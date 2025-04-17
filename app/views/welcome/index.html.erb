@@ -2,3 +2,31 @@
 <p>
   The time is now: <%= Time.now %>
 </p>
+<h2><%= t('users.show.title', default: 'ユーザー詳細') %></h2>
+<% if current_user %>
+  <ul>
+    <li><strong><%= User.human_attribute_name(:name) %>:</strong> <%= current_user.name %></li>
+    <li><strong><%= User.human_attribute_name(:email) %>:</strong> <%= current_user.email %></li>
+    <li><strong><%= User.human_attribute_name(:introduction) %>:</strong> <%= current_user.introduction %></li>
+    <li><strong><%= User.human_attribute_name(:avatar) %>:</strong>
+      <% if current_user.avatar.present? %>
+        <%= image_tag current_user.avatar, alt: current_user.name, width: 100 %>
+      <% else %>
+        <span><%= t('users.show.no_avatar', default: 'アバターなし') %></span>
+      <% end %>
+    </li>
+    <li><strong><%= t('users.show.registered_at', default: '登録日') %>:</strong> <%= l(current_user.created_at, format: :long) %></li>
+  </ul>
+  <%= link_to t('users.show.edit', default: '編集'), edit_user_registration_path, class: 'btn btn-primary' %>
+<% else %>
+  <p><%= t('users.show.not_signed_in', default: 'ログインしてください。') %></p>
+<% end %>
+
+<nav>
+  <% if user_signed_in? %>
+    <%= link_to t('devise.sessions.signed_in.sign_out', default: 'ログアウト'), destroy_user_session_path, data: { turbo_method: :delete,  turbo_confirm: "本当にログアウトしますか？"  }, class: 'btn btn-danger' %>
+  <% else %>
+    <%= link_to t('devise.sessions.new.sign_in', default: 'ログイン'), new_user_session_path, class: 'btn btn-primary' %>
+    <%= link_to t('devise.registrations.new.sign_up', default: '新規登録'), new_user_registration_path, class: 'btn btn-success' %>
+  <% end %>
+</nav>
