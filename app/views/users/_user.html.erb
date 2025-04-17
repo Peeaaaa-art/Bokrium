@@ -1,0 +1,12 @@
+<div class="user-card">
+  <p><strong>ID:</strong> <%= user.id %></p>
+  <p><strong>名前:</strong> <%= user.name %></p>
+  <p><strong>メール:</strong> <%= user.email %></p>
+  <p><strong>自己紹介:</strong> <%= user.introduction %></p>
+  <p><strong>アバター:</strong> <%= user.avatar %></p>
+  <div>
+    <%= link_to '詳細', user %>
+    <%= link_to '編集', edit_user_path(user) %>
+    <%= button_to '削除', user, method: :delete, data: { turbo_confirm: '本当に削除しますか？' } %>
+  </div>
+</div>
