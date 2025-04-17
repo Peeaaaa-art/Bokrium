@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  line_user: one
+  line_notification: one
+  status: MyString
+  sent_at: 2025-04-17 13:53:23
+
+two:
+  line_user: two
+  line_notification: two
+  status: MyString
+  sent_at: 2025-04-17 13:53:23
