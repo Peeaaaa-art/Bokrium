@@ -1,0 +1,20 @@
+<h1>ユーザー詳細</h1>
+
+<p>
+  <strong>ID:</strong> <%= @user.id %>
+</p>
+<p>
+  <strong>名前:</strong> <%= @user.name %>
+</p>
+<p>
+  <strong>メール:</strong> <%= @user.email %>
+</p>
+<p>
+  <strong>自己紹介:</strong> <%= @user.introduction %>
+</p>
+<p>
+  <strong>アバター:</strong> <%= @user.avatar %>
+</p>
+
+<%= link_to '編集', edit_user_path(@user) %> |
+<%= link_to '一覧へ戻る', users_path %>
