@@ -26,8 +26,8 @@ module Bokriumm
     # 私が追加したもの
     config.i18n.default_locale = :ja
     config.i18n.load_path += Dir[
-      Rails.root.join('config/locales/**/*.{yml}')
+      Rails.root.join("config/locales/**/*.{yml}")
     ]
-    config.time_zone = 'Tokyo'
+    config.time_zone = "Tokyo"
   end
 end
