@@ -10,18 +10,18 @@
     <div class="collapse navbar-collapse" id="mainNavbar">
       <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <%= link_to t('nav.home', default: 'ホーム'), root_path, class: "nav-link active fw-semibold", "aria-current": "page" %>
+          <%= link_to t('nav.home', default: 'ホーム'), root_path, class: "nav-link active fw-semibold footer-link", "aria-current": "page" %>
         </li>
         <li class="nav-item">
-          <%= link_to t('nav.service', default: 'My本棚'), root_path, class: "nav-link" %>
+          <%= link_to t('nav.service', default: 'My本棚'), root_path, class: "nav-link footer-link" %>
         </li>
         <li class="nav-item">
-          <%= link_to t('nav.portfolio', default: '書籍検索'), root_path, class: "nav-link" %>
+          <%= link_to t('nav.portfolio', default: '書籍検索'), root_path, class: "nav-link footer-link" %>
         </li>
         <li class="nav-item">
-          <%= link_to t('nav.price', default: 'みんなの本棚'), root_path, class: "nav-link" %>
+          <%= link_to t('nav.price', default: 'みんなの本棚'), root_path, class: "nav-link footer-link" %>
         </li>
-    </ul>
+      </ul>
       <!-- 右側の認証・ユーザー関連ボタン -->
       <div class="d-flex flex-wrap gap-2 ms-lg-3">
         <% if user_signed_in? %>
