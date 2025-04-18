@@ -1,4 +1,8 @@
-"engines": {
-  "node": "22.x",
-  "npm": "10.x"
+{
+  "name": "bokriumm-web",
+  "version": "1.0.0",
+  "engines": {
+    "node": "22.x",
+    "npm": "10.x"
+  }
 }
