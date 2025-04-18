@@ -2,7 +2,7 @@
 
 <% if @not_logged_in %>
   <div class="alert alert-info text-center">
-    こちらはサンプル表示です。自分の本棚を作成するには、登録・ログインが必要です。
+    こちらはサンプル表示です。自分の本棚を作成するには、ログイン・アカウント登録が必要です。
   </div>
 <% elsif @no_books %>
   <div class="alert alert-info">
@@ -40,9 +40,9 @@
 </div>
 
 <% if @not_logged_in %>
-  <div class="registration-cta text-center mt-5">
+  <div class="registration-cta text-center mt-5 text-dark fw-bold  big-shoulders-inline-bold">
     <h4>あなたの読書体験をもっと豊かに</h4>
-    <p><div class="text-dark navbar-brand fw-bold text-primary big-shoulders-inline-bold logo-link">Bokriumで読書メモを管理し、知識を整理しましょう<div/></p>
-    <%= link_to "今すぐ始める（無料登録）", new_user_registration_path, class: "btn btn-lg btn-success mt-2" %>
+    <p>Bokriumで読書メモを管理し、知識を整理しましょう</p>
+    <%= link_to "今すぐ始める（無料登録）", new_user_registration_path, class: "btn btn-lg btn-success mt-2 mb-5" %>
   </div>
 <% end %>

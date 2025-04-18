@@ -29,7 +29,7 @@ class BooksController < ApplicationController
 
   def create
     @book = current_user.books.build(book_params)
-    
+
     if params[:isbn_scan].present?
       # ISBNバーコードスキャン処理（OCR/API連携）
       book_info = fetch_book_info_from_apis(params[:isbn_scan])
@@ -116,7 +116,10 @@ class BooksController < ApplicationController
         publisher: "早川書房",
         page: 648,
         book_cover: "optimized3.jpg"
-      )
-    ]
+      ),
+      (4..15).map do |i|
+        Book.new(book_cover: "optimized#{i}.jpg")
+      end
+    ].flatten
   end
 end

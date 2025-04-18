@@ -1,6 +1,6 @@
 .books-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* 横に3つ */
+  grid-template-columns: repeat(5, 1fr); /* 横に5つ */
   gap: 24px 24px; /* 行・列の間隔 */
   margin: 32px 0;
 }
