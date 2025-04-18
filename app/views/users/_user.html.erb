@@ -1,12 +1,33 @@
-<div class="user-card">
-  <p><strong>ID:</strong> <%= user.id %></p>
-  <p><strong>名前:</strong> <%= user.name %></p>
-  <p><strong>メール:</strong> <%= user.email %></p>
-  <p><strong>自己紹介:</strong> <%= user.introduction %></p>
-  <p><strong>アバター:</strong> <%= user.avatar %></p>
-  <div>
-    <%= link_to '詳細', user %>
-    <%= link_to '編集', edit_user_path(user) %>
-    <%= button_to '削除', user, method: :delete, data: { turbo_confirm: '本当に削除しますか？' } %>
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+      <div class="card shadow-sm">
+        <div class="card-body text-center">
+
+          <%# アバター画像がある場合は画像として表示 %>
+          <% if user.avatar %>
+            <%= user.avatar %>
+          <% else %>
+            <div class="rounded-circle bg-secondary mb-3 d-inline-block" style="width:120px; height:120px; line-height:120px; color:#fff;">
+              <i class="bi bi-person" style="font-size:3rem;"></i>
+            </div>
+          <% end %>
+
+          <h5 class="card-title mb-3"><%= user.name %></h5>
+          <ul class="list-group list-group-flush text-start mb-3">
+            <li class="list-group-item"><strong>ID:</strong> <%= user.id %></li>
+            <li class="list-group-item"><strong>メール:</strong> <%= user.email %></li>
+            <li class="list-group-item"><strong>自己紹介:</strong> <%= user.introduction.presence || "未設定" %></li>
+          </ul>
+
+          <div class="d-flex justify-content-center gap-2">
+            <%= link_to '詳細', user, class: "btn btn-outline-info" %>
+            <%= link_to '編集', edit_user_path(user), class: "btn btn-outline-warning" %>
+            <%= button_to '削除', user, method: :delete, data: { turbo_confirm: '本当に削除しますか？' }, class: "btn btn-outline-danger" %>
+          </div>
+
+        </div>
+      </div>
+    </div>
   </div>
 </div>
