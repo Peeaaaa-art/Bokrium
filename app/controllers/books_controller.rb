@@ -1,7 +1,7 @@
 class BooksController < ApplicationController
   # before_action :authenticate_user!
-  before_action :set_book, only: [:show, :edit, :update, :destroy]
-  before_action :authorize_book, only: [:edit, :update, :destroy]
+  before_action :set_book, only: [ :show, :edit, :update, :destroy ]
+  before_action :authorize_book, only: [ :edit, :update, :destroy ]
 
   def index
     if user_signed_in?
@@ -39,20 +39,20 @@ class BooksController < ApplicationController
     if @book.save
       # タグの処理
       if params[:tags].present?
-        params[:tags].split(',').each do |tag_name|
+        params[:tags].split(",").each do |tag_name|
           tag = Tag.find_or_create_by(name: tag_name.strip)
           @book.book_tags.create(tag_id: tag.id)
         end
       end
-      
-      redirect_to @book, notice: '書籍が正常に登録されました'
+
+      redirect_to @book, notice: "書籍が正常に登録されました"
     else
       render :new
     end
   end
 
   def edit
-    @tags = @book.tags.pluck(:name).join(', ')
+    @tags = @book.tags.pluck(:name).join(", ")
   end
 
   def update
@@ -60,13 +60,13 @@ class BooksController < ApplicationController
       # タグの更新処理
       @book.book_tags.destroy_all
       if params[:tags].present?
-        params[:tags].split(',').each do |tag_name|
+        params[:tags].split(",").each do |tag_name|
           tag = Tag.find_or_create_by(name: tag_name.strip)
           @book.book_tags.create(tag_id: tag.id)
         end
       end
-      
-      redirect_to @book, notice: '書籍情報が更新されました'
+
+      redirect_to @book, notice: "書籍情報が更新されました"
     else
       render :edit
     end
@@ -74,7 +74,7 @@ class BooksController < ApplicationController
 
   def destroy
     @book.destroy
-    redirect_to books_path, notice: '書籍が削除されました'
+    redirect_to books_path, notice: "書籍が削除されました"
   end
 
   private
@@ -85,7 +85,7 @@ class BooksController < ApplicationController
 
   def authorize_book
     unless @book.user_id == current_user.id
-      redirect_to books_path, alert: 'アクセス権限がありません'
+      redirect_to books_path, alert: "アクセス権限がありません"
     end
   end
 

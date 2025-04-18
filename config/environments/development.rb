@@ -76,5 +76,4 @@ Rails.application.configure do
   config.logger.level = Logger::DEBUG
 
   config.assets.compile = true
-
 end
