@@ -1,10 +1,12 @@
-@import url('https://fonts.googleapis.com/css2?family=Big+Shoulders+Inline:wght@700&display=swap');
 @import "bootstrap";
+@import "books";
+@import "footer";
 
 .big-shoulders-inline-bold {
   font-family: "Big Shoulders Inline", sans-serif;
   font-weight: 700;
 }
+
 // スティッキーフッター用
 // html, body {
 //   height: 100%;
@@ -20,21 +22,3 @@ body {
 //   flex: 1;
 // }
 
-// フッターの装飾
-.logo-footer {
-  font-family: "Big Shoulders Inline", sans-serif;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-}
-
-.footer-link {
-  font-size: 1rem;
-  text-decoration: none;
-  margin-left: 1.5rem;
-  margin-right: 1.5rem;
-  transition: color 0.2s;
-}
-.footer-link:hover {
-  color: #000 !important;
-  text-decoration: underline;
-}
