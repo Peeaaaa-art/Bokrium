@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
-  <div class="container">
+  <div class="container-xxl px-0">
     <!-- ロゴ -->
     <%= link_to "Bokrium", root_path, class: "text-dark navbar-brand fw-bold text-primary big-shoulders-inline-bold logo-link", style: "font-size: 3.5rem;" %>
     <!-- ハンバーガーメニュー -->
@@ -10,18 +10,19 @@
     <div class="collapse navbar-collapse" id="mainNavbar">
       <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <%= link_to t('nav.home', default: 'ホーム'), root_path, class: "nav-link active fw-semibold footer-link", "aria-current": "page" %>
+          <%= nav_link_to t('nav.home', default: 'ホーム'), root_path %>
         </li>
         <li class="nav-item">
-          <%= link_to t('nav.service', default: 'My本棚'), root_path, class: "nav-link footer-link" %>
+          <%= nav_link_to t('nav.service', default: 'My本棚'), books_index_path %>
         </li>
         <li class="nav-item">
-          <%= link_to t('nav.portfolio', default: '書籍検索'), root_path, class: "nav-link footer-link" %>
+          <%= nav_link_to t('nav.portfolio', default: '書籍検索'), books_show_path %>
         </li>
         <li class="nav-item">
-          <%= link_to t('nav.price', default: 'みんなの本棚'), root_path, class: "nav-link footer-link" %>
+          <%= nav_link_to t('nav.price', default: 'みんなの本棚'), books_new_path %>
         </li>
       </ul>
+  </div>
       <!-- 右側の認証・ユーザー関連ボタン -->
       <div class="d-flex flex-wrap gap-2 ms-lg-3">
         <% if user_signed_in? %>

@@ -1,11 +1,3 @@
-<h1>ユーザー一覧</h1>
+<h2 class="mb-4 mt-5 text-center"><%= "ユーザー一覧" %></h2>
+
 <%= render @users %>
-  <% if user_signed_in? %>
-    <%= link_to t('devise.sessions.signed_in.sign_out', default: 'ログアウト'), destroy_user_session_path, data: { turbo_method: :delete,  turbo_confirm: "本当にログアウトしますか？"  }, class: 'btn btn-danger' %>
-  <% else %>
-    <%= link_to t('devise.sessions.new.sign_in', default: 'ログイン'), new_user_session_path, class: 'btn btn-primary' %>
-    <%= link_to t('devise.registrations.new.sign_up', default: '新規登録'), new_user_registration_path, class: 'btn btn-success' %>
-  <% end %>
-
-
-  <%= link_to t('ホーム'), root_path, class: 'btn btn-primary' %>

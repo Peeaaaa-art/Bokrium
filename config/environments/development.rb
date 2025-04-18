@@ -74,4 +74,6 @@ Rails.application.configure do
   config.log_level = :debug
   config.logger = Logger.new(STDOUT)
   config.logger.level = Logger::DEBUG
+
+  config.assets.compile = true
 end
