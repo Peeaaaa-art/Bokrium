@@ -1,0 +1,37 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
+  <div class="container">
+    <!-- ロゴ -->
+    <%= link_to "Bokrium", root_path, class: "text-dark navbar-brand fw-bold text-primary big-shoulders-inline-bold logo-link", style: "font-size: 3.5rem;" %>
+    <!-- ハンバーガーメニュー -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <!-- ナビゲーションリンク -->
+    <div class="collapse navbar-collapse" id="mainNavbar">
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <%= link_to t('nav.home', default: 'ホーム'), root_path, class: "nav-link active fw-semibold", "aria-current": "page" %>
+        </li>
+        <li class="nav-item">
+          <%= link_to t('nav.service', default: 'My本棚'), root_path, class: "nav-link" %>
+        </li>
+        <li class="nav-item">
+          <%= link_to t('nav.portfolio', default: '書籍検索'), root_path, class: "nav-link" %>
+        </li>
+        <li class="nav-item">
+          <%= link_to t('nav.price', default: 'みんなの本棚'), root_path, class: "nav-link" %>
+        </li>
+    </ul>
+      <!-- 右側の認証・ユーザー関連ボタン -->
+      <div class="d-flex flex-wrap gap-2 ms-lg-3">
+        <% if user_signed_in? %>
+          <%= link_to t('devise.sessions.signed_in.sign_out', default: 'ログアウト'), destroy_user_session_path, data: { turbo_method: :delete, turbo_confirm: "本当にログアウトしますか？" }, class: 'btn btn-danger' %>
+        <% else %>
+          <%= link_to t('devise.sessions.new.sign_in', default: 'ログイン'), new_user_session_path, class: 'btn btn-primary' %>
+          <%= link_to t('devise.registrations.new.sign_up', default: '新規登録'), new_user_registration_path, class: 'btn btn-success' %>
+        <% end %>
+        <%= link_to t('ユーザー一覧'), users_path, class: 'btn btn-outline-secondary' %>
+      </div>
+    </div>
+  </div>
+</nav>
