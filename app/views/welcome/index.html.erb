@@ -1,34 +1,72 @@
-<h2>Hello World</h2>
-<p>
-  The time is now: <%= Time.now %>
-</p>
-<h2><%= t('users.show.title', default: 'ユーザー詳細') %></h2>
-<% if current_user %>
-  <ul>
-    <li><strong><%= User.human_attribute_name(:name) %>:</strong> <%= current_user.name %></li>
-    <li><strong><%= User.human_attribute_name(:email) %>:</strong> <%= current_user.email %></li>
-    <li><strong><%= User.human_attribute_name(:introduction) %>:</strong> <%= current_user.introduction %></li>
-    <li><strong><%= User.human_attribute_name(:avatar) %>:</strong>
-      <% if current_user.avatar.present? %>
-        <%= image_tag current_user.avatar, alt: current_user.name, width: 100 %>
+<div class="container my-5">
+
+  <!-- タイトル -->
+  <div class="mb-4">
+    <h2 class="display-5 text-primary">Hello World</h2>
+    <p class="text-muted">
+      <i class="bi bi-clock"></i>
+      <%= t('users.show.now', default: '現在時刻') %>: <%= Time.now.strftime("%Y-%m-%d %H:%M:%S") %>
+    </p>
+  </div>
+
+  <!-- ユーザー詳細カード -->
+  <div class="card shadow mb-4">
+    <div class="card-header bg-primary text-white">
+      <h3 class="mb-0"><%= t('users.show.title', default: 'ユーザー詳細') %></h3>
+    </div>
+    <div class="card-body">
+      <% if current_user %>
+        <div class="row align-items-center">
+          <div class="col-md-3 text-center">
+            <% if current_user.avatar.present? %>
+              <%= image_tag current_user.avatar, alt: current_user.name, class: "rounded-circle img-thumbnail mb-2", width: 100, height: 100 %>
+            <% else %>
+              <div class="bg-light rounded-circle d-flex align-items-center justify-content-center" style="width:100px; height:100px;">
+                <span class="text-muted"><%= t('users.show.no_avatar', default: 'アバターなし') %></span>
+              </div>
+            <% end %>
+          </div>
+          <div class="col-md-9">
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item">
+                <strong><%= User.human_attribute_name(:name) %>:</strong>
+                <span class="ms-2"><%= current_user.name %></span>
+              </li>
+              <li class="list-group-item">
+                <strong><%= User.human_attribute_name(:email) %>:</strong>
+                <span class="ms-2"><%= current_user.email %></span>
+              </li>
+              <li class="list-group-item">
+                <strong><%= User.human_attribute_name(:introduction) %>:</strong>
+                <span class="ms-2"><%= current_user.introduction %></span>
+              </li>
+              <li class="list-group-item">
+                <strong><%= t('users.show.registered_at', default: '登録日') %>:</strong>
+                <span class="ms-2"><%= l(current_user.created_at, format: :long) %></span>
+              </li>
+            </ul>
+            <div class="mt-3">
+              <%= link_to t('users.show.edit', default: '編集'), edit_user_registration_path, class: 'btn btn-outline-primary' %>
+            </div>
+          </div>
+        </div>
       <% else %>
-        <span><%= t('users.show.no_avatar', default: 'アバターなし') %></span>
+        <div class="alert alert-warning" role="alert">
+          <%= t('users.show.not_signed_in', default: 'ログインしてください。') %>
+        </div>
       <% end %>
-    </li>
-    <li><strong><%= t('users.show.registered_at', default: '登録日') %>:</strong> <%= l(current_user.created_at, format: :long) %></li>
-  </ul>
-  <%= link_to t('users.show.edit', default: '編集'), edit_user_registration_path, class: 'btn btn-primary' %>
-<% else %>
-  <p><%= t('users.show.not_signed_in', default: 'ログインしてください。') %></p>
-<% end %>
+    </div>
+  </div>
 
-<nav>
-  <% if user_signed_in? %>
-    <%= link_to t('devise.sessions.signed_in.sign_out', default: 'ログアウト'), destroy_user_session_path, data: { turbo_method: :delete,  turbo_confirm: "本当にログアウトしますか？"  }, class: 'btn btn-danger' %>
-  <% else %>
-    <%= link_to t('devise.sessions.new.sign_in', default: 'ログイン'), new_user_session_path, class: 'btn btn-primary' %>
-    <%= link_to t('devise.registrations.new.sign_up', default: '新規登録'), new_user_registration_path, class: 'btn btn-success' %>
-  <% end %>
-</nav>
+  <!-- ナビゲーションボタン -->
+  <div class="d-flex flex-wrap gap-2 mb-4">
+    <% if user_signed_in? %>
+      <%= link_to t('devise.sessions.signed_in.sign_out', default: 'ログアウト'), destroy_user_session_path, data: { turbo_method: :delete, turbo_confirm: "本当にログアウトしますか？" }, class: 'btn btn-danger' %>
+    <% else %>
+      <%= link_to t('devise.sessions.new.sign_in', default: 'ログイン'), new_user_session_path, class: 'btn btn-primary' %>
+      <%= link_to t('devise.registrations.new.sign_up', default: '新規登録'), new_user_registration_path, class: 'btn btn-success' %>
+    <% end %>
+    <%= link_to t('ユーザー一覧'), users_path, class: 'btn btn-outline-secondary' %>
+  </div>
 
-<%= link_to t('ユーザー一覧'), users_path, class: 'btn btn-primary' %>
+</div>
