@@ -29,9 +29,7 @@
         <% unless @not_logged_in || @no_books %>
           <div class="book-actions mt-2">
             <%= link_to "詳細", book_path(book), class: "btn btn-sm btn-info" %>
-            <%= link_to "編集", edit_book_path(book), class: "btn btn-sm btn-warning" %>
-            <%= link_to "削除", book_path(book), method: :delete,
-                data: { confirm: "本当に削除しますか？" }, class: "btn btn-sm btn-danger" %>
+            <%= link_to "削除", book_path(book), data: { turbo_method: :delete, turbo_confirm: "本当に削除しますか？" }, class: "btn btn-sm btn-danger" %>
           </div>
         <% end %>
       </div>

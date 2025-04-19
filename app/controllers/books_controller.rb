@@ -6,22 +6,31 @@ class BooksController < ApplicationController
   def index
     if user_signed_in?
       @books = current_user.books.order(created_at: :desc)
-      # ログイン済みだが本がない場合
       if @books.empty?
         @books = sample_books
         @no_books = true
       end
     else
-      # 未ログインの場合
       @books = sample_books
       @not_logged_in = true
     end
   end
   def show
-    @memos = @book.memos.where(published: true)
+    # 書籍のメモ一覧を取得
+    # @memos = @book.memos.where(published: true)
     @memos = @book.memos.all if @book.user_id == current_user.id
+    
+    # フォーム表示用の@memoを設定（最新のメモまたは新規メモ）
+    @memo = if current_user
+      # 現在のユーザーのこの本に関する最新のメモを取得
+      @book.memos.where(user_id: current_user.id).order(created_at: :desc).first || 
+      # メモがなければ新規メモオブジェクトを作成
+      @book.memos.new(user_id: current_user.id)
+    end
+    
     @tags = @book.tags
   end
+  
 
   def new
     @book = Book.new
