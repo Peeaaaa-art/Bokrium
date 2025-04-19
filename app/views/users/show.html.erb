@@ -1,20 +1,50 @@
-<h1>ユーザー詳細</h1>
+<div class="container my-5">
+  <div class="card shadow mb-4">
+    <div class="card-header bg-primary text-white">
+      <h3 class="mb-0"><%= t('users.show.title', default: 'ユーザー詳細') %></h3>
+    </div>
+    <div class="card-body">
+      <% if current_user %>
+        <div class="row align-items-center">
+          <div class="col-md-3 text-center">
+            <% if current_user.avatar.present? %>
+              <%= image_tag current_user.avatar, alt: current_user.name, class: "rounded-circle img-thumbnail mb-2", width: 100, height: 100 %>
+            <% else %>
+              <div class="bg-light rounded-circle d-flex align-items-center justify-content-center" style="width:100px; height:100px;">
+                <span class="text-muted"><%= t('users.show.no_avatar', default: 'アバターなし') %></span>
+              </div>
+            <% end %>
+          </div>
+          <div class="col-md-9">
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item">
+                <strong><%= User.human_attribute_name(:name) %>:</strong>
+                <span class="ms-2"><%= current_user.name %></span>
+              </li>
+              <li class="list-group-item">
+                <strong><%= User.human_attribute_name(:email) %>:</strong>
+                <span class="ms-2"><%= current_user.email %></span>
+              </li>
+              <li class="list-group-item">
+                <strong><%= User.human_attribute_name(:introduction) %>:</strong>
+                <span class="ms-2"><%= current_user.introduction %></span>
+              </li>
+              <li class="list-group-item">
+                <strong><%= t('users.show.registered_at', default: '登録日') %>:</strong>
+                <span class="ms-2"><%= l(current_user.created_at, format: :long) %></span>
+              </li>
+            </ul>
+            <div class="mt-3">
+              <%= link_to t('users.show.edit', default: '編集'), edit_user_registration_path, class: 'btn btn-outline-primary' %>
+            </div>
+          </div>
+        </div>
+      <% else %>
+        <div class="alert alert-warning" role="alert">
+          <%= t('users.show.not_signed_in', default: 'ログインしてください。') %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
 
-<p>
-  <strong>ID:</strong> <%= @user.id %>
-</p>
-<p>
-  <strong>名前:</strong> <%= @user.name %>
-</p>
-<p>
-  <strong>メール:</strong> <%= @user.email %>
-</p>
-<p>
-  <strong>自己紹介:</strong> <%= @user.introduction %>
-</p>
-<p>
-  <strong>アバター:</strong> <%= @user.avatar %>
-</p>
-
-<%= link_to '編集', edit_user_path(@user) %> |
-<%= link_to '一覧へ戻る', users_path %>
