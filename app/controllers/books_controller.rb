@@ -19,18 +19,18 @@ class BooksController < ApplicationController
     # 書籍のメモ一覧を取得
     # @memos = @book.memos.where(published: true)
     @memos = @book.memos.all if @book.user_id == current_user.id
-    
+
     # フォーム表示用の@memoを設定（最新のメモまたは新規メモ）
     @memo = if current_user
       # 現在のユーザーのこの本に関する最新のメモを取得
-      @book.memos.where(user_id: current_user.id).order(created_at: :desc).first || 
+      @book.memos.where(user_id: current_user.id).order(created_at: :desc).first ||
       # メモがなければ新規メモオブジェクトを作成
       @book.memos.new(user_id: current_user.id)
     end
-    
+
     @tags = @book.tags
   end
-  
+
 
   def new
     @book = Book.new
@@ -67,7 +67,7 @@ class BooksController < ApplicationController
   def update
     # タグの処理（BookControllerで管理）
     if params[:tags].present?
-      tag_names = params[:tags].to_s.split(',').map(&:strip).reject(&:blank?)
+      tag_names = params[:tags].to_s.split(",").map(&:strip).reject(&:blank?)
       tags = tag_names.map { |name| Tag.find_or_create_by(name: name) }
       @book.tags = tags
     end

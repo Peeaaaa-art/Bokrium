@@ -11,4 +11,4 @@ Rails.application.routes.draw do
   get "up" => "rails/health#show", as: :rails_health_check
 end
 
-  # 公式リファレンス https://guides.rubyonrails.org/routing.html
+# 公式リファレンス https://guides.rubyonrails.org/routing.html

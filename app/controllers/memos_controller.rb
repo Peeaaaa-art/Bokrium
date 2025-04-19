@@ -1,8 +1,8 @@
 class MemosController < ApplicationController
   # before_action :authenticate_user!
   before_action :set_book
-  before_action :set_memo, only: [:show, :edit, :update, :destroy]
-  
+  before_action :set_memo, only: [ :show, :edit, :update, :destroy ]
+
   def index
     @memos = @book.memos.where(user_id: current_user.id).order(created_at: :desc)
   end
@@ -20,10 +20,10 @@ class MemosController < ApplicationController
     @memo.book_id = params[:book_id]
     @memo.content = {
       text: params[:text],
-      tags: params[:tags].to_s.split(',').map(&:strip)
+      tags: params[:tags].to_s.split(",").map(&:strip)
     }
     if @memo.save
-      redirect_to book_memos_path(@memo.book, @memo), notice: 'メモを保存しました'
+      redirect_to book_memos_path(@memo.book, @memo), notice: "メモを保存しました"
     else
       render :new
     end
@@ -36,15 +36,15 @@ class MemosController < ApplicationController
   def update
     @memo = Memo.find(params[:id])
     @book = @memo.book
-    
+
     # メモの内容のみを更新（MemoControllerで管理）
     @memo.content = {
       text: params[:text]
       # tagsはメモに関連付けない
     }
-    
+
     if @memo.update(memo_params)
-      redirect_to book_memo_path(@book, @memo), notice: 'メモを更新しました'
+      redirect_to book_memo_path(@book, @memo), notice: "メモを更新しました"
     else
       render :edit
     end
@@ -53,7 +53,7 @@ class MemosController < ApplicationController
 
   def destroy
     @memo.destroy
-    redirect_to book_memos_path(@book), notice: 'メモを削除しました'
+    redirect_to book_memos_path(@book), notice: "メモを削除しました"
   end
 
   private
@@ -66,7 +66,7 @@ class MemosController < ApplicationController
     @memo = Memo.find(params[:id])
     # 自分のメモか公開されているメモのみアクセス可能
     unless @memo.user_id == current_user.id || @memo.published
-      redirect_to book_memos_path(@book), alert: 'アクセス権限がありません'
+      redirect_to book_memos_path(@book), alert: "アクセス権限がありません"
     end
   end
 
