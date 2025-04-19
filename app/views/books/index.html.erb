@@ -20,15 +20,16 @@
 <div class="books-grid">
   <% @books.each do |book| %>
     <div class="book-card">
-      <% if book.book_cover.present? %>
-        <%= image_tag book.book_cover, alt: book.title, class: "book-cover" %>
-      <% else %>
-        <div class="no-cover"><%= book.title %></div>
+      <%= link_to book_path(book) do %>
+        <% if book.book_cover.present? %>
+          <%= image_tag book.book_cover, alt: book.title, class: "book-cover" %>
+        <% else %>
+          <div class="no-cover"><%= book.title %></div>
+        <% end %>
       <% end %>
       <div class="book-info">
         <% unless @not_logged_in || @no_books %>
           <div class="book-actions mt-2">
-            <%= link_to "詳細", book_path(book), class: "btn btn-sm btn-info" %>
             <%= link_to "削除", book_path(book), data: { turbo_method: :delete, turbo_confirm: "本当に削除しますか？" }, class: "btn btn-sm btn-danger" %>
           </div>
         <% end %>
@@ -36,6 +37,7 @@
     </div>
   <% end %>
 </div>
+
 
 <% if @not_logged_in %>
   <div class="registration-cta text-center mt-5 text-dark fw-bold  big-shoulders-inline-bold">
