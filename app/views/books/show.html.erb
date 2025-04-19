@@ -25,9 +25,38 @@
               <% end %>
             </dd>
           </dl>
-          <div class="book-actions mt-2">
+          <div class="book-actions mt-2 mb-2">
             <%= link_to "編集", edit_book_path(@book), class: "btn btn-sm btn-warning" %>
           </div>
+          <div class="mb-3">
+
+        <%= form_with(model: @book, local: true, html: { class: "mb-4" }) do |f| %>
+        <div class="mb-3">
+          <label class="form-label">タグ</label>
+          <!-- タグ表示部分 -->
+          <div class="mb-2">
+            <% @book.tags.each do |tag| %>
+              <span class="badge rounded-pill bg-info text-dark me-1" style="font-size:1em;">
+                <%= tag.name %>
+              </span>
+            <% end %>
+            <!-- タグ追加ボタン -->
+            <button type="button" class="btn btn-sm btn-outline-info ms-2" data-bs-toggle="collapse" data-bs-target="#tagForm">
+              <i class="bi bi-plus"></i>
+            </button>
+          </div>
+          
+          <!-- 折りたたみ可能なタグ入力フォーム -->
+          <div class="collapse" id="tagForm">
+            <div class="input-group">
+              <%= text_field_tag :tags, @book.tags.map(&:name).join(','), class: "form-control", placeholder: "小説,哲学" %>
+              <%= f.submit "保存", class: "btn btn-success" %>
+            </div>
+            <small class="form-text text-muted">カンマ区切りで入力（例: 小説,哲学）</small>
+          </div>
+        </div>
+      <% end %>
+
           <div class="mt-5">
             <h5 class="mb-3">メモ</h5>
             <% if @memo.present? %>
@@ -35,10 +64,7 @@
                 <div class="mb-3">
                   <%= text_area_tag 'text', @memo.content && @memo.content["text"], class: "form-control", rows: 6, placeholder: "メモ内容を入力してください"  %>
                 </div>
-                <div class="mb-3">
-                  <%= f.label :tags, "タグ（カンマ区切り）", class: "form-label" %>
-                  <%= text_field_tag 'tags', (@memo.content && @memo.content["tags"]).to_a.join(','), class: "form-control", placeholder: "小説,哲学" %>
-                </div>
+
                 <div class="mb-3">
                   <label class="form-label">ステータス</label>
                   <div>

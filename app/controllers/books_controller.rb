@@ -65,21 +65,20 @@ class BooksController < ApplicationController
   end
 
   def update
-    if @book.update(book_params)
-      # タグの更新処理
-      @book.book_tags.destroy_all
-      if params[:tags].present?
-        params[:tags].split(",").each do |tag_name|
-          tag = Tag.find_or_create_by(name: tag_name.strip)
-          @book.book_tags.create(tag_id: tag.id)
-        end
-      end
+    # タグの処理（BookControllerで管理）
+    if params[:tags].present?
+      tag_names = params[:tags].to_s.split(',').map(&:strip).reject(&:blank?)
+      tags = tag_names.map { |name| Tag.find_or_create_by(name: name) }
+      @book.tags = tags
+    end
 
+    if @book.update(book_params)
       redirect_to @book, notice: "書籍情報が更新されました"
     else
       render :edit
     end
   end
+
 
   def destroy
     @book.destroy

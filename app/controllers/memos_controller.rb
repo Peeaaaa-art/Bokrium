@@ -32,18 +32,24 @@ class MemosController < ApplicationController
   def edit
   end
 
-  def update
-    @memo.content = {
-      text: params[:text],
-      tags: params[:tags].to_s.split(',').map(&:strip)
-    }
 
+  def update
+    @memo = Memo.find(params[:id])
+    @book = @memo.book
+    
+    # メモの内容のみを更新（MemoControllerで管理）
+    @memo.content = {
+      text: params[:text]
+      # tagsはメモに関連付けない
+    }
+    
     if @memo.update(memo_params)
-      redirect_to book_memo_path(@memo.book, @memo), notice: 'メモを更新しました'
+      redirect_to book_memo_path(@book, @memo), notice: 'メモを更新しました'
     else
       render :edit
     end
   end
+
 
   def destroy
     @memo.destroy
