@@ -1,2 +1,37 @@
-<h1>Books#show</h1>
-<p>Find me in app/views/books/show.html.erb</p>
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+          <h4 class="mb-0"><%= @book.title %></h4>
+        </div>
+        <div class="card-body">
+          <dl class="row">
+            <dt class="col-sm-3">ISBN</dt>
+            <dd class="col-sm-9"><%= @book.isbn.presence || "未登録" %></dd>
+
+            <dt class="col-sm-3">出版社</dt>
+            <dd class="col-sm-9"><%= @book.publisher.presence || "未登録" %></dd>
+
+            <dt class="col-sm-3">ページ数</dt>
+            <dd class="col-sm-9"><%= @book.page.present? ? "#{@book.page} ページ" : "未登録" %></dd>
+
+            <dt class="col-sm-3">表紙画像</dt>
+            <dd class="col-sm-9">
+              <% if @book.book_cover.present? %>
+                <img src="<%= @book.book_cover %>" alt="表紙画像" class="img-thumbnail" style="max-height: 240px;">
+              <% else %>
+                <span class="text-muted">画像なし</span>
+              <% end %>
+            </dd>
+          </dl>
+        </div>
+        <div class="card-footer d-flex justify-content-between">
+          <%= link_to "編集", edit_book_path(@book), class: "btn btn-outline-primary" %>
+          <%= link_to "一覧に戻る", books_path, class: "btn btn-secondary" %>
+          <%= link_to "削除", book_path(@book), method: :delete, data: { confirm: "本当に削除しますか？" }, class: "btn btn-danger" %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
