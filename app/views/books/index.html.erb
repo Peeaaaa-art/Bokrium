@@ -5,8 +5,8 @@
     こちらはサンプル表示です。自分の本棚を作成するには、ログイン・アカウント登録が必要です。
   </div>
 <% elsif @no_books %>
-  <div class="alert alert-info">
-    <p>まだ本が登録されていません。最初の本を登録しましょう！</p>
+  <div class="alert alert-info text-center">
+    <p>こちらはサンプル表示です。最初の本を登録しましょう！</p>
     <div class="mt-3">
       <%= link_to "新規書籍登録", new_book_path, class: "btn btn-primary" %>
     </div>
@@ -17,7 +17,7 @@
   </div>
 <% end %>
 
-<% if current_user %>
+<% if current_user && !@no_books %>
   <div class="books-grid">
     <% @books.each do |book| %>
       <div class="book-card">
