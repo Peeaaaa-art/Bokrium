@@ -1,5 +1,3 @@
-
-
 <% if @not_logged_in %>
   <div class="alert alert-info text-center">
     こちらはサンプル表示です。自分の本棚を作成するには、ログイン・アカウント登録が必要です。
@@ -51,7 +49,9 @@
       </div>
     <% end %>
   </div>
+<% end %>
 
+<% if @not_logged_in %>
   <div class="registration-cta text-center mt-5 text-dark fw-bold  big-shoulders-inline-bold">
     <h4>あなたの読書体験をもっと豊かに</h4>
     <p>Bokriumで読書メモを管理し、知識を整理しましょう</p>
