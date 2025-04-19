@@ -8,12 +8,12 @@
   <div class="alert alert-info">
     <p>まだ本が登録されていません。最初の本を登録しましょう！</p>
     <div class="mt-3">
-      <%= link_to "新規書籍登録", new_book_path, class: "btn btn-primary" %>
+      <%= link_to "新規書籍登録", books_new_path, class: "btn btn-primary" %>
     </div>
   </div>
 <% else %>
   <div class="actions mb-4">
-    <%= link_to "新規書籍登録", new_book_path, class: "btn btn-primary" %>
+    <%= link_to "新規書籍登録", books_new_path, class: "btn btn-primary" %>
   </div>
 <% end %>
 
