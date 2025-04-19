@@ -17,29 +17,41 @@
   </div>
 <% end %>
 
-<div class="books-grid">
-  <% @books.each do |book| %>
-    <div class="book-card">
-      <%= link_to book_path(book) do %>
+<% if current_user %>
+  <div class="books-grid">
+    <% @books.each do |book| %>
+      <div class="book-card">
+        <%= link_to book_path(book) do %>
+          <% if book.book_cover.present? %>
+            <%= image_tag book.book_cover, alt: book.title, class: "book-cover" %>
+          <% else %>
+            <div class="no-cover"><%= book.title %></div>
+          <% end %>
+        <% end %>
+        <div class="book-info">
+          <% unless @not_logged_in || @no_books %>
+            <div class="book-actions mt-2">
+              <%= link_to "削除", book_path(book), data: { turbo_method: :delete, turbo_confirm: "本当に削除しますか？" }, class: "btn btn-sm btn-danger" %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% end %>
+
+
+<% if @book==nil || @not_logged_in %>
+  <div class="books-grid">
+    <% @books.each do |book| %>
+      <div class="book-card">
         <% if book.book_cover.present? %>
           <%= image_tag book.book_cover, alt: book.title, class: "book-cover" %>
-        <% else %>
-          <div class="no-cover"><%= book.title %></div>
-        <% end %>
-      <% end %>
-      <div class="book-info">
-        <% unless @not_logged_in || @no_books %>
-          <div class="book-actions mt-2">
-            <%= link_to "削除", book_path(book), data: { turbo_method: :delete, turbo_confirm: "本当に削除しますか？" }, class: "btn btn-sm btn-danger" %>
-          </div>
         <% end %>
       </div>
-    </div>
-  <% end %>
-</div>
+    <% end %>
+  </div>
 
-
-<% if @not_logged_in %>
   <div class="registration-cta text-center mt-5 text-dark fw-bold  big-shoulders-inline-bold">
     <h4>あなたの読書体験をもっと豊かに</h4>
     <p>Bokriumで読書メモを管理し、知識を整理しましょう</p>
