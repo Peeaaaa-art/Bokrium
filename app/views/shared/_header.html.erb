@@ -13,13 +13,13 @@
           <%= nav_link_to t('nav.home', default: 'ホーム'), root_path %>
         </li>
         <li class="nav-item">
-          <%= nav_link_to t('nav.service', default: 'My本棚'), books_index_path %>
+          <%= nav_link_to t('nav.service', default: 'My本棚'), books_path %>
         </li>
         <li class="nav-item">
-          <%= nav_link_to t('nav.portfolio', default: '書籍検索'), books_show_path %>
+          <%= nav_link_to t('nav.portfolio', default: '書籍検索'), new_book_path %>
         </li>
         <li class="nav-item">
-          <%= nav_link_to t('nav.price', default: 'みんなの本棚'), books_new_path %>
+          <%= nav_link_to t('nav.price', default: 'みんなの本棚'), books_path %>
         </li>
       </ul>
   </div>
