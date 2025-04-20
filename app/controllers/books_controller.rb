@@ -104,29 +104,8 @@ class BooksController < ApplicationController
   def sample_books
     # サンプル書籍データ（DBには保存しない）
     [
-      Book.new(
-        title: "リーダブルコード",
-        isbn: "9784873115658",
-        publisher: "オライリー・ジャパン",
-        page: 260,
-        book_cover: "optimized1.jpg"
-      ),
-      Book.new(
-        title: "世界99",
-        isbn: "9784087718799",
-        publisher: "集英社",
-        page: 432,
-        book_cover: "optimized2.jpg"
-      ),
-      Book.new(
-        title: "チューリングの大聖堂: コンピュータの創造とデジタル世界の到来",
-        isbn: "9784152093592",
-        publisher: "早川書房",
-        page: 648,
-        book_cover: "optimized3.jpg"
-      ),
-      (4..15).map do |i|
-        Book.new(book_cover: "optimized#{i}.jpg")
+      (1..15).map do |i|
+        Book.new(title: "optimized#{i}.jpg")
       end
     ].flatten
   end
