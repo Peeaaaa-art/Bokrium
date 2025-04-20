@@ -36,19 +36,16 @@ class MemosController < ApplicationController
   def update
     @memo = Memo.find(params[:id])
     @book = @memo.book
-
-    # メモの内容のみを更新（MemoControllerで管理）
-    @memo.content = {
-      text: params[:text]
-      # tagsはメモに関連付けない
-    }
-
-    if @memo.update(memo_params)
+  
+    @memo.content = { text: params[:memo][:content] }
+  
+    if @memo.save
       redirect_to book_memo_path(@book, @memo), notice: "メモを更新しました"
     else
       render :edit
     end
   end
+  
 
 
   def destroy
@@ -71,6 +68,6 @@ class MemosController < ApplicationController
   end
 
   def memo_params
-    params.require(:memo).permit(:published)
+    params.require(:memo).permit(:published, :content)
   end
 end

@@ -1,0 +1,6 @@
+ja:
+  books:
+    status:
+      want_to_read: "読みたい"
+      reading: "読書中"
+      finished: "読了"

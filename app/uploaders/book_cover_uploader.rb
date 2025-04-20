@@ -22,12 +22,16 @@ class BookCoverUploader < CarrierWave::Uploader::Base
     # "/images/fallback/" + [version_name, "default.png"].compact.join('_')
   end
 
-  # Process files as they are uploaded:
-  # process scale: [200, 300]
-  #
-  # def scale(width, height)
-  #   # do something
-  # end
+    # リサイズと品質設定を同時に適用
+    process :resize_and_set_quality
+
+    def resize_and_set_quality
+      manipulate! do |img|
+        img.resize "240x"         # 幅240pxにリサイズ（高さはアスペクト比維持）
+        img.quality "85"          # 画質85%に設定
+        img
+      end
+    end
 
   # Create different versions of your uploaded files:
   # version :thumb do
