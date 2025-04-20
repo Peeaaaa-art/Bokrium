@@ -21,7 +21,7 @@
       <div class="book-card">
         <%= link_to book_path(book) do %>
           <% if book.book_cover.present? %>
-            <%= image_tag book.book_cover, alt: book.title, class: "book-cover" %>
+            <%= image_tag book.book_cover.url, alt: book.title, class: "book-cover" %>
           <% else %>
             <div class="no-cover"><%= book.title %></div>
           <% end %>
@@ -39,7 +39,7 @@
 <% end %>
 
 
-<% if @book==nil || @not_logged_in %>
+<% if @no_books || @not_logged_in %>
   <div class="books-grid">
     <% @books.each do |book| %>
       <div class="book-card">

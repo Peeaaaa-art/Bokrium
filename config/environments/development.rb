@@ -1,4 +1,5 @@
 require "active_support/core_ext/integer/time"
+require 'carrierwave/orm/activerecord'
 
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
@@ -76,4 +77,6 @@ Rails.application.configure do
   config.logger.level = Logger::DEBUG
 
   config.assets.compile = true
+
+  config.public_file_server.enabled = true
 end
