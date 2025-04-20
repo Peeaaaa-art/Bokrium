@@ -79,14 +79,16 @@
 
       <!-- メモ欄 -->
       <div class="card bg-light p-4 mt-5 shadow-sm">
-        <h5 class="mb-3">メモ</h5>
+        
         <% if @memo.present? %>
           <%= form_with(model: [@book, @memo], local: true) do |f| %>
-            <div class="mb-3">
-              <%= f.text_area :content, value: @memo.content && @memo.content["text"], class: "form-control", rows: 6, placeholder: "メモ内容を入力してください"  %>
-            </div>
+            <h5 class="d-flex justify-content-center">メモ</h5>
             <div class="d-flex justify-content-end">
-              <%= f.submit "更新", class: "btn btn-success" %>
+              <%= f.submit "更新", class: "btn btn-success mb-2" %>
+            </div>
+            <div class="mb-3">
+              <%= f.text_area :content, value: @memo.content && @memo.content["text"], class: "form-control",
+                rows: 6, data: { controller: "autogrow" }, placeholder: "メモ内容を入力してください"  %>
             </div>
           <% end %>
 
