@@ -20,7 +20,6 @@ class AvatarUploader < CarrierWave::Uploader::Base
     # ActionController::Base.helpers.asset_path("fallback/" + [version_name, "default.png"].compact.join('_'))
     "avatar_default.jpg"
     # "/images/fallback/" + [version_name, "default.png"].compact.join('_')
-
   end
 
   # Process files as they are uploaded:
@@ -32,13 +31,13 @@ class AvatarUploader < CarrierWave::Uploader::Base
 
   # Create different versions of your uploaded files:
   version :thumb do
-    process resize_to_fit: [100, 100]
+    process resize_to_fit: [ 100, 100 ]
   end
 
   # Add an allowlist of extensions which are allowed to be uploaded.
   # For images you might use something like this:
   def extension_allowlist
-    %w(jpg jpeg gif png svg)
+    %w[jpg jpeg gif png svg]
   end
 
   # Override the filename of the uploaded files:

@@ -7,8 +7,8 @@ class ApplicationController < ActionController::Base
 
   def configure_permitted_parameters
     # 新規登録時に許可するパラメータ
-    devise_parameter_sanitizer.permit(:sign_up, keys: [:name, :introduction, :avatar])
+    devise_parameter_sanitizer.permit(:sign_up, keys: [ :name, :introduction, :avatar ])
     # アカウント更新時に許可するパラメータ
-    devise_parameter_sanitizer.permit(:account_update, keys: [:name, :introduction, :avatar])
+    devise_parameter_sanitizer.permit(:account_update, keys: [ :name, :introduction, :avatar ])
   end
 end
