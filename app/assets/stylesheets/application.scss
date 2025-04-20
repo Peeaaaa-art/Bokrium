@@ -22,3 +22,17 @@ body {
 //   flex: 1;
 // }
 
+@mixin avatar-circle($size) {
+  width: $size;
+  height: $size;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.avatar-circle {
+  @include avatar-circle(100px);
+}
+
+.avatar-circle-mini {
+  @include avatar-circle(35px);
+}

@@ -3,10 +3,8 @@
     <div class="col-md-6 col-lg-5">
       <div class="card shadow-sm">
         <div class="card-body text-center">
-
-          <%# アバター画像がある場合は画像として表示 %>
-          <% if user.avatar %>
-            <%= user.avatar %>
+          <% if user.avatar.present? %>
+            <%= image_tag user.avatar.url, alt: user.name, class: "avatar-circle" %>
           <% else %>
             <div class="rounded-circle bg-secondary mb-3 d-inline-block" style="width:120px; height:120px; line-height:120px; color:#fff;">
               <i class="bi bi-person" style="font-size:3rem;"></i>
@@ -22,8 +20,7 @@
 
           <div class="d-flex justify-content-center gap-2">
             <%= link_to '詳細', user, class: "btn btn-outline-info" %>
-            <%= link_to '編集', edit_user_path(user), class: "btn btn-outline-warning" %>
-            <%= button_to '削除', user, method: :delete, data: { turbo_confirm: '本当に削除しますか？' }, class: "btn btn-outline-danger" %>
+            <%= link_to '編集', edit_user_registration_path(user), class: "btn btn-outline-warning" %>
           </div>
 
         </div>

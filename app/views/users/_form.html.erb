@@ -1,36 +1,58 @@
-<%= form_with(model: user, local: true) do |form| %>
-  <% if user.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(user.errors.count, "error") %>が発生しました:</h2>
-      <ul>
-        <% user.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+      <div class="card shadow-sm">
+        <div class="card-body text-center">
+          <%= form_with(model: user, local: true, html: { multipart: true, class: "needs-validation" }) do |form| %>
+            <% if user.errors.any? %>
+              <div class="alert alert-danger">
+                <h4 class="alert-heading"><%= pluralize(user.errors.count, "件のエラー") %>が発生しました:</h4>
+                <ul class="mb-0">
+                  <% user.errors.full_messages.each do |message| %>
+                    <li><%= message %></li>
+                  <% end %>
+                </ul>
+              </div>
+            <% end %>
 
-  <div>
-    <%= form.label :name, "名前" %><br>
-    <%= form.text_field :name %>
+            <div class="mb-3">
+              <%= form.label :name, "名前", class: "form-label" %>
+              <%= form.text_field :name, class: "form-control" %>
+            </div>
+
+            <div class="mb-3">
+              <%= form.label :email, "メール", class: "form-label" %>
+              <%= form.email_field :email, class: "form-control" %>
+            </div>
+
+            <div class="mb-3">
+              <%= form.label :introduction, "自己紹介", class: "form-label" %>
+              <%= form.text_area :introduction, class: "form-control" %>
+            </div>
+
+            <div class="mb-3">
+              <%= form.label :avatar, "アバター画像", class: "form-label" %>
+              <%= form.file_field :avatar, class: "form-control" %>
+              <% if user.avatar.present? %>
+                <div class="mt-2">
+                  <%= image_tag user.avatar.url, alt: user.name, class: "rounded-circle border", style: "width: 100px; height: 100px; object-fit: cover;" %>
+                </div>
+              <% end %>
+            </div>
+
+            <% unless user.persisted? %>
+              <div class="mb-3">
+                <%= form.label :password, "パスワード", class: "form-label" %>
+                <%= form.password_field :password, class: "form-control" %>
+              </div>
+            <% end %>
+
+            <div>
+              <%= form.submit "保存", class: "btn btn-primary" %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
   </div>
-  <div>
-    <%= form.label :email, "メール" %><br>
-    <%= form.email_field :email %>
-  </div>
-  <div>
-    <%= form.label :introduction, "自己紹介" %><br>
-    <%= form.text_area :introduction %>
-  </div>
-  <div>
-    <%= form.label :avatar, "アバター画像URL" %><br>
-    <%= form.text_field :avatar %>
-  </div>
-  <div>
-    <%= form.label :encrypted_password, "パスワード(暗号化済み)" %><br>
-    <%= form.password_field :encrypted_password %>
-  </div>
-  <div>
-    <%= form.submit %>
-  </div>
-<% end %>
+</div>
