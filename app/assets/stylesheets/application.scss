@@ -36,3 +36,24 @@ body {
 .avatar-circle-mini {
   @include avatar-circle(35px);
 }
+
+.rhodia-grid-bg {
+  background-color: #f8f9fa;
+  background-image:
+    linear-gradient(to right, rgba(0, 47, 255, 0.25) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 85, 255, 0.25) 1px, transparent 1px);
+  background-size: 20px 20px;
+  padding: 40px
+}
+
+.bg-rhodia-orange {
+  background-color: #f7a54d;
+  background-image:
+    url('orange-background.jpg'),
+    linear-gradient(135deg, #f4a148 0%, #ffb347 100%);
+  background-size: cover, 100% 100%;
+  background-blend-mode: lighten;
+}
+
+
+

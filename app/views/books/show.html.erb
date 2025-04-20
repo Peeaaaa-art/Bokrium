@@ -26,13 +26,23 @@
           </div>
           <!-- タグ -->
           <div class="mb-2">
-          <i class="bi bi-tags"></i>
-            <% @book.tags.each do |tag| %>
-              <span class="badge rounded-pill bg-info text-dark me-1" style="font-size:1em;"><%= tag.name %></span>
-            <% end %>
-            <button type="button" class="btn btn-sm btn-outline-info ms-2" data-bs-toggle="collapse" data-bs-target="#tagForm">
-              <i class="bi bi-plus"></i> タグ
-            </button>
+            <i class="bi bi-tags"></i>
+              <% @book.tags.each do |tag| %>
+                <span class="badge rounded-pill bg-info text-dark me-1" style="font-size:1em;"><%= tag.name %></span>
+              <% end %>
+              <button type="button" class="btn btn-sm btn-outline-info ms-2" data-bs-toggle="collapse" data-bs-target="#tagForm">
+                <i class="bi bi-plus"></i> タグ
+              </button>
+              <!-- タグ追加フォーム（折りたたみ） -->
+              <div class="collapse mt-2" id="tagForm">
+                <div class="input-group">
+                  <%= form_with(model: @book, local: true, html: { class: "w-100" }) do |f| %>
+                    <%= text_field_tag :tags, @book.tags.map(&:name).join(','), class: "form-control", placeholder: "小説,哲学" %>
+                    <%= f.submit "保存", class: "btn btn-success" %>
+                  <% end %>
+                </div>
+                <small class="form-text text-muted">カンマ区切りで入力（例: 小説,哲学）</small>
+              </div>
           </div>
           <!-- ステータス -->
           <!-- 書誌情報の右側にステータスと公開セレクトを横並びで配置 -->
@@ -66,28 +76,18 @@
         </div>
       </div>
 
-      <!-- タグ追加フォーム（折りたたみ） -->
-      <div class="collapse mt-2" id="tagForm">
-        <div class="input-group">
-          <%= form_with(model: @book, local: true, html: { class: "w-100" }) do |f| %>
-            <%= text_field_tag :tags, @book.tags.map(&:name).join(','), class: "form-control", placeholder: "小説,哲学" %>
-            <%= f.submit "保存", class: "btn btn-success" %>
-          <% end %>
-        </div>
-        <small class="form-text text-muted">カンマ区切りで入力（例: 小説,哲学）</small>
-      </div>
+
 
       <!-- メモ欄 -->
-      <div class="card bg-light p-4 mt-5 shadow-sm">
-        
+      <div class="card bg-rhodia-orange p-4 mt-5 shadow-sm">
         <% if @memo.present? %>
           <%= form_with(model: [@book, @memo], local: true) do |f| %>
-            <h5 class="d-flex justify-content-center">メモ</h5>
+            <h5 class="d-flex justify-content-center">memo</h5>
             <div class="d-flex justify-content-end">
               <%= f.submit "更新", class: "btn btn-success mb-2" %>
             </div>
-            <div class="mb-3">
-              <%= f.text_area :content, value: @memo.content && @memo.content["text"], class: "form-control",
+            <div class="mb-3 ">
+              <%= f.text_area :content, value: @memo.content && @memo.content["text"], class: "form-control rhodia-grid-bg",
                 rows: 6, data: { controller: "autogrow" }, placeholder: "メモ内容を入力してください"  %>
             </div>
           <% end %>
