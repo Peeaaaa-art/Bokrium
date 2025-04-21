@@ -20,7 +20,7 @@ class MemosController < ApplicationController
   def create
     @memo = current_user.memos.new(memo_params)
     @memo.book_id = params[:book_id]
-  
+
     if @memo.save
       redirect_to book_path(@memo.book), notice: "メモを保存しました"
     else
@@ -28,7 +28,7 @@ class MemosController < ApplicationController
       render "books/show", status: :unprocessable_entity
     end
   end
-  
+
 
 
   def edit
@@ -38,7 +38,7 @@ class MemosController < ApplicationController
   def update
     @memo = Memo.find(params[:id])
     @book = @memo.book
-  
+
     if @memo.update(memo_params) # ← memo_paramsを使う
       redirect_to book_path(@book), notice: "メモを更新しました"
     else
@@ -71,10 +71,9 @@ class MemosController < ApplicationController
     params.require(:memo).permit(:content, :published).tap do |prm| # paramsの略
       # contentをJSON形式に変換（textキーでラップ）
       prm[:content] = { "text" => prm[:content] } if prm[:content]
-  
+
       # enumキーをinteger値に変換（例: "you_can_see" → 1）
       prm[:published] = Memo.publisheds[prm[:published]] if prm[:published]
     end
   end
-  
 end
