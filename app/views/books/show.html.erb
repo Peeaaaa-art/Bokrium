@@ -55,15 +55,7 @@
                       class: "form-select d-inline-block", style: "width: 120px; display: inline-block;", onchange: "this.form.requestSubmit();" %>
               </div>
             <% end %>
-            
-            <%= form_with(model: [@book, @memo], local: false, class: "published-form mb-0") do |f| %>
-              <div>
-                <%= f.select :published,
-                      [["公開", true], ["非公開", false]],
-                      {},
-                      class: "form-select d-inline-block", style: "width: 100px; display: inline-block;", onchange: "this.form.requestSubmit();" %>
-              </div>
-            <% end %>
+
           </div>
           
           <!-- 編集ボタン -->
@@ -113,16 +105,33 @@
                 </div>
                 <div class="card-body rhodia-grid-bg">
 
-                    <%= form_with(model: [@book, memo], local: true) do |f| %>
-                      <div class="mb-3">
-                        <%= f.text_area :content, value: memo.content && memo.content["text"], 
-                            class: "form-control rhodia-grid-bg", rows: 4, data: { controller: "autogrow" },
-                            placeholder: "メモ内容を入力してください" %>
-                      </div>
-                      <div class="d-flex justify-content-end">
-                        <%= f.submit "更新", class: "btn btn-outline-primary" %>
-                      </div>
-                    <% end %>
+                <%= form_with(model: [@book, memo], local: true) do |f| %>
+                  <div class="mb-3">
+                    <%= f.text_area :content, 
+                          value: memo.content && memo.content["text"], 
+                          class: "form-control rhodia-grid-bg", 
+                          rows: 6, 
+                          data: { controller: "autogrow" },
+                          placeholder: "メモ内容を入力してください" %>
+                  </div>
+                
+                  <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div class="form-check form-switch">
+                      <%= f.check_box :published, 
+                            { 
+                              class: "form-check-input",
+                              checked: memo.you_can_see?,
+                              role: "switch"
+                            }, 
+                            "you_can_see", 
+                            "only_i_can_see" %>
+                      <%= f.label :published, "公開する", class: "form-check-label" %>
+                    </div>
+                
+                    <%= f.submit "更新", class: "btn btn-outline-primary" %>
+                  </div>
+                <% end %>
+                
                 </div>
               </div>
             <% end %>
