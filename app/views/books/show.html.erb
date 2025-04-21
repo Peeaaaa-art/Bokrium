@@ -71,28 +71,27 @@
             <%= link_to edit_book_path(@book), class: "btn btn-warning btn-sm me-2" do %>
               <i class="bi bi-pencil-square"></i> 編集
             <% end %>
-            <%= link_to "削除", book_path(@book), data: { turbo_method: :delete, turbo_confirm: "本のデータとメモが削除されると、もとに戻すことはできません。\n本当に削除してもよろしいでしょうか？" }, class: "btn btn-danger btn-sm" %>
+            <%= link_to book_path(@book), data: { turbo_method: :delete, turbo_confirm: "本のデータとメモが削除されると、もとに戻すことはできません。\n本当に削除してもよろしいでしょうか？" }, class: "btn btn-danger btn-sm" do %>
+              <i class="bi bi-trash3"></i> 削除
+            <% end %>
           </div>
         </div>
       </div>
 
-      <h4 class="mt-5 mb-3">メモ</h4>
+
       <!-- メモ欄 -->
       <div class="card bg-rhodia-orange p-4 mt-5 mb-5 shadow-sm">
         <%= form_with(model: [@book, @memo], local: true) do |f| %>
           <h5 class="d-flex justify-content-center">memo</h5>
-          <div class="mb-3">
-            <%= f.text_area :content, value: @memo.content && @memo.content["text"], class: "form-control rhodia-grid-bg",
-              rows: 6, data: { controller: "autogrow" }, placeholder: "メモ内容を入力してください" %>
-          </div>
+           <% if @memos.size < 2 %>
+            <div class="mb-3">
+              <%= f.text_area :content, value: @memo.content && @memo.content["text"], class: "form-control rhodia-grid-bg",
+                rows: 6, data: { controller: "autogrow" }, placeholder: "メモ内容を入力してください" %>
+            </div>
+          <% end %>
           <div class="d-flex justify-content-end">
             <%= f.submit "更新", class: "btn btn-outline-primary me-2" %>
             <%= link_to "さらにメモを書く", new_book_memo_path(@book), class: "btn btn-outline-primary" %>
-            <%= button_to "＋ 新しいメモを追加", 
-            add_memo_form_book_path(@book), 
-            method: :post,
-            form: { data: { turbo_frame: "new_memo_forms" } },
-            class: "btn btn-outline-primary" %>
           </div>
         <% end %>
       </div>
@@ -100,7 +99,7 @@
 
         
         <!-- 既存メモ一覧 -->
-        <% if @memos %>
+        <% if @memos.size > 1 %>
           <div id="memos-container" class="mb-4">
             <% @memos.each_with_index do |memo, index| %>
               <div class="card mb-3">
@@ -113,7 +112,7 @@
                   </div>
                 </div>
                 <div class="card-body rhodia-grid-bg">
-                  <turbo-frame id="memo_<%= memo.id %>">
+
                     <%= form_with(model: [@book, memo], local: true) do |f| %>
                       <div class="mb-3">
                         <%= f.text_area :content, value: memo.content && memo.content["text"], 
@@ -124,19 +123,12 @@
                         <%= f.submit "更新", class: "btn btn-outline-primary" %>
                       </div>
                     <% end %>
-                  </turbo-frame>
                 </div>
               </div>
             <% end %>
           </div>
         <% end %>
-
-
         </div>
-        <!-- 動的に追加されるメモフォーム用エリア -->
-        <turbo-frame id="new_memo_forms">
-        </turbo-frame>
-      </div>
 
       <div class="d-flex justify-content-between mt-4">
         <%= link_to "戻る", books_path, class: "btn btn-secondary" %>
