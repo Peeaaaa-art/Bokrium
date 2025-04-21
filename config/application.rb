@@ -30,7 +30,6 @@ module Bokriumm
     ]
     config.time_zone = "Tokyo"
 
-    config.active_record.legacy_connection_handling = false
     config.active_job.queue_adapter = :async
     config.action_cable.disable_request_forgery_protection = true
   end
