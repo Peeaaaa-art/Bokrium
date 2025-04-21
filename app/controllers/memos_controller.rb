@@ -8,26 +8,34 @@ class MemosController < ApplicationController
   end
 
   def show
-    # @comments = @memo.comments.includes(:user).order(created_at: :desc)
+    @book = Book.find(params[:id])
+    @memos = @book.memos.where(user_id: current_user.id).order(created_at: :desc)
   end
 
   def new
     @memo = @book.memos.new
   end
 
+
   def create
-    @memo = current_user.memos.new(memo_params)
+    @memo = current_user.memos.new
     @memo.book_id = params[:book_id]
-    @memo.content = {
-      text: params[:text],
-      tags: params[:tags].to_s.split(",").map(&:strip)
-    }
+
+    # content属性を適切に処理
+    if params[:memo][:content].present?
+      @memo.content = { "text" => params[:memo][:content] }
+    end
+
+    @memo.published = params[:memo][:published]
+
     if @memo.save
-      redirect_to book_memos_path(@memo.book, @memo), notice: "メモを保存しました"
+      redirect_to book_path(@memo.book), notice: "メモを保存しました"
     else
-      render :new
+      # エラー処理
+      render "books/show", status: :unprocessable_entity
     end
   end
+
 
   def edit
   end
@@ -37,24 +45,24 @@ class MemosController < ApplicationController
     @memo = Memo.find(params[:id])
     @book = @memo.book
 
-    # メモの内容のみを更新（MemoControllerで管理）
-    @memo.content = {
-      text: params[:text]
-      # tagsはメモに関連付けない
-    }
+    # content属性を適切に処理
+    if params[:memo][:content].present?
+      @memo.content = { "text" => params[:memo][:content] }
+    end
 
-    if @memo.update(memo_params)
-      redirect_to book_memo_path(@book, @memo), notice: "メモを更新しました"
+    if @memo.save
+      redirect_to book_path(@book), notice: "メモを更新しました"
     else
-      render :edit
+      render :edit, status: :unprocessable_entity
     end
   end
 
 
   def destroy
     @memo.destroy
-    redirect_to book_memos_path(@book), notice: "メモを削除しました"
+    redirect_to book_memos_path(@book), notice: "メモを削除しました", status: :see_other
   end
+
 
   private
 
@@ -71,6 +79,6 @@ class MemosController < ApplicationController
   end
 
   def memo_params
-    params.require(:memo).permit(:published)
+    params.require(:memo).permit(:published, :content)
   end
 end

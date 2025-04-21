@@ -19,6 +19,7 @@ class BooksController < ApplicationController
     # 書籍のメモ一覧を取得
     # @memos = @book.memos.where(published: true)
     @memos = @book.memos.all if @book.user_id == current_user.id
+    @new_memo = @book.memos.new(user_id: current_user.id)
 
     # フォーム表示用の@memoを設定（最新のメモまたは新規メモ）
     @memo = if current_user
@@ -85,6 +86,14 @@ class BooksController < ApplicationController
     redirect_to books_path, notice: "書籍が削除されました"
   end
 
+  def add_memo_form
+    @book = Book.find(params[:id])
+    @memo = @book.memos.new
+    respond_to do |format|
+      format.turbo_stream # 自動的にadd_memo_form.turbo_stream.erbを参照
+    end
+  end
+
   private
 
   def set_book
@@ -98,7 +107,7 @@ class BooksController < ApplicationController
   end
 
   def book_params
-    params.require(:book).permit(:isbn, :title, :publisher, :page, :book_cover)
+    params.require(:book).permit(:isbn, :title, :publisher, :page, :book_cover, :author, :price, :status)
   end
 
   def sample_books

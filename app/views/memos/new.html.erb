@@ -19,7 +19,7 @@
             </div>
           </div>
 
-          <%= form_with(model: [@book, @memo], local: true, html: { class: 'needs-validation', novalidate: true }) do |f| %>
+          <%= form_with(model: [@book, @memo], local: true) do |f| %>
             <% if @memo.errors.any? %>
               <div class="alert alert-danger">
                 <ul class="mb-0">
@@ -29,14 +29,6 @@
                 </ul>
               </div>
             <% end %>
-
-            <!-- タグ入力 -->
-            <div class="mb-3">
-              <label class="form-label">タグ（カンマ区切り）</label>
-              <input type="text" name="tags" class="form-control" placeholder="例: 小説, 哲学, ファンタジー">
-              <div class="form-text">複数タグはカンマで区切ってください</div>
-            </div>
-
             <!-- 公開/非公開 -->
             <div class="mb-3">
               <label class="form-label">公開ステータス</label>
@@ -48,12 +40,13 @@
 
             <!-- メモ本文（Markdown対応） -->
             <div class="mb-4">
-              <label class="form-label">メモ内容（Markdown対応）</label>
-              <textarea name="text" class="form-control" rows="8" placeholder="ここにメモを書いてください"></textarea>
-              <div class="form-text">Markdown記法が使えます</div>
+              <%= f.label :memo_text, "メモ内容（Markdown対応）", class: "form-label" %>
+                <%= f.text_area :content, value: @memo.content && @memo.content["text"], class: "form-control rhodia-grid-bg",
+                rows: 6, data: { controller: "autogrow" }, placeholder: "メモ内容を入力してください"  %>
             </div>
 
-            <div class="d-flex justify-content-end">
+            <div class="d-flex justify-content-between">
+              <%= link_to "戻る", books_path, class: "btn btn-secondary" %>
               <%= f.submit "保存", class: "btn btn-success px-4" %>
             </div>
           <% end %>
@@ -62,19 +55,3 @@
     </div>
   </div>
 </div>
-
-<script>
-(function () {
-  'use strict'
-  const forms = document.querySelectorAll('.needs-validation')
-  Array.from(forms).forEach(form => {
-    form.addEventListener('submit', event => {
-      if (!form.checkValidity()) {
-        event.preventDefault()
-        event.stopPropagation()
-      }
-      form.classList.add('was-validated')
-    }, false)
-  })
-})()
-</script>
