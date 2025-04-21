@@ -4,3 +4,7 @@ ja:
       want_to_read: "読みたい"
       reading: "読書中"
       finished: "読了"
+  memos:
+    published:
+      only_i_can_see: "非公開"
+      you_can_see: "公開"

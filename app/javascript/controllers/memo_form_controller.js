@@ -1,7 +1,7 @@
-import { Controller } from "@hotwired/stimulus"
+// import { Controller } from "@hotwired/stimulus"
 
-export default class extends Controller {
-  cancel() {
-    this.element.closest(".card").remove()
-  }
-}
+// export default class extends Controller {
+//   cancel() {
+//     this.element.closest(".card").remove()
+//   }
+// }
