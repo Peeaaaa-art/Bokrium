@@ -8,13 +8,13 @@ development:
 test:
   adapter: test
 
-production:
-  adapter: solid_cable
-  connects_to:
-    database:
-      writing: cable
-  polling_interval: 0.1.seconds
-  message_retention: 1.day
+# production:
+#   adapter: solid_cable
+#   connects_to:
+#     database:
+#       writing: cable
+#   polling_interval: 0.1.seconds
+#   message_retention: 1.day
 
 # シンプル
 # production:
@@ -24,3 +24,8 @@ production:
   # production:
   # adapter: redis
   # url: <%= ENV["REDIS_URL"] %>
+
+  production:
+  adapter: redis
+  url: <%= ENV["REDIS_URL"] %>
+  channel_prefix: bokriumm_production
