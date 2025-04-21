@@ -68,6 +68,6 @@ class MemosController < ApplicationController
   end
 
   def memo_params
-    params.require(:memo).permit(:published, :content)
+    params.require(:memo).permit(:published, :content, :text)
   end
 end

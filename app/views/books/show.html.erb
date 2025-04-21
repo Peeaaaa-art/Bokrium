@@ -22,7 +22,7 @@
           </div>
           <div class="mb-2">
             <span class="me-3"><i class="bi bi-file-earmark-text"></i> <%= @book.page.present? ? "#{@book.page}ページ" : "ページ数未登録" %></span>
-            <span class="me-3"><i class="bi bi-currency-yen"></i> <%= @book.price.present? ? "#{@book.price}" : "価格未登録" %></span>
+            <span class="me-3"><i class="bi bi-currency-yen"></i> <%= @book.price.present? ? "¥#{@book.price}" : "価格未登録" %></span>
           </div>
           <!-- タグ -->
           <div class="mb-2">
@@ -71,7 +71,7 @@
             <%= link_to edit_book_path(@book), class: "btn btn-warning btn-sm me-2" do %>
               <i class="bi bi-pencil-square"></i> 編集
             <% end %>
-            <%= link_to "削除", book_path(@book), data: { turbo_method: :delete, turbo_confirm: "本当に削除しますか？" }, class: "btn btn-danger btn-sm" %>
+            <%= link_to "削除", book_path(@book), data: { turbo_method: :delete, turbo_confirm: "本のデータとメモが削除されると、もとに戻すことはできません。\n本当に削除してもよろしいでしょうか？" }, class: "btn btn-danger btn-sm" %>
           </div>
         </div>
       </div>
@@ -80,21 +80,16 @@
 
       <!-- メモ欄 -->
       <div class="card bg-rhodia-orange p-4 mt-5 shadow-sm">
-        <% if @memo.present? %>
           <%= form_with(model: [@book, @memo], local: true) do |f| %>
             <h5 class="d-flex justify-content-center">memo</h5>
-            <div class="d-flex justify-content-end">
-              <%= f.submit "更新", class: "btn btn-success mb-2" %>
-            </div>
             <div class="mb-3 ">
               <%= f.text_area :content, value: @memo.content && @memo.content["text"], class: "form-control rhodia-grid-bg",
                 rows: 6, data: { controller: "autogrow" }, placeholder: "メモ内容を入力してください"  %>
             </div>
-          <% end %>
-
-        <% else %>
-          <div class="alert alert-secondary">write your own memo</div>
-          <%= link_to "メモを書く", new_book_memo_path(@book), class: "btn btn-outline-primary" %>
+            <div class="d-flex justify-content-end">
+              <%= f.submit "更新", class: "btn btn-outline-primary me-2" %>
+              <%= link_to "さらにメモを書く", new_book_memo_path(@book), class: "btn btn-outline-primary" %>
+            </div>
         <% end %>
       </div>
 

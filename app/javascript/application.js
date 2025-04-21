@@ -2,6 +2,5 @@
 import "@hotwired/turbo-rails"
 import "controllers"
 
-// 私が追加したもの
 import "@popperjs/core"
 import "bootstrap"
