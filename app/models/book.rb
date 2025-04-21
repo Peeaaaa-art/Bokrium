@@ -8,6 +8,6 @@ class Book < ApplicationRecord
   enum :status, {
     want_to_read: 0, # 読みたい
     reading: 1,     # 読書中
-    finished: 2,    # 読了
+    finished: 2    # 読了
   }
 end

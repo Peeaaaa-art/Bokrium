@@ -3,6 +3,9 @@ Rails.application.routes.draw do
   resources :users, only: [ :index, :show ]
   resources :books do
     resources :memos
+    member do
+      post :add_memo_form
+    end
   end
 
   root "welcome#index"

@@ -22,27 +22,27 @@
           </div>
           <div class="mb-2">
             <span class="me-3"><i class="bi bi-file-earmark-text"></i> <%= @book.page.present? ? "#{@book.page}ページ" : "ページ数未登録" %></span>
-            <span class="me-3"><i class="bi bi-currency-yen"></i> <%= @book.price.present? ? "¥#{@book.price}" : "価格未登録" %></span>
+            <span class="me-3"><i class="bi bi-currency-yen"></i> <%= @book.price.present? ? "#{@book.price}" : "価格未登録" %></span>
           </div>
           <!-- タグ -->
           <div class="mb-2">
             <i class="bi bi-tags"></i>
-              <% @book.tags.each do |tag| %>
-                <span class="badge rounded-pill bg-info text-dark me-1" style="font-size:1em;"><%= tag.name %></span>
-              <% end %>
-              <button type="button" class="btn btn-sm btn-outline-info ms-2" data-bs-toggle="collapse" data-bs-target="#tagForm">
-                <i class="bi bi-plus"></i> タグ
-              </button>
-              <!-- タグ追加フォーム（折りたたみ） -->
-              <div class="collapse mt-2" id="tagForm">
-                <div class="input-group">
-                  <%= form_with(model: @book, local: true, html: { class: "w-100" }) do |f| %>
-                    <%= text_field_tag :tags, @book.tags.map(&:name).join(','), class: "form-control", placeholder: "小説,哲学" %>
-                    <%= f.submit "保存", class: "btn btn-success" %>
-                  <% end %>
-                </div>
-                <small class="form-text text-muted">カンマ区切りで入力（例: 小説,哲学）</small>
+            <% @book.tags.each do |tag| %>
+              <span class="badge rounded-pill bg-info text-dark me-1" style="font-size:1em;"><%= tag.name %></span>
+            <% end %>
+            <button type="button" class="btn btn-sm btn-outline-info ms-2" data-bs-toggle="collapse" data-bs-target="#tagForm">
+              <i class="bi bi-plus"></i> タグ
+            </button>
+            <!-- タグ追加フォーム（折りたたみ） -->
+            <div class="collapse mt-2" id="tagForm">
+              <div class="input-group">
+                <%= form_with(model: @book, local: true, html: { class: "w-100" }) do |f| %>
+                  <%= text_field_tag :tags, @book.tags.map(&:name).join(','), class: "form-control", placeholder: "小説,哲学" %>
+                  <%= f.submit "保存", class: "btn btn-success" %>
+                <% end %>
               </div>
+              <small class="form-text text-muted">カンマ区切りで入力（例: 小説,哲学）</small>
+            </div>
           </div>
           <!-- ステータス -->
           <!-- 書誌情報の右側にステータスと公開セレクトを横並びで配置 -->
@@ -55,7 +55,7 @@
                       class: "form-select d-inline-block", style: "width: 120px; display: inline-block;", onchange: "this.form.requestSubmit();" %>
               </div>
             <% end %>
-          
+            
             <%= form_with(model: [@book, @memo], local: false, class: "published-form mb-0") do |f| %>
               <div>
                 <%= f.select :published,
@@ -76,21 +76,66 @@
         </div>
       </div>
 
-
-
+      <h4 class="mt-5 mb-3">メモ</h4>
       <!-- メモ欄 -->
-      <div class="card bg-rhodia-orange p-4 mt-5 shadow-sm">
-          <%= form_with(model: [@book, @memo], local: true) do |f| %>
-            <h5 class="d-flex justify-content-center">memo</h5>
-            <div class="mb-3 ">
-              <%= f.text_area :content, value: @memo.content && @memo.content["text"], class: "form-control rhodia-grid-bg",
-                rows: 6, data: { controller: "autogrow" }, placeholder: "メモ内容を入力してください"  %>
-            </div>
-            <div class="d-flex justify-content-end">
-              <%= f.submit "更新", class: "btn btn-outline-primary me-2" %>
-              <%= link_to "さらにメモを書く", new_book_memo_path(@book), class: "btn btn-outline-primary" %>
-            </div>
+      <div class="card bg-rhodia-orange p-4 mt-5 mb-5 shadow-sm">
+        <%= form_with(model: [@book, @memo], local: true) do |f| %>
+          <h5 class="d-flex justify-content-center">memo</h5>
+          <div class="mb-3">
+            <%= f.text_area :content, value: @memo.content && @memo.content["text"], class: "form-control rhodia-grid-bg",
+              rows: 6, data: { controller: "autogrow" }, placeholder: "メモ内容を入力してください" %>
+          </div>
+          <div class="d-flex justify-content-end">
+            <%= f.submit "更新", class: "btn btn-outline-primary me-2" %>
+            <%= link_to "さらにメモを書く", new_book_memo_path(@book), class: "btn btn-outline-primary" %>
+            <%= button_to "＋ 新しいメモを追加", 
+            add_memo_form_book_path(@book), 
+            method: :post,
+            form: { data: { turbo_frame: "new_memo_forms" } },
+            class: "btn btn-outline-primary" %>
+          </div>
         <% end %>
+      </div>
+
+
+        
+        <!-- 既存メモ一覧 -->
+        <% if @memos %>
+          <div id="memos-container" class="mb-4">
+            <% @memos.each_with_index do |memo, index| %>
+              <div class="card mb-3">
+                <div class="card bg-rhodia-orange d-flex justify-content-between align-items-center">
+                  <span>メモ <%= index + 1 %> - <%= l memo.created_at, format: :long %></span>
+                  <div>
+                    <%= button_to "削除", book_memo_path(@book, memo), method: :delete, 
+                        data: { turbo_confirm: "本当に削除しますか？", turbo_frame: "_top" }, 
+                        class: "btn btn-sm btn-outline-danger" %>
+                  </div>
+                </div>
+                <div class="card-body rhodia-grid-bg">
+                  <turbo-frame id="memo_<%= memo.id %>">
+                    <%= form_with(model: [@book, memo], local: true) do |f| %>
+                      <div class="mb-3">
+                        <%= f.text_area :content, value: memo.content && memo.content["text"], 
+                            class: "form-control rhodia-grid-bg", rows: 4, data: { controller: "autogrow" },
+                            placeholder: "メモ内容を入力してください" %>
+                      </div>
+                      <div class="d-flex justify-content-end">
+                        <%= f.submit "更新", class: "btn btn-outline-primary" %>
+                      </div>
+                    <% end %>
+                  </turbo-frame>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
+
+
+        </div>
+        <!-- 動的に追加されるメモフォーム用エリア -->
+        <turbo-frame id="new_memo_forms">
+        </turbo-frame>
       </div>
 
       <div class="d-flex justify-content-between mt-4">
