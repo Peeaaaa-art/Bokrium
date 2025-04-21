@@ -22,7 +22,7 @@
           </div>
           <div class="mb-2">
             <span class="me-3"><i class="bi bi-file-earmark-text"></i> <%= @book.page.present? ? "#{@book.page}ページ" : "ページ数未登録" %></span>
-            <span class="me-3"><i class="bi bi-currency-yen"></i> <%= @book.price.present? ? "¥#{@book.price}" : "価格未登録" %></span>
+            <span class="me-3"><i class="bi bi-currency-yen"></i> <%= @book.price.present? ? "#{@book.price}" : "価格未登録" %></span>
           </div>
           <!-- タグ -->
           <div class="mb-2">
