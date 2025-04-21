@@ -29,8 +29,5 @@ module Bokriumm
       Rails.root.join("config/locales/**/*.{yml}")
     ]
     config.time_zone = "Tokyo"
-    config.active_record.suppress_multiple_database_warning = true
-    config.active_job.queue_adapter = :async
-    config.action_cable.disable_request_forgery_protection = true
   end
 end
