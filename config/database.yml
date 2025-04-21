@@ -97,22 +97,22 @@ test:
 #     database: bokriumm_production_cable
 #     migrations_paths: db/cable_migrate
 
-# production:
-#   <<: *default
-#   url: <%= ENV['DATABASE_URL'] %>
-
 production:
-  primary: &primary_production
-    <<: *default
-    database: <%= ENV["BOKRIUMM_DATABASE_NAME"] || "bokriumm_production" %>
-    username: <%= ENV["BOKRIUMM_DATABASE_USER"] || "bokriumm" %>
-    password: <%= ENV["BOKRIUMM_DATABASE_PASSWORD"] %>
-  cache:
-    <<: *primary_production
-    database: <%= ENV["BOKRIUMM_CACHE_DATABASE_NAME"] || "bokriumm_production" %>
-  queue:
-    <<: *primary_production
-    database: <%= ENV["BOKRIUMM_QUEUE_DATABASE_NAME"] || "bokriumm_production" %>
-  cable:
-    <<: *primary_production
-    database: <%= ENV["BOKRIUMM_CABLE_DATABASE_NAME"] || "bokriumm_production" %>
+  <<: *default
+  url: <%= ENV['DATABASE_URL'] %>
+
+# production:
+#   primary: &primary_production
+#     <<: *default
+#     database: <%= ENV["BOKRIUMM_DATABASE_NAME"] || "bokriumm_production" %>
+#     username: <%= ENV["BOKRIUMM_DATABASE_USER"] || "bokriumm" %>
+#     password: <%= ENV["BOKRIUMM_DATABASE_PASSWORD"] %>
+#   cache:
+#     <<: *primary_production
+#     database: <%= ENV["BOKRIUMM_CACHE_DATABASE_NAME"] || "bokriumm_production" %>
+#   queue:
+#     <<: *primary_production
+#     database: <%= ENV["BOKRIUMM_QUEUE_DATABASE_NAME"] || "bokriumm_production" %>
+#   cable:
+#     <<: *primary_production
+#     database: <%= ENV["BOKRIUMM_CABLE_DATABASE_NAME"] || "bokriumm_production" %>
