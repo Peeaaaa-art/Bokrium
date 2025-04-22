@@ -1,0 +1,11 @@
+<div class="col-md-6">
+  <h3 class="fw-semibold mb-2"><%= @book.title %></h3>
+  <div class="mb-2 text-secondary fs-5"><%= @book.author.presence || "著者未登録" %></div>
+  <div class="mb-2">
+    <span class="me-3"><i class="bi bi-building"></i> <%= @book.publisher.presence || "出版社未登録" %></span>
+    <span class="me-3"><i class="bi bi-upc-scan"></i> <%= @book.isbn.presence || "ISBN未登録" %></span>
+  </div>
+  <div class="mb-2">
+    <span class="me-3"><i class="bi bi-file-earmark-text"></i> <%= @book.page.present? ? "#{@book.page}ページ" : "ページ数未登録" %></span>
+    <span class="me-3"><i class="bi bi-currency-yen"></i> <%= @book.price.present? ? "#{@book.price}" : "価格未登録" %></span>
+</div>
