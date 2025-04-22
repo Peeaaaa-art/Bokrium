@@ -36,20 +36,27 @@ class MemosController < ApplicationController
 
 
   def update
-    @memo = Memo.find(params[:id])
-    @book = @memo.book
-
-    if @memo.update(memo_params) # ← memo_paramsを使う
-      redirect_to book_path(@book), notice: "メモを更新しました"
+    if @memo.update(memo_params)
+      respond_to do |format|
+        format.turbo_stream
+        format.html { redirect_to book_path(@book), notice: "更新しました" }
+      end
     else
-      render :edit, status: :unprocessable_entity
+      render turbo_stream: turbo_stream.replace(
+        memo_dom_id(@memo),
+        partial: "memos/memo_item",
+        locals: { memo: @memo, index: 0, memos: @book.memos, book: @book }
+      ), status: :unprocessable_entity
     end
   end
 
 
   def destroy
     @memo.destroy
-    redirect_to book_memos_path(@book), notice: "メモを削除しました", status: :see_other
+    respond_to do |format|
+      format.turbo_stream { render turbo_stream: turbo_stream.remove(memo_dom_id(@memo)) }
+      format.html { redirect_to book_path(@book), notice: "メモを削除しました", status: :see_other }
+    end
   end
 
 
@@ -63,7 +70,7 @@ class MemosController < ApplicationController
     @memo = Memo.find(params[:id])
     # 自分のメモか公開されているメモのみアクセス可能
     unless @memo.user_id == current_user.id || @memo.published
-      redirect_to book_memos_path(@book), alert: "アクセス権限がありません"
+      redirect_to book_memo_path(@book), alert: "アクセス権限がありません"
     end
   end
 

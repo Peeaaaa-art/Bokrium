@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   devise_for :users, controllers: { registrations: "users/registrations" }
   resources :users, only: [ :index, :show ]
   resources :books do
-    resources :memos
+    resources :memos, only: [ :create, :new, :edit, :update, :destroy ]
     member do
       post :add_memo_form
     end

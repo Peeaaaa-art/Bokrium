@@ -1,0 +1,1 @@
+<%= turbo_stream.replace memo_dom_id(@memo), partial: "memo_item", locals: { memo: @memo, index: 0, memos: @book.memos, book: @book } %>

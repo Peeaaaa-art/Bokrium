@@ -1,0 +1,8 @@
+<div class="d-flex justify-content-end align-items-center gap-3 mb-3">
+  <%= form_with(model: @book, local: false, class: "status-form mb-0") do |f| %>
+      <%= f.select :status,
+            Book.statuses.keys.map { |s| [t("books.status.#{s}"), s] },
+            {},
+            class: "form-select d-inline-block", style: "width: 120px; display: inline-block;", onchange: "this.form.requestSubmit();" %>
+  <% end %>
+</div>
