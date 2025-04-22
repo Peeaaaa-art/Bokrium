@@ -5,6 +5,7 @@
         <!-- 書影 -->
         <%= render 'book_cover',   book: @book %>
         <!-- 書誌情報 -->
+      <div class="col-md-6">
         <%= render 'book_info',    book: @book %>
         <!-- タグ -->
         <%= render 'tags_form',    book: @book %>
@@ -14,77 +15,12 @@
         <%= render 'book_actions', book: @book %>
       </div>
     </div>
-
-
       <!-- メモ欄 -->
-      <div class="card bg-rhodia-orange p-4 mt-5 mb-5 shadow-sm">
-        <%= form_with(model: [@book, @memo], local: true) do |f| %>
-          <h5 class="d-flex justify-content-center">memo</h5>
-           <% if @memos.size < 2 %>
-            <div class="mb-3">
-              <%= f.text_area :content, value: @memo.content && @memo.content["text"], class: "form-control rhodia-grid-bg",
-                rows: 6, data: { controller: "autogrow" }, placeholder: "メモ内容を入力してください" %>
-            </div>
-          <% end %>
-          <div class="d-flex justify-content-end">
-            <%= f.submit "更新", class: "btn btn-outline-primary me-2" %>
-            <%= link_to "さらにメモを書く", new_book_memo_path(@book), class: "btn btn-outline-primary" %>
-          </div>
-        <% end %>
-      </div>
-
-
-        
-        <!-- 既存メモ一覧 -->
-        <% if @memos.size > 1 %>
-          <div id="memos-container" class="mb-4">
-            <% @memos.each_with_index do |memo, index| %>
-              <div class="card mb-3">
-                <div class="card bg-rhodia-orange d-flex justify-content-between align-items-center">
-                  <span>メモ <%= index + 1 %> - <%= l memo.created_at, format: :long %></span>
-                  <div>
-                    <%= button_to "削除", book_memo_path(@book, memo), method: :delete, 
-                        data: { turbo_confirm: "本当に削除しますか？", turbo_frame: "_top" }, 
-                        class: "btn btn-sm btn-outline-danger" %>
-                  </div>
-                </div>
-                <div class="card-body rhodia-grid-bg">
-
-                <%= form_with(model: [@book, memo], local: true) do |f| %>
-                  <div class="mb-3">
-                    <%= f.text_area :content, 
-                          value: memo.content && memo.content["text"], 
-                          class: "form-control rhodia-grid-bg", 
-                          rows: 6, 
-                          data: { controller: "autogrow" },
-                          placeholder: "メモ内容を入力してください" %>
-                  </div>
-                
-                  <div class="d-flex justify-content-between align-items-center mb-3">
-                    <div class="form-check form-switch">
-                      <%= f.check_box :published, 
-                            { 
-                              class: "form-check-input",
-                              checked: memo.you_can_see?,
-                              role: "switch"
-                            }, 
-                            "you_can_see", 
-                            "only_i_can_see" %>
-                      <%= f.label :published, "公開する", class: "form-check-label" %>
-                    </div>
-                
-                    <%= f.submit "更新", class: "btn btn-outline-primary" %>
-                  </div>
-                <% end %>
-                
-                </div>
-              </div>
-            <% end %>
-          </div>
-        <% end %>
-        </div>
-
-      <div class="d-flex justify-content-between mt-4">
+      <%= render 'memos/memo_form', book: @book, memos: @memos, memo: @memo %>
+      <!-- 既存メモ一覧 -->
+      <%= render 'memos/memo_list', book: @book, memos: @memos %>
+      <div class="d-flex  justify-content-center gap-3 mt-4 mb-3">
+        <%= link_to "さらにメモを書く", new_book_memo_path(@book), class: "btn btn-outline-primary" %>
         <%= link_to "戻る", books_path, class: "btn btn-secondary" %>
       </div>
     </div>

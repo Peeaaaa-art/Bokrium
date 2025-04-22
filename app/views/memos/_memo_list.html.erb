@@ -1,0 +1,7 @@
+<% if @memos.size > 1 %>
+  <div id="memos-container" class="mb-5">
+    <% @memos.sort_by(&:created_at).reverse.each_with_index do |memo, index| %>
+      <%= render partial: "memos/memo_item", locals: { memo:, index:, memos: @memos, book: @book } %>
+    <% end %>
+  </div>
+<% end %>

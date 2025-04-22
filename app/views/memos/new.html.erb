@@ -29,17 +29,6 @@
                 </ul>
               </div>
             <% end %>
-            <!-- 公開/非公開 -->
-                <%= f.check_box :published,
-                      {
-                        checked: @memo.you_can_see?,
-                        class: "form-check-input",
-                        data: { action: "change->form#submit" }
-                      },
-                      "you_can_see",   # チェック時の値（enumキー）
-                      "only_i_can_see" # 未チェック時の値（enumキー
-                %>
-                <%= f.hidden_field :published, value: "only_i_can_see" %>
 
             <!-- メモ本文（Markdown対応） -->
             <div class="mb-4">
