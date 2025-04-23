@@ -16,7 +16,7 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background-color:rgba(221, 231, 233, 0.25);
+  background-color:rgba(221, 231, 233, 0.33);
 }
 
 .yomoo-color {
@@ -34,6 +34,12 @@ body {
 
 .rhodia-gray {
   background-color: #2D2D2D;
+}
+
+.rhodia-gray .navbar-nav .nav-link,
+.rhodia-gray .navbar-brand,
+.rhodia-gray .navbar-text {
+  color: #fff !important;
 }
 
 @mixin avatar-circle($size) {
