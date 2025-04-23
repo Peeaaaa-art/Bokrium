@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_04_21_115217) do
+ActiveRecord::Schema[8.0].define(version: 2025_04_23_043420) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -49,10 +49,12 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_21_115217) do
   end
 
   create_table "images", force: :cascade do |t|
-    t.bigint "memo_id", null: false
+    t.bigint "memo_id"
     t.string "image_path"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "book_id", null: false
+    t.index ["book_id"], name: "index_images_on_book_id"
     t.index ["memo_id"], name: "index_images_on_memo_id"
   end
 
@@ -284,6 +286,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_21_115217) do
   add_foreign_key "books", "users"
   add_foreign_key "comments", "memos"
   add_foreign_key "comments", "users"
+  add_foreign_key "images", "books"
   add_foreign_key "images", "memos"
   add_foreign_key "like_memos", "memos"
   add_foreign_key "like_memos", "users"

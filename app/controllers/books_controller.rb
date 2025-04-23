@@ -15,9 +15,9 @@ class BooksController < ApplicationController
       @not_logged_in = true
     end
   end
+
   def show
-    # 書籍のメモ一覧を取得
-    # @memos = @book.memos.where(published: true)
+    # @others_memos = @book.memos.where(published: 1)
     @memos = @book.memos.all if @book.user_id == current_user.id
     @new_memo = @book.memos.new(user_id: current_user.id)
 
@@ -47,7 +47,6 @@ class BooksController < ApplicationController
     end
 
     if @book.save
-      # タグの処理
       if params[:tags].present?
         params[:tags].split(",").each do |tag_name|
           tag = Tag.find_or_create_by(name: tag_name.strip)
@@ -66,7 +65,6 @@ class BooksController < ApplicationController
   end
 
   def update
-    # タグの処理（BookControllerで管理）
     if params[:tags].present?
       tag_names = params[:tags].to_s.split(",").map(&:strip).reject(&:blank?)
       tags = tag_names.map { |name| Tag.find_or_create_by(name: name) }
@@ -111,7 +109,6 @@ class BooksController < ApplicationController
   end
 
   def sample_books
-    # サンプル書籍データ（DBには保存しない）
     [
       (1..15).map do |i|
         Book.new(title: "optimized#{i}.jpg")

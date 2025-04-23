@@ -1,42 +1,19 @@
-<%= turbo_frame_tag memo_dom_id(memo) do %>
+<%= turbo_frame_tag dom_id(memo) do %>
   <div class="card mt-5 mb-5">
     <div class="card bg-rhodia-orange d-flex justify-content-between align-items-center px-3 py-2">
-      <span>メモ <%= memos.size - index %> - <%= l memo.created_at, format: :long %></span>
+      <span>メモ <%= memos.size - index - 1 %> - <%= l memo.created_at, format: :long %></span>
       <div>
-        <%= button_to "削除", book_memo_path(book, memo), method: :delete,
-            data: { turbo_confirm: "本当に削除しますか？", turbo: true },
-            class: "btn btn-sm btn-outline-danger" %>
+        <%= button_to book_memo_path(book, memo), method: :delete,
+        data: { turbo_confirm: "本当に削除しますか？", turbo: true },
+        class: "btn btn-sm" do %>
+          <i class="bi bi-trash2"></i>
+        <% end %>
       </div>
     </div>
 
     <div class="card-body rhodia-grid-bg">
       <%= form_with(model: [book, memo], data: { turbo_frame: dom_id(memo) }) do |f| %>
-        <div class="mb-3">
-          <%= f.text_area :content,
-                value: memo_text(memo),
-                class: "form-control rhodia-grid-bg",
-                rows: 6,
-                data: { controller: "autogrow" },
-                placeholder: "メモ内容を入力してください" %>
-        </div>
-
-        <div class="d-flex justify-content-between align-items-center mb-3">
-          <div class="form-check form-switch">
-            <%= f.check_box :published,
-                  {
-                    class: "form-check-input",
-                    checked: memo.you_can_see?,
-                    role: "switch"
-                  },
-                  "you_can_see",
-                  "only_i_can_see" %>
-            <%= f.label :published, "公開する", class: "form-check-label" %>
-          </div>
-
-          <%= button_tag type: "submit", class: "btn btn-outline-primary me-2" do %>
-            <i class="bi bi-arrow-clockwise"></i> 更新
-          <% end %>
-        </div>
+        <%= render partial: "memos/form_fields", locals: { f: f, memo: memo } %>
       <% end %>
     </div>
   </div>

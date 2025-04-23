@@ -15,6 +15,10 @@
         <%= render 'book_actions', book: @book %>
       </div>
     </div>
+      <!-- 画像アップロード -->
+      <%= render 'images/image_form', book: @book %>
+      <!-- 画像一覧表示 -->
+      <%= render 'images/image_list', book: @book %>
       <!-- メモ欄 -->
       <%= render 'memos/memo_form', book: @book, memos: @memos, memo: @memo %>
       <!-- 既存メモ一覧 -->

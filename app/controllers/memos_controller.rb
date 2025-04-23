@@ -1,4 +1,5 @@
 class MemosController < ApplicationController
+  include ActionView::RecordIdentifier
   # before_action :authenticate_user!
   before_action :set_book
   before_action :set_memo, only: [ :show, :edit, :update, :destroy ]
@@ -16,7 +17,6 @@ class MemosController < ApplicationController
     @memo = @book.memos.new
   end
 
-
   def create
     @memo = current_user.memos.new(memo_params)
     @memo.book_id = params[:book_id]
@@ -24,16 +24,12 @@ class MemosController < ApplicationController
     if @memo.save
       redirect_to book_path(@memo.book), notice: "メモを保存しました"
     else
-      # エラー処理
       render "books/show", status: :unprocessable_entity
     end
   end
 
-
-
   def edit
   end
-
 
   def update
     if @memo.update(memo_params)
@@ -43,22 +39,20 @@ class MemosController < ApplicationController
       end
     else
       render turbo_stream: turbo_stream.replace(
-        memo_dom_id(@memo),
+        dom_id(@memo),
         partial: "memos/memo_item",
         locals: { memo: @memo, index: 0, memos: @book.memos, book: @book }
       ), status: :unprocessable_entity
     end
   end
 
-
   def destroy
     @memo.destroy
     respond_to do |format|
-      format.turbo_stream { render turbo_stream: turbo_stream.remove(memo_dom_id(@memo)) }
+      format.turbo_stream { render turbo_stream: turbo_stream.remove(dom_id(@memo)) }
       format.html { redirect_to book_path(@book), notice: "メモを削除しました", status: :see_other }
     end
   end
-
 
   private
 
@@ -68,14 +62,13 @@ class MemosController < ApplicationController
 
   def set_memo
     @memo = Memo.find(params[:id])
-    # 自分のメモか公開されているメモのみアクセス可能
     unless @memo.user_id == current_user.id || @memo.published
       redirect_to book_memo_path(@book), alert: "アクセス権限がありません"
     end
   end
 
   def memo_params
-    params.require(:memo).permit(:content, :published).tap do |prm| # paramsの略
+    params.require(:memo).permit(:content, :published).tap do |prm|
       # contentをJSON形式に変換（textキーでラップ）
       prm[:content] = { "text" => prm[:content] } if prm[:content]
 
