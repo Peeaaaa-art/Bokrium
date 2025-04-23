@@ -6,22 +6,35 @@
   font-family: "Big Shoulders Inline", sans-serif;
   font-weight: 700;
 }
-
-// スティッキーフッター用
-// html, body {
-//   height: 100%;
+// body::before {
+//   content: "Hello from SCSS!";
+//   display: block;
+//   background: #D88200;
 // }
 
 body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background-color: rgba(243, 243, 243, 0.241);
+  background-color:rgba(221, 231, 233, 0.25);
 }
 
-// .main-content {
-//   flex: 1;
-// }
+.yomoo-color {
+  background-color:rgba(221, 231, 233, 0.4);
+}
+
+.stone-color {
+  background-color:rgb(204, 218, 221);
+}
+
+
+.rhodia-cover-blue {
+  background-color:rgb(54, 54, 146, 0.8);
+}
+
+.rhodia-gray {
+  background-color: #2D2D2D;
+}
 
 @mixin avatar-circle($size) {
   width: $size;
