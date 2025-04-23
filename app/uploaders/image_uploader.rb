@@ -15,12 +15,12 @@ class ImageUploader < CarrierWave::Uploader::Base
 
   # サムネイル（小）
   version :thumb do
-    process resize_to_fill: [200,200]
+    process resize_to_fill: [ 200, 200 ]
   end
 
   # 拡大用（大）
   version :large do
-    process resize_to_limit: [1200, 800]
+    process resize_to_limit: [ 1200, 800 ]
     process :set_quality
   end
 

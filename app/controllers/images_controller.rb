@@ -4,16 +4,16 @@ class ImagesController < ApplicationController
   def create
     @image = @book.images.build(image_params)
     if @image.save
-      redirect_to @book, notice: '画像をアップロードしました。'
+      redirect_to @book, notice: "画像をアップロードしました。"
     else
-      redirect_to @book, alert: '画像のアップロードに失敗しました。'
+      redirect_to @book, alert: "画像のアップロードに失敗しました。"
     end
   end
 
   def destroy
     @image = @book.images.find(params[:id])
     @image.destroy
-    redirect_to @book, notice: '画像を削除しました。'
+    redirect_to @book, notice: "画像を削除しました。"
   end
 
   private

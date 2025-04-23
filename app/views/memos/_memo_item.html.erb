@@ -1,7 +1,7 @@
 <%= turbo_frame_tag dom_id(memo) do %>
   <div class="card mt-5 mb-5">
     <div class="card bg-rhodia-orange d-flex justify-content-between align-items-center px-3 py-2">
-      <span>メモ <%= memos.size - index - 1 %> - <%= l memo.created_at, format: :long %></span>
+      <span>memo <%= memos.size - index - 1 %> - <%= l memo.created_at, format: :long %></span>
       <div>
         <%= button_to book_memo_path(book, memo), method: :delete,
         data: { turbo_confirm: "本当に削除しますか？", turbo: true },
