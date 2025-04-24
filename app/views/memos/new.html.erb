@@ -6,7 +6,6 @@
           <h4 class="mb-0">新規メモ作成</h4>
         </div>
         <div class="card-body">
-
           <!-- 本の情報（タイトル・著者・出版社など） -->
           <div class="mb-4 d-flex align-items-center">
             <% if @book.book_cover.present? %>
@@ -29,7 +28,6 @@
                 </ul>
               </div>
             <% end %>
-
             <!-- メモ本文（Markdown対応） -->
             <div class="mb-4">
                 <%= f.text_area :content, value: @memo.content && @memo.content["text"], class: "form-control rhodia-grid-bg",

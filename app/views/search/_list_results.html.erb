@@ -1,57 +1,55 @@
-<% if @book_results.present? %>
-  <div class="container mt-4">
-    <h3 class="mb-4 text-center">
-      検索結果（<%= number_with_delimiter(@total_count) %>件中
-      <%= number_with_delimiter(@book_results.size) %>件表示）
-    </h3>
-    <div class="row row-cols-1 row-cols-md-3 row-cols-lg-6 g-4 mb-5">
-      <% @book_results.each do |book| %>
-        <div class="col">
-          <div class="card h-100 shadow-sm">
-            <div class="card-img-top-container" style="height: 250px; background-color: #f8f9fa;">
-              <img src="<%= book.large_image_url || book.medium_image_url %>"
-                  alt="<%= book.title %>の表紙画像"
-                  class="img-fluid p-3"
-                  style="height: 100%; width: 100%; object-fit: contain;"
-                  loading="lazy">
+<div class="container mt-4">
+  <h3 class="mb-4 text-center">
+    検索結果（<%= number_with_delimiter(@total_count) %>件中
+    <%= number_with_delimiter(@book_results.size) %>件表示）
+  </h3>
+  <div class="row row-cols-1 row-cols-md-3 row-cols-lg-6 g-4 mb-5">
+    <% @book_results.each do |book| %>
+      <div class="col">
+        <div class="card h-100 shadow-sm">
+          <div class="card-img-top-container" style="height: 250px; background-color: #f8f9fa;">
+            <img src="<%= book.large_image_url || book.medium_image_url %>"
+                alt="<%= book.title %>の表紙画像"
+                class="img-fluid p-3"
+                style="height: 100%; width: 100%; object-fit: contain;"
+                loading="lazy">
+          </div>
+          <div class="card-body d-flex flex-column">
+            <h5 class="card-title mb-3"><%= book.title.truncate(40) %></h5>
+            <div class="mb-auto">
+              <p class="card-text text-muted small mb-1">
+                <strong>著者:</strong> <%= book.author || '情報なし' %>
+              </p>
+              <p class="card-text text-muted small">
+                <strong>出版社:</strong> <%= book.publisher_name || '情報なし' %>
+              </p>
             </div>
-            <div class="card-body d-flex flex-column">
-              <h5 class="card-title mb-3"><%= book.title.truncate(40) %></h5>
-              <div class="mb-auto">
-                <p class="card-text text-muted small mb-1">
-                  <strong>著者:</strong> <%= book.author || '情報なし' %>
-                </p>
-                <p class="card-text text-muted small">
-                  <strong>出版社:</strong> <%= book.publisher_name || '情報なし' %>
-                </p>
-              </div>
-              <%= button_to "My本棚に追加", books_path(book: {
-                title: book.title,
-                author: book.author,
-                publisher: book.publisher_name,
-                isbn: book.isbn,
-                price: book.item_price,
-                remote_book_cover_url: book.large_image_url || book.medium_image_url || book.small_image_url
-              }), method: :post, class: "btn btn-success" %>
+            <%= button_to "My本棚に追加", books_path(book: {
+              title:     book.title,
+              author:    book.author,
+              publisher: book.publisher_name,
+              isbn:      book.isbn,
+              price:     book.item_price,
+              remote_book_cover_url: book.large_image_url || book.medium_image_url || book.small_image_url
+            }), method: :post, class: "btn btn-success" %>
 
-            </div>
           </div>
         </div>
-      <% end %>
-    </div>
-
-    <% if @total_pages > 1 %>
-      <div class="d-flex justify-content-center mb-5">
-        <nav aria-label="ページネーション">
-          <ul class="pagination">
-            <% 1.upto(@total_pages) do |i| %>
-              <li class="page-item <%= 'active' if i == (params[:page] || 1).to_i %>">
-                <%= link_to i, pagination_path_for(i, params), class: "page-link", data: { turbo_action: "replace" } %>
-              </li>
-            <% end %>
-          </ul>
-        </nav>
       </div>
     <% end %>
   </div>
-<% end %>
+
+  <% if @total_pages > 1 %>
+    <div class="d-flex justify-content-center mb-5">
+      <nav aria-label="ページネーション">
+        <ul class="pagination">
+          <% 1.upto(@total_pages) do |i| %>
+            <li class="page-item <%= 'active' if i == (params[:page] || 1).to_i %>">
+              <%= link_to i, pagination_path_for(i, params), class: "page-link", data: { turbo_action: "replace" } %>
+            </li>
+          <% end %>
+        </ul>
+      </nav>
+    </div>
+  <% end %>
+</div>
