@@ -28,7 +28,7 @@ class BookCoverUploader < CarrierWave::Uploader::Base
     def resize_and_set_quality
       manipulate! do |img|
         img.resize "240x"
-        img.quality "88"
+        img.quality "95"
         img
       end
     end
