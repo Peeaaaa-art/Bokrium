@@ -37,6 +37,8 @@ class BooksController < ApplicationController
     @book = Book.new
   end
 
+  def search_index; end
+
   def create
     @book = current_user.books.build(book_params)
 
