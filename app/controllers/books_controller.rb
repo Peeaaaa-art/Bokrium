@@ -92,20 +92,17 @@ class BooksController < ApplicationController
     end
   end
 
-  # def search_by_isbn
-  #   isbn = paramas[:isbn]
-  #   @books = RakutenWebService::Books::Book.search(isbn: isbn)
-
-  #   if @books.any?
-  #     @book_data = @books.first
-  #   else
-  #     flash[:alert] = "該当する書籍が見つかりませんでした"
-  #   end
-  # end
   def search_by_isbn
     if params[:isbn].present?
       results = RakutenWebService::Books::Book.search(isbn: params[:isbn])
       @book_data = results.first if results.any?
+    end
+  end
+
+  def search_by_author
+    if params[:author].present?
+      results = RakutenWebService::Books::Book.search(author: params[:author])
+      @book_results = results if results.any?
     end
   end
 

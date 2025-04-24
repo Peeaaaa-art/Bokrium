@@ -9,6 +9,7 @@ Rails.application.routes.draw do
     end
     collection do
       get :search_by_isbn
+      get :search_by_author
     end
   end
 

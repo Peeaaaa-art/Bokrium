@@ -47,3 +47,9 @@
     grid-template-columns: 1fr;
   }
 }
+
+.card-grid-5-cols {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1.5rem;
+}

@@ -1,0 +1,40 @@
+<h2 class="text-center mt-4 mb-4">著者名で検索</h2>
+
+<div class="d-flex justify-content-center mb-4">
+  <div style="max-width: 480px; width: 100%;">
+    <%= form_with url: search_by_author_books_path, method: :get, local: true do %>
+      <div class="mb-3">
+        <%= label_tag :author, "著者名", class: "form-label" %>
+        <%= text_field_tag :author, params[:author], class: "form-control", placeholder: "例: 村上春樹" %>
+      </div>
+      <div class="text-center">
+        <%= submit_tag "検索", class: "btn btn-primary" %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<% if @book_results %>
+  <h3 class="mb-3">検索結果（<%= @book_results.count %>件）</h3>
+
+  <div class="card-grid-5-cols">
+    <% @book_results.each do |book| %>
+      <div class="card h-100 shadow-sm p-3">
+        <img src="<%= book.large_image_url || book.medium_image_url %>" alt="書影" class="card-img-top mb-2" style="object-fit: contain; max-height: 300px;">
+        <div class="card-body text-center">
+          <h5 class="card-title"><%= book.title %></h5>
+          <p class="card-text"><strong>著者:</strong> <%= book.author %></p>
+          <p class="card-text"><strong>出版社:</strong> <%= book.publisher_name %></p>
+          <%= button_to "My本棚に追加", books_path(book: {
+            title: book.title,
+            author: book.author,
+            publisher: book.publisher_name,
+            isbn: book.isbn,
+            price: book.item_price,
+            remote_book_cover_url: book.large_image_url || book.medium_image_url || book.small_image_url
+          }), method: :post, class: "btn btn-success" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% end %>
