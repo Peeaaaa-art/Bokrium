@@ -29,6 +29,8 @@ gem "bootstrap", "~> 5.3.3"
 gem "carrierwave", "~> 3.1", ">= 3.1.2"
 gem "mini_magick", "~> 4.5", ">= 4.5.1"
 
+gem 'rakuten_web_service', '~> 1.15'
+
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
 # gem "bcrypt", "~> 3.1.7"
 
@@ -66,6 +68,8 @@ end
 group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
+  # .envを読み込んで使用するため（楽天ID用)
+  gem 'dotenv-rails'
 end
 
 group :test do
