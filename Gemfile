@@ -29,6 +29,9 @@ gem "bootstrap", "~> 5.3.3"
 gem "carrierwave", "~> 3.1", ">= 3.1.2"
 gem "mini_magick", "~> 4.5", ">= 4.5.1"
 
+gem "rakuten_web_service"
+gem "dotenv-rails"
+
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
 # gem "bcrypt", "~> 3.1.7"
 

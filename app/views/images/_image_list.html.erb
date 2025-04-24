@@ -1,0 +1,36 @@
+<div class="row row-cols-1 row-cols-md-5 g-3">
+  <% book.images.each_with_index do |img, idx| %>
+    <div class="col">
+      <%= button_to book_image_path(book, img),
+          method: :delete,
+          data: { turbo_confirm: "この画像を削除しますか？" },
+          class: "btn btn-sm d-flex align-items-center justify-content-center mx-auto mt-2",
+          title: "画像を削除" do %>
+      <i class="bi bi-trash2"></i>
+      <% end %>
+      <div class="card">
+        <!-- サムネイル表示（小） -->
+        <%= image_tag img.image_path.url(:thumb),
+              class: "card-img-top",
+              alt: "Book Image",
+              style: "object-fit: contain; background: #f8f9fa;",
+              data: { bs_toggle: "modal", bs_target: "#imageModal#{idx}" } %>
+      </div>
+    </div>
+
+    <!-- モーダル表示（大） -->
+    <div class="modal fade" id="imageModal<%= idx %>" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-xl bg-transparent">
+        <div class="modal-content bg-transparent border-0">
+          <div class="modal-body text-center p-0">
+            <%= image_tag img.image_path.url(:large),
+                  class: "img-fluid rounded shadow-lg", alt: "拡大画像" %>
+            <!-- バツアイコンで閉じる -->
+            <button type="button" class="btn-close position-absolute top-0 end-0 m-3"
+                    data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>

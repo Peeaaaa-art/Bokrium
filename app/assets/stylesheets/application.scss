@@ -6,22 +6,41 @@
   font-family: "Big Shoulders Inline", sans-serif;
   font-weight: 700;
 }
-
-// スティッキーフッター用
-// html, body {
-//   height: 100%;
+// body::before {
+//   content: "Hello from SCSS!";
+//   display: block;
+//   background: #D88200;
 // }
 
 body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background-color: rgba(243, 243, 243, 0.241);
+  background-color:rgba(221, 231, 233, 0.33);
 }
 
-// .main-content {
-//   flex: 1;
-// }
+.yomoo-color {
+  background-color:rgba(221, 231, 233, 0.4);
+}
+
+.stone-color {
+  background-color:rgb(204, 218, 221);
+}
+
+
+.rhodia-cover-blue {
+  background-color:rgb(54, 54, 146, 0.8);
+}
+
+.rhodia-gray {
+  background-color: #2d2d2de3;
+}
+
+.rhodia-gray .navbar-nav .nav-link,
+.rhodia-gray .navbar-brand,
+.rhodia-gray .navbar-text {
+  color: #fff !important;
+}
 
 @mixin avatar-circle($size) {
   width: $size;
@@ -54,6 +73,26 @@ body {
     linear-gradient(135deg, #f4a148 0%, #ffb347 100%);
   background-size: cover, 100% 100%;
   background-blend-mode: lighten;
+}
+
+.flash-message {
+  position: fixed;
+  left: 50%;
+  bottom: 2rem;
+  transform: translateX(-50%);
+  z-index: 2000;
+  min-width: 320px;
+  max-width: 90vw;
+  text-align: center;
+  opacity: 0.97;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+  animation: appear-then-fade 3s both;
+}
+@keyframes appear-then-fade {
+  0%   { opacity: 0; }
+  10%  { opacity: 0.97; }
+  90%  { opacity: 0.97; }
+  100% { opacity: 0; }
 }
 
 

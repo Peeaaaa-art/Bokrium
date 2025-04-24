@@ -14,8 +14,8 @@
             <% end %>
             <div>
               <h5 class="mb-1"><%= @book.title %></h5>
+              <div class="text-muted"><%= @book.author %></div>
               <div class="text-muted"><%= @book.publisher %></div>
-              <div class="text-muted"><%= @book.page %>ページ</div>
             </div>
           </div>
 
@@ -32,15 +32,16 @@
 
             <!-- メモ本文（Markdown対応） -->
             <div class="mb-4">
-              <%= f.label :memo_text, "メモ内容（Markdown対応）", class: "form-label" %>
                 <%= f.text_area :content, value: @memo.content && @memo.content["text"], class: "form-control rhodia-grid-bg",
                 rows: 6, data: { controller: "autogrow" }, placeholder: "メモ内容を入力してください"  %>
             </div>
 
-            <div class="d-flex justify-content-between">
-              <%= link_to "戻る", book_path(@book), class: "btn btn-secondary" %>
-              <%= f.submit "保存", class: "btn btn-success px-4" %>
+            <div class="d-flex justify-content-end">
+              <%= f.submit "保存", class: "btn btn-outline-primary px-4" %>
             </div>
+            <div class="text-center mt-5">
+              <%= link_to "戻る", book_path(@book), class: "btn btn-secondary" %>
+              </div>
           <% end %>
         </div>
       </div>

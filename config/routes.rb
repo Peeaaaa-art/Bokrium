@@ -3,8 +3,14 @@ Rails.application.routes.draw do
   resources :users, only: [ :index, :show ]
   resources :books do
     resources :memos, only: [ :create, :new, :edit, :update, :destroy ]
+    resources :images, only: [ :create, :destroy ]
     member do
       post :add_memo_form
+    end
+    collection do
+      get :search_by_isbn
+      get :search_by_author
+      get :search_index
     end
   end
 

@@ -27,8 +27,8 @@ class BookCoverUploader < CarrierWave::Uploader::Base
 
     def resize_and_set_quality
       manipulate! do |img|
-        img.resize "240x"         # 幅240pxにリサイズ（高さはアスペクト比維持）
-        img.quality "88"          # 画質85%に設定
+        img.resize "240x"
+        img.quality "95"
         img
       end
     end

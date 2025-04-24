@@ -15,9 +15,9 @@ class BooksController < ApplicationController
       @not_logged_in = true
     end
   end
+
   def show
-    # 書籍のメモ一覧を取得
-    # @memos = @book.memos.where(published: true)
+    # @others_memos = @book.memos.where(published: 1)
     @memos = @book.memos.all if @book.user_id == current_user.id
     @new_memo = @book.memos.new(user_id: current_user.id)
 
@@ -37,6 +37,8 @@ class BooksController < ApplicationController
     @book = Book.new
   end
 
+  def search_index; end
+
   def create
     @book = current_user.books.build(book_params)
 
@@ -47,7 +49,6 @@ class BooksController < ApplicationController
     end
 
     if @book.save
-      # タグの処理
       if params[:tags].present?
         params[:tags].split(",").each do |tag_name|
           tag = Tag.find_or_create_by(name: tag_name.strip)
@@ -55,9 +56,17 @@ class BooksController < ApplicationController
         end
       end
 
-      redirect_to @book, notice: "書籍が正常に登録されました"
+      flash.now[:success] = "My本棚に『#{@book.title.truncate(30)}』を追加しました"
+      respond_to do |format|
+        format.turbo_stream
+        format.html { redirect_to books_path, notice: "My本棚に『#{@book.title.truncate(30)}』を追加しました" }
+      end
     else
-      render :new
+      flash.now[:danger] = "追加に失敗しました"
+      respond_to do |format|
+        format.turbo_stream
+        format.html { render :new, status: :unprocessable_entity }
+      end
     end
   end
 
@@ -66,7 +75,6 @@ class BooksController < ApplicationController
   end
 
   def update
-    # タグの処理（BookControllerで管理）
     if params[:tags].present?
       tag_names = params[:tags].to_s.split(",").map(&:strip).reject(&:blank?)
       tags = tag_names.map { |name| Tag.find_or_create_by(name: name) }
@@ -94,6 +102,39 @@ class BooksController < ApplicationController
     end
   end
 
+  def search_by_isbn
+    if params[:isbn].present?
+      results = RakutenWebService::Books::Book.search(isbn: params[:isbn])
+      @book_data = results.first if results.any?
+    end
+  end
+
+  def search_by_author
+    begin
+      if params[:author].present?
+        page = params[:page] || 1
+        results = RakutenWebService::Books::Book.search(
+          author: params[:author],
+          page: page,
+          hits: 30
+        )
+
+        @book_results = results.to_a
+        @total_count = results.response["count"]
+        @total_pages = (results.response["count"].to_f / 30).ceil
+      else
+        @book_results = []
+        @total_count = 0
+        @total_pages = 0
+      end
+    rescue RakutenWebService::Error => e
+      flash[:error] = "楽天APIでエラーが発生しました: #{e.message}"
+      redirect_to root_path
+    end
+  end
+
+
+
   private
 
   def set_book
@@ -107,11 +148,10 @@ class BooksController < ApplicationController
   end
 
   def book_params
-    params.require(:book).permit(:isbn, :title, :publisher, :page, :book_cover, :author, :price, :status)
+    params.require(:book).permit(:isbn, :title, :publisher, :page, :book_cover, :author, :price, :status, :remote_book_cover_url)
   end
 
   def sample_books
-    # サンプル書籍データ（DBには保存しない）
     [
       (1..15).map do |i|
         Book.new(title: "optimized#{i}.jpg")
