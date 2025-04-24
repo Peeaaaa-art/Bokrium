@@ -10,6 +10,7 @@ Rails.application.routes.draw do
     collection do
       get :search_by_isbn
       get :search_by_author
+      get :search_by_title
       get :search_index
     end
   end

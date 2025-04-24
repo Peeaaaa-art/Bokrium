@@ -37,7 +37,7 @@
           isbn: @book_data.isbn,
           remote_book_cover_url: @book_data.large_image_url || @book_data.medium_image_url || @book_data.small_image_url,
           price: @book_data.item_price
-        }), method: :post, class: "btn btn-success mt-3" %>
+        }), method: :post, class: "btn btn-success mt-3", data: { turbo: false } %>
       </div>
     </div>
   </div>

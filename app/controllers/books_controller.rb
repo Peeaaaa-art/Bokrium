@@ -120,8 +120,8 @@ class BooksController < ApplicationController
         )
 
         @book_results = results.to_a
-        @total_count = results.response["count"]
-        @total_pages = (results.response["count"].to_f / 30).ceil
+        @total_count = [ results.response["count"].to_i, 300 ].min
+        @total_pages = (@total_count / 30.0).ceil
       else
         @book_results = []
         @total_count = 0
@@ -133,6 +133,29 @@ class BooksController < ApplicationController
     end
   end
 
+  def search_by_title
+    begin
+      if params[:title].present?
+        page = params[:page] || 1
+        results = RakutenWebService::Books::Book.search(
+          title: params[:title],
+          page: page,
+          hits: 30
+        )
+
+        @book_results = results.to_a
+        @total_count = [ results.response["count"].to_i, 300 ].min
+        @total_pages = (@total_count / 30.0).ceil
+      else
+        @book_results = []
+        @total_count = 0
+        @total_pages = 0
+      end
+    rescue RakutenWebService::Error => e
+      flash[:error] = "楽天APIでエラーが発生しました: #{e.message}"
+      redirect_to root_path
+    end
+  end
 
 
   private
