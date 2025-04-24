@@ -53,7 +53,7 @@
   </div>
 
   <div class="d-flex justify-content-between mt-4">
-    <%= link_to "戻る", @book.persisted? ? book_path(@book) : books_path, class: "btn btn-secondary" %>
+    <%= link_to "戻る", @book.persisted? ? book_path(@book) : search_books_path, class: "btn btn-secondary" %>
     <%= f.submit @book.persisted? ? "更新する" : "登録する", class: "btn btn-primary px-4" %>
   </div>
 <% end %>

@@ -1,0 +1,28 @@
+<div class="d-flex justify-content-center mb-4">
+  <div style="max-width: 600px; width: 100%;">
+    <%= form_with url: search_books_path, method: :get, local: true do %>
+      <div class="row">
+        <div class="col-md-4 mb-3">
+          <%= label_tag :type, "検索種別", class: "form-label" %>
+          <%= select_tag :type,
+                options_for_select([["タイトル", "title"], ["著者", "author"],["ISBN", "isbn"]], params[:type]),
+                class: "form-select",
+                onchange: "this.form.submit()" %>
+        </div>
+        <div class="col-md-8 mb-3">
+          <%= label_tag :query, "検索キーワード", class: "form-label" %>
+          <% placeholder = case params[:type]
+            when "isbn" then "例: 9781234567890"
+            when "author" then "例: 村上春樹"
+            when "title" then "例: ノルウェイの森"
+            else "例: ノルウェイの森"
+            end %>
+          <%= text_field_tag :query, params[:query], class: "form-control", placeholder: placeholder %>
+        </div>
+      </div>
+      <div class="text-center">
+        <%= submit_tag "検索", class: "btn btn-primary" %>
+      </div>
+    <% end %>
+  </div>
+</div>
