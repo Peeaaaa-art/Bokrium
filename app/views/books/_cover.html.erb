@@ -1,0 +1,7 @@
+<div class="col-md-3 text-center">
+  <% if @book.book_cover.present? %>
+    <%= image_tag @book.book_cover.url, alt: @book.title, class: "img-fluid rounded shadow-sm", style: "max-width: auto;" %>
+  <% else %>
+    <div class="no-cover"><%= @book.title %></div>
+  <% end %>
+</div>

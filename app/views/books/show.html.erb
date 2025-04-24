@@ -3,26 +3,26 @@
     <div class="col-lg-10">
       <div class="row g-4 align-items-start">
         <!-- 書影 -->
-        <%= render 'book_cover',   book: @book %>
+        <%= render 'books/cover',   book: @book %>
         <!-- 書誌情報 -->
       <div class="col-md-6 ms-4">
-        <%= render 'book_info',    book: @book %>
+        <%= render 'books/info',    book: @book %>
         <!-- タグ -->
         <%= render 'tags_form',    book: @book %>
         <!-- ステータス -->
         <%= render 'status_form',  book: @book %>
         <!-- 編集ボタン -->
-        <%= render 'book_actions', book: @book %>
+        <%= render 'books/actions', book: @book %>
       </div>
     </div>
       <!-- 画像アップロード -->
-      <%= render 'images/image_form', book: @book %>
+      <%= render 'images/form', book: @book %>
       <!-- 画像一覧表示 -->
-      <%= render 'images/image_list', book: @book %>
+      <%= render 'images/list', book: @book %>
       <!-- メモ欄 -->
-      <%= render 'memos/memo_form', book: @book, memos: @memos, memo: @memo %>
+      <%= render 'memos/form', book: @book, memos: @memos, memo: @memo %>
       <!-- 既存メモ一覧 -->
-      <%= render 'memos/memo_list', book: @book, memos: @memos %>
+      <%= render 'memos/list', book: @book, memos: @memos %>
       <div class="d-flex  justify-content-center gap-3 mt-4 mb-3">
         <%= link_to "さらにメモを書く", new_book_memo_path(@book), class: "btn btn-outline-primary" %>
         <%= link_to "戻る", books_path, class: "btn btn-secondary" %>

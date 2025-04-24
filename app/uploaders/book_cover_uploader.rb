@@ -23,12 +23,11 @@ class BookCoverUploader < CarrierWave::Uploader::Base
   end
 
     # リサイズと品質設定を同時に適用
-    process :resize_and_set_quality
+    process :resize
 
-    def resize_and_set_quality
+    def resize
       manipulate! do |img|
         img.resize "240x"
-        img.quality "95"
         img
       end
     end

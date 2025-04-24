@@ -37,8 +37,6 @@ class BooksController < ApplicationController
     @book = Book.new
   end
 
-  def search_index; end
-
   def create
     @book = current_user.books.build(book_params)
 
@@ -88,52 +86,10 @@ class BooksController < ApplicationController
     end
   end
 
-
   def destroy
     @book.destroy
     redirect_to books_path, notice: "書籍が削除されました"
   end
-
-  def add_memo_form
-    @book = Book.find(params[:id])
-    @memo = @book.memos.new
-    respond_to do |format|
-      format.turbo_stream # 自動的にadd_memo_form.turbo_stream.erbを参照
-    end
-  end
-
-  def search_by_isbn
-    if params[:isbn].present?
-      results = RakutenWebService::Books::Book.search(isbn: params[:isbn])
-      @book_data = results.first if results.any?
-    end
-  end
-
-  def search_by_author
-    begin
-      if params[:author].present?
-        page = params[:page] || 1
-        results = RakutenWebService::Books::Book.search(
-          author: params[:author],
-          page: page,
-          hits: 30
-        )
-
-        @book_results = results.to_a
-        @total_count = results.response["count"]
-        @total_pages = (results.response["count"].to_f / 30).ceil
-      else
-        @book_results = []
-        @total_count = 0
-        @total_pages = 0
-      end
-    rescue RakutenWebService::Error => e
-      flash[:error] = "楽天APIでエラーが発生しました: #{e.message}"
-      redirect_to root_path
-    end
-  end
-
-
 
   private
 
