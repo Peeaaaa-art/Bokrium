@@ -7,6 +7,9 @@ Rails.application.routes.draw do
     member do
       post :add_memo_form
     end
+    collection do
+      get :search_by_isbn
+    end
   end
 
   root "welcome#index"
