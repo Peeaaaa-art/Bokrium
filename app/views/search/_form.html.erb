@@ -12,9 +12,9 @@
         <div class="col-md-8 mb-3">
           <%= label_tag :query, "検索キーワード", class: "form-label" %>
           <% placeholder = case params[:type]
-            when "isbn" then "例: 9781234567890"
+            when "isbn"   then "例: 9781234567890"
             when "author" then "例: 村上春樹"
-            when "title" then "例: ノルウェイの森"
+            when "title"  then "例: ノルウェイの森"
             else "例: ノルウェイの森"
             end %>
           <%= text_field_tag :query, params[:query], class: "form-control", placeholder: placeholder %>
