@@ -30,9 +30,10 @@
   </head>
 
   <body>
-    <div class="yomoo-color">
-      <%= render "shared/header" %>
+    <div id="flash">
+      <%= render "shared/flash" %>
     </div>
+    <%= render "shared/header" %>
 
     <%= yield %>
     <%= render "shared/footer" %>

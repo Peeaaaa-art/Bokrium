@@ -54,9 +54,17 @@ class BooksController < ApplicationController
         end
       end
 
-      redirect_to @book, notice: "書籍が正常に登録されました"
+      flash.now[:success] = "My本棚に『#{@book.title.truncate(30)}』を追加しました"
+      respond_to do |format|
+        format.turbo_stream
+        format.html { redirect_to books_path, notice: "My本棚に『#{@book.title.truncate(30)}』を追加しました" }
+      end
     else
-      render :new
+      flash.now[:danger] = "追加に失敗しました"
+      respond_to do |format|
+        format.turbo_stream
+        format.html { render :new, status: :unprocessable_entity }
+      end
     end
   end
 

@@ -75,5 +75,25 @@ body {
   background-blend-mode: lighten;
 }
 
+.flash-message {
+  position: fixed;
+  left: 50%;
+  bottom: 2rem;
+  transform: translateX(-50%);
+  z-index: 2000;
+  min-width: 320px;
+  max-width: 90vw;
+  text-align: center;
+  opacity: 0.97;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+  animation: appear-then-fade 3s both;
+}
+@keyframes appear-then-fade {
+  0%   { opacity: 0; }
+  10%  { opacity: 0.97; }
+  90%  { opacity: 0.97; }
+  100% { opacity: 0; }
+}
+
 
 
