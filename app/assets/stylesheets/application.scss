@@ -95,5 +95,12 @@ body {
   100% { opacity: 0; }
 }
 
-
-
+#scanner {
+  video,
+  canvas {
+    width: 100% !important; // ← 横幅を scanner 枠にフィット
+    max-height: 240px !important;
+    object-fit: cover;
+    object-position: center center; // ← 中央寄せ（上下＋左右）
+  }
+}

@@ -6,6 +6,19 @@
   <%= link_to "手動で入力",  new_book_path, class: "btn btn-secondary" %>
 </div>
 
+<div class="container text-center mb-4">
+  <h1>バーコードスキャンで本を追加</h1>
+
+  <div id="scanner" style="max-width: 680px; margin: 0 auto; height: 240px; border: 2px dashed #ccc; overflow: hidden;"></div>
+
+  <p>読み取ったISBN:</p>
+  <input type="text" id="isbn_input" name="isbn" readonly class="isbn-input" />
+
+  <%= button_to "登録する", books_path, method: :post, params: { isbn: '' }, id: "submit_button", class: "btn btn-primary", disabled: true %>
+
+  <%= javascript_include_tag "quagga_start", type: "module" %>
+</div>
+
 <% if @book_data.present? %>
   <%= render "search/isbn_result", book: @book_data %>
 <% elsif @book_results.present? %>

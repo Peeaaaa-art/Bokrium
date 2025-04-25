@@ -9,3 +9,4 @@ pin_all_from "app/javascript/controllers", under: "controllers"
 # 私が追加したもの
 pin "bootstrap", to: "bootstrap.min.js", preload: true
 pin "@popperjs/core", to: "popper.js", preload: true
+pin "quagga", to: "https://cdn.jsdelivr.net/npm/@ericblade/quagga2@1.2.6/dist/quagga.min.js"
