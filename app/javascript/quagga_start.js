@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
         constraints: {
           facingMode: "environment",
           width: { min: 640 },
-          height: { min: 480 },
+          height: { min: 240 },
         }
       },
       decoder: {
