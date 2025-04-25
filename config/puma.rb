@@ -1,20 +1,5 @@
-
 threads_count = ENV.fetch("RAILS_MAX_THREADS", 3)
 threads threads_count, threads_count
-
-# Specifies the `port` that Puma will listen on to receive requests; default is 3000.
-
-
-# localhostのHTTPS化
-# if ENV["USE_SSL"] == "true" &&
-#   File.exist?(File.expand_path("~/ssl-dev/localhost.key")) &&
-#   File.exist?(File.expand_path("~/ssl-dev/localhost.crt"))
-
-#  ssl_bind '0.0.0.0', '3000', {
-#    key: File.expand_path("~/ssl-dev/localhost.key"),
-#    cert: File.expand_path("~/ssl-dev/localhost.crt")
-#  }
-# end
 
 if defined?(Rails) && Rails.env.development? && ENV["USE_SSL"] == "true"
   key_path  = File.expand_path("~/ssl-dev/localhost.key")
