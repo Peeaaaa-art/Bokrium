@@ -2,7 +2,8 @@
   "name": "bokriumm-web",
   "version": "1.0.0",
   "engines": {
-    "node": "22.x",
-    "npm": "10.x"
+    "node": "23.11.0",
+    "npm": "10.x",
+    "yarn": "1.22.x"
   }
 }
