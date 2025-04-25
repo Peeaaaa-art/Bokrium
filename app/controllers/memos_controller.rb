@@ -33,6 +33,7 @@ class MemosController < ApplicationController
 
   def update
     if @memo.update(memo_params)
+      flash[:notice] = "更新しました"
       respond_to do |format|
         format.turbo_stream
         format.html { redirect_to book_path(@book), notice: "更新しました" }

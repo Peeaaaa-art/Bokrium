@@ -1,1 +1,3 @@
-<%= turbo_stream.replace dom_id(@memo), partial: "memo_item", locals: { memo: @memo, index: 0, memos: @book.memos, book: @book } %>
+<%= turbo_stream.replace dom_id(@memo), partial: "memos/item", locals: { memo: @memo, index: 0, memos: @book.memos, book: @book } %>
+
+<%= turbo_stream.append "flash", partial: "shared/flash" %>
