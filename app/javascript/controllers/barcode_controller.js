@@ -6,6 +6,11 @@ export default class extends Controller {
 
   connect() {
     this.reader = new BrowserMultiFormatReader();
+    // フォーマット制限を追加
+    this.reader.options = {
+      possibleFormats: ['EAN_13'],
+      tryHarder: true
+    };
     this.startScanner();
     // 赤枠の動的生成
     this.createScanFrame()
@@ -25,8 +30,15 @@ export default class extends Controller {
 
       this.reader.decodeFromVideoDevice(selectedDeviceId, this.videoTarget, (result, err) => {
         if (result) {
-          this.outputTarget.textContent = `ISBN: ${result.getText()}`;
-          this.reader.reset();
+          const isbn = result.getText();
+          // 978から始まるバーコードのみ処理
+          if (isbn.startsWith('978')) {
+            this.outputTarget.textContent = `ISBN: ${result.getText()}`;
+            this.reader.reset();
+          } else {
+            console.log('無効なバーコード', isbn);
+          }
+
         }
       });
 
@@ -53,7 +65,7 @@ export default class extends Controller {
     frame.style.left = '25%'
     frame.style.width = '50%'
     frame.style.height = '30%'
-    frame.style.border = '4px solid rgb(181, 31, 31)'
+    frame.style.border = '4px solid rgba(227, 221, 216, 0.66)'
     frame.style.boxSizing = 'border-box'
     frame.style.pointerEvents = 'none'
     frame.style.zIndex = '1000'
