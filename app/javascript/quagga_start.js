@@ -1,37 +1,44 @@
-import "quagga";
+import "quagga"; // importmap にて UMD CDN を pin
 
 document.addEventListener("DOMContentLoaded", () => {
   const scanner = document.getElementById("scanner");
 
-  if (scanner) {
-    Quagga.init({
+  if (scanner && window.Quagga) {
+    window.Quagga.init({
       inputStream: {
+        name: "Live",
         type: "LiveStream",
         target: scanner,
         constraints: {
-          facingMode: "environment" // 背面カメラ指定
+          facingMode: "environment",
+          width: { min: 640 },
+          height: { min: 480 },
         }
       },
       decoder: {
-        readers: ["ean_reader"] // ISBNコード用バーコード
-      }
+        readers: ["ean_reader"] // ← ここを強調
+      },
+      locate: false // ← 一旦 false に
     }, (err) => {
       if (err) {
-        console.error(err);
+        console.error("Quagga init error:", err);
         return;
       }
-      Quagga.start();
+      window.Quagga.start();
     });
 
-    Quagga.onDetected((data) => {
+    window.Quagga.onDetected((data) => {
       const isbn = data.codeResult.code;
       console.log("ISBN Detected:", isbn);
 
-      // ここでinput要素に挿入もできる
       const input = document.getElementById("isbn_input");
-      if (input) {
-        input.value = isbn;
-      }
+      const button = document.getElementById("submit_button");
+
+      if (input) input.value = isbn;
+      if (button) button.disabled = false;
+
+      // 読み取り後に停止する場合:
+      // window.Quagga.stop();
     });
   }
 });
