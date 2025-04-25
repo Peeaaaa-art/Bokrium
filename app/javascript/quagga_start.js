@@ -1,4 +1,4 @@
-import Quagga from "@ericblade/quagga2";
+import "quagga";
 
 document.addEventListener("DOMContentLoaded", () => {
   const scanner = document.getElementById("scanner");
