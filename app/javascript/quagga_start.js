@@ -11,9 +11,8 @@ document.addEventListener("DOMContentLoaded", () => {
         target: scanner,
         constraints: {
           facingMode: "environment",
-          width: { min: 640 },
-          height: { min: 240 },
-        }
+          width: { min: 680 },
+          height: { min: 240 } }
       },
       decoder: {
         readers: ["ean_reader"] // ← ここを強調
