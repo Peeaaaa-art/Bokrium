@@ -20,12 +20,8 @@ class BooksController < ApplicationController
     # @others_memos = @book.memos.where(published: 1)
     @memos = @book.memos.all if @book.user_id == current_user.id
     @new_memo = @book.memos.new(user_id: current_user.id)
-
-    # フォーム表示用の@memoを設定（最新のメモまたは新規メモ）
     @memo = if current_user
-      # 現在のユーザーのこの本に関する最新のメモを取得
       @book.memos.where(user_id: current_user.id).order(created_at: :desc).first ||
-      # メモがなければ新規メモオブジェクトを作成
       @book.memos.new(user_id: current_user.id)
     end
 
