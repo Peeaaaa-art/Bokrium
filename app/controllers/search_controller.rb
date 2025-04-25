@@ -30,4 +30,6 @@ class SearchController < ApplicationController
       redirect_to root_path
     end
   end
+
+  def barcode; end
 end
