@@ -3,7 +3,7 @@ threads_count = ENV.fetch("RAILS_MAX_THREADS", 3)
 threads threads_count, threads_count
 
 # Specifies the `port` that Puma will listen on to receive requests; default is 3000.
-port ENV.fetch("PORT", 3000)
+
 
 # localhostのHTTPS化
 # if ENV["USE_SSL"] == "true" &&
@@ -26,6 +26,8 @@ if defined?(Rails) && Rails.env.development? && ENV["USE_SSL"] == "true"
       cert: cert_path
     }
   end
+else
+  port ENV.fetch("PORT", 3000)
 end
 
 # Allow puma to be restarted by `bin/rails restart` command.
