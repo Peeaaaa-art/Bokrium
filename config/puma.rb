@@ -6,7 +6,7 @@ threads threads_count, threads_count
 # port ENV.fetch("PORT", 3000)
 
 # localhostのHTTPS化
-if Rails.env.development?
+if ENV["USE_SSL"] == "true"
   ssl_bind '0.0.0.0', '3000', {
     key: File.expand_path("~/ssl-dev/localhost.key"),
     cert: File.expand_path("~/ssl-dev/localhost.crt")
