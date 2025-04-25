@@ -7,6 +7,8 @@ export default class extends Controller {
   connect() {
     this.reader = new BrowserMultiFormatReader();
     this.startScanner();
+    // 赤枠の動的生成
+    this.createScanFrame()
   }
 
   async startScanner() {
@@ -37,5 +39,27 @@ export default class extends Controller {
     if (this.reader) {
       this.reader.reset();
     }
+  }
+  createScanFrame() {
+    // 既存の枠を削除
+    const existingFrame = this.element.querySelector('.dynamic-scan-frame')
+    if (existingFrame) existingFrame.remove()
+    
+    // 新しい枠を作成
+    const frame = document.createElement('div')
+    frame.classList.add('dynamic-scan-frame')
+    frame.style.position = 'absolute'
+    frame.style.top = '35%'
+    frame.style.left = '25%'
+    frame.style.width = '50%'
+    frame.style.height = '30%'
+    frame.style.border = '4px solid rgb(181, 31, 31)'
+    frame.style.boxSizing = 'border-box'
+    frame.style.pointerEvents = 'none'
+    frame.style.zIndex = '1000'
+    
+    // ビデオラッパーに枠を追加
+    const wrapper = this.videoTarget.parentElement
+    wrapper.appendChild(frame)
   }
 }

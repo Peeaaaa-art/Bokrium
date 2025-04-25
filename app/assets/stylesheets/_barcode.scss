@@ -1,0 +1,19 @@
+.video-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  overflow: hidden; /* はみ出し防止 */
+}
+
+.scan-frame {
+  position: absolute;
+  top: 10%;
+  left: 10%;
+  width: 80%;
+  height: 20%;
+  border: 4px solid rgba(181, 31, 31, 0.8); /* 透明度を追加 */
+  box-sizing: border-box;
+  pointer-events: none;
+  z-index: 1000; /* z-indexを大きな値に */
+  box-shadow: 0 0 0 2000px rgba(0, 0, 0, 0.3); /* 外側を暗くする */
+}

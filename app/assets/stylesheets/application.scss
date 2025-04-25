@@ -1,16 +1,12 @@
 @import "bootstrap";
 @import "books";
 @import "footer";
+@import "barcode";
 
 .big-shoulders-inline-bold {
   font-family: "Big Shoulders Inline", sans-serif;
   font-weight: 700;
 }
-// body::before {
-//   content: "Hello from SCSS!";
-//   display: block;
-//   background: #D88200;
-// }
 
 body {
   min-height: 100vh;

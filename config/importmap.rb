@@ -9,5 +9,3 @@ pin_all_from "app/javascript/controllers", under: "controllers"
 # 私が追加したもの
 pin "bootstrap", to: "bootstrap.min.js", preload: true
 pin "@popperjs/core", to: "popper.js", preload: true
-
-pin "zxing" # @0.1.2
