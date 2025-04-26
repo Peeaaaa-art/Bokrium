@@ -33,16 +33,16 @@ export default class extends Controller {
             try {
               this.dispatch("scan", {
                 detail: { isbn },
-                bubbles: true, // 必須
+                bubbles: true,
                 cancelable: true,
                 prefix: "barcode",
-                target: window // 明示的にwindowをターゲットに指定
+                target: window
               });
 
             console.log('DISPATCHED scan event with ISBN:', isbn);
 
             this.outputTarget.textContent = `検出: ${isbn}`;
-            
+
             await new Promise(resolve => setTimeout(resolve, this.debounceValue));
           } finally {
             this.isProcessing = false;
@@ -54,7 +54,7 @@ export default class extends Controller {
       this.outputTarget.textContent = `エラー: ${e.message}`;
     }
   }
-  
+
   disconnect() {
     if (this.reader) {
       this.reader.reset();

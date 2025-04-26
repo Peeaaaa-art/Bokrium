@@ -10,8 +10,8 @@ export default class extends Controller {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), this.timeoutValue);
 
-    fetch(`/books/search_isbn_turbo?isbn=${isbn}`, {
-      headers: { 
+    fetch(`/search/search_isbn_turbo?isbn=${isbn}`, {
+      headers: {
         Accept: "text/vnd.turbo-stream.html",
         "X-CSRF-Token": this.getCsrfToken(),
         "X-Requested-With": "XMLHttpRequest"
@@ -21,14 +21,14 @@ export default class extends Controller {
     .then(response => {
       console.log("Response status:", response.status);
       clearTimeout(timeoutId);
-      
+
       if (!response.ok) {
         throw new Error(`${response.status} ${response.statusText}`);
       }
-      
+
       return response.text().then(html => {
         console.log("Raw Response:", html);
-        
+
         if (typeof html === "string" && html.includes("<turbo-stream")) {
           Turbo.renderStreamMessage(html);
           this.scrollToLatest();

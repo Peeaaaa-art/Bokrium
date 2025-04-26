@@ -1,5 +1,4 @@
 class SearchController < ApplicationController
-  skip_before_action :verify_authenticity_token, only: [:search_isbn_turbo]
   SEARCH_TYPES = %w[isbn author title].freeze
 
   def index
@@ -35,7 +34,7 @@ class SearchController < ApplicationController
   def search_isbn_turbo
     isbn = params[:isbn]
     return head :bad_request if isbn.blank?
-  
+
     begin
       results = RakutenWebService::Books::Book.search(isbn: isbn)
       if results.present?
