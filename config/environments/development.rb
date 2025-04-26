@@ -77,6 +77,7 @@ Rails.application.configure do
   config.logger.level = Logger::DEBUG
 
   config.assets.compile = true
+  config.assets.debug = true
 
   config.public_file_server.enabled = true
 end
