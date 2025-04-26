@@ -3,9 +3,11 @@ import { BrowserMultiFormatReader } from "https://cdn.jsdelivr.net/npm/@zxing/br
 
 export default class extends Controller {
   static targets = ["video", "output"]
+  static values = { debounce: { type: Number, default: 1000 } }
 
   connect() {
     this.scannedIsbns = new Set();
+    this.isProcessing = false;
     this.reader = new BrowserMultiFormatReader();
     this.reader.options = {
       possibleFormats: ['EAN_13'],
@@ -21,25 +23,38 @@ export default class extends Controller {
         video: {
           facingMode: { ideal: "environment" }
         }
-      }, this.videoTarget, (result, err) => {
-        if (result) {
+      }, this.videoTarget, async (result, err) => {
+        if (result && !this.isProcessing) {
           const isbn = result.getText();
           if (isbn.startsWith('978') && !this.scannedIsbns.has(isbn)) {
-            this.outputTarget.textContent = `ISBN: ${isbn} を検出しました`;
+            this.isProcessing = true;
             this.scannedIsbns.add(isbn);
-            // windowレベルでイベントを発行
-            const event = new CustomEvent("scan", { detail: { isbn } });
-            window.dispatchEvent(event);
-            this.reader.reset();
-            setTimeout(() => this.startScanner(), 1000);
+
+            try {
+              this.dispatch("scan", {
+                detail: { isbn },
+                bubbles: true, // 必須
+                cancelable: true,
+                prefix: "barcode",
+                target: window // 明示的にwindowをターゲットに指定
+              });
+
+            console.log('DISPATCHED scan event with ISBN:', isbn);
+
+            this.outputTarget.textContent = `検出: ${isbn}`;
+            
+            await new Promise(resolve => setTimeout(resolve, this.debounceValue));
+          } finally {
+            this.isProcessing = false;
           }
         }
-      });
+      }
+    });
     } catch (e) {
       this.outputTarget.textContent = `エラー: ${e.message}`;
     }
   }
-
+  
   disconnect() {
     if (this.reader) {
       this.reader.reset();

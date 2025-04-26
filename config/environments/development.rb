@@ -80,4 +80,6 @@ Rails.application.configure do
   config.assets.debug = true
 
   config.public_file_server.enabled = true
+
+  config.web_console.permissions = '192.168.0.33'
 end

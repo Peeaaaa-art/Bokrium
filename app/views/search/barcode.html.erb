@@ -2,7 +2,7 @@
   <h1 class="mb-4">バーコードを読み取る</h1>
   <div
     data-controller="barcode scan"
-    data-action="scan@window->scan#scan"
+    data-action="barcode:scan@window->scan#scan"
     class="d-flex justify-content-center flex-column align-items-center"
   >
     <div class="video-wrapper border rounded shadow p-3" style="width: 480px; position: relative;">
@@ -17,7 +17,7 @@
     <p class="mt-3 fs-5 text-muted" data-barcode-target="output">
       スキャン結果がここに表示されます
     </p>
-    <turbo-frame id="scanned-books" class="w-100 mt-4" style="max-width: 240px;">
+    <turbo-frame id="scanned-books" class="w-100 mt-4" style="max-width: 720px;">
     </turbo-frame>
   </div>
 </div>
