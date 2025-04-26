@@ -5,6 +5,7 @@ export default class extends Controller {
   static targets = ["video", "output"]
 
   connect() {
+    this.scannedIsbns = new Set();
     this.reader = new BrowserMultiFormatReader();
     this.reader.options = {
       possibleFormats: ['EAN_13'],
@@ -23,11 +24,14 @@ export default class extends Controller {
       }, this.videoTarget, (result, err) => {
         if (result) {
           const isbn = result.getText();
-          if (isbn.startsWith('978')) {
-            this.outputTarget.textContent = `ISBN: ${isbn}`;
+          if (isbn.startsWith('978') && !this.scannedIsbns.has(isbn)) {
+            this.outputTarget.textContent = `ISBN: ${isbn} を検出しました`;
+            this.scannedIsbns.add(isbn);
+            // windowレベルでイベントを発行
+            const event = new CustomEvent("scan", { detail: { isbn } });
+            window.dispatchEvent(event);
             this.reader.reset();
-          } else {
-            console.log('無効なバーコード', isbn);
+            setTimeout(() => this.startScanner(), 1000);
           }
         }
       });
