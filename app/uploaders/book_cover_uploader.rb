@@ -28,6 +28,8 @@ class BookCoverUploader < CarrierWave::Uploader::Base
     def resize
       manipulate! do |img|
         img.resize "240x"
+        img.strip
+        img.interlace "Plane"
         img
       end
     end

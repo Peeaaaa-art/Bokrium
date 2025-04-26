@@ -1,0 +1,42 @@
+
+.yomoo-color {
+  background-color:rgba(221, 231, 233, 0.4);
+}
+
+.stone-color {
+  background-color:rgb(204, 218, 221);
+}
+
+
+.rhodia-cover-blue {
+  background-color:rgb(54, 54, 146, 0.8);
+}
+
+.rhodia-gray {
+  background-color: #2d2d2de3;
+}
+
+.rhodia-gray .navbar-nav .nav-link,
+.rhodia-gray .navbar-brand,
+.rhodia-gray .navbar-text {
+  color: #fff !important;
+}
+
+
+.rhodia-grid-bg {
+  background-color: #f8f9fa;
+  background-image:
+    linear-gradient(to right, rgba(0, 47, 255, 0.125) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 85, 255, 0.125) 1px, transparent 1px);
+  background-size: 20px 20px;
+  padding: 40px
+}
+
+.bg-rhodia-orange {
+  background-color: #f7a54d;
+  background-image:
+    url('orange-background.jpg'),
+    linear-gradient(135deg, #f4a148 0%, #ffb347 100%);
+  background-size: cover, 100% 100%;
+  background-blend-mode: lighten;
+}
