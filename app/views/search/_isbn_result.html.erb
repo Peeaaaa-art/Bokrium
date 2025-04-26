@@ -1,24 +1,26 @@
-<div class="card shadow-sm p-4 mx-auto" style="max-width: 1200px;">
+<% book = local_assigns[:book_data] || @book_data %>
+
+<div class="card shadow-sm p-4 mb-1 mx-auto" style="max-width: 1200px;">
   <div class="row g-3 align-items-center justify-content-center flex-column flex-md-row">
     <div class="col-12 col-md-6 d-flex justify-content-center mb-3 mb-md-0">
-      <img src="<%= @book_data.large_image_url || @book_data.medium_image_url || @book_data.small_image_url %>"
+      <img src="<%= book.large_image_url || book.medium_image_url || book.small_image_url %>"
           alt="書影"
           class="rounded shadow-sm"
           style="max-height: 480px; max-width: 100%; object-fit: contain;">
     </div>
 
     <div class="col-12 col-md-6 d-flex flex-column">
-      <h4 class="mb-2"><%= @book_data.title %></h4>
-      <p class="mb-1"><strong>著者:</strong> <%= @book_data.author %></p>
-      <p class="mb-1"><strong>出版社:</strong> <%= @book_data.publisher_name %></p>
+      <h4 class="mb-2"><%= book.title %></h4>
+      <p class="mb-1"><strong>著者:</strong> <%= book.author %></p>
+      <p class="mb-1"><strong>出版社:</strong> <%= book.publisher_name %></p>
 
       <%= button_to "My本棚に追加", books_path(book: {
-        title:     @book_data.title,
-        author:    @book_data.author,
-        publisher: @book_data.publisher_name,
-        isbn:      @book_data.isbn,
-        remote_book_cover_url: @book_data.large_image_url || @book_data.medium_image_url || @book_data.small_image_url,
-        price:     @book_data.item_price
+        title:     book.title,
+        author:    book.author,
+        publisher: book.publisher_name,
+        isbn:      book.isbn,
+        remote_book_cover_url: book.large_image_url || book.medium_image_url || book.small_image_url,
+        price:     book.item_price
       }), method: :post, class: "btn btn-success mt-3", data: { turbo: false } %>
     </div>
   </div>

@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
   get "search", to: "search#index", as: :search_books
   get "search/barcode", to: "search#barcode"
+  get "search/search_isbn_turbo", to: "search#search_isbn_turbo"
+
   devise_for :users, controllers: { registrations: "users/registrations" }
   resources :users, only: [ :index, :show ]
 

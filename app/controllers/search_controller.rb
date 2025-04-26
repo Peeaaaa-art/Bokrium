@@ -31,5 +31,43 @@ class SearchController < ApplicationController
     end
   end
 
+  def search_isbn_turbo
+    isbn = params[:isbn]
+    return head :bad_request if isbn.blank?
+
+    begin
+      results = RakutenWebService::Books::Book.search(isbn: isbn)
+      if results.present?
+        @book_data = results.first
+        respond_to do |format|
+          format.turbo_stream {
+            render turbo_stream: turbo_stream.append(
+              "scanned-books",
+              partial: "search/isbn_result",
+              locals: { book_data: @book_data }
+            )
+          }
+        end
+      else
+        render turbo_stream: turbo_stream.append(
+          "scanned-books",
+          html: "<div class='alert alert-warning mt-2'>該当なし: #{isbn}</div>"
+        )
+      end
+    rescue RakutenWebService::Error => e
+      Rails.logger.error(e)
+      render turbo_stream: turbo_stream.append(
+        "scanned-books",
+        html: "<div class='alert alert-danger'>エラー: #{e.message}</div>"
+      )
+    rescue => e
+      Rails.logger.error(e)
+      render turbo_stream: turbo_stream.append(
+        "scanned-books",
+        html: "<div class='alert alert-danger'>システムエラーが発生しました</div>"
+      )
+    end
+  end
+
   def barcode; end
 end

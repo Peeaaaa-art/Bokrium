@@ -33,6 +33,20 @@ class BooksController < ApplicationController
     @book = Book.new
   end
 
+  def scan_result
+    book = RakutenWebService::Books::Book.search(isbn: params[:isbn]).first
+
+    respond_to do |format|
+      format.turbo_stream do
+        render turbo_stream: turbo_stream.append(
+          "scanned-books",
+          partial: "books/card",
+          locals: { book: book }
+        )
+      end
+    end
+  end
+
   def create
     @book = current_user.books.build(book_params)
 

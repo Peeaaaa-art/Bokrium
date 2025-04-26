@@ -81,7 +81,12 @@ body {
   text-align: center;
   opacity: 0.97;
   box-shadow: 0 4px 16px rgba(0,0,0,0.12);
-  animation: appear-then-fade 3s both;
+  animation: appear-then-fade 2.5s both;
+  border-radius: 0.75rem;
+  margin: 0 auto;
+  padding: 1rem 1.5rem;
+  font-weight: 500;
+  font-size: 1rem;
 }
 @keyframes appear-then-fade {
   0%   { opacity: 0; }
