@@ -68,6 +68,6 @@ class SearchController < ApplicationController
       )
     end
   end
-  
+
   def barcode; end
 end

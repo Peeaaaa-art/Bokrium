@@ -81,5 +81,5 @@ Rails.application.configure do
 
   config.public_file_server.enabled = true
 
-  config.web_console.permissions = '192.168.0.33'
+  config.web_console.permissions = "192.168.0.33"
 end
