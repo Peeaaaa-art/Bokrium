@@ -10,7 +10,7 @@ class UploadsController < ApplicationController
 
     obj = bucket.object(key)
 
-    url = obj.presigned_url(:put, expires_in: 60, acl: "public-read")
+    url = obj.presigned_url(:put, expires_in: 600, acl: "public-read")
 
     render json: { url: url, key: key }
   end

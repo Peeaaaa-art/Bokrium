@@ -4,9 +4,9 @@
   <div class="row g-3 align-items-center justify-content-center flex-column flex-md-row">
     <div class="col-12 col-md-6 d-flex justify-content-center mb-3 mb-md-0">
       <img src="<%= book.large_image_url || book.medium_image_url || book.small_image_url %>"
-          alt="書影"
-          class="rounded shadow-sm"
-          style="max-height: 480px; max-width: 100%; object-fit: contain;">
+           alt="書影"
+           class="rounded shadow-sm"
+           style="max-height: 480px; max-width: 100%; object-fit: contain;">
     </div>
 
     <div class="col-12 col-md-6 d-flex flex-column">
@@ -14,17 +14,26 @@
       <p class="mb-1"><strong>著者:</strong> <%= book.author %></p>
       <p class="mb-1"><strong>出版社:</strong> <%= book.publisher_name %></p>
 
-      <%= button_to "My本棚に追加", books_path(book: {
-        title: book.title,
-        author: book.author,
-        publisher: book.publisher_name,
-        isbn: book.isbn,
-        remote_book_cover_url: book.large_image_url || book.medium_image_url || book.small_image_url,
-        price: book.item_price
-      }), method: :post, class: "btn btn-success mt-3",
-        data: { action: "click->upload-direct-s3#addBookAndUpload",
-        book_id: book.isbn,
-        book_cover_url: (book.large_image_url || book.medium_image_url || book.small_image_url)} %>
+      <!-- form_with を使って書籍情報を送信 -->
+      <%= form_with(url: books_path, method: :post, local: true) do |form| %>
+        <%= form.hidden_field :isbn, value: book.isbn %>
+        <%= form.hidden_field :title, value: book.title %>
+        <%= form.hidden_field :author, value: book.author %>
+        <%= form.hidden_field :publisher, value: book.publisher_name %>
+        <%= form.hidden_field :price, value: book.item_price %>
+
+        <!-- 書影のURLをデータ属性として渡す -->
+        <%= form.hidden_field :remote_book_cover_url, value: book.large_image_url || book.medium_image_url || book.small_image_url %>
+
+        <!-- 追加ボタン -->
+        <%= form.submit "My本棚に追加", class: "btn btn-success mt-3", 
+            data: {
+              action: "click->upload-direct-s3#addBookAndUpload", 
+              book_id: book.isbn, 
+              book_cover_url: (book.large_image_url || book.medium_image_url || book.small_image_url || '')
+            }
+        %>
+      <% end %>
     </div>
   </div>
 </div>
