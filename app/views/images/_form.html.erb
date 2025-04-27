@@ -1,9 +1,9 @@
-<div class="mt-5 mb-3 text-center" data-controller="upload-direct-s3" data-book-id="<%= @book.id %>">
+<div class="mt-5 mb-3 text-center">
   <%= form_with model: [book, Image.new],
-                local: true,
+                local: false,
                 html: { multipart: true,
                 class: "d-inline-flex gap-2 align-items-center" } do |f| %>
-    <%= f.file_field :image_path, class: "form-control form-control-sm w-auto" %>
+    <%= f.file_field :image_path, class: "form-control form-control-sm w-auto", direct_upload: true %>
     <%= f.submit "アップロード", class: "btn btn-sm btn-primary" %>
   <% end %>
 </div>

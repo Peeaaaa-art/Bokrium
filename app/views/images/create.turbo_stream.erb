@@ -8,11 +8,11 @@
       <i class="bi bi-trash2"></i>
     <% end %>
     <div class="card">
-      <%= image_tag @image.image_path.url(:thumb),
+      <%= image_tag @image.image_path,
             class: "card-img-top",
             alt: "Book Image",
-            style: "object-fit: contain; background: #f8f9fa;",
-            data: { bs_toggle: "modal", bs_target: "#imageModal#{@image.id}" } %> 
+            style: "object-fit: contain; background: #f8f9fa;" 
+      %> 
     </div>
   </div>
 

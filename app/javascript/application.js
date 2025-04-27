@@ -4,3 +4,4 @@ import "controllers"
 // 私が追加したもの
 import "@popperjs/core"
 import "bootstrap"
+import "@rails/activestorage"
