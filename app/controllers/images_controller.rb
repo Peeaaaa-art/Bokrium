@@ -2,11 +2,15 @@ class ImagesController < ApplicationController
   before_action :set_book
 
   def create
+    # 画像URLとbook_id、memo_idを含むパラメータを受け取ってImageを作成
     @image = @book.images.build(image_params)
+
     if @image.save
-      redirect_to @book, notice: "画像をアップロードしました。"
+      # 成功時、JSONレスポンスを返す
+      render json: { message: "画像をアップロードしました。", image: @image }, status: :created
     else
-      redirect_to @book, alert: "画像のアップロードに失敗しました。"
+      # 失敗時、エラーレスポンスを返す
+      render json: { errors: @image.errors.full_messages }, status: :unprocessable_entity
     end
   end
 
@@ -23,6 +27,7 @@ class ImagesController < ApplicationController
   end
 
   def image_params
-    params.require(:image).permit(:image_path)
+    # image_pathに加えて、memo_idを受け取るように変更
+    params.require(:image).permit(:image_path, :memo_id)
   end
 end

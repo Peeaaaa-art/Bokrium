@@ -1,6 +1,6 @@
 import { Controller } from "@hotwired/stimulus"
 
-// connectするだけで使える！
+// Stimulusのコントローラー
 export default class extends Controller {
   static targets = ["fileInput", "preview"]
 
@@ -12,9 +12,11 @@ export default class extends Controller {
     }
 
     try {
+      // presigned_urlを取得
       const presignedRes = await fetch('/presigned_url', { method: 'POST' });
       const { url, key } = await presignedRes.json();
 
+      // S3にファイルをアップロード
       await fetch(url, {
         method: 'PUT',
         headers: {
@@ -23,14 +25,35 @@ export default class extends Controller {
         body: file
       });
 
+      // アップロード後、公開URLをRailsに送信
       const publicUrl = url.split('?')[0];
-      this.previewTarget.src = publicUrl;
 
-      alert('アップロード成功！');
+      // ここでbook_id（またはmemo_id）を送信する
+      const bookId = this.element.dataset.bookId; // HTMLでbook_idをデータ属性として渡す
 
+      const response = await fetch(`/books/${bookId}/images`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          image: {
+            image_path: publicUrl,  // S3にアップロードした画像のURL
+            book_id: bookId,  // book_idを送信
+          },
+        }),
+      });
+
+      if (response.ok) {
+        alert('画像保存に成功しました！');
+        // 画像プレビュー
+        this.previewTarget.src = publicUrl;
+      } else {
+        alert('画像保存に失敗しました');
+      }
     } catch (e) {
       console.error(e);
-      alert('アップロード失敗');
+      alert('アップロード中にエラーが発生しました');
     }
   }
 }
