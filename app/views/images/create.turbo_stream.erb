@@ -1,3 +1,32 @@
-<%= turbo_stream.append "book_#{@book.id}_images" do %>
-  <%= render 'images/list', book: @book %> <!-- 画像リストを再レンダリング -->
+<%= turbo_stream.append "image-list" do %>
+  <div class="col" id="image_<%= @image.id %>">
+    <%= button_to book_image_path(@book, @image),
+                  method: :delete,
+                  data: { turbo_confirm: "この画像を削除しますか？" },
+                  class: "btn btn-sm d-flex align-items-center justify-content-center mx-auto mt-2",
+                  title: "画像を削除" do %>
+      <i class="bi bi-trash2"></i>
+    <% end %>
+    <div class="card">
+      <%= image_tag @image.image_path.url(:thumb),
+            class: "card-img-top",
+            alt: "Book Image",
+            style: "object-fit: contain; background: #f8f9fa;",
+            data: { bs_toggle: "modal", bs_target: "#imageModal#{@image.id}" } %> 
+    </div>
+  </div>
+
+  <!-- モーダル -->
+  <div class="modal fade" id="imageModal<%= @image.id %>" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl bg-transparent">
+      <div class="modal-content bg-transparent border-0">
+        <div class="modal-body text-center p-0">
+          <%= image_tag @image.image_path.url(:large),
+                class: "img-fluid rounded shadow-lg", alt: "拡大画像" %>
+          <button type="button" class="btn-close position-absolute top-0 end-0 m-3"
+                  data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+      </div>
+    </div>
+  </div>
 <% end %>
