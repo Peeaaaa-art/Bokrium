@@ -6,8 +6,8 @@ class ImagesController < ApplicationController
 
     if @image.save
       respond_to do |format|
-        format.html { redirect_to @book, notice: "画像をアップロードしました。" }
-        format.turbo_stream # Turbo Streamレスポンスを返す
+        format.turbo_stream  # Turbo Streamでレスポンスを返す
+        format.html { redirect_to @book }
       end
     else
       redirect_to @book, alert: "画像のアップロードに失敗しました。"
