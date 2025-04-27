@@ -9,6 +9,7 @@ class ImageUploader < CarrierWave::Uploader::Base
 
   process :set_quality
 
+
   version :thumb do
     process resize_to_fill: [ 200, 200 ]
   end
@@ -20,7 +21,7 @@ class ImageUploader < CarrierWave::Uploader::Base
 
   def set_quality
     manipulate! do |img|
-      img.quality "88"
+      img.quality "85"
       img.strip
       img.interlace "Plane"
       img
@@ -29,5 +30,21 @@ class ImageUploader < CarrierWave::Uploader::Base
 
   def extension_allowlist
     %w[jpg jpeg gif png webp avif tiff]
+  end
+
+  after :store, :delete_original_file
+
+  private
+
+  def delete_original_file(file)
+    return unless file && file.path.present?
+
+    if versions.keys.none? { |v| file.path.include?(v.to_s) }
+      begin
+        file.delete
+      rescue => e
+        Rails.logger.error("Failed to delete original file: #{e.message}")
+      end
+    end
   end
 end
