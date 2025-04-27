@@ -6,7 +6,7 @@ class ImagesController < ApplicationController
 
     if @image.save
       respond_to do |format|
-        format.turbo_stream  # Turbo Streamでレスポンスを返す
+        format.turbo_stream
         format.html { redirect_to @book }
       end
     else
@@ -18,8 +18,8 @@ class ImagesController < ApplicationController
     @image = @book.images.find(params[:id])
     @image.destroy
     respond_to do |format|
+      format.turbo_stream
       format.html { redirect_to @book, notice: "画像を削除しました。" }
-      format.turbo_stream # Turbo Streamレスポンスを返す
     end
   end
 
