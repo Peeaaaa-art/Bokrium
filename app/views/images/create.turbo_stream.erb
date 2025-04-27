@@ -1,0 +1,19 @@
+<%= turbo_stream.append "image-list", target: "image_#{@image.id}" do %>
+  <div class="col" id="image_<%= @image.id %>">
+    <%= button_to book_image_path(@book, @image),
+                  method: :delete,
+                  data: { turbo_confirm: "この画像を削除しますか？" },
+                  class: "btn btn-sm d-flex align-items-center justify-content-center mx-auto mt-2",
+                  title: "画像を削除" do %>
+    <i class="bi bi-trash2"></i>
+    <% end %>
+    <div class="card">
+      <!-- サムネイル表示（小） -->
+      <%= image_tag @image.image_path.url(:thumb),
+            class: "card-img-top",
+            alt: "Book Image",
+            style: "object-fit: contain; background: #f8f9fa;",
+            data: { bs_toggle: "modal", bs_target: "#imageModal#{idx}" } %>
+    </div>
+  </div>
+<% end %>
