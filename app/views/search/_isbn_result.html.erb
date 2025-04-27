@@ -15,14 +15,14 @@
       <p class="mb-1"><strong>出版社:</strong> <%= book.publisher_name %></p>
 
       <%= form_with(url: books_path, method: :post, local: true) do |form| %>
-        <%= form.hidden_field :isbn, value: book.isbn %>
-        <%= form.hidden_field :title, value: book.title %>
-        <%= form.hidden_field :author, value: book.author %>
-        <%= form.hidden_field :publisher, value: book.publisher_name %>
-        <%= form.hidden_field :price, value: book.item_price %>
-      
-        <!-- 書影のURLをデータ属性として渡す -->
-        <%= form.hidden_field :remote_book_cover_url, value: book.large_image_url || book.medium_image_url || book.small_image_url %>
+        <%= form.fields_for :book do |book_form| %>
+          <%= book_form.hidden_field :isbn, value: book.isbn %>
+          <%= book_form.hidden_field :title, value: book.title %>
+          <%= book_form.hidden_field :author, value: book.author %>
+          <%= book_form.hidden_field :publisher, value: book.publisher_name %>
+          <%= book_form.hidden_field :price, value: book.item_price %>
+          <%= book_form.hidden_field :remote_book_cover_url, value: book.large_image_url || book.medium_image_url || book.small_image_url %>
+        <% end %>
       
         <!-- 追加ボタン -->
         <%= form.submit "My本棚に追加", class: "btn btn-success mt-3", 
