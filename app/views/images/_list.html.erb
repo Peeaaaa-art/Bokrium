@@ -1,7 +1,4 @@
 <div class="row row-cols-1 row-cols-md-5 g-3" id="image-list">
-  <%= turbo_stream_from "book_#{book.id}_images" %> <!-- Turbo Streamの設定 -->
-  
-  <!-- 既存の画像リストを表示 -->
   <% book.images.each_with_index do |img, idx| %>
     <div class="col" id="image_<%= img.id %>">
       <%= button_to book_image_path(book, img),
