@@ -36,17 +36,19 @@ class ImageUploader < CarrierWave::Uploader::Base
 
   private
 
-  def remove_original(file)
-    # オリジナルファイルへのパス
-    original_path = file.path
+  def remove_original(_file)
+    # オリジナルファイルのpath
+    original_file = self.file
   
-    # thumbやlargeのパスは除外
-    version_paths = versions.values.map { |v| v.file.path }
+    return unless original_file.present? && original_file.path.present?
   
-    # オリジナルとバージョンのパスが違うなら削除
-    unless version_paths.include?(original_path)
+    # バージョンファイルのpaths
+    version_paths = versions.values.map { |v| v.file&.path }.compact
+  
+    # オリジナルがバージョンリストに含まれていなければ削除
+    unless version_paths.include?(original_file.path)
       begin
-        file.delete
+        original_file.delete
       rescue => e
         Rails.logger.error("Failed to delete original file: #{e.message}")
       end
