@@ -1,6 +1,6 @@
-<%= turbo_stream.append "book_#{book.id}_images" do %>
+<%= turbo_stream.append "book_#{@book.id}_images" do %>
   <div class="col">
-    <%= button_to book_image_path(book, img),
+    <%= button_to book_image_path(@book, img),
           method: :delete,
           data: { turbo_confirm: "この画像を削除しますか？" },
           class: "btn btn-sm d-flex align-items-center justify-content-center mx-auto mt-2",
