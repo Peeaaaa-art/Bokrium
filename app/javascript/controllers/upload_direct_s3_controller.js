@@ -11,6 +11,11 @@ export default class extends Controller {
       return;
     }
 
+    await this.uploadFile(file);
+  }
+
+  // ファイルオブジェクトを受け取ってアップロードする共通処理
+  async uploadFile(file, bookId = null) {
     try {
       // presigned_urlを取得
       const presignedRes = await fetch('/presigned_url', { method: 'POST' });
@@ -28,8 +33,10 @@ export default class extends Controller {
       // アップロード後、公開URLをRailsに送信
       const publicUrl = url.split('?')[0];
 
-      // ここでbook_id（またはmemo_id）を送信する
-      const bookId = this.element.dataset.bookId; // HTMLでbook_idをデータ属性として渡す
+      // bookIdが渡されていなければ、data属性から取得
+      if (!bookId) {
+        bookId = this.element.dataset.bookId;
+      }
 
       const response = await fetch(`/books/${bookId}/images`, {
         method: 'POST',
@@ -38,16 +45,17 @@ export default class extends Controller {
         },
         body: JSON.stringify({
           image: {
-            image_path: publicUrl,  // S3にアップロードした画像のURL
-            book_id: bookId,  // book_idを送信
+            image_path: publicUrl,
+            book_id: bookId,
           },
         }),
       });
 
       if (response.ok) {
         alert('画像保存に成功しました！');
-        // 画像プレビュー
-        this.previewTarget.src = publicUrl;
+        if (this.hasPreviewTarget) {
+          this.previewTarget.src = publicUrl;
+        }
       } else {
         alert('画像保存に失敗しました');
       }
@@ -55,5 +63,36 @@ export default class extends Controller {
       console.error(e);
       alert('アップロード中にエラーが発生しました');
     }
+  }
+
+  // 外部画像URLを直接アップロードするための新しいメソッド
+  async uploadFromUrl(imageUrl, bookId) {
+    try {
+      const res = await fetch(imageUrl);
+      const blob = await res.blob();
+      const file = new File([blob], "cover.jpg", { type: blob.type });
+
+      await this.uploadFile(file, bookId);
+    } catch (e) {
+      console.error(e);
+      alert('外部画像のアップロード中にエラーが発生しました');
+    }
+  }
+
+  async addBookAndUpload(event) {
+    event.preventDefault();
+  
+    const bookId = event.target.dataset.bookId;
+    const imageUrl = event.target.dataset.bookCoverUrl;
+  
+    if (!bookId || !imageUrl) {
+      alert('必要な情報が足りません！');
+      return;
+    }
+  
+    await this.uploadFromUrl(imageUrl, bookId);
+  
+    // 画像アップロードが成功したら本棚に追加するリクエストを送る
+    event.target.form.submit(); 
   }
 }
