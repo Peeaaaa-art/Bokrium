@@ -51,4 +51,5 @@ class ImageUploader < CarrierWave::Uploader::Base
         Rails.logger.error("Failed to delete original file: #{e.message}")
       end
     end
+  end
 end
