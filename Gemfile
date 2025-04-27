@@ -24,10 +24,11 @@ gem "devise-i18n"
 gem "rails-i18n", "~> 8.0"
 
 gem "dartsass-rails"
-gem "bootstrap", "~> 5.3.3"
+gem "bootstrap", "~> 5.3.5"
 
 gem "carrierwave", "~> 3.1", ">= 3.1.2"
-gem "mini_magick", "~> 4.5", ">= 4.5.1"
+gem "mini_magick", "~> 5.2"
+gem "fog-aws", "~> 3.31"
 
 gem "rakuten_web_service"
 gem "dotenv-rails"
