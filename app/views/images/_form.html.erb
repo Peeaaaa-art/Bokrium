@@ -1,9 +1,9 @@
-<div class="mt-5 mb-3 text-center">
-  <%= form_with model: [book, Image.new],
-                local: true,
-                html: { multipart: true,
-                class: "d-inline-flex gap-2 align-items-center" } do |f| %>
-    <%= f.file_field :image_path, class: "form-control form-control-sm w-auto" %>
-    <%= f.submit "アップロード", class: "btn btn-sm btn-primary" %>
-  <% end %>
+<div class="mt-5 mb-3 text-center" data-controller="upload-direct-s3">
+  <div class="d-inline-flex gap-2 align-items-center">
+    <input type="file" data-upload-direct-s3-target="fileInput" class="form-control form-control-sm w-auto">
+    <button type="button" data-action="click->upload-direct-s3#upload" class="btn btn-sm btn-primary">
+      アップロード
+    </button>
+  </div>
 </div>
+<img data-upload-direct-s3-target="preview" style="max-width: 240px; margin-top: 10px;">
