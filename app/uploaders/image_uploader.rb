@@ -60,13 +60,11 @@ class ImageUploader < CarrierWave::Uploader::Base
           Rails.logger.info("Deleting original file: #{original_file.path}")
           
           # オリジナルファイルを S3 上で削除
-          if original_file.respond_to?(:remove!)
-            Rails.logger.info("Attempting to remove original file from S3: #{original_file.path}")
-            original_file.remove!
+          if original_file.respond_to?(:delete)
+            original_file.delete
           else
             # ローカルストレージの場合
             File.delete(original_file.path) if File.exist?(original_file.path)
-            Rails.logger.info("File does not support remove!: #{original_file.path}")
           end
         rescue => e
           Rails.logger.error("Failed to delete original file: #{e.message}")
