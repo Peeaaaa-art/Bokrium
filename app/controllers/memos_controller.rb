@@ -4,14 +4,9 @@ class MemosController < ApplicationController
   before_action :set_book
   before_action :set_memo, only: [ :show, :edit, :update, :destroy ]
 
-  def index
-    @memos = @book.memos.where(user_id: current_user.id).order(created_at: :desc)
-  end
+  def index; end
 
-  def show
-    @book = Book.find(params[:id])
-    @memos = @book.memos.where(user_id: current_user.id).order(created_at: :desc)
-  end
+  def show; end
 
   def new
     @memo = @book.memos.new
@@ -28,8 +23,7 @@ class MemosController < ApplicationController
     end
   end
 
-  def edit
-  end
+  def edit; end
 
   def update
     if @memo.update(memo_params)
@@ -72,7 +66,6 @@ class MemosController < ApplicationController
     params.require(:memo).permit(:content, :published).tap do |prm|
       # contentをJSON形式に変換（textキーでラップ）
       prm[:content] = { "text" => prm[:content] } if prm[:content]
-
       # enumキーをinteger値に変換（例: "you_can_see" → 1）
       prm[:published] = Memo.publisheds[prm[:published]] if prm[:published]
     end
