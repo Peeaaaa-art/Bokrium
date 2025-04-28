@@ -2,7 +2,9 @@
   <%= form_with model: [book, Image.new],
                 local: false,
                 html: { multipart: true,
-                class: "d-inline-flex gap-2 align-items-center" } do |f| %>
+                  class: "d-inline-flex gap-2 align-items-center",
+                  data: { controller: "spinner" }
+                  } do |f| %>
     <%= f.file_field :image_path, class: "form-control form-control-sm w-auto", direct_upload: true %>
     <%= f.submit "アップロード", class: "btn btn-sm btn-primary" %>
   <% end %>

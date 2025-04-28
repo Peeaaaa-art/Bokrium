@@ -1,5 +1,5 @@
 class User < ApplicationRecord
-  has_one_attached :avatar
+  has_one_attached :avatar_s3, dependent: :purge_later
   has_many :books, dependent: :destroy
   has_many :memos, dependent: :destroy
 

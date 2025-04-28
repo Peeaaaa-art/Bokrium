@@ -1,6 +1,8 @@
 <div class="col-md-3 text-center">
-  <% if @book.book_cover.present? %>
-    <%= image_tag @book.book_cover.url, alt: @book.title, class: "img-fluid rounded shadow-sm", style: "max-width: auto;" %>
+  <% if @book.book_cover_s3.attached? %>
+    <%= image_tag @book.book_cover_s3, alt: @book.title, class: "img-fluid rounded shadow-sm" %>
+  <% elsif @book.book_cover.present? %>
+    <img src="<%= @book.book_cover %>" alt="表紙画像" class="book-cover" >
   <% else %>
     <div class="no-cover"><%= @book.title %></div>
   <% end %>

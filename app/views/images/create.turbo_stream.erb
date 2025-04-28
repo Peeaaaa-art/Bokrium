@@ -1,3 +1,5 @@
 <%= turbo_stream.append "image-list" do %>
-  <%= render partial: "images/card", locals: { image: @image, book: @book, thumb: false, identifier: @image.id } %>
+  <div data-controller="modal">
+    <%= render partial: "images/card", locals: { image: @image, book: @book, thumb: true, identifier: @image.id } %>
+  </div>
 <% end %>
