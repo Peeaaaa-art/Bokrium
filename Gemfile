@@ -28,6 +28,8 @@ gem "bootstrap", "~> 5.3.5"
 
 gem "aws-sdk-s3", "~> 1.183", require: false
 
+gem "image_processing", "~> 1.2"
+
 gem "rakuten_web_service"
 gem "dotenv-rails"
 
