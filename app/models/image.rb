@@ -1,4 +1,4 @@
 class Image < ApplicationRecord
   belongs_to :book
-  mount_uploader :image_path, ImageUploader
+  has_one_attached :image_path, dependent: :purge_later
 end

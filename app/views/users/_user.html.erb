@@ -4,7 +4,7 @@
       <div class="card shadow-sm">
         <div class="card-body text-center">
           <% if user.avatar.present? %>
-            <%= image_tag user.avatar.url, alt: user.name, class: "avatar-circle" %>
+            <%= image_tag user.avatar.variant(resize_to_fit: [300, 300]), alt: user.name, class: "avatar-circle" %>
           <% else %>
             <div class="rounded-circle bg-secondary mb-3 d-inline-block" style="width:120px; height:120px; line-height:120px; color:#fff;">
               <i class="bi bi-person" style="font-size:3rem;"></i>

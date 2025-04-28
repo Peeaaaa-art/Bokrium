@@ -30,7 +30,7 @@
               publisher: book.publisher_name,
               isbn:      book.isbn,
               price:     book.item_price,
-              remote_book_cover_url: book.large_image_url || book.medium_image_url || book.small_image_url
+              book_cover: book.large_image_url || book.medium_image_url || book.small_image_url
             }), method: :post, class: "btn btn-success" %>
 
           </div>

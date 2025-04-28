@@ -4,9 +4,9 @@
   <div class="row g-3 align-items-center justify-content-center flex-column flex-md-row">
     <div class="col-12 col-md-6 d-flex justify-content-center mb-3 mb-md-0">
       <img src="<%= book.large_image_url || book.medium_image_url || book.small_image_url %>"
-          alt="書影"
-          class="rounded shadow-sm"
-          style="max-height: 480px; max-width: 100%; object-fit: contain;">
+           alt="書影"
+           class="rounded shadow-sm"
+           style="max-height: 480px; max-width: 100%; object-fit: contain;">
     </div>
 
     <div class="col-12 col-md-6 d-flex flex-column">
@@ -14,14 +14,19 @@
       <p class="mb-1"><strong>著者:</strong> <%= book.author %></p>
       <p class="mb-1"><strong>出版社:</strong> <%= book.publisher_name %></p>
 
-      <%= button_to "My本棚に追加", books_path(book: {
-        title:     book.title,
-        author:    book.author,
-        publisher: book.publisher_name,
-        isbn:      book.isbn,
-        remote_book_cover_url: book.large_image_url || book.medium_image_url || book.small_image_url,
-        price:     book.item_price
-      }), method: :post, class: "btn btn-success mt-3" %>
+      <%= form_with model: Book.new, url: books_path, local: true do |f| %>
+        <%= f.hidden_field :isbn, value: book.isbn %>
+        <%= f.hidden_field :title, value: book.title %>
+        <%= f.hidden_field :author, value: book.author %>
+        <%= f.hidden_field :publisher, value: book.publisher_name %>
+        <%= f.hidden_field :price, value: book.item_price %>
+      
+        <% if book.large_image_url || book.medium_image_url || book.small_image_url %>
+          <%= f.hidden_field :book_cover, value: (book.large_image_url || book.medium_image_url || book.small_image_url), direct_upload: true %>
+        <% end %>
+      
+        <%= f.submit "My本棚に追加", class: "btn btn-success mt-3" %>
+      <% end %>
     </div>
   </div>
 </div>

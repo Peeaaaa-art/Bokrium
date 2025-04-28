@@ -1,9 +1,9 @@
 class Book < ApplicationRecord
   belongs_to :user
+  has_one_attached :book_cover_s3, dependent: :purge_later
   has_many :memos, dependent: :destroy
   has_many :book_tags, dependent: :destroy
   has_many :tags, through: :book_tags
-  mount_uploader :book_cover, BookCoverUploader
   has_many :images, dependent: :destroy
 
   enum :status, {

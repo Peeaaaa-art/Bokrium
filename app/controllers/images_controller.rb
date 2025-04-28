@@ -3,8 +3,12 @@ class ImagesController < ApplicationController
 
   def create
     @image = @book.images.build(image_params)
+
     if @image.save
-      redirect_to @book, notice: "画像をアップロードしました。"
+      respond_to do |format|
+        format.turbo_stream
+        format.html { redirect_to @book }
+      end
     else
       redirect_to @book, alert: "画像のアップロードに失敗しました。"
     end
@@ -13,7 +17,10 @@ class ImagesController < ApplicationController
   def destroy
     @image = @book.images.find(params[:id])
     @image.destroy
-    redirect_to @book, notice: "画像を削除しました。"
+    respond_to do |format|
+      format.turbo_stream
+      format.html { redirect_to @book, notice: "画像を削除しました。" }
+    end
   end
 
   private
