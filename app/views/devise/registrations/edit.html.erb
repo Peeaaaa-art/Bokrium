@@ -21,7 +21,7 @@
       <%= f.label :avatar_s3, "アバター画像", class: "form-label" %>
       <%= f.file_field :avatar_s3, class: "form-control", direct_upload: true %>
       <div class="mt-2">
-        <%= image_tag user_avatar(resource), alt: resource.name, class: "rounded-circle border", style: "width: 80px; height: 80px; object-fit: cover;" %>
+        <%= image_tag user_avatar(resource, size: :medium), alt: resource.name, class: "avatar-circle-medium" %>
       </div>
     </div>
     <div class="d-grid mb-4">

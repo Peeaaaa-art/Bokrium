@@ -6,7 +6,7 @@
     <div class="card-body">
       <div class="row align-items-center">
         <div class="col-md-3 text-center">
-            <%= image_tag user_avatar(current_user), alt: current_user.name, class: "avatar-circle" %>
+            <%= image_tag user_avatar(current_user, size: :large), alt: current_user.name, class: "avatar-circle" %>
         </div>
         <div class="col-md-9">
           <ul class="list-group list-group-flush">

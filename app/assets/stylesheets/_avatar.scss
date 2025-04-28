@@ -7,9 +7,13 @@
 }
 
 .avatar-circle {
-  @include avatar-circle(100px);
+  @include avatar-circle(160px);
+}
+
+.avatar-circle-medium {
+  @include avatar-circle(80px);
 }
 
 .avatar-circle-mini {
-  @include avatar-circle(35px);
+  @include avatar-circle(40px);
 }
