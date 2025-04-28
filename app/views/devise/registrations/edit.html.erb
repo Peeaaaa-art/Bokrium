@@ -20,11 +20,9 @@
     <div class="mb-3">
       <%= f.label :avatar, "アバター画像", class: "form-label" %>
       <%= f.file_field :avatar, class: "form-control" %>
-      <% if resource.avatar.present? %>
-        <div class="mt-2">
-          <%= image_tag resource.avatar.url, alt: resource.name, class: "rounded-circle border", style: "width: 80px; height: 80px; object-fit: cover;" %>
-        </div>
-      <% end %>
+      <div class="mt-2">
+        <%= image_tag user_avatar(resource), alt: resource.name, class: "rounded-circle border", style: "width: 80px; height: 80px; object-fit: cover;" %>
+      </div>
     </div>
     <div class="d-grid mb-4">
       <%= f.submit t('.update'), class: "btn btn-primary btn-lg" %>
