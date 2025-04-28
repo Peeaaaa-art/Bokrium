@@ -6,9 +6,7 @@ class ApplicationController < ActionController::Base
   protected
 
   def configure_permitted_parameters
-    # 新規登録時に許可するパラメータ
     devise_parameter_sanitizer.permit(:sign_up, keys: [ :name, :introduction, :avatar_s3 ])
-    # アカウント更新時に許可するパラメータ
     devise_parameter_sanitizer.permit(:account_update, keys: [ :name, :introduction, :avatar_s3 ])
   end
 end

@@ -27,7 +27,7 @@
       <div class="d-flex flex-wrap align-items-center gap-2 ms-lg-3">
         <% if user_signed_in? %>
           <%= link_to user_path(current_user) do %>
-            <%= image_tag user_avatar(current_user), alt: current_user.name, class: "avatar-circle-mini" %>
+            <%= image_tag user_avatar(current_user, size: :small), alt: current_user.name, class: "avatar-circle-mini" %>
           <% end %>
         <% else %>
           <%= link_to t('devise.sessions.new.sign_in', default: 'ログイン'), new_user_session_path, class: 'btn btn-primary' %>

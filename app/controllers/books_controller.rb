@@ -1,5 +1,5 @@
 class BooksController < ApplicationController
-  # before_action :authenticate_user!
+  before_action :authenticate_user!, only: [ :create, :edit, :update, :destroy ]
   before_action :set_book, only: [ :show, :edit, :update, :destroy ]
   before_action :authorize_book, only: [ :edit, :update, :destroy ]
 
@@ -18,16 +18,18 @@ class BooksController < ApplicationController
 
   def show
     # @others_memos = @book.memos.where(published: 1)
-    @memos = @book.memos.all if @book.user_id == current_user.id
-    @new_memo = @book.memos.new(user_id: current_user.id)
-    @memo = if current_user
-      @book.memos.where(user_id: current_user.id).order(created_at: :desc).first ||
-      @book.memos.new(user_id: current_user.id)
+    if @book.user_id == current_user.id
+      @memos = @book.memos.order(created_at: :desc)
+      @memo = @memos.first || @book.memos.new(user_id: current_user.id)
+      @new_memo = @book.memos.new(user_id: current_user.id)
+    else
+      @memos = []
+      @memo = nil
+      @new_memo = nil
     end
 
     @tags = @book.tags
   end
-
 
   def new
     @book = Book.new
@@ -49,12 +51,6 @@ class BooksController < ApplicationController
 
   def create
     @book = current_user.books.build(book_params)
-
-    if params[:isbn_scan].present?
-      # ISBNバーコードスキャン処理（OCR/API連携）
-      book_info = fetch_book_info_from_apis(params[:isbn_scan])
-      @book.assign_attributes(book_info) if book_info.present?
-    end
 
     if @book.save
       if params[:tags].present?
@@ -108,13 +104,11 @@ class BooksController < ApplicationController
   end
 
   def authorize_book
-    unless @book.user_id == current_user.id
-      redirect_to books_path, alert: "アクセス権限がありません"
-    end
+    redirect_to books_path, alert: "アクセス権限がありません" unless @book.user_id == current_user.id
   end
 
   def book_params
-    params.require(:book).permit(:isbn, :title, :publisher, :page, :book_cover, :author, :price, :status, :book_cover_s3, :ima)
+    params.require(:book).permit(:isbn, :title, :publisher, :page, :book_cover, :author, :price, :status, :book_cover_s3)
   end
 
   def sample_books
