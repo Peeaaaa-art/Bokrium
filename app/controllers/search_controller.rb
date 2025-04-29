@@ -5,6 +5,7 @@ class SearchController < ApplicationController
   def index
     type = params[:type]
     query = params[:query]
+    @query = query
     page = (params[:page] || 1).to_i
 
     unless SEARCH_TYPES.include?(type) && query.present?
@@ -25,14 +26,34 @@ class SearchController < ApplicationController
     begin
       results = RakutenWebService::Books::Book.search(type.to_sym => query, page: page, hits: 30)
       books = results.to_a
-
       @book_results = books
+
       raw_count = results.response["count"].to_i
       @total_count = [ raw_count, 300 ].min
       @total_pages = (@total_count / 30.0).ceil
     rescue RakutenWebService::Error => e
       flash[:error] = "楽天APIでエラーが発生しました: #{e.message}"
     end
+  end
+
+  def search_google_books
+    query = params[:query]
+    page = (params[:page] || 1).to_i
+    return redirect_to search_books_path, alert: "検索キーワードがありません" if query.blank?
+    @query = query
+    @page = page
+
+    response = GoogleBooksService.fetch_by_title_or_author(query, page)
+
+    @google_book_results = response[:items]
+    @google_total_count = [ response[:total_count], 300 ].min
+    @google_total_pages = (@google_total_count / 30.0).ceil
+
+    if @google_book_results.blank?
+      flash.now[:warning] = "Google Booksでも該当する書籍が見つかりませんでした（#{query}）"
+    end
+
+    render :index
   end
 
   def search_isbn_turbo

@@ -2,6 +2,7 @@ Rails.application.routes.draw do
   get "search", to: "search#index", as: :search_books
   get "search/barcode", to: "search#barcode"
   get "search/search_isbn_turbo", to: "search#search_isbn_turbo"
+  get "search/search_google_books", to: "search#search_google_books", as: :search_google_books
   post "/presigned_url", to: "uploads#presigned_url"
 
   devise_for :users, controllers: { registrations: "users/registrations" }
