@@ -27,6 +27,7 @@ gem "bootstrap", "~> 5.3.5"
 gem "aws-sdk-s3", "~> 1.183", require: false
 gem "rakuten_web_service"
 gem "dotenv-rails"
+gem "rexml"
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: %i[ windows jruby ]

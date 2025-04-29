@@ -2,17 +2,46 @@
 
 <%= render "search/form" %>
 
-<div class="container text-center mb-4">
-  <%= link_to "手動で入力",  new_book_path, class: "btn btn-secondary" %>
-</div>
+<div class="d-flex justify-content-center my-5">
+  <div style="max-width: 800px; width: 100%;">
+    <div class="row g-4">
+      <div class="col-md-8">
+        <%= link_to search_barcode_path, class: "btn btn-light border shadow-sm rounded-4 py-4 w-100 h-100 d-flex flex-column justify-content-center align-items-center" do %>
+          <i class="bi bi-upc-scan display-5 mb-1 text-primary"></i>
+          <span class="text-body">バーコード読み取り</span>
+        <% end %>
+      </div>
 
-<div class="container text-center mb-4">
-  <%= link_to "バーコードを読み取る",  search_barcode_path, class: "btn btn-secondary" %>
+      <div class="col-md-4">
+        <%= link_to new_book_path, class: "btn btn-light border shadow-sm rounded-4 py-3 w-100 h-100 d-flex flex-column justify-content-center align-items-center" do %>
+          <i class="bi bi-pencil fs-3 mb-1 text-muted"></i>
+          <span class="text-body">手動登録</span>
+        <% end %>
+      </div>
+    </div>
+  </div>
 </div>
-
 
 <% if @book_data.present? %>
   <%= render "search/isbn_result", book: @book_data %>
-<% elsif @book_results.present? %>
+<% end %>
+
+<% if @book_results.present? %>
   <%= render "search/list_results", books: @book_results, total_count: @total_count, total_pages: @total_pages %>
+<% end %>
+
+<% if @book_results&.size&.<= 10 %>
+  <div class="text-center mt-3">
+    <%= link_to "Google Booksでも探す", search_google_books_path(query: @query, page: 1), class: "btn btn-outline-primary btn-sm mb-5" %>
+  </div>
+<% end %>
+
+<% if @google_book_results.present? %>
+  <%= render "search/google_list_results", books: @google_book_results %>
+<% end %>
+
+<% if @google_book_results&.size&.<= 10 %>
+  <div class="text-center mt-3">
+    <%= link_to "楽天ブックスでも探す", search_books_path(engine: "rakuten", type: params[:type], query: @query), class: "btn btn-outline-primary btn-sm mb-5" %>
+  </div>
 <% end %>

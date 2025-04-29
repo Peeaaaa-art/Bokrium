@@ -1,0 +1,64 @@
+<div class="container mt-4">
+  <h3 class="mb-4 text-center">
+    Google Books検索結果（<%= number_with_delimiter(books.size) %>件表示）
+  </h3>
+
+  <div class="row row-cols-1 row-cols-md-3 row-cols-lg-6 g-4 mb-5">
+    <% books.each do |book| %>
+      <div class="col">
+        <div class="card h-100 shadow-sm">
+          <div class="card-img-top-container" style="height: 250px; background-color: #f8f9fa;">
+            <% if book[:book_cover].present? %>
+              <img src="<%= book[:book_cover] %>"
+                  alt="<%= book[:title] %>の表紙画像"
+                  class="img-fluid p-3"
+                  style="height: 100%; width: 100%; object-fit: contain;"
+                  loading="lazy">
+            <% else %>
+              <div class="d-flex align-items-center justify-content-center h-100 text-muted">
+                画像なし
+              </div>
+            <% end %>
+          </div>
+
+          <div class="card-body d-flex flex-column">
+            <h5 class="card-title mb-3"><%= book[:title]&.truncate(40) %></h5>
+
+            <div class="mb-auto">
+              <p class="card-text text-muted small mb-1">
+                <strong>著者:</strong> <%= book[:author] || '情報なし' %>
+              </p>
+              <p class="card-text text-muted small">
+                <strong>出版社:</strong> <%= book[:publisher] || '情報なし' %>
+              </p>
+            </div>
+
+            <%= button_to "My本棚に追加", books_path(book: {
+              title: book[:title],
+              author: book[:author],
+              publisher: book[:publisher] || "",
+              isbn: book[:isbn] || "",
+              book_cover: book[:book_cover] || ""
+            }), method: :post, class: "btn btn-success" %>
+
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<% if @google_total_pages.present? && @google_total_pages > 1 %>
+  <!-- Google Books検索結果のページネーション -->
+  <div class="d-flex justify-content-center mb-5">
+    <nav aria-label="ページネーション">
+      <ul class="pagination">
+        <% 1.upto(@google_total_pages) do |i| %>
+          <li class="page-item <%= 'active' if i == (params[:page] || 1).to_i %>">
+            <%= link_to i, search_google_books_path(query: @query, page: i), class: "page-link", data: { turbo_action: "replace" } %>
+          </li>
+        <% end %>
+      </ul>
+    </nav>
+  </div>
+<% end %>

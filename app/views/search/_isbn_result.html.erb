@@ -3,28 +3,36 @@
 <div class="card shadow-sm p-4 mb-1 mx-auto" style="max-width: 1200px;">
   <div class="row g-3 align-items-center justify-content-center flex-column flex-md-row">
     <div class="col-12 col-md-6 d-flex justify-content-center mb-3 mb-md-0">
-      <img src="<%= book.large_image_url || book.medium_image_url || book.small_image_url %>"
-           alt="書影"
-           class="rounded shadow-sm"
-           style="max-height: 480px; max-width: 100%; object-fit: contain;">
+      <% if book[:book_cover].present? %>
+        <img src="<%= book[:book_cover] %>"
+             alt="書影"
+             class="rounded shadow-sm"
+             style="max-height: 480px; max-width: 100%; object-fit: contain;">
+      <% else %>
+        <div class="bg-light d-flex justify-content-center align-items-center rounded shadow-sm"
+             style="height: 320px; width: 100%; max-width: 320px;">
+          <span class="text-muted">画像なし</span>
+        </div>
+      <% end %>
     </div>
 
     <div class="col-12 col-md-6 d-flex flex-column">
-      <h4 class="mb-2"><%= book.title %></h4>
-      <p class="mb-1"><strong>著者:</strong> <%= book.author %></p>
-      <p class="mb-1"><strong>出版社:</strong> <%= book.publisher_name %></p>
+      <h4 class="mb-2"><%= book[:title] %></h4>
+      <p class="mb-1"><strong>著者:</strong> <%= book[:author] %></p>
+      <p class="mb-1"><strong>出版社:</strong> <%= book[:publisher] %></p>
 
       <%= form_with model: Book.new, url: books_path, local: true do |f| %>
-        <%= f.hidden_field :isbn, value: book.isbn %>
-        <%= f.hidden_field :title, value: book.title %>
-        <%= f.hidden_field :author, value: book.author %>
-        <%= f.hidden_field :publisher, value: book.publisher_name %>
-        <%= f.hidden_field :price, value: book.item_price %>
-      
-        <% if book.large_image_url || book.medium_image_url || book.small_image_url %>
-          <%= f.hidden_field :book_cover, value: (book.large_image_url || book.medium_image_url || book.small_image_url), direct_upload: true %>
+        <%= f.hidden_field :isbn, value: book[:isbn] %>
+        <%= f.hidden_field :title, value: book[:title] %>
+        <%= f.hidden_field :author, value: book[:author] %>
+        <%= f.hidden_field :publisher, value: book[:publisher] %>
+        <%= f.hidden_field :price, value: book[:price] %>
+        <%= f.hidden_field :page, value: book[:page] %>
+
+        <% if book[:book_cover].present? %>
+          <%= f.hidden_field :book_cover, value: book[:book_cover], direct_upload: true %>
         <% end %>
-      
+
         <%= f.submit "My本棚に追加", class: "btn btn-success mt-3" %>
       <% end %>
     </div>
