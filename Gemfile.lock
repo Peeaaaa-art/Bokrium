@@ -490,6 +490,7 @@ DEPENDENCIES
   rails (~> 8.0.2)
   rails-i18n (~> 8.0)
   rakuten_web_service
+  rexml
   rubocop-rails-omakase
   selenium-webdriver
   solid_cable
