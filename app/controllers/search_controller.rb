@@ -1,6 +1,6 @@
 class SearchController < ApplicationController
   SEARCH_TYPES = %w[isbn author title].freeze
-
+  APIs = [  NdlService ]
   def index
     type = params[:type]
     query = params[:query]
@@ -27,7 +27,6 @@ class SearchController < ApplicationController
       end
     rescue RakutenWebService::Error => e
       flash[:error] = "楽天APIでエラーが発生しました: #{e.message}"
-      redirect_to root_path
     end
   end
 
@@ -36,9 +35,10 @@ class SearchController < ApplicationController
     return head :bad_request if isbn.blank?
 
     begin
-      results = RakutenWebService::Books::Book.search(isbn: isbn)
-      if results.present?
-        @book_data = results.first
+      book_info = fetch_book_info(isbn)
+
+      if book_info.present?
+        @book_data = book_info
         respond_to do |format|
           format.turbo_stream {
             render turbo_stream: turbo_stream.append(
@@ -54,12 +54,6 @@ class SearchController < ApplicationController
           html: "<div class='alert alert-warning mt-2'>該当なし: #{isbn}</div>"
         )
       end
-    rescue RakutenWebService::Error => e
-      Rails.logger.error(e)
-      render turbo_stream: turbo_stream.append(
-        "scanned-books",
-        html: "<div class='alert alert-danger'>エラー: #{e.message}</div>"
-      )
     rescue => e
       Rails.logger.error(e)
       render turbo_stream: turbo_stream.append(
@@ -70,4 +64,40 @@ class SearchController < ApplicationController
   end
 
   def barcode; end
+
+
+  private
+
+  def fetch_book_info(isbn)
+    result = {}
+
+    APIs.each do |api|
+      data = api.fetch(isbn)
+      if data
+        result.merge!(data.compact)
+        Rails.logger.info("[BookSearch] #{api.name} から情報取得（ISBN: #{isbn}）")
+      end
+
+      break if complete?(result)
+    end
+
+    Rails.logger.info("[BookSearch] 検索完了（ISBN: #{isbn}） -> 取得元: #{result_source(result)}")
+    result
+  end
+
+  def complete?(data)
+    data[:title].present? &&
+    data[:author].present? &&
+    data[:publisher].present? &&
+    data[:isbn].present? &&
+    data[:price].present? &&
+    data[:page].present? &&
+    data[:book_cover].present?
+  end
+
+  def result_source(result)
+    keys = %i[title author publisher isbn price page book_cover]
+    present_keys = keys.select { |k| result[k].present? }
+    "取得項目: #{present_keys.join(', ')}"
+  end
 end
