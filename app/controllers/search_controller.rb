@@ -76,16 +76,8 @@ class SearchController < ApplicationController
     result = {}
 
     APIs.each do |api|
-      previous_keys = result.compact.keys
-
-      data = api.fetch(isbn)
-
-      if data
-        data_compact = data.compact
-
-        data_compact.each do |key, value|
-          result[key] = value if result[key].blank?
-        end
+      api.fetch(isbn)&.compact&.each do |key, value|
+        result[key] = value if result[key].blank?
       end
 
       break if complete?(result)
@@ -99,11 +91,5 @@ class SearchController < ApplicationController
     data[:author].present? &&
     data[:publisher].present? &&
     data[:book_cover].present?
-  end
-
-  def result_source(result)
-    keys = %i[title author publisher isbn price page book_cover]
-    present_keys = keys.select { |k| result[k].present? }
-    "#{present_keys.join(', ')}"
   end
 end

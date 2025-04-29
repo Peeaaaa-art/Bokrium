@@ -5,11 +5,11 @@ class RakutenService
     return nil unless item
 
     {
-      title: item.title,
-      author: item.author,
-      publisher: item.publisher_name,
-      isbn: item.isbn,
-      price: item.item_price,
+      title:      item.title,
+      author:     item.author,
+      publisher:  item.publisher_name,
+      isbn:       item.isbn,
+      price:      item.item_price,
       book_cover: item.large_image_url,
       page: nil
     }

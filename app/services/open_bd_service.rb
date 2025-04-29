@@ -15,13 +15,13 @@ class OpenBdService
     return nil unless data
 
     {
-      title: data.dig("summary", "title"),
-      author: data.dig("summary", "author"),
-      publisher: data.dig("summary", "publisher"),
-      isbn: data.dig("summary", "isbn"),
-      page:      data.dig("summary", "page")&.to_i,
-      price: data.dig("onix", "ProductSupply", "SupplyDetail", "Price", 0, "PriceAmount")&.to_i,
-      book_cover: data.dig("summary", "cover")
+      title:      data.dig("summary", "title"),
+      author:     data.dig("summary", "author"),
+      publisher:  data.dig("summary", "publisher"),
+      isbn:       data.dig("summary", "isbn"),
+      page:       data.dig("summary", "page")&.to_i,
+      book_cover: data.dig("summary", "cover"),
+      price: data.dig("onix", "ProductSupply", "SupplyDetail", "Price", 0, "PriceAmount")&.to_i
     }
   rescue StandardError => e
     Rails.logger.error("[OpenBdService] #{e.message}")

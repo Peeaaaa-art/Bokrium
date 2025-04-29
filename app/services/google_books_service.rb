@@ -18,13 +18,13 @@ class GoogleBooksService
     volume_info = item["volumeInfo"]
 
     {
-      title: volume_info["title"],
-      author: Array(volume_info["authors"]).join(", "),
-      publisher: volume_info["publisher"],
       isbn: isbn,
       price: nil,
-      book_cover: volume_info.dig("imageLinks", "thumbnail"),
-      page: volume_info["pageCount"]&.to_i
+      title:        volume_info["title"],
+      author: Array(volume_info["authors"]).join(", "),
+      publisher:    volume_info["publisher"],
+      book_cover:   volume_info.dig("imageLinks", "thumbnail"),
+      page:         volume_info["pageCount"]&.to_i
     }
   rescue StandardError => e
     Rails.logger.error("[GoogleBooksService] #{e.message}")

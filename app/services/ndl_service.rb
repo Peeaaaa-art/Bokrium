@@ -16,8 +16,8 @@ class NdlService
     return nil unless item
 
     {
-      title: item.elements["title"]&.text,
-      author: item.elements["dc:creator"]&.text,
+      title:     item.elements["title"]&.text,
+      author:    item.elements["dc:creator"]&.text,
       publisher: item.elements["dc:publisher"]&.text,
       isbn: isbn,
       price: nil,
