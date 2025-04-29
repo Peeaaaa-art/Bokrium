@@ -62,3 +62,5 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
 end
+
+gem "letter_opener", "~> 1.10"
