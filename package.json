@@ -5,6 +5,10 @@
     "node": "22.x",
     "npm": "10.x"
   },
+  "scripts": {
+    "build": "node esbuild.config.js",
+    "heroku-postbuild": "npm run build"
+  },
   "dependencies": {
     "@tiptap/react": "^2.11.9",
     "@tiptap/starter-kit": "^2.11.9",
