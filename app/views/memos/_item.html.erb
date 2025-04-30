@@ -13,7 +13,7 @@
 
     <div class="card-body rhodia-grid-bg">
       <%= form_with(model: [book, memo], data: { turbo_frame: dom_id(memo) }) do |f| %>
-        <%= render partial: "memos/form_fields", locals: { f: f, memo: memo } %>
+        <%= render partial: "memos/form_fields", locals: { f: f, memo: memo, editable: true } %>
       <% end %>
     </div>
   </div>

@@ -1,5 +1,5 @@
 module MemosHelper
   def memo_text(memo)
-    memo.content&.fetch("text", "")
+    memo.content.to_s
   end
 end

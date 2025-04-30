@@ -4,5 +4,14 @@
   "engines": {
     "node": "22.x",
     "npm": "10.x"
+  },
+  "dependencies": {
+    "@tiptap/react": "^2.11.9",
+    "@tiptap/starter-kit": "^2.11.9",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.3"
   }
 }

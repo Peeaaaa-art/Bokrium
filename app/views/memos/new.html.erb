@@ -29,6 +29,7 @@
               </div>
             <% end %>
             <!-- メモ本文（Markdown対応） -->
+            <%= render partial: "memos/form_fields", locals: { f: f, memo: @memo, align: "end" } %>
             <div class="mb-4">
                 <%= f.text_area :content, value: @memo.content && @memo.content["text"], class: "form-control rhodia-grid-bg",
                 rows: 6, data: { controller: "autogrow" }, placeholder: "メモ内容を入力してください"  %>

@@ -64,8 +64,6 @@ class MemosController < ApplicationController
 
   def memo_params
     params.require(:memo).permit(:content, :published).tap do |prm|
-      # contentをJSON形式に変換（textキーでラップ）
-      prm[:content] = { "text" => prm[:content] } if prm[:content]
       # enumキーをinteger値に変換（例: "you_can_see" → 1）
       prm[:published] = Memo.publisheds[prm[:published]] if prm[:published]
     end

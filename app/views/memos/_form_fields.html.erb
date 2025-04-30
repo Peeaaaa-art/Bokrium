@@ -1,10 +1,20 @@
 <div class="mb-4">
-  <%= f.text_area :content,
-        value: memo_text(memo),
-        class: "form-control rhodia-grid-bg",
-        rows: 6,
-        data: { controller: "autogrow" },
-        placeholder: "メモ内容を入力してください" %>
+  <%= f.hidden_field :content, id: "memo_content_input" %>
+
+  <% if editable %>
+    <!-- 編集モード: TipTap を使ったエディタ -->
+    <div
+      id="rich-editor-root"
+      data-initial-content="<%= j memo_text(memo) %>"
+      class="form-control rhodia-grid-bg"
+      style="min-height: 9em;"
+    ></div>
+  <% else %>
+    <!-- 表示モード: HTMLをそのまま表示 -->
+    <div class="form-control rhodia-grid-bg memo-content" style="min-height: 9em;">
+      <%= @memo.content&.html_safe.presence || "（内容はまだありません）" %>
+    </div>
+  <% end %>
 </div>
 
 <div class="d-flex justify-content-end gap-3">
