@@ -13,3 +13,6 @@ ja:
     author: "村上春樹"
     title: "ノルウェイの森"
     default: "入力してください"
+  errors:
+    messages:
+      invalid_isbn: "は有効なISBNではありません"
