@@ -5,7 +5,8 @@
   outline: none;
   border: none;
   background: transparent;
-  padding: 0.25rem
+  padding: 0.25rem;
+  border-radius: 0.5rem;
 }
 
 .ProseMirror p {
@@ -33,11 +34,10 @@
 }
 
 
-.rhodia-grid-bg {
+.ProseMirror.rhodia-grid-bg {
   background-color: #f8f9faf5;
   background-image:
     linear-gradient(to right, rgba(0, 47, 255, 0.1) 0.01rem, transparent 1px),
     linear-gradient(to bottom, rgba(0, 85, 255, 0.1) 0.01rem, transparent 1px);
   background-size: 1.2rem 1.2rem;
-
 }

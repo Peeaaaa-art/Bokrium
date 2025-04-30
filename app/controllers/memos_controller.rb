@@ -29,7 +29,13 @@ class MemosController < ApplicationController
     if @memo.update(memo_params)
       flash[:notice] = "更新しました"
       respond_to do |format|
-        format.turbo_stream
+        format.turbo_stream {
+          render turbo_stream: turbo_stream.replace(
+            dom_id(@memo),
+            partial: "memos/item",
+            locals: { memo: @memo, index: 0, memos: @book.memos, book: @book }
+          )
+        }
         format.html { redirect_to book_path(@book), notice: "更新しました" }
       end
     else

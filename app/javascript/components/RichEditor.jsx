@@ -37,7 +37,7 @@ const RichEditor = () => {
   if (!editor) return null;
 
   return (
-    <div className="form-control rhodia-grid-bg" style={{ overflowY: "auto" }}>
+    <div className="form-control" style={{ overflowY: "auto" }}>
       <EditorContent editor={editor} className="w-100 ProseMirror" />
     </div>
   );
