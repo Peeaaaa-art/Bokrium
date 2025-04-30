@@ -1,8 +1,8 @@
 <div class="d-flex justify-content-center">
   <div style="max-width: 800px; width: 100%;">
-    <%= form_with url: "#", method: :get, local: true, id: "search-form" , data: { controller: "spinner" } do %>
-      <div class="row g-2 align-items-end">
-        <div class="col-md-3">
+    <%= form_with url: "#", method: :get, local: true, id: "search-form", data: { controller: "spinner" } do %>
+      <div class="row g-2 align-items-center">
+        <div class="col-md-2">
           <%= label_tag :type, "検索種別", class: "form-label" %>
           <%= select_tag :type,
                 options_for_select([["タイトル", "title"], ["著者", "author"], ["ISBN", "isbn"]], params[:type]),
@@ -10,35 +10,18 @@
                 onchange: "this.form.submit()" %>
         </div>
 
-        <div class="col-md-5">
+        <div class="col-md-6">
           <%= label_tag :query, "検索キーワード", class: "form-label" %>
-          <% placeholder = case params[:type]
-            when "isbn"   then "例: 9781234567890"
-            when "author" then "例: 村上春樹"
-            when "title"  then "例: ノルウェイの森"
-            else "例: ノルウェイの森"
-            end %>
-          <%= text_field_tag :query, params[:query], class: "form-control", placeholder: placeholder %>
+          <div class="input-group">
+            <span class="input-group-text"><i class="bi bi-search"></i></span>
+            <%= text_field_tag :query, params[:query], class: "form-control", placeholder: placeholder_for(params[:type]) %>
+          </div>
         </div>
 
         <div class="col-md-4">
+          <%= label_tag :search_button, "検索実行", class: "form-label invisible" %>
           <div class="d-flex gap-2">
-            <% if params[:type].blank? || params[:type] == "title" || params[:type] == "author" %>
-              <div class="flex-fill">
-                <%= button_tag "楽天検索", type: "submit", formaction: search_books_path(engine: "rakuten", type: params[:type] || "title", query: params[:query]), method: :get, class: "btn btn-primary btn-sm w-100" %>
-              </div>
-              <div class="flex-fill">
-                <%= button_tag "Google検索", type: "submit", formaction: search_google_books_path(query: params[:query], page: 1), method: :get, class: "btn btn-outline-success btn-sm w-100" %>
-              </div>
-            <% elsif params[:type] == "isbn" %>
-              <div class="flex-fill">
-                <%= button_tag "検索", type: "submit", name: "engine", value: "isbn", class: "btn btn-primary btn-sm w-100" %>
-              </div>
-            <% else %>
-              <div class="flex-fill">
-                <%= submit_tag "検索", class: "btn btn-primary btn-sm w-100" %>
-              </div>
-            <% end %>
+            <%= render "search/search_buttons", type: params[:type], query: params[:query] %>
           </div>
         </div>
       </div>

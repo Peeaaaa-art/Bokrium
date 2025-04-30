@@ -8,3 +8,8 @@ ja:
     published:
       only_i_can_see: "非公開"
       you_can_see: "公開"
+  placeholders:
+    isbn: "9781234567890"
+    author: "村上春樹"
+    title: "ノルウェイの森"
+    default: "入力してください"

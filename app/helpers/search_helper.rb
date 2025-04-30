@@ -8,4 +8,8 @@ module SearchHelper
       "#"
     end
   end
+
+  def placeholder_for(type)
+    I18n.t("placeholders.#{type}", default: I18n.t("placeholders.default"))
+  end
 end
