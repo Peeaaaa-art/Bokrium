@@ -11,7 +11,7 @@ class GoogleBooksService
 
     return nil unless response.is_a?(Net::HTTPSuccess)
 
-    parse_response(response.body)
+    parse_response(response.body, isbn)
   rescue StandardError => e
     Rails.logger.error("[GoogleBooksService][ISBN] #{e.message}")
     nil
@@ -38,7 +38,7 @@ class GoogleBooksService
 
   private
 
-  def self.parse_response(body)
+  def self.parse_response(body, isbn)
     data = JSON.parse(body)
     item = data["items"]&.first
     return nil unless item

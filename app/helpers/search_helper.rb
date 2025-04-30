@@ -8,4 +8,9 @@ module SearchHelper
       "#"
     end
   end
+
+  def placeholder_for(type)
+    key = type.presence || "title"
+    I18n.t("placeholders.#{key}", default: I18n.t("placeholders.default"))
+  end
 end

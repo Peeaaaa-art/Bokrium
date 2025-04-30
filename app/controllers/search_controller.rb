@@ -19,9 +19,17 @@ class SearchController < ApplicationController
     end
 
     if type == "isbn" || engine == "isbn"
-      @book_data = fetch_book_info(query)
+      validator = Search::ValidateIsbnService.new(query)
+      unless validator.valid?
+        flash.now[:warning] = "#{query} #{validator.error_message}）"
+        return
+      end
+
+      isbn13 = validator.isbn13
+      @book_data = fetch_book_info(isbn13)
+
       unless @book_data.present?
-        flash.now[:warning] = "該当する書籍が見つかりませんでした（ISBN: #{query}）"
+        flash.now[:warning] = "該当する書籍が見つかりませんでした（ISBN: #{isbn13}）"
       end
       return
     end
@@ -91,6 +99,7 @@ class SearchController < ApplicationController
   def barcode; end
 
   private
+
 
   def search_rakuten_books(type, query, page)
     begin
