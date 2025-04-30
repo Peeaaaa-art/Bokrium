@@ -6,9 +6,14 @@ const RichEditor = () => {
   const element = document.getElementById("rich-editor-root");
   const initialContent = element?.dataset?.initialContent || "";
 
+  const decodeHTML = (html) => {
+    const textarea = document.createElement("textarea");
+    textarea.innerHTML = html;
+    return textarea.value;
+  };
+
   const editor = useEditor({
     extensions: [StarterKit],
-    content: initialContent,
     autofocus: true,
     editable: true,
     onUpdate: ({ editor }) => {
@@ -20,24 +25,20 @@ const RichEditor = () => {
 
   useEffect(() => {
     if (!editor) return;
+
+    // 初期表示：HTMLとして挿入
+    editor.commands.setContent(decodeHTML(initialContent));
+
+    // 保存初期化
     const hiddenField = document.getElementById("memo_content_input");
     if (hiddenField) hiddenField.value = editor.getHTML();
   }, [editor]);
 
-  if (!editor) return null; // ← editorが未初期化なら何も表示しない
+  if (!editor) return null;
 
   return (
-    <div>
-      <div
-        className="form-control rhodia-grid-bg"
-        style={{
-          minHeight: "9em",
-          overflowY: "auto",
-          borderRadius: "0.375rem",
-        }}
-      >
-        <EditorContent editor={editor} className="w-100 ProseMirror" />
-      </div>
+    <div className="form-control rhodia-grid-bg" style={{ overflowY: "auto" }}>
+      <EditorContent editor={editor} className="w-100 ProseMirror" />
     </div>
   );
 };
