@@ -15,36 +15,26 @@ class MemosController < ApplicationController
   def create
     @memo = current_user.memos.new(memo_params)
     @memo.book_id = params[:book_id]
+    @book = @memo.book
+    @memos = @book.memos.order(created_at: :asc)
 
     if @memo.save
       redirect_to book_path(@memo.book), notice: "メモを保存しました"
     else
-      render "books/show", status: :unprocessable_entity
+      # render "books/show", status: :unprocessable_entity
     end
   end
 
   def edit; end
 
+
   def update
+    @memos = @book.memos.order(created_at: :asc)
+    @memo = Memo.find(params[:id])
     if @memo.update(memo_params)
-      @memos = @book.memos.order(created_at: :asc)
-      flash[:notice] = "更新しました"
-      respond_to do |format|
-        format.turbo_stream {
-          render turbo_stream: turbo_stream.replace(
-            dom_id(@memo),
-            partial: "memos/list",
-            locals: { memo: @memo, index: 0, memos: @book.memos, book: @book }
-          )
-        }
-        format.html { redirect_to book_path(@book), notice: "更新しました" }
-      end
+      redirect_to book_path(@memo.book), notice: "メモを保存しました"
     else
-      render turbo_stream: turbo_stream.replace(
-        dom_id(@memo),
-        partial: "memos/list",
-        locals: { memo: @memo, index: 0, memos: @book.memos, book: @book }
-      ), status: :unprocessable_entity
+      render status: :unprocessable_entity
     end
   end
 

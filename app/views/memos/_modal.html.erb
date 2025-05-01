@@ -2,7 +2,7 @@
   <div class="modal-dialog modal-xl modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-body">
-        <%= form_with url: "", method: :patch, id: "memo-edit-form" do |f| %>
+<%= form_with url: memo.persisted? ? book_memo_path(book, memo) : book_memos_path(book), method: memo.persisted? ? :patch : :post, id: "memo-edit-form", data: { turbo_frame: "_top" } do |f| %>
           <%= hidden_field_tag "memo[content]", "", id: "memo_content_input" %>
           <div id="rich-editor-root" data-initial-content=""></div>
 

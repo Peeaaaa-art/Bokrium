@@ -14,39 +14,44 @@ export default class extends Controller {
 
   open(event) {
     console.log("✅ モーダルを開こうとしています")
-  
+
     const memoId = this.element.dataset.memoModalMemoIdValue
     const bookId = this.element.dataset.memoModalBookIdValue
-  
+    const isNew = memoId === "new";
     const contentElement = document.querySelector(`#memo-${memoId} .ProseMirror`)
     const content = contentElement?.innerHTML || ""
-  
-    console.log("📦 メモID:", memoId)
+
     console.log("📄 取得したHTMLコンテンツ:", content)
-  
-    // 🟢 ここで rich-editor-root に初期データを渡す
+
     const editorRoot = document.getElementById("rich-editor-root")
     if (editorRoot) {
       editorRoot.dataset.initialContent = content
-      console.log("📝 エディタ初期化用の content をセットしました")
-    } else {
-      console.warn("⚠️ #rich-editor-root が見つかりませんでした")
+      editorRoot.dataset.memoId = memoId
+      mountRichEditor(editorRoot)
     }
 
     const hiddenField = document.getElementById("memo_content_input")
-    if (hiddenField) {
-      hiddenField.value = content
-      console.log("💾 hidden field に初期値をセットしました")
-    } else {
-      console.warn("⚠️ #memo_content_input が見つかりませんでした")
-    }
+    if (hiddenField) hiddenField.value = content
 
     const form = document.getElementById("memo-edit-form")
     if (form) {
-      form.setAttribute("action", `/books/${bookId}/memos/${memoId}`)
-      console.log(`${form} の action を更新しました`)
-    } else {
-      console.warn("⚠️ #memo-edit-form が見つかりませんでした")
+      if (isNew) {
+        form.setAttribute("action", `/books/${bookId}/memos`)
+        form.setAttribute("method", "post")
+      } else {
+        form.setAttribute("action", `/books/${bookId}/memos/${memoId}`)
+        form.setAttribute("method", "post") // PATCHをエミュレート
+      }
+    
+      form.addEventListener("submit", () => {
+        const editorRoot = document.getElementById("rich-editor-root")
+        const content = editorRoot?.querySelector(".ProseMirror")?.innerHTML || ""
+        const hiddenField = document.getElementById("memo_content_input")
+        if (hiddenField) {
+          hiddenField.value = content
+          console.log("📝 フォーム送信直前に hidden input を更新:", content)
+        }
+      }, { once: true })
     }
 
     const deleteButton = document.getElementById("memo-delete-button")
@@ -64,11 +69,8 @@ export default class extends Controller {
           })
         }
       }
-    } else {
-      console.warn("⚠️ #memo-delete-button が見つかりませんでした")
     }
 
-    // 🔽 最後にモーダル表示
     const modalElement = document.getElementById("memoEditModal")
     const modal = new bootstrap.Modal(modalElement)
     modal.show()
