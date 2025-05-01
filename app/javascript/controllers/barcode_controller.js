@@ -1,81 +1,85 @@
 import { Controller } from "@hotwired/stimulus"
-import { BrowserMultiFormatReader } from "https://cdn.jsdelivr.net/npm/@zxing/browser/+esm";
+import { BrowserMultiFormatReader } from "@zxing/browser"
+
+let scannerStarted = false
 
 export default class extends Controller {
   static targets = ["video", "output"]
-  static values = { debounce: { type: Number, default: 1000 } }
+  static values = { debounce: { type: Number, default: 1500 } }
 
   connect() {
-    this.scannedIsbns = new Set();
-    this.isProcessing = false;
-    this.reader = new BrowserMultiFormatReader();
+    console.log("📸 barcode_controller connected!")
+
+    if (scannerStarted) {
+      console.warn("⚠️ スキャナーはすでに起動済みです")
+      return
+    }
+
+    scannerStarted = true
+    this.scannedIsbns = new Set()
+    this.reader = new BrowserMultiFormatReader()
     this.reader.options = {
-      possibleFormats: ['EAN_13'],
-      tryHarder: true
-    };
-    this.startScanner();
+      possibleFormats: ["EAN_13"],
+      tryHarder: true,
+    }
+
+    this.startScanner()
     this.createScanFrame()
   }
 
-  async startScanner() {
-    try {
-      await this.reader.decodeFromConstraints({
-        video: {
-          facingMode: { ideal: "environment" }
-        }
-      }, this.videoTarget, async (result, err) => {
-        if (result && !this.isProcessing) {
-          const isbn = result.getText();
-          if (isbn.startsWith('978') && !this.scannedIsbns.has(isbn)) {
-            this.isProcessing = true;
-            this.scannedIsbns.add(isbn);
+  startScanner() {
+    this.reader.decodeFromVideoDevice(null, this.videoTarget, async (result, err, controls) => {
+      if (!result) return
 
-            try {
-              this.dispatch("scan", {
-                detail: { isbn },
-                bubbles: true,
-                cancelable: true,
-                prefix: "barcode",
-                target: window
-              });
+      const isbn = result.getText()
 
-            console.log('DISPATCHED scan event with ISBN:', isbn);
+      // 無効 or 重複ISBNは無視
+      if (!isbn.startsWith("978") || this.scannedIsbns.has(isbn)) return
 
-            this.outputTarget.textContent = `検出: ${isbn}`;
+      console.log("📘 ISBN detected:", isbn)
 
-            await new Promise(resolve => setTimeout(resolve, this.debounceValue));
-          } finally {
-            this.isProcessing = false;
-          }
-        }
-      }
-    });
-    } catch (e) {
-      this.outputTarget.textContent = `エラー: ${e.message}`;
-    }
+      // 重複防止用Setに登録
+      this.scannedIsbns.add(isbn)
+
+      // イベントディスパッチ
+      this.dispatch("scan", {
+        detail: { isbn },
+        bubbles: true,
+        cancelable: true,
+        prefix: "barcode",
+        target: window,
+      })
+
+      this.outputTarget.textContent = `検出: ${isbn}`
+
+      setTimeout(() => {
+        controls.resume?.() // 安全に再開（バージョンによって存在しないこともある）
+      }, this.debounceValue)
+    })
   }
 
   disconnect() {
     if (this.reader) {
-      this.reader.reset();
+      this.reader.reset?.()
     }
+    scannerStarted = false
+    console.log("📴 barcode_controller disconnected!")
   }
 
   createScanFrame() {
-    const frame = document.createElement('div')
-    frame.classList.add('dynamic-scan-frame')
-    frame.style.position = 'absolute'
-    frame.style.top = '35%'
-    frame.style.left = '25%'
-    frame.style.width = '50%'
-    frame.style.height = '30%'
-    frame.style.border = '4px solid rgba(227, 221, 216, 0.66)'
-    frame.style.borderRadius = '8px';
-    frame.style.boxSizing = 'border-box'
-    frame.style.pointerEvents = 'none'
-    frame.style.zIndex = '1000'
-
-    const wrapper = this.videoTarget.parentElement
-    wrapper.appendChild(frame)
+    const frame = document.createElement("div")
+    Object.assign(frame.style, {
+      position: "absolute",
+      top: "30%",
+      left: "28%",
+      width: "45%",
+      height: "40%",
+      border: "4px solid rgba(227, 221, 216, 0.66)",
+      borderRadius: "8px",
+      boxSizing: "border-box",
+      pointerEvents: "none",
+      zIndex: "1000",
+    })
+    this.videoTarget.parentElement.appendChild(frame)
   }
 }

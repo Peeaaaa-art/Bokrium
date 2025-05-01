@@ -74,7 +74,7 @@ class SearchController < ApplicationController
         @book_data = book_info
         respond_to do |format|
           format.turbo_stream {
-            render turbo_stream: turbo_stream.append(
+            render turbo_stream: turbo_stream.prepend(
               "scanned-books",
               partial: "search/isbn_result",
               locals: { book_data: @book_data }
@@ -82,14 +82,14 @@ class SearchController < ApplicationController
           }
         end
       else
-        render turbo_stream: turbo_stream.append(
+        render turbo_stream: turbo_stream.prepend(
           "scanned-books",
           html: "<div class='alert alert-warning mt-2'>該当なし: #{isbn}</div>"
         )
       end
     rescue => e
       Rails.logger.error(e)
-      render turbo_stream: turbo_stream.append(
+      render turbo_stream: turbo_stream.prepend(
         "scanned-books",
         html: "<div class='alert alert-danger'>システムエラーが発生しました</div>"
       )

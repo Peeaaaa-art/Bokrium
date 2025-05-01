@@ -1,7 +1,7 @@
 .ProseMirror {
-  min-height: 9em;
+  min-height: 15rem;
   line-height: 1.6;
-  margin: 0;
+  // margin: 0.5em 0.5em;
   outline: none;
   border: none;
   background: transparent;
@@ -24,7 +24,7 @@
 .ProseMirror blockquote {
   border-left: 4px solid #ccc;
   margin: 0.5em 0;
-  padding-left: 1em;
+  padding-left: 1rem;
   color: #555;
   font-style: italic;
 }
@@ -37,7 +37,7 @@
 .ProseMirror.rhodia-grid-bg {
   background-color: #f8f9faf5;
   background-image:
-    linear-gradient(to right, rgba(0, 47, 255, 0.1) 0.01rem, transparent 1px),
-    linear-gradient(to bottom, rgba(0, 85, 255, 0.1) 0.01rem, transparent 1px);
-  background-size: 1.2rem 1.2rem;
+    linear-gradient(to right, rgba(0, 47, 255, 0.1) 0.01em, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 85, 255, 0.1) 0.0rem, transparent 1px);
+  background-size: 1.2em 1.2em;
 }

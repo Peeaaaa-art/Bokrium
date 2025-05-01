@@ -1,4 +1,4 @@
-<turbo-stream action="append" target="scanned-books">
+<turbo-stream action="prepend" target="scanned-books">
   <template>
     <%= render partial: "search/isbn_result", locals: { book_data: @book_data } %>
   </template>

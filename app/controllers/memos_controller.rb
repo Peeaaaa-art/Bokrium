@@ -27,12 +27,13 @@ class MemosController < ApplicationController
 
   def update
     if @memo.update(memo_params)
+      @memos = @book.memos.order(created_at: :asc)
       flash[:notice] = "更新しました"
       respond_to do |format|
         format.turbo_stream {
           render turbo_stream: turbo_stream.replace(
             dom_id(@memo),
-            partial: "memos/item",
+            partial: "memos/list",
             locals: { memo: @memo, index: 0, memos: @book.memos, book: @book }
           )
         }
@@ -41,7 +42,7 @@ class MemosController < ApplicationController
     else
       render turbo_stream: turbo_stream.replace(
         dom_id(@memo),
-        partial: "memos/memo_item",
+        partial: "memos/list",
         locals: { memo: @memo, index: 0, memos: @book.memos, book: @book }
       ), status: :unprocessable_entity
     end

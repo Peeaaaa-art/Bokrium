@@ -21,6 +21,9 @@
       <%= render 'images/list', book: @book %>
       <!-- メモ欄 -->
       <%= render 'memos/form', book: @book, memos: @memos, memo: @memo %>
+
+      <%= render 'memos/read_only_item', book: @book, memos: @memos, memo: @memo %>
+      <%= render "memos/modal", book: @book, memos: @memos, memo: @memo %>
       <!-- 既存メモ一覧 -->
       <%= render 'memos/list', book: @book, memos: @memos %>
       <div class="d-flex  justify-content-center gap-3 mt-4 mb-3">

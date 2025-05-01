@@ -1,0 +1,23 @@
+<div class="modal fade" id="memoEditModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-body">
+        <%= form_with url: "", method: :patch, id: "memo-edit-form" do |f| %>
+          <%= hidden_field_tag "memo[content]", "", id: "memo_content_input" %>
+          <div id="rich-editor-root" data-initial-content=""></div>
+
+          <div class="mt-4 d-flex justify-content-between align-items-center">
+            <div class="form-check form-switch">
+              <%= f.check_box :published, { class: "form-check-input", role: "switch" }, "you_can_see", "only_i_can_see" %>
+              <%= f.label :published, "公開する", class: "form-check-label" %>
+            </div>
+            <div class="d-flex gap-3">
+              <%= button_tag "削除", type: "button", class: "btn btn-danger", id: "memo-delete-button" %>
+              <%= button_tag "保存", type: "submit", class: "btn btn-primary" %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
