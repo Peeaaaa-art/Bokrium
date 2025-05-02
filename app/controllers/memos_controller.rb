@@ -15,29 +15,26 @@ class MemosController < ApplicationController
   def create
     @memo = current_user.memos.new(memo_params)
     @memo.book_id = params[:book_id]
+    @book = @memo.book
+    @memos = @book.memos.order(created_at: :asc)
 
     if @memo.save
       redirect_to book_path(@memo.book), notice: "メモを保存しました"
     else
-      render "books/show", status: :unprocessable_entity
+      # render "books/show", status: :unprocessable_entity
     end
   end
 
   def edit; end
 
+
   def update
+    @memos = @book.memos.order(created_at: :asc)
+    @memo = Memo.find(params[:id])
     if @memo.update(memo_params)
-      flash[:notice] = "更新しました"
-      respond_to do |format|
-        format.turbo_stream
-        format.html { redirect_to book_path(@book), notice: "更新しました" }
-      end
+      redirect_to book_path(@memo.book), notice: "メモを保存しました"
     else
-      render turbo_stream: turbo_stream.replace(
-        dom_id(@memo),
-        partial: "memos/memo_item",
-        locals: { memo: @memo, index: 0, memos: @book.memos, book: @book }
-      ), status: :unprocessable_entity
+      render status: :unprocessable_entity
     end
   end
 
@@ -64,8 +61,6 @@ class MemosController < ApplicationController
 
   def memo_params
     params.require(:memo).permit(:content, :published).tap do |prm|
-      # contentをJSON形式に変換（textキーでラップ）
-      prm[:content] = { "text" => prm[:content] } if prm[:content]
       # enumキーをinteger値に変換（例: "you_can_see" → 1）
       prm[:published] = Memo.publisheds[prm[:published]] if prm[:published]
     end

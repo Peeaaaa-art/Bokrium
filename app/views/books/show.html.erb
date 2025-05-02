@@ -1,32 +1,210 @@
 <div class="container my-5">
   <div class="row justify-content-center">
     <div class="col-lg-10">
-      <div class="row g-4 align-items-start">
-        <!-- 書影 -->
-        <%= render 'books/cover',   book: @book %>
-        <!-- 書誌情報 -->
-      <div class="col-md-6 ms-4">
-        <%= render 'books/info',    book: @book %>
-        <!-- タグ -->
-        <%= render 'tags_form',    book: @book %>
-        <!-- ステータス -->
-        <%= render 'status_form',  book: @book %>
-        <!-- 編集ボタン -->
-        <%= render 'books/actions', book: @book %>
+
+      <!-- 表紙・情報・タグカラム -->
+      <div class="row mb-4">
+        <!-- 表紙カラム -->
+        <div class="col-6 col-md-3 mb-3 mb-md-0">
+          <div class="card h-100 border-0 shadow-none bg-transparent">
+            <div class="card-body text-center d-flex align-items-center justify-content-center">
+              <div class="book-cover">
+                <% if @book.book_cover_s3.attached? %>
+                  <%= image_tag @book.book_cover_s3, alt: @book.title, class: "img-fluid rounded" %>
+                <% elsif @book.book_cover.present? %>
+                  <img src="<%= @book.book_cover %>" alt="表紙画像" class="img-fluid rounded" >
+                <% else %>
+                  <div class="no-cover p-4 bg-light rounded"><%= @book.title %></div>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 情報カラム -->
+        <div class="col-6 col-md-5 mb-3 mb-md-0">
+          <div class="card h-100 border-0 shadow-none bg-transparent">
+            <div class="card-body">
+              <h3 class="fw-semibold fs-4 mb-2"><%= @book.title %></h3>
+              <div class="mb-2 text-secondary fs-6"><%= @book.author.presence || "著者？" %></div>
+              <div class="mb-2">
+                <span class="text-secondary me-3">
+                  <i class="bi bi-building"></i> <%= @book.publisher.presence || "出版社？" %>
+                </span>
+              </div>
+              <div class="mt-3">
+                <% if @book.page.present? %>
+                  <span class="text-secondary me-3">
+                    <i class="bi bi-file-earmark-text"></i> <%= "#{@book.page}ページ" %>
+                  </span>
+                <% end %>
+                <% if @book.price.present? %>
+                  <span class="text-secondary">
+                    <i class="bi bi-currency-yen"></i> <%= @book.price %>
+                  </span>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- タグ・アクションカラム -->
+        <div class="col-12 col-md-4">
+          <div class="card h-100 border-0 shadow-none bg-transparent">
+            <div class="card-body">
+              <div class="mb-3">
+                <h5 class="card-title mb-2"><i class="bi bi-tags"></i> Tags</h5>
+                <div class="tag-container">
+                  <% @book.tags.each do |tag| %>
+                    <span class="badge rounded-pill bg-info text-dark me-1 mb-1" style="font-size:0.9em;"><%= tag.name %></span>
+                  <% end %>
+                  <button type="button" class="btn btn-sm btn-outline-info" data-bs-toggle="collapse" data-bs-target="#tagForm">
+                    <i class="bi bi-plus"></i> タグ
+                  </button>
+                </div>
+
+                <!-- タグ追加フォーム -->
+                <div class="collapse mt-2" id="tagForm">
+                  <div class="input-group">
+                    <%= form_with(model: @book, local: true, html: { class: "w-100" }) do |f| %>
+                      <%= text_field_tag :tags, @book.tags.map(&:name).join(','), class: "form-control", placeholder: "小説,哲学" %>
+                      <%= f.submit "保存", class: "btn btn-success" %>
+                    <% end %>
+                  </div>
+                  <small class="form-text text-muted">カンマ区切りで入力（例: 小説,哲学）</small>
+                </div>
+              </div>
+
+              <!-- ✅ PC専用：ステータス + アクション + 画像アップロード -->
+              <div class="d-none d-sm-flex flex-column gap-2 mt-3">
+                <!-- ステータスセレクト -->
+                <%= form_with(model: @book, local: false, class: "status-form") do |f| %>
+                  <div class="d-flex align-items-center mb-2">
+                    <%= f.select :status,
+                          Book.statuses.keys.map { |s| [t("books.status.#{s}"), s] },
+                          {},
+                          class: "form-select form-select-sm",
+                          style: "width: auto; min-width: 120px;",
+                          onchange: "this.form.requestSubmit();" %>
+                  </div>
+                <% end %>
+
+                <!-- アクションボタン -->
+                <div class="d-flex gap-2">
+                  <%= link_to edit_book_path(@book), class: "btn btn-warning btn-sm" do %>
+                    <i class="bi bi-pencil-square"></i> 編集
+                  <% end %>
+                  <%= link_to book_path(@book),
+                    data: { turbo_method: :delete, turbo_confirm: "本のデータとメモが削除されると、もとに戻すことはできません。\n本当に削除してもよろしいでしょうか？" },
+                    class: "btn btn-danger btn-sm" do %>
+                    <i class="bi bi-trash2"></i> 削除
+                  <% end %>
+                </div>
+
+                <!-- 画像アップロード -->
+                <div data-controller="image-upload" class="mt-2">
+                  <%= form_with model: [@book, Image.new], local: false,
+                        html: {
+                          multipart: true,
+                          class: "d-inline-flex align-items-center",
+                          data: { image_upload_target: "form" }
+                        } do |f| %>
+                    <%= f.file_field :image_path,
+                          direct_upload: true,
+                          class: "d-none",
+                          data: {
+                            image_upload_target: "fileInput",
+                            action: "change->image-upload#triggerUpload"
+                          },
+                          id: "customFileInput" %>
+                    <label for="customFileInput" class="btn btn-outline-secondary btn-sm mb-0">
+                      <i class="bi bi-camera-fill"></i> 画像アップロード
+                    </label>
+                  <% end %>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
-      <!-- 画像アップロード -->
-      <%= render 'images/form', book: @book %>
-      <!-- 画像一覧表示 -->
-      <%= render 'images/list', book: @book %>
-      <!-- メモ欄 -->
-      <%= render 'memos/form', book: @book, memos: @memos, memo: @memo %>
-      <!-- 既存メモ一覧 -->
+
+      <!-- ✅ スマホ専用：ステータス + アクション + アップロード 横並び -->
+      <div class="d-flex d-sm-none flex-row align-items-center justify-content-between px-3">
+        <!-- ステータスセレクト -->
+        <%= form_with(model: @book, local: false, class: "status-form mb-0") do |f| %>
+          <%= f.select :status,
+                Book.statuses.keys.map { |s| [t("books.status.#{s}"), s] },
+                {},
+                class: "btn btn-outline-secondary px-4 text-start",
+                style: "min-width: 90px; height: calc(1.5em + .5rem + 2px);",
+                onchange: "this.form.requestSubmit();" %>
+        <% end %>
+
+        <!-- 画像アップロード -->
+        <div data-controller="image-upload">
+          <%= form_with model: [@book, Image.new], local: false,
+                html: {
+                  multipart: true,
+                  class: "d-inline",
+                  data: { image_upload_target: "form" }
+                } do |f| %>
+            <%= f.file_field :image_path,
+                  direct_upload: true,
+                  class: "d-none",
+                  data: {
+                    image_upload_target: "fileInput",
+                    action: "change->image-upload#triggerUpload"
+                  },
+                  id: "customFileInputSm" %>
+            <label for="customFileInputSm" class="btn btn-outline-secondary btn-sm px-4 mb-0">
+              <i class="bi bi-camera-fill"></i>
+            </label>
+          <% end %>
+        </div>
+
+        <!-- アクション：ドロップダウン -->
+        <div class="dropdown">
+          <button class="btn btn-outline-secondary btn-sm px-4 dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-three-dots-vertical"></i>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li>
+              <%= link_to edit_book_path(@book), class: "dropdown-item" do %>
+                <i class="bi bi-pencil-square"></i> 編集
+              <% end %>
+            </li>
+            <li>
+              <%= link_to book_path(@book),
+                data: { turbo_method: :delete, turbo_confirm: "本のデータとメモが削除されると、もとに戻すことはできません。\n本当に削除してもよろしいでしょうか？" },
+                class: "dropdown-item text-danger" do %>
+                <i class="bi bi-trash2"></i> 削除
+              <% end %>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- 画像リスト -->
+      <div class="row row-cols-4 row-cols-md-6 g-2 mb-4 mt-2" id="image-list">
+        <% @book.images.each_with_index do |img, idx| %>
+          <div class="col">
+            <%= render partial: "images/card", locals: { image: img, book: @book, thumb: true, identifier: idx } %>
+          </div>
+        <% end %>
+      </div>
+
+      <!-- メモ表示 -->
+      <%= render 'memos/read_only_item', book: @book, memos: @memos, memo: @memo %>
+      <%= render "memos/modal", book: @book, memos: @memos, memo: @memo %>
       <%= render 'memos/list', book: @book, memos: @memos %>
-      <div class="d-flex  justify-content-center gap-3 mt-4 mb-3">
+
+      <!-- アクションボタン -->
+      <div class="d-flex justify-content-center gap-3 mt-4 mb-3">
         <%= link_to "さらにメモを書く", new_book_memo_path(@book), class: "btn btn-outline-primary" %>
         <%= link_to "戻る", books_path, class: "btn btn-secondary" %>
       </div>
+
     </div>
   </div>
 </div>

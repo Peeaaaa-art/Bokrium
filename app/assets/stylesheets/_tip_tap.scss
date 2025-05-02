@@ -1,0 +1,55 @@
+.ProseMirror {
+  min-height: 20rem;
+  line-height: 1.6;
+  margin: 0.5em 0.5em;
+  outline: none;
+  border: none;
+  background: transparent;
+  padding: 0.1rem;
+  border-radius: 0.5rem;
+}
+
+.ProseMirror p {
+  margin-bottom: 0.18em;
+  line-height: 1.5;
+}
+
+.ProseMirror h1,
+.ProseMirror h2,
+.ProseMirror h3 {
+  margin: 1.5rem 0 1rem;
+}
+
+
+.ProseMirror blockquote {
+  border-left: 4px solid #ccc;
+  margin: 0.5em 0;
+  padding-left: 1rem;
+  color: #555;
+  font-style: italic;
+}
+
+.ProseMirror:focus {
+  outline: none;
+}
+
+
+.ProseMirror.rhodia-grid-bg {
+  background-color: #f8f9faf5;
+  background-image:
+    linear-gradient(to right, rgba(0, 47, 255, 0.1) 0.01em, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 85, 255, 0.1) 0.0rem, transparent 1px);
+  background-size: 1.2em 1.2em;
+}
+
+.rhodia-grid-bg {
+  background-color: #f8f9faf5;
+  background-image:
+    linear-gradient(to right, rgba(0, 47, 255, 0.1) 0.01em, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 85, 255, 0.1) 0.0rem, transparent 1px);
+  background-size: 1.2em 1.2em;
+}
+.modal-body {
+
+  padding: 0 !important;
+}

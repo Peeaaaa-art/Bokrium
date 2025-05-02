@@ -4,6 +4,7 @@ export default class extends Controller {
   static values = { timeout: { type: Number, default: 5000 } }
 
   scan(event) {
+    console.log("📥 ScanController received:", event.detail.isbn)
     const isbn = event.detail.isbn;
     if (!isbn || !isbn.startsWith('978')) return;
 
@@ -31,7 +32,6 @@ export default class extends Controller {
 
         if (typeof html === "string" && html.includes("<turbo-stream")) {
           Turbo.renderStreamMessage(html);
-          this.scrollToLatest();
           return html;
         }
         throw new Error("Invalid Turbo Stream response");
@@ -40,7 +40,7 @@ export default class extends Controller {
     .catch(error => {
       console.error("検索エラー:", error);
       Turbo.renderStreamMessage(
-        `<turbo-stream action="append" target="scanned-books">
+        `<turbo-stream action="prepend" target="scanned-books">
           <template>
             <div class="alert alert-danger">通信エラー: ${error.message}</div>
           </template>
@@ -51,15 +51,5 @@ export default class extends Controller {
 
   getCsrfToken() {
     return document.querySelector('meta[name="csrf-token"]').content;
-  }
-
-  scrollToLatest() {
-    const container = document.querySelector("#scanned-books");
-    if (container?.lastElementChild) {
-      container.lastElementChild.scrollIntoView({
-        behavior: "smooth",
-        block: "nearest"
-      });
-    }
   }
 }

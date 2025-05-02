@@ -4,5 +4,26 @@
   "engines": {
     "node": "22.x",
     "npm": "10.x"
+  },
+  "scripts": {
+    "build": "node esbuild.config.js",
+    "build:watch": "node esbuild.config.js --watch",
+    "heroku-postbuild": "npm run build"
+  },
+  "dependencies": {
+    "@hotwired/stimulus": "^3.2.2",
+    "@hotwired/stimulus-webpack-helpers": "^1.0.1",
+    "@hotwired/turbo": "^8.0.13",
+    "@popperjs/core": "^2.11.8",
+    "@tiptap/react": "^2.11.9",
+    "@tiptap/starter-kit": "^2.11.9",
+    "@zxing/browser": "^0.1.5",
+    "bootstrap": "^5.3.5",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "stimulus-vite-helpers": "^3.1.0"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.3"
   }
 }

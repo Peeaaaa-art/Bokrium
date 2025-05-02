@@ -1,4 +1,3 @@
-# app/services/search/validate_isbn_service.rb
 module Search
   class ValidateIsbnService
     attr_reader :isbn, :isbn13, :error_message
