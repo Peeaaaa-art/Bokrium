@@ -7,10 +7,10 @@
     <i class="bi bi-trash2"></i>
   <% end %>
   <div class="card">
-    <%= image_tag (thumb ? image.image_path.variant(resize_to_limit: [300, 300]) : image.image_path),
-          class: "card-img-top",
+    <%= image_tag (thumb ? image.image_path.variant(resize_to_fill: [200, 200]) : image.image_path),
+          class: "card-img-top img-fluid",
           alt: "Book Image",
-          style: "object-fit: contain; background: #f8f9fa;",
+          style: "max-width: 240px; width: 100%; height: auto; object-fit: contain; background: #f8f9fa;",
           data: (thumb ? { bs_toggle: "modal", bs_target: "#imageModal#{identifier}" } : {}) %>
   </div>
 </div>

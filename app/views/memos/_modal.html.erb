@@ -2,7 +2,10 @@
   <div class="modal-dialog modal-xl modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-body">
-<%= form_with url: memo.persisted? ? book_memo_path(book, memo) : book_memos_path(book), method: memo.persisted? ? :patch : :post, id: "memo-edit-form", data: { turbo_frame: "_top" } do |f| %>
+        <%= form_with url: memo.persisted? ? book_memo_path(book, memo) : book_memos_path(book), method: memo.persisted? ? :patch : :post, id: "memo-edit-form", data: { turbo_frame: "_top" } do |f| %>
+        <div class="card-header d-flex justify-content-center py-2">
+          <i class="bi bi-cloud-fog2-fill"></i><i class="bi bi-cloud-haze2"></i><i class="bi bi-cloud-fog2-fill"></i>
+        </div>
           <%= hidden_field_tag "memo[content]", "", id: "memo_content_input" %>
           <div id="rich-editor-root" data-initial-content=""></div>
 

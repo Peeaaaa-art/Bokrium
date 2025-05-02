@@ -1,11 +1,22 @@
-<div class="mt-5 mb-5 text-center">
-  <%= form_with model: [book, Image.new],
-                local: false,
-                html: { multipart: true,
-                  class: "d-inline-flex gap-2 align-items-center",
-                  data: { controller: "spinner" }
-                  } do |f| %>
-    <%= f.file_field :image_path, class: "form-control form-control-sm w-auto", direct_upload: true %>
-    <%= f.submit "アップロード", class: "btn btn-sm btn-primary" %>
+<div data-controller="image-upload" class="text-center mt-4 mb-5">
+  <%= form_with model: [book, Image.new], local: false,
+        html: {
+          multipart: true,
+          class: "d-inline-flex align-items-center gap-2",
+          data: { image_upload_target: "form" }
+        } do |f| %>
+
+    <%= f.file_field :image_path,
+          direct_upload: true,
+          class: "d-none",
+          data: {
+            image_upload_target: "fileInput",
+            action: "change->image-upload#triggerUpload"
+          },
+          id: "customFileInput" %>
+
+    <label for="customFileInput" class="btn btn-outline-secondary btn-sm mb-0">
+      <i class="bi bi-camera-fill"></i>
+    </label>
   <% end %>
 </div>

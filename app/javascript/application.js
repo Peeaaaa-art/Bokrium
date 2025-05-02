@@ -13,6 +13,9 @@ import ScanController from "./controllers/scan_controller"
 import SpinnerController from "./controllers/spinner_controller"
 import ModalController from "./controllers/modal_controller"
 import MemoModalController from "./controllers/memo_modal_controller"
+import ImageUploadController from "./controllers/image_upload_controller"
+
+
 
 const application = Application.start()
 window.Stimulus = application
@@ -23,6 +26,7 @@ application.register("scan", ScanController)
 application.register("spinner", SpinnerController)
 application.register("modal", ModalController)
 application.register("memo-modal", MemoModalController)
+application.register("image-upload", ImageUploadController)
 
 import * as bootstrap from "bootstrap"
 window.bootstrap = bootstrap  // グローバルにしたい場合

@@ -9,7 +9,7 @@
   <div class="card-header bg-rhodia-orange d-flex justify-content-center py-2">
     <i class="bi bi-cloud-fog2-fill"></i><i class="bi bi-cloud-haze2"></i><i class="bi bi-cloud-fog2-fill"></i>
   </div>
-  <div class="card-body rhodia-grid-bg">
-    <%= memo.content&.html_safe.presence || content_tag(:p, "（内容はまだありません）") %>
+  <div class=" card-body rhodia-grid-bg">
+    <%= memo.content&.html_safe.presence || memo_placeholder_html %>
   </div>
 </div>

@@ -22,7 +22,7 @@ const RichEditor = ({ element }) => {
 
   if (!editor) return null;
 
-  return <EditorContent editor={editor} className="w-100 ProseMirror rhodia-grid-bg" />;
+  return <EditorContent editor={editor} className="ProseMirror rhodia-grid-bg" />;
 };
 
 // ✅ すべての .rich-editor-root をマウント（通常表示用）

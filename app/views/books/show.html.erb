@@ -1,32 +1,45 @@
 <div class="container my-5">
   <div class="row justify-content-center">
     <div class="col-lg-10">
-      <div class="row g-4 align-items-start">
-        <!-- 書影 -->
-        <%= render 'books/cover',   book: @book %>
-        <!-- 書誌情報 -->
-      <div class="col-md-6 ms-4">
-        <%= render 'books/info',    book: @book %>
-        <!-- タグ -->
-        <%= render 'tags_form',    book: @book %>
-        <!-- ステータス -->
-        <%= render 'status_form',  book: @book %>
-        <!-- 編集ボタン -->
-        <%= render 'books/actions', book: @book %>
-      </div>
-    </div>
-      <!-- 画像アップロード -->
-      <%= render 'images/form', book: @book %>
-      <!-- 画像一覧表示 -->
-      <%= render 'images/list', book: @book %>
-      <!-- メモ欄 -->
-      <%#= render 'memos/form', book: @book, memos: @memos, memo: @memo #%>
+      <!-- 横3カラム: Cover | Info | Sidebar -->
+      <div class="d-flex flex-column flex-md-row gap-4 align-items-start">
 
+        <!-- Cover -->
+        <div class="book-cover flex-shrink-0 text-center">
+          <%= render 'books/cover', book: @book %>
+        </div>
+
+        <!-- Info -->
+        <div class="flex-grow-1">
+          <%= render 'books/info', book: @book %>
+        </div>
+
+        <!-- Sidebar（タグ + ステータス + アクション + アップロード）-->
+        <div class="d-flex flex-column align-items-md-end gap-2 w-100 w-md-auto">
+          <%= render 'tags_form', book: @book %>
+
+          <!-- ステータスとアクション横並び -->
+          <div class="d-flex justify-content-end align-items-center gap-2 flex-wrap">
+            <%= render 'status_form', book: @book %>
+            <%= render 'books/actions', book: @book %>
+          </div>
+
+          <!-- 画像アップロード -->
+          <%= render 'images/form', book: @book %>
+        </div>
+
+      </div>
+
+      <!-- 画像リスト -->
+      <%= render 'images/list', book: @book %>
+
+      <!-- メモ -->
       <%= render 'memos/read_only_item', book: @book, memos: @memos, memo: @memo %>
       <%= render "memos/modal", book: @book, memos: @memos, memo: @memo %>
-      <!-- 既存メモ一覧 -->
       <%= render 'memos/list', book: @book, memos: @memos %>
-      <div class="d-flex  justify-content-center gap-3 mt-4 mb-3">
+
+      <!-- ボタン -->
+      <div class="d-flex justify-content-center gap-3 mt-4 mb-3">
         <%= link_to "さらにメモを書く", new_book_memo_path(@book), class: "btn btn-outline-primary" %>
         <%= link_to "戻る", books_path, class: "btn btn-secondary" %>
       </div>

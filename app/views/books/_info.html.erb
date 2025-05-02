@@ -1,10 +1,21 @@
-<h3 class="fw-semibold mb-2"><%= @book.title %></h3>
+<h3 class="fw-semibold fs-4 mb-2"><%= @book.title %></h3>
 <div class="mb-2 text-secondary fs-6"><%= @book.author.presence || "著者？" %></div>
 <div class="mb-2">
-  <span class="text-secondary me-3"><i class="bi bi-building"></i> <%= @book.publisher.presence || "出版社？" %></span>
-  <span class="text-secondary me-3"><i class="bi bi-upc-scan"></i> <%= @book.isbn.presence || "ISBN？" %></span>
+  <span class="text-secondary me-3">
+    <i class="bi bi-building"></i> <%= @book.publisher.presence || "出版社？" %>
+  </span>
 </div>
+
 <div class="mt-2 mb-2">
-  <span class="text-secondary me-3"><i class="bi bi-file-earmark-text"></i> <%= @book.page.present? ? "#{@book.page}ページ" : "ページ数？" %></span>
-  <span class="text-secondary me-3"><i class="bi bi-currency-yen"></i> <%= @book.price.present? ? "#{@book.price}" : "価格？" %></span>
+  <% if @book.page.present? %>
+    <span class="text-secondary me-3">
+      <i class="bi bi-file-earmark-text"></i> <%= "#{@book.page}ページ" %>
+    </span>
+  <% end %>
+
+  <% if @book.price.present? %>
+    <span class="text-secondary me-3">
+      <i class="bi bi-currency-yen"></i> <%= @book.price %>
+    </span>
+  <% end %>
 </div>

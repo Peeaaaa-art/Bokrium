@@ -1,5 +1,6 @@
 @import "bootstrap";
 @import "books";
+@import "my_bookshelf";
 @import "footer";
 @import "avatar";
 @import "color";
@@ -12,6 +13,10 @@ body {
   display: flex;
   flex-direction: column;
   background-color:rgba(221, 231, 233, 0.33);
+}
+
+.container {
+  // overflow-x: hidden;
 }
 
 .flash-message {

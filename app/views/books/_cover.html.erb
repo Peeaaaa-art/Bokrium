@@ -1,4 +1,4 @@
-<div class="col-md-3 text-center">
+<div class="col-md-3">
   <% if @book.book_cover_s3.attached? %>
     <%= image_tag @book.book_cover_s3, alt: @book.title, class: "img-fluid rounded shadow-sm" %>
   <% elsif @book.book_cover.present? %>
