@@ -3,7 +3,7 @@
 
   <div
     id="rich-editor-root-#{memo.id || 'new'}"
-    data-initial-content="<%= raw(memo.content || "") %>"
+    data-initial-content="<%= raw(memo.content || "").to_json.html_safe %>"
     data-memo-id="<%= memo.id || 'new' %>"
     class="rich-editor-root"
   ></div>
