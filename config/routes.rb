@@ -15,7 +15,7 @@ Rails.application.routes.draw do
     post "toggle_tag", on: :member
   end
 
-  resources :tags, only: [ :create ]
+  resources :tags, only: [ :create, :update, :destroy ]
 
   root "welcome#index"
   get "up" => "rails/health#show", as: :rails_health_check

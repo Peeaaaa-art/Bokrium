@@ -1,4 +1,6 @@
 class TagsController < ApplicationController
+  before_action :set_tag, only: [ :destroy, :update, :edit ]
+
   def create
     @tags = ActsAsTaggableOn::Tag.all.order(created_at: :desc)
     tag = ActsAsTaggableOn::Tag.new(tag_params)
@@ -9,7 +11,23 @@ class TagsController < ApplicationController
       redirect_back fallback_location: root_path, alert: "タグの作成に失敗しました"
     end
   end
+
+  def update
+  end
+
+  def edit
+  end
+
+  def destroy
+      @tag.destroy
+      redirect_back fallback_location: root_path, notice: "タグ「#{@tag.name}」を削除しました"
+  end
+
   private
+
+  def set_tag
+    @tag = ActsAsTaggableOn::Tag.find(params[:id])
+  end
 
   def tag_params
     params.require(:tag).permit(:name, :color)
