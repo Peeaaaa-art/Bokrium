@@ -53,24 +53,98 @@
           <div class="card h-100 border-0 shadow-none bg-transparent">
             <div class="card-body">
               <h5 class="card-title"><i class="bi bi-tags"></i> Tags</h5>
-              <div class="tag-container">
-                <% @book.tags.each do |tag| %>
-                  <span class="badge rounded-pill bg-info text-dark me-1" style="font-size:0.9em;"><%= tag.name %></span>
+              <!-- タグ表示 -->
+              <div class="mb-2 tag-container">
+                <% @book.tag_list.each do |tag| %>
+                  <span class="badge rounded-pill bg-primary text-light me-1" style="font-size: 0.9em;">
+                    <%= tag %>
+                  </span>
                 <% end %>
-                <button type="button" class="btn btn-sm btn-outline-info" data-bs-toggle="collapse" data-bs-target="#tagForm">
-                  <i class="bi bi-plus"></i> タグ
-                </button>
               </div>
+        
+              <!-- タグ編集ボタン -->
+              <button class="btn btn-sm btn-outline-info mb-2" data-bs-toggle="collapse" data-bs-target="#tagForm" aria-expanded="false" aria-controls="tagForm">
+                <i class="bi bi-pencil-square"></i> タグを編集
+              </button>
 
               <!-- タグ追加フォーム -->
               <div class="collapse" id="tagForm">
-                <div class="input-group">
-                  <%= form_with(model: @book, local: true, html: { class: "w-100" }) do |f| %>
-                    <%= text_field_tag :tags, @book.tags.map(&:name).join(' '), class: "form-control", placeholder: "小説 哲学" %>
+                <%= form_with model: @book, local: true, html: { class: "w-100 mt-2" } do |f| %>
+                  <div class="input-group mb-2">
+                    <%= text_field_tag :tags, @book.tag_list.join(" "), class: "form-control", placeholder: "小説 哲学 ミステリー" %>
                     <%= f.submit "保存", class: "btn btn-success" %>
-                  <% end %>
+                  </div>
+                <% end %>
+                <small class="form-text text-muted">スペース区切りで入力（例: 小説 哲学）</small>
+              </div>
+
+              <!-- タグ未選択ボタン -->
+              <button class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#tagSelectModal">
+                タグを選択
+              </button>
+
+              <!-- タグ選択モーダル -->
+              <div class="modal fade" id="tagSelectModal" tabindex="-1" aria-labelledby="tagSelectModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-scrollable">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="tagSelectModalLabel">タグを選択</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
+                    </div>
+                    <div class="modal-body">
+                      <div class="d-flex flex-wrap gap-2">
+                        <% @user_tags.each do |tag| %>
+                          <%= button_to assign_tag_book_path(@book, tag_name: tag.name),
+                                        method: :post,
+                                        class: "btn btn-sm text-white",
+                                        style: "background-color: #{tag.color.presence || '#6c757d'};" do %>
+                            <%= tag.name %>
+                          <% end %>
+                        <% end %>
+                      </div>
+                      <hr>
+                      <button class="btn btn-outline-primary btn-sm mt-2" data-bs-toggle="modal" data-bs-target="#tagCreateModal">
+                        ＋ 新しいタグを作成
+                      </button>
+                    </div>
+                  </div>
                 </div>
-                <small class="form-text text-muted">カンマ区切りで入力（例: 小説,哲学）</small>
+              </div>
+
+              <!-- タグ作成モーダル -->
+              <div class="modal fade" id="tagCreateModal" tabindex="-1" aria-labelledby="tagCreateModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="tagCreateModalLabel">新しいタグを作成</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
+                    </div>
+                    <div class="modal-body">
+                      <%= form_with url: tags_path, method: :post, local: true do |f| %>
+                        <div class="mb-3">
+                          <%= f.label :name, "タグ名", class: "form-label" %>
+                          <%= f.text_field :name, class: "form-control", name: "tag[name]", placeholder: "例: 哲学、小説など" %>
+                        </div>
+                        <div class="mb-3">
+                          <%= f.label :color, "タグの色", class: "form-label" %>
+                          <%= f.color_field :color, class: "form-control form-control-color", name: "tag[color]", value: "#6c757d" %>
+                        </div>
+                        <div class="text-end">
+                          <%= f.submit "作成", class: "btn btn-primary" %>
+                        </div>
+                      <% end %>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 書籍に紐づくタグ表示 -->
+              <div class="d-flex flex-wrap gap-2 mt-2">
+                <% @user_tags&.each do |tag| %>
+                  <span class="badge rounded-pill" style="background-color: <%= tag.color.presence || '#6c757d' %>;">
+                    <%= tag.name %>
+                  </span>
+                <% end %>
               </div>
 
 

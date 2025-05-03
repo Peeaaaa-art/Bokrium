@@ -1,7 +1,7 @@
 class BooksController < ApplicationController
-  before_action :authenticate_user!, only: [ :create, :edit, :update, :destroy ]
-  before_action :set_book, only: [ :show, :edit, :update, :destroy ]
-  before_action :authorize_book, only: [ :edit, :update, :destroy ]
+  before_action :authenticate_user!, only: [:create, :edit, :update, :destroy]
+  before_action :set_book, only: [:show, :edit, :update, :destroy]
+  before_action :authorize_book, only: [:edit, :update, :destroy]
 
   def index
     if user_signed_in?
@@ -17,17 +17,16 @@ class BooksController < ApplicationController
   end
 
   def show
-    # @others_memos = @book.memos.where(published: 1)
     if @book.user_id == current_user.id
       @memos = @book.memos.order(created_at: :desc)
       @new_memo = @book.memos.new(user_id: current_user.id)
+      @user_tags = ActsAsTaggableOn::Tag.where(user: current_user)
     else
       @memos = []
       @memo = nil
       @new_memo = nil
     end
 
-    @tags = @book.tags
   end
 
   def new
@@ -37,14 +36,12 @@ class BooksController < ApplicationController
   def create
     @book = current_user.books.build(book_params)
 
-    if @book.save
-      if params[:tags].present?
-        params[:tags].split(",").each do |tag_name|
-          tag = Tag.find_or_create_by(name: tag_name.strip)
-          @book.book_tags.create(tag_id: tag.id)
-        end
-      end
+    # タグ追加
+    if params[:tags].present?
+      @book.tag_list = params[:tags].to_s.split(/\s+/).map(&:strip)
+    end
 
+    if @book.save
       flash.now[:success] = "My本棚に『#{@book.title.truncate(30)}』を追加しました"
       respond_to do |format|
         format.turbo_stream
@@ -60,14 +57,12 @@ class BooksController < ApplicationController
   end
 
   def edit
-    @tags = @book.tags.pluck(:name).join(", ")
+    @tags = @book.tag_list.join(' ')
   end
 
   def update
     if params[:tags].present?
-      tag_names = params[:tags].to_s.split(/\s+/).map(&:strip).reject(&:blank?)
-      tags = tag_names.map { |name| Tag.find_or_create_by(name: name) }
-      @book.tags = tags
+      @book.tag_list = params[:tags].to_s.split(/\s+/).map(&:strip)
     end
 
     if @book.update(book_params)
@@ -80,6 +75,20 @@ class BooksController < ApplicationController
   def destroy
     @book.destroy
     redirect_to books_path, notice: "書籍が削除されました"
+  end
+
+  def assign_tag
+    tag_name = params[:tag_name]
+    tag = ActsAsTaggableOn::Tag.find_by(name: tag_name, user: current_user)
+    
+    if tag
+      @book = Book.find(params[:id])
+      @book.tag_list.add(tag.name)
+      @book.save
+      redirect_to @book, notice: "タグ「#{tag.name}」を追加しました"
+    else
+      redirect_to @book, alert: "タグが見つかりません"
+    end
   end
 
   private
@@ -97,10 +106,6 @@ class BooksController < ApplicationController
   end
 
   def sample_books
-    [
-      (1..15).map do |i|
-        Book.new(title: "optimized#{i}.jpg")
-      end
-    ].flatten
+    (1..15).map { |i| Book.new(title: "optimized#{i}.jpg") }
   end
 end
