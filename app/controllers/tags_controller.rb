@@ -13,6 +13,11 @@ class TagsController < ApplicationController
   end
 
   def update
+    if @tag.update(tag_params)
+      redirect_back fallback_location: root_path, notice: "タグ「#{@tag.name}」を更新しました"
+    else
+      redirect_back fallback_location: root_path, alert: "タグの更新に失敗しました"
+    end
   end
 
   def edit

@@ -47,8 +47,10 @@
             </div>
           </div>
         </div>
-
-          <%= render partial: "tag_panel", locals: { book: @book, user_tags: @user_tags } %>
+        <div class="col-12 col-md-4">
+          <div class="card h-100 border-0 shadow-none bg-transparent">
+            <div class="card-body">
+            <%= render partial: "tag_panel", locals: { book: @book, user_tags: @user_tags } %>
 
               <!-- ✅ PC専用：ステータス + アクション + 画像アップロード -->
               <div class="d-none d-sm-flex flex-column gap-2 mt-3">
