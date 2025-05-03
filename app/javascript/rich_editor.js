@@ -1,3 +1,4 @@
+// app/javascript/rich_editor.js
 import React from "react";
 import { createRoot } from "react-dom/client";
 import { useEditor, EditorContent } from "@tiptap/react";

@@ -1,3 +1,4 @@
+// app/javascript/controllers/memo_modal_controller.js
 import { Controller } from "@hotwired/stimulus"
 import { mountRichEditor } from "../rich_editor"
 
@@ -11,6 +12,7 @@ export default class extends Controller {
   }
 
   open(event) {
+    document.activeElement?.blur?.();
     const memoId = this.element.dataset.memoModalMemoIdValue
     const bookId = this.element.dataset.memoModalBookIdValue
     const isNew = memoId === "new"
