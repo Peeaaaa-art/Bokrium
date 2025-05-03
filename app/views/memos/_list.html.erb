@@ -1,22 +1,4 @@
-<% @memos&.sort_by(&:created_at)&.reverse[1..]&.each_with_index do |memo, index| %>
-  <div class="card mt-5 mb-5 ">
-    <div class="card bg-rhodia-orange d-flex justify-content-between align-items-center px-3 py-2">
-      <span>memo <%= memos.size - index - 1 %> - <%= l memo.created_at, format: :long %></span>
-      <div>
-        <%= button_to book_memo_path(book, memo), method: :delete,
-        data: { turbo_confirm: "本当に削除しますか？", turbo: true },
-        class: "btn btn-sm" do %>
-          <i class="bi bi-trash2"></i>
-        <% end %>
-      </div>
-    </div>
-
-    <div class="card-body rhodia-grid-bg">
-      <%= form_with(model: [book, memo], data: { turbo_frame: dom_id(memo) }) do |f| %>
-        <h4 class="d-flex justify-content-center mb-2"><i class="bi bi-cloud-fog2-fill"></i><i class="bi bi-cloud-haze2"></i><i class="bi bi-cloud-fog2-fill"></i></h4>
-        <%= render partial: "memos/form_fields", locals: { f: f, memo: memo, align: "end" } %>
-      <% end %>
-    </div>
-  </div>
+<% memos&.each do |memo| %>
+  <%= render partial: "memos/read_only_item", locals: { memo: memo, book: book } %>
+  <%= render partial: "memos/shared_modal", locals: { memo: memo, book: book } %>
 <% end %>
-

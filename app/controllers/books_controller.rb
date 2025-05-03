@@ -20,7 +20,6 @@ class BooksController < ApplicationController
     # @others_memos = @book.memos.where(published: 1)
     if @book.user_id == current_user.id
       @memos = @book.memos.order(created_at: :desc)
-      @memo = @memos.first || @book.memos.new(user_id: current_user.id)
       @new_memo = @book.memos.new(user_id: current_user.id)
     else
       @memos = []

@@ -194,13 +194,34 @@
       </div>
 
       <!-- メモ表示 -->
-      <%= render 'memos/read_only_item', book: @book, memos: @memos, memo: @memo %>
-      <%= render "memos/modal", book: @book, memos: @memos, memo: @memo %>
-      <%= render 'memos/list', book: @book, memos: @memos %>
+      <% if @memos.present? %>
+        <% @memos.first&.tap do |memo| %>
+          <%= render "memos/read_only_item", book: @book, memo: memo %>
+        <% end %>
+      
+        <%= render partial: "memos/read_only_item", collection: @memos.drop(1), as: :memo, locals: { book: @book } %>
+      <% else %>
+        <!-- 新規メモの read_only 表示（まだ保存されていない状態） -->
+        <%= render "memos/read_only_item", book: @book, memo: @new_memo %>
+      <% end %>
+      
+      <!-- モーダルは1つだけ -->
+      <%= render "memos/modal_shared", memo: @new_memo %>
+      
+      <!-- 📌 共通のモーダルは1個だけ -->
+      <%= render "memos/modal_shared", memo: @new_memo %>
 
       <!-- アクションボタン -->
       <div class="d-flex justify-content-center gap-3 mt-4 mb-3">
-        <%= link_to "さらにメモを書く", new_book_memo_path(@book), class: "btn btn-outline-primary" %>
+        <!-- 新規メモ作成ボタン -->
+        <%= button_tag type: "button", class: "btn btn-outline-primary", data: {
+          controller: "memo-modal",
+          action: "click->memo-modal#open",
+          memo_modal_memo_id_value: "new",
+          memo_modal_book_id_value: @book.id
+        } do %>
+          <i class="bi bi-plus-circle"></i> 新しいメモを書く
+        <% end %>
         <%= link_to "戻る", books_path, class: "btn btn-secondary" %>
       </div>
 

@@ -1,15 +1,63 @@
 <div
-  class="card memo-display"
+  id="<%= dom_id(memo) %>"
+  class="card memo-display position-relative"
   data-controller="memo-modal"
   data-action="click->memo-modal#open"
-  data-memo-modal-memo-id-value="<%= memo.id.to_s %>"
-  data-memo-modal-book-id-value="<%= book.id.to_s %>"
-  id="memo-<%= memo.id %>"
+  data-memo-modal-memo-id-value="<%= memo.id || 'new' %>"
+  data-memo-modal-book-id-value="<%= book.id %>"
+  data-published="<%= memo.published %>"
 >
+
+  <!-- 📌 公開・削除などのドロップダウン -->
+  <% unless memo.new_record? %>
+    <div class="dropdown position-absolute top-0 end-0 m-2" data-action="click->memo-modal#stop">
+      <button class="btn btn-sm btn-light" data-bs-toggle="dropdown" aria-expanded="false">
+        ⋯
+      </button>
+      <ul class="dropdown-menu dropdown-menu-end">
+        <li>
+          <%= form_with model: [book, memo], method: :patch, data: { turbo_confirm: "公開設定を切り替えますか？" } do |f| %>
+            <%= f.hidden_field :content, value: memo.content %>
+            <%= f.hidden_field :published, value: memo.published == "you_can_see" ? "only_i_can_see" : "you_can_see" %>
+            <button type="submit" class="dropdown-item">
+              <i class="bi <%= memo.published == "you_can_see" ? "bi-eye-slash" : "bi-eye text-success" %> me-1"></i>
+              <%= memo.published == "only_i_can_see" ? "公開する" : "非公開にする" %>
+            </button>
+          <% end %>
+        </li>
+        <li>
+          <%= button_to book_memo_path(book, memo),
+                        method: :delete,
+                        data: {
+                          turbo: true,
+                          turbo_confirm: "このメモを削除しますか？"
+                        },
+                        form: { data: { turbo_stream: true } },
+                        class: "dropdown-item text-danger" do %>
+            <i class="bi bi-trash me-1"></i> 削除する
+          <% end %>
+        </li>
+      </ul>
+    </div>
+  <% end %>
+
+  <!-- ヘッダー -->
   <div class="card-header bg-rhodia-orange d-flex justify-content-center py-2">
-    <i class="bi bi-cloud-fog2-fill"></i><i class="bi bi-cloud-haze2"></i><i class="bi bi-cloud-fog2-fill"></i>
+    <i class="bi bi-cloud-fog2-fill"></i>
+    <i class="bi bi-cloud-haze2"></i>
+    <i class="bi bi-cloud-fog2-fill"></i>
   </div>
-  <div class=" card-body rhodia-grid-bg">
+
+  <!-- 内容 -->
+  <div class="card-body rhodia-grid-bg">
     <%= memo.content&.html_safe.presence || memo_placeholder_html %>
   </div>
+
+  <!-- ステータスアイコン（右下に浮かせる） -->
+  <% if memo.persisted? %>
+    <div class="position-absolute bottom-0 end-0 m-2" style="z-index: 1;">
+      <i class="bi <%= memo.published == "you_can_see" ? "bi-eye text-success" : "bi-eye-slash text-muted" %>"
+        title="<%= memo.published == "you_can_see" ? "公開中" : "非公開" %>"></i>
+    </div>
+<% end %>
 </div>
