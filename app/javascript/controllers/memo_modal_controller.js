@@ -2,6 +2,10 @@ import { Controller } from "@hotwired/stimulus"
 import { mountRichEditor } from "../rich_editor"
 
 export default class extends Controller {
+  static values = {
+    initialContent: String
+  }
+
   connect() {
     console.log("🔌 memo-modal connected!")
   }
@@ -10,9 +14,7 @@ export default class extends Controller {
     const memoId = this.element.dataset.memoModalMemoIdValue
     const bookId = this.element.dataset.memoModalBookIdValue
     const isNew = memoId === "new"
-
-    // 表示中のHTMLから content を取得
-    const contentElement = document.querySelector(`#memo-${memoId} .ProseMirror`)
+    const contentElement = this.element.querySelector(".card-body")
     const content = contentElement?.innerHTML || ""
 
     // エディタ初期化
@@ -64,6 +66,7 @@ export default class extends Controller {
 
     const modal = new bootstrap.Modal(modalElement)
     modal.show()
+    
   }
 
   stop(event) {

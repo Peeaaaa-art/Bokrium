@@ -1,11 +1,10 @@
 <div
   id="<%= dom_id(memo) %>"
-  class="card memo-display position-relative"
+  class="card memo-display position-relative mb-3"
   data-controller="memo-modal"
   data-action="click->memo-modal#open"
   data-memo-modal-memo-id-value="<%= memo.id || 'new' %>"
   data-memo-modal-book-id-value="<%= book.id %>"
-  data-published="<%= memo.published %>"
 >
 
   <!-- 📌 公開・削除などのドロップダウン -->
@@ -59,5 +58,5 @@
       <i class="bi <%= memo.published == "you_can_see" ? "bi-eye text-success" : "bi-eye-slash text-muted" %>"
         title="<%= memo.published == "you_can_see" ? "公開中" : "非公開" %>"></i>
     </div>
-<% end %>
+  <% end %>
 </div>

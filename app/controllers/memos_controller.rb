@@ -21,7 +21,7 @@ class MemosController < ApplicationController
     if @memo.save
       redirect_to book_path(@memo.book), notice: "メモを保存しました"
     else
-      # render "books/show", status: :unprocessable_entity
+      render "books/show", status: :unprocessable_entity
     end
   end
 
