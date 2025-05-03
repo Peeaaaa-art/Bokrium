@@ -65,7 +65,7 @@ class BooksController < ApplicationController
 
   def update
     if params[:tags].present?
-      tag_names = params[:tags].to_s.split(",").map(&:strip).reject(&:blank?)
+      tag_names = params[:tags].to_s.split(/\s+/).map(&:strip).reject(&:blank?)
       tags = tag_names.map { |name| Tag.find_or_create_by(name: name) }
       @book.tags = tags
     end

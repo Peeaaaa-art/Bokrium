@@ -66,7 +66,7 @@
               <div class="collapse" id="tagForm">
                 <div class="input-group">
                   <%= form_with(model: @book, local: true, html: { class: "w-100" }) do |f| %>
-                    <%= text_field_tag :tags, @book.tags.map(&:name).join(','), class: "form-control", placeholder: "小説,哲学" %>
+                    <%= text_field_tag :tags, @book.tags.map(&:name).join(' '), class: "form-control", placeholder: "小説 哲学" %>
                     <%= f.submit "保存", class: "btn btn-success" %>
                   <% end %>
                 </div>
@@ -220,7 +220,7 @@
           memo_modal_memo_id_value: "new",
           memo_modal_book_id_value: @book.id
         } do %>
-          <i class="bi bi-plus-circle"></i> 新しいメモを書く
+          <i class="bi bi-pen"></i> もっと書く
         <% end %>
         <%= link_to "戻る", books_path, class: "btn btn-secondary" %>
       </div>
