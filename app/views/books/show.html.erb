@@ -140,7 +140,7 @@
 
               <!-- 書籍に紐づくタグ表示 -->
               <div class="d-flex flex-wrap gap-2 mt-2">
-                <% @user_tags&.each do |tag| %>
+                <% @book.tags&.each do |tag| %>
                   <span class="badge rounded-pill" style="background-color: <%= tag.color.presence || '#6c757d' %>;">
                     <%= tag.name %>
                   </span>

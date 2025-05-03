@@ -1,7 +1,7 @@
 class BooksController < ApplicationController
-  before_action :authenticate_user!, only: [:create, :edit, :update, :destroy]
-  before_action :set_book, only: [:show, :edit, :update, :destroy]
-  before_action :authorize_book, only: [:edit, :update, :destroy]
+  before_action :authenticate_user!, only: [ :create, :edit, :update, :destroy ]
+  before_action :set_book, only: [ :show, :edit, :update, :destroy ]
+  before_action :authorize_book, only: [ :edit, :update, :destroy ]
 
   def index
     if user_signed_in?
@@ -26,7 +26,6 @@ class BooksController < ApplicationController
       @memo = nil
       @new_memo = nil
     end
-
   end
 
   def new
@@ -57,7 +56,7 @@ class BooksController < ApplicationController
   end
 
   def edit
-    @tags = @book.tag_list.join(' ')
+    @tags = @book.tag_list.join(" ")
   end
 
   def update
@@ -78,17 +77,12 @@ class BooksController < ApplicationController
   end
 
   def assign_tag
+    @book = Book.find(params[:id])
     tag_name = params[:tag_name]
-    tag = ActsAsTaggableOn::Tag.find_by(name: tag_name, user: current_user)
-    
-    if tag
-      @book = Book.find(params[:id])
-      @book.tag_list.add(tag.name)
-      @book.save
-      redirect_to @book, notice: "タグ「#{tag.name}」を追加しました"
-    else
-      redirect_to @book, alert: "タグが見つかりません"
-    end
+    @book.tag_list.add(tag_name)
+    @book.save
+
+    redirect_back fallback_location: book_path(@book), notice: "#{tag_name} をタグ付けしました"
   end
 
   private
