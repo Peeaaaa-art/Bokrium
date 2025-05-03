@@ -52,35 +52,9 @@
         <div class="col-12 col-md-4">
           <div class="card h-100 border-0 shadow-none bg-transparent">
             <div class="card-body">
-              <h5 class="card-title"><i class="bi bi-tags"></i> Tags</h5>
-              <!-- タグ表示 -->
-              <div class="mb-2 tag-container">
-                <% @book.tag_list.each do |tag| %>
-                  <span class="badge rounded-pill bg-primary text-light me-1" style="font-size: 0.9em;">
-                    <%= tag %>
-                  </span>
-                <% end %>
-              </div>
-        
-              <!-- タグ編集ボタン -->
-              <button class="btn btn-sm btn-outline-info mb-2" data-bs-toggle="collapse" data-bs-target="#tagForm" aria-expanded="false" aria-controls="tagForm">
-                <i class="bi bi-pencil-square"></i> タグを編集
-              </button>
-
-              <!-- タグ追加フォーム -->
-              <div class="collapse" id="tagForm">
-                <%= form_with model: @book, local: true, html: { class: "w-100 mt-2" } do |f| %>
-                  <div class="input-group mb-2">
-                    <%= text_field_tag :tags, @book.tag_list.join(" "), class: "form-control", placeholder: "小説 哲学 ミステリー" %>
-                    <%= f.submit "保存", class: "btn btn-success" %>
-                  </div>
-                <% end %>
-                <small class="form-text text-muted">スペース区切りで入力（例: 小説 哲学）</small>
-              </div>
-
               <!-- タグ未選択ボタン -->
               <button class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#tagSelectModal">
-                タグを選択
+                <i class="bi bi-tags"></i> タグ
               </button>
 
               <!-- タグ選択モーダル -->
@@ -94,7 +68,7 @@
                     <div class="modal-body">
                       <div class="d-flex flex-wrap gap-2">
                         <% @user_tags.each do |tag| %>
-                          <%= button_to assign_tag_book_path(@book, tag_name: tag.name),
+                          <%= button_to toggle_tag_book_path(@book, tag_name: tag.name),
                                         method: :post,
                                         class: "btn btn-sm text-white",
                                         style: "background-color: #{tag.color.presence || '#6c757d'};" do %>

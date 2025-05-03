@@ -85,6 +85,20 @@ class BooksController < ApplicationController
     redirect_back fallback_location: book_path(@book), notice: "#{tag_name} をタグ付けしました"
   end
 
+  def toggle_tag
+    @book = current_user.books.find(params[:id])
+    tag_name = params[:tag_name]
+
+    if @book.tag_list.include?(tag_name)
+      @book.tag_list.remove(tag_name)
+    else
+      @book.tag_list.add(tag_name)
+    end
+
+    @book.save
+    redirect_back fallback_location: @book
+  end
+
   private
 
   def set_book
