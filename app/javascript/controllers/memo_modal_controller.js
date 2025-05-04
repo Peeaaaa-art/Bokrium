@@ -12,7 +12,7 @@ export default class extends Controller {
   }
 
   open(event) {
-    // フォーカス外し（iOS Safari対策）
+    // フォーカス外しⅡiOS Safari対策
     document.activeElement?.blur?.();
 
     const memoId = this.element.dataset.memoModalMemoIdValue
@@ -56,9 +56,14 @@ export default class extends Controller {
 
       // submit 時に content を hidden input に再セット
       form.addEventListener("submit", () => {
+        // ○ trailingBreak <br> を削除
+        const editorRoot = document.getElementById("rich-editor-root")
+        const trailingBreaks = editorRoot?.querySelectorAll(".ProseMirror-trailingBreak")
+        trailingBreaks?.forEach((br) => br.remove())
+
         const updatedContent = editorRoot?.querySelector(".ProseMirror")?.innerHTML || ""
         if (hiddenField) hiddenField.value = updatedContent
-        console.log("📝 フォーム送信直前: content =", updatedContent)
+        console.log("📜 フォーム送信直前: content =", updatedContent)
       }, { once: true })
     }
 

@@ -2,14 +2,14 @@
 
 <%= render "search/form" %>
 
-<%= render "search/buttons" %>
+<%= render "search/entry_buttons" %>
 
 <% if @book_data.present? %>
   <%= render "search/isbn_result", book: @book_data %>
 <% end %>
 
 <% if @rakuten_book_results.present? %>
-  <%= render "search/list_results", books: @rakuten_book_results, total_count: @rakuten_total_count, total_pages: @rakuten_total_pages %>
+  <%= render "search/rakuten_results", books: @rakuten_book_results, total_count: @rakuten_total_count, total_pages: @rakuten_total_pages %>
 <% end %>
 
 <% if @rakuten_book_results.present? && @rakuten_book_results.size < 30 %>
@@ -19,7 +19,7 @@
 <% end %>
 
 <% if @google_book_results.present? %>
-  <%= render "search/google_list_results", books: @google_book_results %>
+  <%= render "search/google_results", books: @google_book_results %>
 <% end %>
 
 <% if @google_book_results.present? && @google_book_results.size < 30 %>

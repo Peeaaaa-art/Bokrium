@@ -73,7 +73,17 @@ class BooksController < ApplicationController
 
   def destroy
     @book.destroy
-    redirect_to books_path, notice: "書籍が削除されました"
+
+    respond_to do |format|
+      if request.referrer&.include?("/books/#{@book.id}")
+        # 詳細ページからの削除ならHTMLでリダイレクト
+        format.html { redirect_to books_path, notice: "書籍が削除されました" }
+      else
+        # 一覧などからの削除ならTurbo Stream対応
+        format.turbo_stream
+        format.html { redirect_to books_path, notice: "書籍が削除されました" }
+      end
+    end
   end
 
   def assign_tag

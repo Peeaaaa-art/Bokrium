@@ -1,3 +1,4 @@
+// app/javascript/rich_editors.js
 import React from "react";
 import { createRoot } from "react-dom/client";
 import RichEditor from "./components/RichEditor.jsx"; // ✅ 正しいやつを使う
