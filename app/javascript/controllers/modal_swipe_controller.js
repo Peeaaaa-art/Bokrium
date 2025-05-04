@@ -1,4 +1,3 @@
-// modal_swipe_controller
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
@@ -6,15 +5,26 @@ export default class extends Controller {
 
   connect() {
     this.startY = null
-    this.threshold = 300
+    this.threshold = 280
+    this.skipNextConfirmation = false
 
     this.modalTarget.addEventListener("touchstart", this.onTouchStart)
     this.modalTarget.addEventListener("touchend", this.onTouchEnd)
+    this.modalTarget.addEventListener("hidden.bs.modal", this.onModalHidden)
+
+    this.modalTarget.addEventListener("shown.bs.modal", () => {
+      this.skipNextConfirmation = false
+    })
   }
 
   disconnect() {
     this.modalTarget.removeEventListener("touchstart", this.onTouchStart)
     this.modalTarget.removeEventListener("touchend", this.onTouchEnd)
+    this.modalTarget.removeEventListener("hidden.bs.modal", this.onModalHidden)
+  }
+
+  skipConfirmationOnce() {
+    this.skipNextConfirmation = true
   }
 
   onTouchStart = (e) => {
@@ -24,27 +34,27 @@ export default class extends Controller {
   onTouchEnd = (e) => {
     const endY = e.changedTouches[0].clientY
     const deltaY = endY - this.startY
-  
-    console.log("🧪 スワイプ距離:", deltaY)
-    console.log("🧪 window.hasUnsavedChanges:", window.hasUnsavedChanges)
-  
+
     if (Math.abs(deltaY) > this.threshold) {
       if (window.hasUnsavedChanges) {
-        console.log("⚠️ 変更あり → 確認モーダル表示")
-        const editorModalEl = document.getElementById("memoEditModal")
-        const editorModal = bootstrap.Modal.getInstance(editorModalEl)
-        editorModal?.hide()
-  
-        editorModalEl.addEventListener("hidden.bs.modal", () => {
-          const confirm = new bootstrap.Modal(document.getElementById("confirmModal"))
-          confirm.show()
-        }, { once: true })
-      } else {
-        console.log("✅ 変更なし → 通常閉じ")
-        bootstrap.Modal.getInstance(this.modalTarget)?.hide()
+        this.shouldShowConfirmOnClose = true
       }
+      bootstrap.Modal.getInstance(this.modalTarget)?.hide()
     }
-  
+
     this.startY = null
+  }
+
+  onModalHidden = () => {
+    if (this.skipNextConfirmation) {
+      this.skipNextConfirmation = false
+      return
+    }
+
+    if (window.hasUnsavedChanges || this.shouldShowConfirmOnClose) {
+      this.shouldShowConfirmOnClose = false
+      const confirm = new bootstrap.Modal(document.getElementById("confirmModal"))
+      confirm.show()
+    }
   }
 }

@@ -1,27 +1,30 @@
 // app/javascript/controllers/confirm_modal_controller.js
 import { Controller } from "@hotwired/stimulus"
+import { saveAndClose, discardChanges } from "../utils/memo_modal" 
 
 export default class extends Controller {
   static targets = ["modal"]
 
   cancel() {
-    this.instance().hide()
-
+    const confirmModalEl = this.element
     const editorModalEl = document.getElementById("memoEditModal")
-    if (editorModalEl) {
+
+    if (!editorModalEl) return
+
+    confirmModalEl.addEventListener("hidden.bs.modal", () => {
       const editorModal = new bootstrap.Modal(editorModalEl)
       editorModal.show()
-    }
+    }, { once: true })
+
+    this.instance().hide()
   }
 
   discard() {
-    this.dispatch("discard") // イベントを送る
-    this.instance().hide()
+    discardChanges()
   }
 
   save() {
-    this.dispatch("save")
-    this.instance().hide()
+    saveAndClose()
   }
 
   instance() {

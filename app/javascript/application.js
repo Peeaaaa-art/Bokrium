@@ -25,11 +25,4 @@ window.bootstrap = bootstrap  // グローバルにしたい場合
 import * as Turbo from "@hotwired/turbo"
 window.Turbo = Turbo
 
-import { discardChanges, saveAndClose } from "./utils/memo_modal"
-window.discardChanges = discardChanges
-window.saveAndClose = saveAndClose
-
-window.hasUnsavedChanges = false
-
-// 他のファイルから使えるようにする場合（省略可）
 export { application }
