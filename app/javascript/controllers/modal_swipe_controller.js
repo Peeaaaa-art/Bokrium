@@ -5,7 +5,7 @@ export default class extends Controller {
 
   connect() {
     this.startY = null
-    this.threshold = 280
+    this.threshold = 250
     this.skipNextConfirmation = false
 
     this.modalTarget.addEventListener("touchstart", this.onTouchStart)

@@ -2,25 +2,7 @@
 
 <%= render "search/form" %>
 
-<div class="d-flex justify-content-center my-5">
-  <div style="max-width: 800px; width: 100%;">
-    <div class="row g-4">
-      <div class="col-md-8">
-        <%= link_to search_barcode_path, class: "btn btn-light border shadow-sm rounded-4 py-4 w-100 d-flex flex-column justify-content-center align-items-center", style: "min-height: 140px;" do %>
-          <i class="bi bi-upc-scan display-5 mb-1 text-primary"></i>
-          <span class="text-body">バーコード読み取り</span>
-        <% end %>
-      </div>
-
-      <div class="col-md-4">
-        <%= link_to new_book_path, class: "btn btn-light border shadow-sm rounded-4 py-4 w-100 d-flex flex-column justify-content-center align-items-center", style: "min-height: 140px;" do %>
-          <i class="bi bi-pencil display-5 mb-1 text-success"></i>
-          <span class="text-body">手動登録</span>
-        <% end %>
-      </div>
-    </div>
-  </div>
-</div>
+<%= render "search/buttons" %>
 
 <% if @book_data.present? %>
   <%= render "search/isbn_result", book: @book_data %>
