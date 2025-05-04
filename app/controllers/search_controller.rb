@@ -12,9 +12,9 @@ class SearchController < ApplicationController
     @page = page
 
     unless SEARCH_TYPES.include?(type) && query.present?
-      @book_results = []
-      @total_count = 0
-      @total_pages = 0
+      @rakuten_book_results = []
+      @rakuten_total_count = 0
+      @rakuten_total_pages = 0
       return
     end
 
@@ -105,11 +105,11 @@ class SearchController < ApplicationController
     begin
       results = RakutenWebService::Books::Book.search(type.to_sym => query, page: page, hits: 30)
       books = results.to_a
-      @book_results = books
+      @rakuten_book_results = books
 
       raw_count = results.response["count"].to_i
-      @total_count = [ raw_count, 300 ].min
-      @total_pages = (@total_count / 30.0).ceil
+      @rakuten_total_count = [ raw_count, 300 ].min
+      @rakuten_total_pages = (@rakuten_total_count / 30.0).ceil
 
       if books.blank?
         flash.now[:warning] = "楽天ブックスで該当する書籍が見つかりませんでした（#{query}）"
