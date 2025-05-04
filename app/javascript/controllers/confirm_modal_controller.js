@@ -6,6 +6,12 @@ export default class extends Controller {
 
   cancel() {
     this.instance().hide()
+
+    const editorModalEl = document.getElementById("memoEditModal")
+    if (editorModalEl) {
+      const editorModal = new bootstrap.Modal(editorModalEl)
+      editorModal.show()
+    }
   }
 
   discard() {
