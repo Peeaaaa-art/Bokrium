@@ -12,22 +12,25 @@ export default class extends Controller {
   }
 
   open(event) {
+    // フォーカス外し（iOS Safari対策）
     document.activeElement?.blur?.();
+
     const memoId = this.element.dataset.memoModalMemoIdValue
     const bookId = this.element.dataset.memoModalBookIdValue
     const isNew = memoId === "new"
     const contentElement = this.element.querySelector(".card-body")
     const content = contentElement?.innerHTML || ""
 
-    // エディタ初期化
+    // エディタ初期化前に未保存フラグをリセット
     const editorRoot = document.getElementById("rich-editor-root")
     if (editorRoot) {
+      window.hasUnsavedChanges = false // ✅ ここで初期化！
       editorRoot.dataset.initialContent = content
       editorRoot.dataset.memoId = memoId
       mountRichEditor(editorRoot)
     }
 
-    // hidden content input を更新
+    // hidden input に初期値を設定
     const hiddenField = document.getElementById("memo_content_input")
     if (hiddenField) hiddenField.value = content
 
@@ -51,7 +54,7 @@ export default class extends Controller {
         if (methodInput) methodInput.remove()
       }
 
-      // submit 時に content を hidden input にセット
+      // submit 時に content を hidden input に再セット
       form.addEventListener("submit", () => {
         const updatedContent = editorRoot?.querySelector(".ProseMirror")?.innerHTML || ""
         if (hiddenField) hiddenField.value = updatedContent
@@ -68,7 +71,6 @@ export default class extends Controller {
 
     const modal = new bootstrap.Modal(modalElement)
     modal.show()
-    
   }
 
   stop(event) {

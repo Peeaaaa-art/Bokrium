@@ -21,14 +21,28 @@ const RichEditor = ({ element }) => {
       const html = editor.getHTML()
       const hiddenField = document.getElementById("memo_content_input")
       if (hiddenField) hiddenField.value = html
+      window.hasUnsavedChanges = true // ✅ ←これが必須！
+      console.log("📝 onUpdate: hasUnsavedChanges = true") // デバッグ用
     }
   })
 
   useEffect(() => {
     if (!editor) return
+  
     const hiddenField = document.getElementById("memo_content_input")
     if (hiddenField) hiddenField.value = editor.getHTML()
+  
+    const updateHandler = () => {
+      const html = editor.getHTML()
+      if (hiddenField) hiddenField.value = html
+      window.hasUnsavedChanges = true
+      console.log("✏️ [event] editor updated → hasUnsavedChanges = true")
+    }
+  
+    editor.on("update", updateHandler)
+    return () => editor.off("update", updateHandler)
   }, [editor])
+  
 
   if (!editor) return null
 

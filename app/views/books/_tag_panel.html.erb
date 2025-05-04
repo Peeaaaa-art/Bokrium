@@ -97,7 +97,7 @@
 <!-- タグ編集モーダル群（管理モーダル外） -->
 <% user_tags.each do |tag| %>
   <div class="modal fade" id="editTagModal<%= tag.id %>" tabindex="-1" aria-labelledby="editTagModalLabel<%= tag.id %>" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <%= form_with model: tag, url: tag_path(tag), method: :patch, local: true, scope: :tag do |f| %>
           <div class="modal-header">

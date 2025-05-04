@@ -1,4 +1,4 @@
-// app/javascript/controllers/modal_swipe_controller.js
+// modal_swipe_controller
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
@@ -6,7 +6,7 @@ export default class extends Controller {
 
   connect() {
     this.startY = null
-    this.threshold = 330 // スワイプ距離の閾値（px）
+    this.threshold = 300
 
     this.modalTarget.addEventListener("touchstart", this.onTouchStart)
     this.modalTarget.addEventListener("touchend", this.onTouchEnd)
@@ -17,27 +17,34 @@ export default class extends Controller {
     this.modalTarget.removeEventListener("touchend", this.onTouchEnd)
   }
 
-  onTouchStart = (event) => {
-    this.startY = event.touches[0].clientY
+  onTouchStart = (e) => {
+    this.startY = e.touches[0].clientY
   }
 
-  onTouchEnd = (event) => {
-    const endY = event.changedTouches[0].clientY
+  onTouchEnd = (e) => {
+    const endY = e.changedTouches[0].clientY
     const deltaY = endY - this.startY
-
+  
+    console.log("🧪 スワイプ距離:", deltaY)
+    console.log("🧪 window.hasUnsavedChanges:", window.hasUnsavedChanges)
+  
     if (Math.abs(deltaY) > this.threshold) {
-      const modal = bootstrap.Modal.getInstance(this.modalTarget)
-
-      if (deltaY > 0) {
-        // 下にスワイプ → モーダルを閉じる
-        modal?.hide()
+      if (window.hasUnsavedChanges) {
+        console.log("⚠️ 変更あり → 確認モーダル表示")
+        const editorModalEl = document.getElementById("memoEditModal")
+        const editorModal = bootstrap.Modal.getInstance(editorModalEl)
+        editorModal?.hide()
+  
+        editorModalEl.addEventListener("hidden.bs.modal", () => {
+          const confirm = new bootstrap.Modal(document.getElementById("confirmModal"))
+          confirm.show()
+        }, { once: true })
       } else {
-        // 上にスワイプ → ここに処理を追加可能
-        console.log("上スワイプ detected")
-        modal?.hide() // ここも一旦閉じるにしてますが、別処理OK
+        console.log("✅ 変更なし → 通常閉じ")
+        bootstrap.Modal.getInstance(this.modalTarget)?.hide()
       }
     }
-
+  
     this.startY = null
   }
 }

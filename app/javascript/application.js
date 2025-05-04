@@ -5,6 +5,7 @@ import SpinnerController from "./controllers/spinner_controller"
 import ImageModalController from "./controllers/image_modal_controller"
 import MemoModalController from "./controllers/memo_modal_controller"
 import ModalSwipeController from "./controllers/modal_swipe_controller"
+import ConfirmModalController from "./controllers/confirm_modal_controller"
 import ImageUploadController from "./controllers/image_upload_controller"
 
 const application = Application.start()
@@ -17,11 +18,18 @@ application.register("modal", ImageModalController)
 application.register("memo-modal", MemoModalController)
 application.register("image-upload", ImageUploadController)
 application.register("modal-swipe", ModalSwipeController)
+application.register("confirm-modal", ConfirmModalController)
 
 import * as bootstrap from "bootstrap"
 window.bootstrap = bootstrap  // グローバルにしたい場合
 import * as Turbo from "@hotwired/turbo"
 window.Turbo = Turbo
+
+import { discardChanges, saveAndClose } from "./utils/memo_modal"
+window.discardChanges = discardChanges
+window.saveAndClose = saveAndClose
+
+window.hasUnsavedChanges = false
 
 // 他のファイルから使えるようにする場合（省略可）
 export { application }
