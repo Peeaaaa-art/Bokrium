@@ -3,16 +3,17 @@
     <div>
       <%= link_to "Bokrium", root_path, class: "big-shoulders-inline-bold logo-footer text-light", style: "font-size: 2.5rem; text-decoration: none;" %>
     </div>
-    <ul class="list-inline mt-2 mb-0 " >
-      <li class="list-inline-item">
-        <%= link_to "利用規約", root_path, class: "footer-link text-secondary text-white"  %>
-      </li>
-      <li class="list-inline-item">
-        <%= link_to "プライバシーポリシー", root_path, class: "footer-link text-secondary text-white" %>
-      </li>
-      <li class="list-inline-item">
-        <%= link_to "お問い合わせ", root_path, class: "footer-link text-secondary text-white" %>
-      </li>
-    </ul>
+
+    <div class="d-flex justify-content-center flex-nowrap gap-3 mt-2 mb-0 small overflow-x-auto" style="list-style: none; padding-left: 0;">
+      <div class="text-nowrap">
+        <%= link_to "利用規約", root_path, class: "footer-link text-white-50" %>
+      </div>
+      <div class="text-nowrap">
+        <%= link_to "プライバシーポリシー", root_path, class: "footer-link text-white-50" %>
+      </div>
+      <div class="text-nowrap">
+        <%= link_to "お問い合わせ", root_path, class: "footer-link text-white-50" %>
+      </div>
+    </div>
   </div>
 </footer>

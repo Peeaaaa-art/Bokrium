@@ -1,0 +1,52 @@
+<div class="modal fade modal-dialog-scrollable" id="memoEditModal"
+     data-controller="modal-swipe"
+     data-modal-swipe-target="modal"
+
+     tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-body">
+        <%= form_with url: "#", method: :post, id: "memo-edit-form", data: { turbo_frame: "_top" } do |f| %>
+          <div class="card-header d-flex justify-content-center py-2">
+            <i class="bi bi-cloud-fog2-fill"></i>
+            <i class="bi bi-cloud-haze2"></i>
+            <i class="bi bi-cloud-fog2-fill"></i>
+          </div>
+
+          <%= hidden_field_tag "memo[content]", "", id: "memo_content_input" %>
+          <div id="rich-editor-root" class="rich-editor-root"></div>
+          <div class="d-flex justify-content-center">
+            <%= button_tag type: "submit", class: "btn btn-primary my-3", title: "保存" do %>
+              <i class="bi bi-floppy-fill"></i>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="confirmModal" tabindex="-1" aria-hidden="true"
+    data-controller="confirm-modal" data-confirm-modal-target="modal" data-bs-backdrop="static">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content bg-light border-0 rounded-4 shadow p-4 p-md-5">
+      <div class="modal-body text-center">
+        <p class="text-dark mb-4">保存していない変更があります。どうしますか？</p>
+        <div class="d-flex justify-content-center gap-3 flex-wrap">
+          <button class="btn btn-outline-secondary rounded-pill px-4 shadow-sm"
+                  data-action="click->confirm-modal#cancel touchend->confirm-modal#cancel">
+            <i class="bi bi-x-circle me-1"></i> キャンセル
+          </button>
+          <button class="btn btn-primary rounded-pill px-4 shadow-sm"
+                  data-action="click->confirm-modal#save touchend->confirm-modal#save">
+            <i class="bi bi-floppy-fill"></i> 保存
+          </button>
+          <button class="btn btn-danger rounded-pill px-4 shadow-sm"
+                  data-action="click->confirm-modal#discard touchend->confirm-modal#discard">
+            <i class="bi bi-trash me-1"></i> 破棄
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,38 +1,10 @@
+// app/javascript/rich_editors.js
 import React from "react";
 import { createRoot } from "react-dom/client";
-import { useEditor, EditorContent } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
+import RichEditor from "./components/RichEditor.jsx"; // ✅ 正しいやつを使う
 
-const mountedRoots = new Map(); // DOM要素とReact Rootのマッピング
+const mountedRoots = new Map();
 
-const RichEditor = ({ element }) => {
-  const initialContent = element.dataset.initialContent || "";
-  const memoId = element.dataset.memoId || "new";
-  const hiddenField = document.getElementById(`memo_content_input_${memoId}`);
-
-  const editor = useEditor({
-    extensions: [StarterKit],
-    content: initialContent,
-    autofocus: false,
-    editable: true,
-    onUpdate: ({ editor }) => {
-      if (hiddenField) hiddenField.value = editor.getHTML();
-    },
-  });
-
-  if (!editor) return null;
-
-  return <EditorContent editor={editor} className="ProseMirror rhodia-grid-bg" />;
-};
-
-// ✅ すべての .rich-editor-root をマウント（通常表示用）
-export function mountEditors() {
-  document.querySelectorAll(".rich-editor-root").forEach((element) => {
-    mountRichEditor(element);
-  });
-}
-
-// ✅ 単体エディタをマウント（モーダルなど）
 export function mountRichEditor(selectorOrElement) {
   const element =
     typeof selectorOrElement === "string"
@@ -52,6 +24,9 @@ export function mountRichEditor(selectorOrElement) {
   mountedRoots.set(element, root);
 }
 
-// Turboで再読み込み時にエディタ再描画（index表示用）
-document.addEventListener("turbo:load", mountEditors);
-document.addEventListener("turbo:frame-load", mountEditors);
+// Turbo対応：全体エディタ用
+document.addEventListener("turbo:load", () => {
+  document.querySelectorAll(".rich-editor-root").forEach((el) => {
+    mountRichEditor(el);
+  });
+});

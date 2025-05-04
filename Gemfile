@@ -29,6 +29,7 @@ gem "rakuten_web_service"
 gem "dotenv-rails"
 gem "rexml"
 gem "redcarpet", "~> 3.6", ">= 3.6.1"
+gem "acts-as-taggable-on"
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: %i[ windows jruby ]

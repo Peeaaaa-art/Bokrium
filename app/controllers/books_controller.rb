@@ -17,18 +17,15 @@ class BooksController < ApplicationController
   end
 
   def show
-    # @others_memos = @book.memos.where(published: 1)
     if @book.user_id == current_user.id
       @memos = @book.memos.order(created_at: :desc)
-      @memo = @memos.first || @book.memos.new(user_id: current_user.id)
       @new_memo = @book.memos.new(user_id: current_user.id)
+      @user_tags = ActsAsTaggableOn::Tag.where(user: current_user)
     else
       @memos = []
       @memo = nil
       @new_memo = nil
     end
-
-    @tags = @book.tags
   end
 
   def new
@@ -38,14 +35,12 @@ class BooksController < ApplicationController
   def create
     @book = current_user.books.build(book_params)
 
-    if @book.save
-      if params[:tags].present?
-        params[:tags].split(",").each do |tag_name|
-          tag = Tag.find_or_create_by(name: tag_name.strip)
-          @book.book_tags.create(tag_id: tag.id)
-        end
-      end
+    # タグ追加
+    if params[:tags].present?
+      @book.tag_list = params[:tags].to_s.split(/\s+/).map(&:strip)
+    end
 
+    if @book.save
       flash.now[:success] = "My本棚に『#{@book.title.truncate(30)}』を追加しました"
       respond_to do |format|
         format.turbo_stream
@@ -61,14 +56,12 @@ class BooksController < ApplicationController
   end
 
   def edit
-    @tags = @book.tags.pluck(:name).join(", ")
+    @tags = @book.tag_list.join(" ")
   end
 
   def update
     if params[:tags].present?
-      tag_names = params[:tags].to_s.split(",").map(&:strip).reject(&:blank?)
-      tags = tag_names.map { |name| Tag.find_or_create_by(name: name) }
-      @book.tags = tags
+      @book.tag_list = params[:tags].to_s.split(/\s+/).map(&:strip)
     end
 
     if @book.update(book_params)
@@ -80,7 +73,40 @@ class BooksController < ApplicationController
 
   def destroy
     @book.destroy
-    redirect_to books_path, notice: "書籍が削除されました"
+
+    respond_to do |format|
+      if request.referrer&.include?("/books/#{@book.id}")
+        # 詳細ページからの削除ならHTMLでリダイレクト
+        format.html { redirect_to books_path, notice: "書籍が削除されました" }
+      else
+        # 一覧などからの削除ならTurbo Stream対応
+        format.turbo_stream
+        format.html { redirect_to books_path, notice: "書籍が削除されました" }
+      end
+    end
+  end
+
+  def assign_tag
+    @book = Book.find(params[:id])
+    tag_name = params[:tag_name]
+    @book.tag_list.add(tag_name)
+    @book.save
+
+    redirect_back fallback_location: book_path(@book), notice: "#{tag_name} をタグ付けしました"
+  end
+
+  def toggle_tag
+    @book = current_user.books.find(params[:id])
+    tag_name = params[:tag_name]
+
+    if @book.tag_list.include?(tag_name)
+      @book.tag_list.remove(tag_name)
+    else
+      @book.tag_list.add(tag_name)
+    end
+
+    @book.save
+    redirect_back fallback_location: @book
   end
 
   private
@@ -98,10 +124,6 @@ class BooksController < ApplicationController
   end
 
   def sample_books
-    [
-      (1..15).map do |i|
-        Book.new(title: "optimized#{i}.jpg")
-      end
-    ].flatten
+    (1..15).map { |i| Book.new(title: "optimized#{i}.jpg") }
   end
 end

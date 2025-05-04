@@ -47,33 +47,11 @@
             </div>
           </div>
         </div>
-
-        <!-- タグ・アクションカラム -->
         <div class="col-12 col-md-4">
           <div class="card h-100 border-0 shadow-none bg-transparent">
             <div class="card-body">
-              <div class="mb-3">
-                <h5 class="card-title mb-2"><i class="bi bi-tags"></i> Tags</h5>
-                <div class="tag-container">
-                  <% @book.tags.each do |tag| %>
-                    <span class="badge rounded-pill bg-info text-dark me-1 mb-1" style="font-size:0.9em;"><%= tag.name %></span>
-                  <% end %>
-                  <button type="button" class="btn btn-sm btn-outline-info" data-bs-toggle="collapse" data-bs-target="#tagForm">
-                    <i class="bi bi-plus"></i> タグ
-                  </button>
-                </div>
-
-                <!-- タグ追加フォーム -->
-                <div class="collapse mt-2" id="tagForm">
-                  <div class="input-group">
-                    <%= form_with(model: @book, local: true, html: { class: "w-100" }) do |f| %>
-                      <%= text_field_tag :tags, @book.tags.map(&:name).join(','), class: "form-control", placeholder: "小説,哲学" %>
-                      <%= f.submit "保存", class: "btn btn-success" %>
-                    <% end %>
-                  </div>
-                  <small class="form-text text-muted">カンマ区切りで入力（例: 小説,哲学）</small>
-                </div>
-              </div>
+            <!-- タグ -->
+            <%= render partial: "tags/tag_panel", locals: { book: @book, user_tags: @user_tags } %>
 
               <!-- ✅ PC専用：ステータス + アクション + 画像アップロード -->
               <div class="d-none d-sm-flex flex-column gap-2 mt-3">
@@ -94,9 +72,13 @@
                   <%= link_to edit_book_path(@book), class: "btn btn-warning btn-sm" do %>
                     <i class="bi bi-pencil-square"></i> 編集
                   <% end %>
-                  <%= link_to book_path(@book),
-                    data: { turbo_method: :delete, turbo_confirm: "本のデータとメモが削除されると、もとに戻すことはできません。\n本当に削除してもよろしいでしょうか？" },
-                    class: "btn btn-danger btn-sm" do %>
+                  <%= button_to book_path(@book),
+                          method: :delete,
+                          data: {
+                            turbo: true,
+                            turbo_confirm: "本のデータとメモが削除されると、もとに戻すことはできません。\n本当に削除してもよろしいでしょうか？"
+                          },
+                          class: "btn btn-danger btn-sm" do %>
                     <i class="bi bi-trash2"></i> 削除
                   <% end %>
                 </div>
@@ -166,7 +148,7 @@
         <!-- アクション：ドロップダウン -->
         <div class="dropdown">
           <button class="btn btn-outline-secondary btn-sm px-4 dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <i class="bi bi-three-dots-vertical"></i>
+          <i class="bi bi-dot"></i><i class="bi bi-dot"></i>
           </button>
           <ul class="dropdown-menu dropdown-menu-end">
             <li>
@@ -195,13 +177,34 @@
       </div>
 
       <!-- メモ表示 -->
-      <%= render 'memos/read_only_item', book: @book, memos: @memos, memo: @memo %>
-      <%= render "memos/modal", book: @book, memos: @memos, memo: @memo %>
-      <%= render 'memos/list', book: @book, memos: @memos %>
+      <% if @memos.present? %>
+        <% @memos.first&.tap do |memo| %>
+          <%= render "memos/read_only_item", book: @book, memo: memo %>
+        <% end %>
+      
+        <%= render partial: "memos/read_only_item", collection: @memos.drop(1), as: :memo, locals: { book: @book } %>
+      <% else %>
+        <!-- 新規メモの read_only 表示（まだ保存されていない状態） -->
+        <%= render "memos/read_only_item", book: @book, memo: @new_memo %>
+      <% end %>
+      
+      <!-- モーダルは1つだけ -->
+      <%= render "memos/modal_shared", memo: @new_memo %>
+      
+      <!-- 📌 共通のモーダルは1個だけ -->
+      <%= render "memos/modal_shared", memo: @new_memo %>
 
       <!-- アクションボタン -->
       <div class="d-flex justify-content-center gap-3 mt-4 mb-3">
-        <%= link_to "さらにメモを書く", new_book_memo_path(@book), class: "btn btn-outline-primary" %>
+        <!-- 新規メモ作成ボタン -->
+        <%= button_tag type: "button", class: "btn btn-outline-primary", data: {
+          controller: "memo-modal",
+          action: "click->memo-modal#open",
+          memo_modal_memo_id_value: "new",
+          memo_modal_book_id_value: @book.id
+        } do %>
+          <i class="bi bi-pen"></i> もっと書く
+        <% end %>
         <%= link_to "戻る", books_path, class: "btn btn-secondary" %>
       </div>
 

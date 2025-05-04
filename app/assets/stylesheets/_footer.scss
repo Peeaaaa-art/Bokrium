@@ -15,3 +15,8 @@
   color: #000 !important;
   text-decoration: underline;
 }
+@media (max-width: 576px) {
+  .footer-link {
+    font-size: 0.7rem;
+  }
+}

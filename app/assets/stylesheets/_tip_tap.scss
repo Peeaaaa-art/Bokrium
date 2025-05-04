@@ -1,18 +1,29 @@
 .ProseMirror {
-  min-height: 20rem;
-  line-height: 1.6;
-  margin: 0.5em 0.5em;
+  min-height: 3rem;          // 元: 6rem → 少し縮める
+  max-height: 80vh;         // 伸びすぎ防止
+  overflow-y: auto;
+  line-height: 1.4;
+  padding: 0.3rem 0.5rem;
+  margin: 0;
   outline: none;
   border: none;
   background: transparent;
-  padding: 0.1rem;
   border-radius: 0.5rem;
+}
+.memo-readonly {
+  max-height: 300px;
+  overflow-y: auto;
 }
 
 .ProseMirror p {
-  margin-bottom: 0.18em;
+  margin-bottom: 0.2em;
   line-height: 1.5;
 }
+
+.ProseMirror p:empty::before {
+  content: "\00a0"; /* &nbsp; を挿入 */
+}
+
 
 .ProseMirror h1,
 .ProseMirror h2,

@@ -2,42 +2,24 @@
 
 <%= render "search/form" %>
 
-<div class="d-flex justify-content-center my-5">
-  <div style="max-width: 800px; width: 100%;">
-    <div class="row g-4">
-      <div class="col-md-8">
-        <%= link_to search_barcode_path, class: "btn btn-light border shadow-sm rounded-4 py-4 w-100 d-flex flex-column justify-content-center align-items-center", style: "min-height: 140px;" do %>
-          <i class="bi bi-upc-scan display-5 mb-1 text-primary"></i>
-          <span class="text-body">バーコード読み取り</span>
-        <% end %>
-      </div>
-
-      <div class="col-md-4">
-        <%= link_to new_book_path, class: "btn btn-light border shadow-sm rounded-4 py-4 w-100 d-flex flex-column justify-content-center align-items-center", style: "min-height: 140px;" do %>
-          <i class="bi bi-pencil display-5 mb-1 text-success"></i>
-          <span class="text-body">手動登録</span>
-        <% end %>
-      </div>
-    </div>
-  </div>
-</div>
+<%= render "search/entry_buttons" %>
 
 <% if @book_data.present? %>
   <%= render "search/isbn_result", book: @book_data %>
 <% end %>
 
-<% if @book_results.present? %>
-  <%= render "search/list_results", books: @book_results, total_count: @total_count, total_pages: @total_pages %>
+<% if @rakuten_book_results.present? %>
+  <%= render "search/rakuten_results", books: @rakuten_book_results, total_count: @rakuten_total_count, total_pages: @rakuten_total_pages %>
 <% end %>
 
-<% if @book_results.present? && @book_results.size < 30 %>
+<% if @rakuten_book_results.present? && @rakuten_book_results.size < 30 %>
   <div class="text-center mt-3">
     <%= link_to "Google Booksでも探す", search_google_books_path(query: @query, page: 1), class: "btn btn-outline-success btn-sm mb-5" %>
   </div>
 <% end %>
 
 <% if @google_book_results.present? %>
-  <%= render "search/google_list_results", books: @google_book_results %>
+  <%= render "search/google_results", books: @google_book_results %>
 <% end %>
 
 <% if @google_book_results.present? && @google_book_results.size < 30 %>

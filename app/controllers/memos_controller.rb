@@ -16,12 +16,12 @@ class MemosController < ApplicationController
     @memo = current_user.memos.new(memo_params)
     @memo.book_id = params[:book_id]
     @book = @memo.book
-    @memos = @book.memos.order(created_at: :asc)
+    # @memos = @book.memos.order(created_at: :asc)
 
     if @memo.save
       redirect_to book_path(@memo.book), notice: "メモを保存しました"
     else
-      # render "books/show", status: :unprocessable_entity
+      render "books/show", status: :unprocessable_entity
     end
   end
 
@@ -29,9 +29,11 @@ class MemosController < ApplicationController
 
 
   def update
+    logger.debug "🪵 params: #{params.inspect}"
     @memos = @book.memos.order(created_at: :asc)
     @memo = Memo.find(params[:id])
     if @memo.update(memo_params)
+      Rails.logger.debug "🪵 converted_params: #{memo_params.inspect}"
       redirect_to book_path(@memo.book), notice: "メモを保存しました"
     else
       render status: :unprocessable_entity
@@ -61,7 +63,7 @@ class MemosController < ApplicationController
 
   def memo_params
     params.require(:memo).permit(:content, :published).tap do |prm|
-      # enumキーをinteger値に変換（例: "you_can_see" → 1）
+      # enum変換
       prm[:published] = Memo.publisheds[prm[:published]] if prm[:published]
     end
   end
