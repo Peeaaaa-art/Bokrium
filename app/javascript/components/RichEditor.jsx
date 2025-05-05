@@ -61,6 +61,23 @@ const RichEditor = ({ element }) => {
         <div className="bubble-menu bg-white border rounded shadow-sm p-2 d-flex flex-wrap gap-2">
           <button
             type="button"
+            onClick={() => editor.chain().focus().undo().run()}
+            className="btn btn-sm btn-outline-secondary"
+            title="元に戻す"
+          >
+            <i class="bi bi-arrow-left"></i>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => editor.chain().focus().redo().run()}
+            className="btn btn-sm btn-outline-secondary"
+            title="やり直す"
+          >
+            <i class="bi bi-arrow-right"></i>
+          </button>
+          <button
+            type="button"
             onClick={() => editor.chain().focus().toggleBold().run()}
             className={`btn btn-sm btn-outline-secondary ${editor.isActive("bold") ? "active" : ""}`}
           >
