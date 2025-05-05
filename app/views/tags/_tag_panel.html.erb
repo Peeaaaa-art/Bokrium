@@ -14,8 +14,9 @@
       <div class="modal-body">
         <div class="d-flex flex-wrap m-3 gap-2">
           <% user_tags.each do |tag| %>
+            <% selected = book.tags.include?(tag) %>
             <%= button_to toggle_tag_book_path(book, tag_name: tag.name), method: :post,
-                class: "badge rounded-pill border-0",
+                class: "badge rounded-pill border-0 #{selected ? 'selected-tag' : 'unselected-tag'}",
                 style: "background-color: #{tag.color.presence || '#6c757d'};" do %>
               <%= tag.name %>
             <% end %>
@@ -43,7 +44,7 @@
         <h5 class="modal-title" id="tagCreateModalLabel"><i class="bi bi-tag"></i> 新しいタグを作成</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
       </div>
-      <div class="modal-body ms-3">
+      <div class="modal-body mx-3">
         <%= form_with url: tags_path, method: :post, local: true do |f| %>
           <div class="my-3">
             <%= f.label :name, "タグ名", class: "form-label" %>
@@ -106,7 +107,7 @@
             <h5 class="modal-title" id="editTagModalLabel<%= tag.id %>">タグの編集</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
           </div>
-          <div class="modal-body ms-3">
+          <div class="modal-body mx-3">
             <div class="my-3">
               <%= f.label :name, "タグ名", class: "form-label" %>
               <%= f.text_field :name, class: "form-control" %>
@@ -133,5 +134,3 @@
     </span>
   <% end %>
 </div>
-
-

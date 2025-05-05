@@ -157,8 +157,12 @@
               <% end %>
             </li>
             <li>
-              <%= link_to book_path(@book),
-                data: { turbo_method: :delete, turbo_confirm: "本のデータとメモが削除されると、もとに戻すことはできません。\n本当に削除してもよろしいでしょうか？" },
+              <%= button_to book_path(@book),
+              method: :delete,
+              data: {
+                turbo: true,
+                turbo_confirm: "本のデータとメモが削除されると、もとに戻すことはできません。\n本当に削除してもよろしいでしょうか？"
+              },
                 class: "dropdown-item text-danger" do %>
                 <i class="bi bi-trash2"></i> 削除
               <% end %>

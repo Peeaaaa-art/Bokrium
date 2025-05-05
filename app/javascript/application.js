@@ -2,8 +2,9 @@ import { Application } from "@hotwired/stimulus"
 import BarcodeController from "./controllers/barcode_controller"
 import ScanController from "./controllers/scan_controller"
 import SpinnerController from "./controllers/spinner_controller"
-import ImageModalController from "./controllers/image_modal_controller"
+// import ImageModalController from "./controllers/image_modal_controller"
 import MemoModalController from "./controllers/memo_modal_controller"
+// import TagModalController from "./controllers/tag_modal_controller"
 import ModalSwipeController from "./controllers/modal_swipe_controller"
 import ConfirmModalController from "./controllers/confirm_modal_controller"
 import ImageUploadController from "./controllers/image_upload_controller"
@@ -14,7 +15,8 @@ window.Stimulus = application
 application.register("barcode", BarcodeController)
 application.register("scan", ScanController)
 application.register("spinner", SpinnerController)
-application.register("modal", ImageModalController)
+// application.register("image-modal", ImageModalController)
+// application.register("tag-modal", TagModalController)
 application.register("memo-modal", MemoModalController)
 application.register("image-upload", ImageUploadController)
 application.register("modal-swipe", ModalSwipeController)

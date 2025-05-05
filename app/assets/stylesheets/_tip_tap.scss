@@ -1,6 +1,6 @@
 .ProseMirror {
-  min-height: 3rem;          // 元: 6rem → 少し縮める
-  max-height: 80vh;         // 伸びすぎ防止
+  min-height: 35vh;          // 元: 6rem → 少し縮める
+  max-height: 70vh;         // 伸びすぎ防止
   overflow-y: auto;
   line-height: 1.4;
   padding: 0.3rem 0.5rem;
@@ -11,9 +11,18 @@
   border-radius: 0.5rem;
 }
 .memo-readonly {
-  max-height: 300px;
+  max-height: 45vh;
   overflow-y: auto;
 }
+
+.rich-editor-root {
+  position: relative;
+  max-height: 70vh;
+  overflow-y: auto;
+  overscroll-behavior: contain; /* iOS スクロールバグ対策 */
+  -webkit-overflow-scrolling: touch;
+}
+
 
 .ProseMirror p {
   margin-bottom: 0.2em;
@@ -22,6 +31,14 @@
 
 .ProseMirror p:empty::before {
   content: "\00a0"; /* &nbsp; を挿入 */
+}
+
+.ProseMirror p.is-empty::before {
+  content: attr(data-placeholder);
+  color: #aaa;
+  float: left;
+  height: 0;
+  pointer-events: none;
 }
 
 
