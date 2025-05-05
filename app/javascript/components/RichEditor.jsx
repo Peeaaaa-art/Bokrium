@@ -1,7 +1,7 @@
-// ✅ app/javascript/components/RichEditor.jsx
-import React, { useEffect } from "react"
-import { useEditor, EditorContent } from "@tiptap/react"
+import React, { useEffect, useRef } from "react"
+import { useEditor, EditorContent, BubbleMenu } from "@tiptap/react"
 import StarterKit from "@tiptap/starter-kit"
+import BubbleMenuExtension from "@tiptap/extension-bubble-menu"
 
 const RichEditor = ({ element }) => {
   const initialContent = element?.dataset?.initialContent || ""
@@ -20,7 +20,10 @@ const RichEditor = ({ element }) => {
   }
 
   const editor = useEditor({
-    extensions: [StarterKit],
+    extensions: [
+      StarterKit,
+      BubbleMenuExtension,
+    ],
     content: decodeHTML(initialContent),
     autofocus: true,
     editable: true,
@@ -53,7 +56,74 @@ const RichEditor = ({ element }) => {
   if (!editor) return null
 
   return (
-    <div className="form-control rhodia-grid-bg" style={{ overflowY: "auto" }}>
+    <div className="form-control rhodia-grid-bg" style={{ overflowY: "auto", position: "relative" }}>
+      <BubbleMenu editor={editor} tippyOptions={{ duration: 150 }}>
+        <div className="bubble-menu bg-white border rounded shadow-sm p-2 d-flex flex-wrap gap-2">
+          <button
+            type="button"
+            onClick={() => editor.chain().focus().toggleBold().run()}
+            className={`btn btn-sm btn-outline-secondary ${editor.isActive("bold") ? "active" : ""}`}
+          >
+            <b>B</b>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => editor.chain().focus().toggleItalic().run()}
+            className={`btn btn-sm btn-outline-secondary ${editor.isActive("italic") ? "active" : ""}`}
+          >
+            <i>I</i>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
+            className={`btn btn-sm btn-outline-secondary ${editor.isActive("heading", { level: 1 }) ? "active" : ""}`}
+          >
+            H1
+          </button>
+
+          <button
+            type="button"
+            onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
+            className={`btn btn-sm btn-outline-secondary ${editor.isActive("heading", { level: 2 }) ? "active" : ""}`}
+          >
+            H2
+          </button>
+
+          <button
+            type="button"
+            onClick={() => editor.chain().focus().toggleBulletList().run()}
+            className={`btn btn-sm btn-outline-secondary ${editor.isActive("bulletList") ? "active" : ""}`}
+          >
+            • List
+          </button>
+
+          <button
+            type="button"
+            onClick={() => editor.chain().focus().toggleOrderedList().run()}
+            className={`btn btn-sm btn-outline-secondary ${editor.isActive("orderedList") ? "active" : ""}`}
+          >
+            1. List
+          </button>
+
+          <button
+            type="button"
+            onClick={() => editor.chain().focus().toggleBlockquote().run()}
+            className={`btn btn-sm btn-outline-secondary ${editor.isActive("blockquote") ? "active" : ""}`}
+          >
+            &gt; 引用
+          </button>
+
+          <button
+            type="button"
+            onClick={() => editor.chain().focus().toggleCodeBlock().run()}
+            className={`btn btn-sm btn-outline-secondary ${editor.isActive("codeBlock") ? "active" : ""}`}
+          >
+            {"</>"}
+          </button>
+        </div>
+      </BubbleMenu>
       <EditorContent editor={editor} className="w-100 ProseMirror" />
     </div>
   )
