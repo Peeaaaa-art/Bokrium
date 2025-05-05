@@ -14,8 +14,9 @@
       <div class="modal-body">
         <div class="d-flex flex-wrap m-3 gap-2">
           <% user_tags.each do |tag| %>
+            <% selected = book.tags.include?(tag) %>
             <%= button_to toggle_tag_book_path(book, tag_name: tag.name), method: :post,
-                class: "badge rounded-pill border-0",
+                class: "badge rounded-pill border-0 #{selected ? 'selected-tag' : 'unselected-tag'}",
                 style: "background-color: #{tag.color.presence || '#6c757d'};" do %>
               <%= tag.name %>
             <% end %>
@@ -133,5 +134,3 @@
     </span>
   <% end %>
 </div>
-
-
