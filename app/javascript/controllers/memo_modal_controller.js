@@ -61,6 +61,7 @@ export default class extends Controller {
       // 古い submitHandler を削除し、再登録
       form.removeEventListener("submit", this.submitHandler)
       form.addEventListener("submit", this.submitHandler)
+      form.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
 
     // モーダル表示
