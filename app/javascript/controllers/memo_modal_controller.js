@@ -19,20 +19,23 @@ export default class extends Controller {
     const bookId = this.element.dataset.memoModalBookIdValue
     const isNew = memoId === "new"
     const contentElement = this.element.querySelector(".card-body")
-    const content = contentElement?.innerHTML || ""
+    const contentHTML = contentElement?.innerHTML || ""
+    const isPlaceholder = contentHTML.includes('PLACEHOLDER_TOKEN_9fz3!ifhdas094hfgfygq@_$2x')
+    const initialContent = isPlaceholder ? "" : contentHTML
+
 
     // エディタ初期化前に未保存フラグをリセット
     const editorRoot = document.getElementById("rich-editor-root")
     if (editorRoot) {
-      window.hasUnsavedChanges = false // ✅ ここで初期化！
-      editorRoot.dataset.initialContent = content
+      window.hasUnsavedChanges = false
+      editorRoot.dataset.initialContent = initialContent
       editorRoot.dataset.memoId = memoId
       mountRichEditor(editorRoot)
     }
 
     // hidden input に初期値を設定
     const hiddenField = document.getElementById("memo_content_input")
-    if (hiddenField) hiddenField.value = content
+    if (hiddenField) hiddenField.value = initialContent
 
     // フォーム設定
     const form = document.getElementById("memo-edit-form")

@@ -5,6 +5,7 @@
   data-action="click->memo-modal#open"
   data-memo-modal-memo-id-value="<%= memo.id || 'new' %>"
   data-memo-modal-book-id-value="<%= book.id %>"
+  data-memo-modal-initial-content-value="<%= memo.content || "" %>"
 >
 
   <!-- 📌 公開・削除などのドロップダウン -->
@@ -51,7 +52,6 @@
   <div class="card-body rhodia-grid-bg memo-readonly">
     <%= memo.content&.html_safe.presence || memo_placeholder_html %>
   </div>
-
   <!-- ステータスアイコン（右下に浮かせる） -->
   <% if memo.persisted? %>
     <div class="position-absolute bottom-0 end-0 m-2" style="z-index: 1;">

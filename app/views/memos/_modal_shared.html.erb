@@ -16,7 +16,7 @@
           <%= hidden_field_tag "memo[content]", "", id: "memo_content_input" %>
           <div id="rich-editor-root" class="rich-editor-root"></div>
           <div class="d-flex justify-content-center">
-            <%= button_tag type: "submit", class: "btn btn-primary my-3", title: "保存" do %>
+            <%= button_tag type: "submit", class: "btn btn-primary rounded-circle d-flex align-items-center justify-content-center my-2", title: "保存", style: "width: 48px; height: 48px;" do %>
               <i class="bi bi-floppy-fill"></i>
             <% end %>
           </div>
