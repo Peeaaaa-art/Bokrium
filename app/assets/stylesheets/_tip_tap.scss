@@ -1,6 +1,6 @@
 .ProseMirror {
-  min-height: 40vh;          // 元: 6rem → 少し縮める
-  max-height: 80vh;         // 伸びすぎ防止
+  min-height: 40dvh;          // 元: 6rem → 少し縮める
+  max-height: 52dvh;         // 伸びすぎ防止
   overflow-y: auto;
   line-height: 1.4;
   padding: 0.3rem 0.5rem;
@@ -11,19 +11,32 @@
   border-radius: 0.5rem;
 }
 .memo-readonly {
-  max-height: 45vh;
+  max-height: 45dvh;
   overflow-y: auto;
 }
 
 .rich-editor-root {
   position: relative;
-  max-height: 100vh;
+  max-height: 52dvh;
   overflow-y: auto;
   overscroll-behavior: contain; /* iOS スクロールバグ対策 */
   -webkit-overflow-scrolling: touch;
 }
 
+@media (min-width: 768px) {
+  .ProseMirror {
+    max-height: 80dvh;
+    padding: 2rem 2rem;
+  }
 
+  .memo-readonly {
+    max-height: 40dvh;
+  }
+
+  .rich-editor-root {
+    max-height: 80dvh;
+  }
+}
 .ProseMirror p {
   margin-bottom: 0.2em;
   line-height: 1.5;
@@ -92,12 +105,7 @@
 
   #memoEditModal .modal-content {
     border-radius: 0.3rem;
-    height: auto;
-    max-height: 100vh;
+
   }
 
-  #memoEditModal .modal-body {
-    max-height: 100vh;
-    overflow-y: auto;
-  }
 }
