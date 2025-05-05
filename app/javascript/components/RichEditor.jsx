@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from "react"
 import { useEditor, EditorContent, BubbleMenu } from "@tiptap/react"
 import StarterKit from "@tiptap/starter-kit"
 import BubbleMenuExtension from "@tiptap/extension-bubble-menu"
+import CharacterCount from "@tiptap/extension-character-count"
 
 const RichEditor = ({ element }) => {
   const initialContent = element?.dataset?.initialContent || ""
@@ -23,32 +24,48 @@ const RichEditor = ({ element }) => {
     extensions: [
       StarterKit,
       BubbleMenuExtension,
+      CharacterCount.configure({
+        limit: 100000,
+      }),
     ],
     content: decodeHTML(initialContent),
     autofocus: true,
     editable: true,
     onUpdate: ({ editor }) => {
       const html = cleanHTML(editor.getHTML())
+
+      const charCountEl = document.getElementById("char-count")
+      if (charCountEl) {
+        charCountEl.textContent = `${editor.storage.characterCount.characters()} 文字`
+      }
       const hiddenField = document.getElementById("memo_content_input")
       if (hiddenField) hiddenField.value = html
       window.hasUnsavedChanges = true
-      console.log("📝 onUpdate: hasUnsavedChanges = true")
     }
   })
 
   useEffect(() => {
     if (!editor) return
-
+  
     const hiddenField = document.getElementById("memo_content_input")
     if (hiddenField) hiddenField.value = cleanHTML(editor.getHTML())
-
+  
     const updateHandler = () => {
       const html = cleanHTML(editor.getHTML())
       if (hiddenField) hiddenField.value = html
+  
+      // ✅ 文字数カウントの表示を更新
+      const charCountEl = document.getElementById("char-count")
+      if (charCountEl) {
+        charCountEl.textContent = `${editor.storage.characterCount.characters()} 文字`
+      }
+  
       window.hasUnsavedChanges = true
       console.log("✏️ [event] editor updated → hasUnsavedChanges = true")
     }
-
+  
+    updateHandler()
+  
     editor.on("update", updateHandler)
     return () => editor.off("update", updateHandler)
   }, [editor])

@@ -16,6 +16,7 @@
     "@hotwired/turbo": "^8.0.13",
     "@popperjs/core": "^2.11.8",
     "@tiptap/extension-bubble-menu": "^2.11.9",
+    "@tiptap/extension-character-count": "^2.11.9",
     "@tiptap/react": "^2.11.9",
     "@tiptap/starter-kit": "^2.11.9",
     "@zxing/browser": "^0.1.5",

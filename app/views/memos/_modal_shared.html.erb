@@ -15,11 +15,21 @@
 
           <%= hidden_field_tag "memo[content]", "", id: "memo_content_input" %>
           <div id="rich-editor-root" class="rich-editor-root"></div>
-          <div class="d-flex justify-content-center">
-            <%= button_tag type: "submit", class: "btn btn-primary rounded-circle d-flex align-items-center justify-content-center my-2", title: "保存", style: "width: 48px; height: 48px;" do %>
-              <i class="bi bi-floppy-fill"></i>
-            <% end %>
-          </div>
+          <div class="position-relative py-4">
+            <!-- ボタン：中央に配置 -->
+            <div class="position-absolute top-50 start-50 translate-middle">
+              <%= button_tag type: "submit",
+                  class: "btn btn-primary rounded-circle d-flex align-items-center justify-content-center",
+                  title: "保存",
+                  style: "width: 48px; height: 48px;" do %>
+                <i class="bi bi-floppy-fill"></i>
+              <% end %>
+            </div>
+            <!-- 文字数表示：右上 -->
+            <div class="text-end text-muted small pe-3" id="char-count">
+              <!-- JSで挿入される文字数 -->
+            </div>
+        </div>
         <% end %>
       </div>
     </div>
