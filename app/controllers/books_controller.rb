@@ -17,10 +17,11 @@ class BooksController < ApplicationController
   end
 
   def show
-    if @book.user_id == current_user.id
+    if current_user && @book.user_id == current_user.id
       @memos = @book.memos.order(created_at: :desc)
       @new_memo = @book.memos.new(user_id: current_user.id)
       @user_tags = ActsAsTaggableOn::Tag.where(user: current_user)
+      @tag = ActsAsTaggableOn::Tag.new
     else
       @memos = []
       @memo = nil
@@ -56,7 +57,6 @@ class BooksController < ApplicationController
   end
 
   def edit
-    @tags = @book.tag_list.join(" ")
   end
 
   def update

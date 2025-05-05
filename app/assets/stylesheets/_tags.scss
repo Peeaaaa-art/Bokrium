@@ -1,0 +1,11 @@
+.selected-tag {
+  opacity: 1;
+  font-weight: bold;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.15);
+}
+
+.unselected-tag {
+  opacity: 0.5;
+  font-weight: normal;
+  filter: grayscale(30%);
+}

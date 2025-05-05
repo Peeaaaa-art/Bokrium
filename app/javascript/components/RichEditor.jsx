@@ -48,20 +48,27 @@ const RichEditor = ({ element }) => {
     if (!editor) return
   
     const hiddenField = document.getElementById("memo_content_input")
+    let previousHTML = cleanHTML(editor.getHTML())
+
+    if (hiddenField) hiddenField.value = previousHTML
+
     if (hiddenField) hiddenField.value = cleanHTML(editor.getHTML())
   
     const updateHandler = () => {
-      const html = cleanHTML(editor.getHTML())
-      if (hiddenField) hiddenField.value = html
-  
+      const currentHTML = cleanHTML(editor.getHTML())
+
+      if (hiddenField && currentHTML !== previousHTML) {
+        hiddenField.value = currentHTML
+        previousHTML = currentHTML // 更新
+        window.hasUnsavedChanges = true
+        console.log("✏️ [update] 内容が変化 → hasUnsavedChanges = true")
+      }
+
       // ✅ 文字数カウントの表示を更新
       const charCountEl = document.getElementById("char-count")
       if (charCountEl) {
         charCountEl.textContent = `${editor.storage.characterCount.characters()} 文字`
       }
-  
-      window.hasUnsavedChanges = true
-      console.log("✏️ [event] editor updated → hasUnsavedChanges = true")
     }
   
     updateHandler()
