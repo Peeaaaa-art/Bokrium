@@ -15,8 +15,6 @@
             <% end %>
           </div>
         </div>
-
-
         <!-- 情報カラム -->
         <div class="col-6 col-md-5">
           <div class="card h-100 border-0 shadow-none bg-transparent">
@@ -48,7 +46,6 @@
             <div class="card-body">
             <!-- タグ -->
             <%= render partial: "tags/tag_panel", locals: { book: @book, user_tags: @user_tags } %>
-
               <!-- ✅ PC専用：ステータス + アクション + 画像アップロード -->
               <div class="d-none d-sm-flex flex-column gap-2 mt-3">
                 <!-- ステータスセレクト -->
@@ -62,7 +59,6 @@
                           onchange: "this.form.requestSubmit();" %>
                   </div>
                 <% end %>
-
                 <!-- アクションボタン -->
                 <div class="d-flex gap-2">
                   <%= link_to edit_book_path(@book), class: "btn btn-warning btn-sm" do %>
@@ -78,7 +74,6 @@
                     <i class="bi bi-trash2"></i> 削除
                   <% end %>
                 </div>
-
                 <!-- 画像アップロード -->
                 <div data-controller="image-upload" class="mt-2">
                   <%= form_with model: [@book, Image.new], local: false,
@@ -101,12 +96,10 @@
                   <% end %>
                 </div>
               </div>
-
             </div>
           </div>
         </div>
       </div>
-
       <!-- ✅ スマホ専用：ステータス + アクション + アップロード 横並び -->
       <div class="d-flex d-sm-none flex-row align-items-center justify-content-between px-3">
         <!-- ステータスセレクト -->
@@ -118,7 +111,6 @@
                 style: "min-width: 90px; height: calc(1.5em + .5rem + 2px);",
                 onchange: "this.form.requestSubmit();" %>
         <% end %>
-
         <!-- 画像アップロード -->
         <div data-controller="image-upload">
           <%= form_with model: [@book, Image.new], local: false,
@@ -140,7 +132,6 @@
             </label>
           <% end %>
         </div>
-
         <!-- アクション：ドロップダウン -->
         <div class="dropdown">
           <button class="btn btn-outline-secondary btn-sm px-4 dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -166,7 +157,6 @@
           </ul>
         </div>
       </div>
-
       <!-- 画像リスト -->
       <div class="row row-cols-4 row-cols-md-6 g-2 mb-4 mt-2" id="image-list">
         <% @book.images.each_with_index do |img, idx| %>
@@ -175,22 +165,21 @@
           </div>
         <% end %>
       </div>
-
       <!-- メモ表示 -->
       <% if @memos.present? %>
         <% @memos.first&.tap do |memo| %>
           <%= render "memos/read_only_item", book: @book, memo: memo %>
         <% end %>
-      
+
         <%= render partial: "memos/read_only_item", collection: @memos.drop(1), as: :memo, locals: { book: @book } %>
       <% else %>
         <!-- 新規メモの read_only 表示（まだ保存されていない状態） -->
         <%= render "memos/read_only_item", book: @book, memo: @new_memo %>
       <% end %>
-      
+
       <!-- モーダルは1つだけ -->
       <%= render "memos/modal_shared", memo: @new_memo %>
-      
+
       <!-- 📌 共通のモーダルは1個だけ -->
       <%= render "memos/modal_shared", memo: @new_memo %>
 
@@ -207,7 +196,6 @@
         <% end %>
         <%= link_to "戻る", books_path, class: "btn btn-secondary" %>
       </div>
-
     </div>
   </div>
 </div>

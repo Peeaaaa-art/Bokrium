@@ -1,69 +1,65 @@
 <div class="container text-center my-4">
-  <div class="mb-4">
-    <h2 class="display-5 text-primary mb-3">Hello World</h2>
-    <div class="text-muted mb-4">
-      <%= t('users.show.now', default: '現在時刻') %>: <%= Time.now.strftime("%Y-%m-%d %H:%M:%S") %>
-    </div>
-    <h3 class="mb-3 fw-bold">Bokriumへようこそ</h3>
-    <div class="lead mb-4">
-      本を「読んで終わり」にしない、書籍管理アプリです。
-    </div>
-    <ul class="list-unstyled mb-4 text-start mx-auto" style="max-width: 600px;">
-      <li class="mb-4 d-flex align-items-start">
-        <span class="me-3 text-primary fs-3">
-          <i class="bi bi-upc-scan"></i>
-        </span>
-        <div>
-          <span class="fw-bold text-primary">ISBNバーコードスキャンで簡単登録</span><br>
-          <span class="text-muted small">書籍情報をすばやく電子本棚に追加できます。</span>
-        </div>
-      </li>
-      <li class="mb-4 d-flex align-items-start">
-        <span class="me-3 text-success fs-3">
-          <i class="bi bi-journal-richtext"></i>
-        </span>
-        <div>
-          <span class="fw-bold text-success">読書メモや画像を整理・保存</span><br>
-          <span class="text-muted small">本ごとに感想や学びを記録し、いつでも振り返りが可能です。</span>
-        </div>
-      </li>
-      <li class="mb-4 d-flex align-items-start">
-        <span class="me-3 text-warning fs-3">
-          <i class="bi bi-collection"></i>
-        </span>
-        <div>
-          <span class="fw-bold text-warning">重複購入を防ぎ、蔵書を一目で把握</span><br>
-          <span class="text-muted small">あなたの本棚を可視化し、同じ本を何度も買ってしまう心配がなくなります。</span>
-        </div>
-      </li>
-      <li class="mb-4 d-flex align-items-start">
-        <span class="me-3 text-info fs-3">
-          <i class="bi bi-shuffle"></i>
-        </span>
-        <div>
-          <span class="fw-bold text-info">過去のメモをランダム表示</span><br>
-          <span class="text-muted small">忘れかけていた知識や気づきを日常に活かせます。</span>
-        </div>
-      </li>
-      <li class="mb-4 d-flex align-items-start">
-        <span class="me-3 text-danger fs-3">
-          <i class="bi bi-people"></i>
-        </span>
-        <div>
-          <span class="fw-bold text-danger">読書メモの共有機能</span><br>
-          <span class="text-muted small">他のユーザーの視点や知識に触れ、新たな発見を得られます。</span>
-        </div>
-      </li>
-    </ul>
-
-    <div class="mb-3">
-      <span class="h5 text-success">蔵書を活かしたい読書家や、管理に悩む方へ。</span>
-    </div>
-    <div class="mb-4 small text-muted">
-      Bokriumは「本を読むだけで終わらせない」思いから生まれました。<br>
-      整理・実践・共有という仕組みで、読書による知識の蓄積を日常に息づかせます。<br>
-      あなたの読書体験を深め、社会全体で「読書人階級」を育てることを目指しています。
-    </div>
+  <h3 class="mb-3 fw-bold">Bokriumへようこそ</h3>
+  <div class="lead mb-4">
+    本を「読んで終わり」にしない<br>
+    書籍管理アプリです。
   </div>
-    <%= link_to "書籍を追加しましょう",  search_books_path, class: "btn btn-secondary" %>
+  <ul class="list-unstyled mb-4 text-start mx-auto" style="max-width: 600px;">
+    <li class="mb-4 d-flex align-items-start">
+      <span class="me-3 text-primary fs-3">
+        <i class="bi bi-upc-scan"></i>
+      </span>
+      <div>
+        <span class="fw-bold text-primary">ISBNバーコードスキャンで簡単登録</span><br>
+        <span class="text-muted small">書籍情報をすばやく電子本棚に追加できます。</span>
+      </div>
+    </li>
+    <li class="mb-4 d-flex align-items-start">
+      <span class="me-3 text-success fs-3">
+        <i class="bi bi-journal-richtext"></i>
+      </span>
+      <div>
+        <span class="fw-bold text-success">読書メモや画像を整理・保存</span><br>
+        <span class="text-muted small">本ごとに感想や学びを記録し、いつでも振り返りが可能です。</span>
+      </div>
+    </li>
+    <li class="mb-4 d-flex align-items-start">
+      <span class="me-3 text-warning fs-3">
+        <i class="bi bi-collection"></i>
+      </span>
+      <div>
+        <span class="fw-bold text-warning">重複購入を防ぎ、蔵書を一目で把握</span><br>
+        <span class="text-muted small">あなたの本棚を可視化し、同じ本を何度も買ってしまう心配がなくなります。</span>
+      </div>
+    </li>
+    <li class="mb-4 d-flex align-items-start">
+      <span class="me-3 text-info fs-3">
+        <i class="bi bi-shuffle"></i>
+      </span>
+      <div>
+        <span class="fw-bold text-info">過去のメモをランダム表示</span><br>
+        <span class="text-muted small">忘れかけていた知識や気づきを日常に活かせます。</span>
+      </div>
+    </li>
+    <li class="mb-4 d-flex align-items-start">
+      <span class="me-3 text-danger fs-3">
+        <i class="bi bi-people"></i>
+      </span>
+      <div>
+        <span class="fw-bold text-danger">読書メモの共有機能</span><br>
+        <span class="text-muted small">他のユーザーの視点や知識に触れ、新たな発見を得られます。</span>
+      </div>
+    </li>
+  </ul>
+
+  <div class="mb-3">
+    <span class="h5 text-success">蔵書を活かしたい読書家や、管理に悩む方へ。</span>
+  </div>
+  <div class="mb-4 small text-muted">
+    Bokriumは「本を読むだけで終わらせない」思いから生まれました。<br>
+    整理・実践・共有という仕組みで、読書による知識の蓄積を日常に息づかせます。<br>
+    あなたの読書体験を深め、社会全体で「読書人階級」を育てることを目指しています。
+  </div>
+
+  <%= link_to "書籍を追加しましょう",  search_books_path, class: "btn btn-secondary" %>
 </div>
