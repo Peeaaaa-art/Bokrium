@@ -53,3 +53,10 @@ body {
   justify-content: center;
   z-index: 1050; /* モーダルより上にしたいなら大きめ */
 }
+
+/* 例: app/assets/stylesheets/custom.scss または inline style */
+.random-memo {
+  background-color: #fdfdfd;
+  border-left: 4px solid #007bff;
+  border-radius: 0.5rem;
+}

@@ -1,3 +1,5 @@
 class WelcomeController < ApplicationController
-  def index; end
+  def index
+    @random_memo = current_user&.memos&.includes(:book)&.order("RANDOM()")&.first
+  end
 end
