@@ -6,9 +6,19 @@
   data-memo-modal-memo-id-value="<%= memo.id || 'new' %>"
   data-memo-modal-book-id-value="<%= book.id %>"
   data-memo-modal-initial-content-value="<%= memo.content || "" %>"
+  style="overflow: visible; z-index: 1;"
 >
 
-  <!-- 📌 公開・削除などのドロップダウン -->
+  <!-- ✅ トグルボタン -->
+  <button
+    class="btn btn-sm btn-light position-absolute top-0 start-0 m-2"
+    data-action="click->memo-modal#toggle click->memo-modal#stop"
+    aria-label="表示切り替え"
+  >
+    <i class="bi bi-arrows-angle-expand" data-memo-modal-target="icon"></i>
+  </button>
+
+  <!-- ✅ ドロップダウン（右上） -->
   <% unless memo.new_record? %>
     <div class="dropdown position-absolute top-0 end-0 m-2" data-action="click->memo-modal#stop">
       <button class="btn btn-sm btn-light" data-bs-toggle="dropdown" aria-expanded="false">
@@ -48,13 +58,16 @@
     <i class="bi bi-cloud-fog2-fill"></i>
   </div>
 
-  <!-- 内容 -->
-  <div class="card-body rhodia-grid-bg memo-readonly">
-    <%= memo.content&.html_safe.presence || memo_placeholder_html %>
+  <!-- ✅ 高さ制御付き本文 -->
+  <div class="memo-body" data-memo-modal-target="body">
+    <div class="card-body rhodia-grid-bg">
+      <%= memo.content&.html_safe.presence || memo_placeholder_html %>
+    </div>
   </div>
-  <!-- ステータスアイコン（右下に浮かせる） -->
+
+  <!-- ステータスアイコン -->
   <% if memo.persisted? %>
-    <div class="position-absolute bottom-0 end-0 m-2" style="z-index: 1;">
+    <div class="position-absolute bottom-0 end-0 m-2" style="z-index: 2;">
       <i class="bi <%= memo.published == "you_can_see" ? "bi-eye text-success" : "bi-eye-slash text-muted" %>"
         title="<%= memo.published == "you_can_see" ? "公開中" : "非公開" %>"></i>
     </div>
