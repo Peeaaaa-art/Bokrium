@@ -15,14 +15,14 @@
 <% if current_user && !@no_books %>
   <div class="books-grid">
     <% @books.each do |book| %>
-      <div class="book-card">
+      <div>
         <%= link_to book_path(book) do %>
           <% if book.book_cover_s3.attached? %>
-            <%= image_tag book.book_cover_s3.variant(resize_to_limit: [200, 300]), alt: book.title, class: "book-cover" %>
+            <%= image_tag book.book_cover_s3.variant(resize_to_limit: [200, 300]), alt: book.title, class: "book-cover img-fluid" %>
           <% elsif book.book_cover.present? %>
-           <img src="<%= book.book_cover %>" alt="表紙画像" class="book-cover" >
+            <img src="<%= book.book_cover %>" alt="表紙画像" class="book-cover" >
           <% else %>
-            <div class="no-cover"><%= book.title %></div>
+            <div class="no-cover book-cover"><%= book.title %></div>
           <% end %>
         <% end %>
       </div>
@@ -34,8 +34,8 @@
 <% if @no_books || @not_logged_in %>
   <div class="books-grid">
     <% @books.each do |book| %>
-      <div class="book-card">
-        <%= image_tag asset_path(book.title), alt: book.title, class: "book-cover" %>
+      <div class="book-cover">
+        <%= image_tag asset_path(book.title), alt: book.title, class: "img-fluid" %>
       </div>
     <% end %>
   </div>
