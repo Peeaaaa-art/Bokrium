@@ -71,6 +71,7 @@ export default class extends Controller {
       return
     }
 
+
     const modal = new bootstrap.Modal(modalElement)
     modal.show()
   }
