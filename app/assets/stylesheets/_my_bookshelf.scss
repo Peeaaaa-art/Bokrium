@@ -1,20 +1,62 @@
 .books-grid {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
+  grid-template-columns: repeat(21, 1fr);
   gap: 12px 12px;
   margin: 0;
   padding: 0 12px;
 
 }
 
-@media (max-width: 900px) {
+@media (max-width: 3840px) {
+  .books-grid {
+    grid-template-columns: repeat(18, 1fr);
+    padding: 0 10px;
+  }
+}
+
+@media (max-width: 2560px) {
+  .books-grid {
+    grid-template-columns: repeat(15, 1fr);
+    padding: 0 10px;
+  }
+}
+
+@media (max-width: 1920px) {
+  .books-grid {
+    grid-template-columns: repeat(12, 1fr);
+    padding: 0 10px;
+  }
+}
+
+@media (max-width: 1400px) {
+  .books-grid {
+    grid-template-columns: repeat(10, 1fr);
+    padding: 0 10px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .books-grid {
+    grid-template-columns: repeat(9, 1fr);
+    padding: 0 10px;
+  }
+}
+
+@media (max-width: 992px) {
+  .books-grid {
+    grid-template-columns: repeat(7, 1fr);
+    padding: 0 10px;
+  }
+}
+
+@media (max-width: 768px) {
   .books-grid {
     grid-template-columns: repeat(6, 1fr);
     padding: 0 10px;
   }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 576px) {
   .books-grid {
     grid-template-columns: repeat(3, 1fr);
     padding: 0 8px;

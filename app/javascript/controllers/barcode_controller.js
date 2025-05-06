@@ -50,7 +50,7 @@ export default class extends Controller {
         target: window,
       })
 
-      this.outputTarget.textContent = `検出: ${isbn}`
+      this.outputTarget.textContent = `ISBN: ${isbn}`
 
       setTimeout(() => {
         controls.resume?.() // 安全に再開（バージョンによって存在しないこともある）
