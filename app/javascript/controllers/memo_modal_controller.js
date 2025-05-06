@@ -8,9 +8,12 @@ export default class extends Controller {
     bookId: String
   }
 
+  static targets = ["body", "icon"] // ← 追加
+
   connect() {
     console.log("🔌 memo-modal connected!")
     this.submitHandler = this.handleSubmit.bind(this)
+    this.expanded = false // ← 追加
   }
 
   open(event) {
@@ -25,26 +28,33 @@ export default class extends Controller {
     const isPlaceholder = contentHTML.includes('PLACEHOLDER_TOKEN_9fz3!ifhdas094hfgfygq@_$2x')
     const initialContent = isPlaceholder ? "" : contentHTML
 
-    // リッチエディタ初期化
     const editorRoot = document.getElementById("rich-editor-root")
     if (editorRoot) {
       window.hasUnsavedChanges = false
       editorRoot.dataset.initialContent = initialContent
       editorRoot.dataset.memoId = memoId
+
       mountRichEditor(editorRoot)
+
+      const observer = new MutationObserver(() => {
+        const proseMirror = editorRoot.querySelector(".ProseMirror")
+        if (proseMirror) {
+          proseMirror.classList.add("editing")
+          observer.disconnect()
+        }
+      })
+
+      observer.observe(editorRoot, { childList: true, subtree: true })
     }
 
-    // hidden input 更新
     const hiddenField = document.getElementById("memo_content_input")
     if (hiddenField) hiddenField.value = initialContent
 
-    // フォーム構成
     const form = document.getElementById("memo-edit-form")
     if (form) {
       form.setAttribute("action", isNew ? `/books/${bookId}/memos` : `/books/${bookId}/memos/${memoId}`)
       form.setAttribute("method", "post")
 
-      // _method hidden field を動的に設定
       let methodInput = form.querySelector("input[name='_method']")
       if (!isNew) {
         if (!methodInput) {
@@ -58,13 +68,11 @@ export default class extends Controller {
         if (methodInput) methodInput.remove()
       }
 
-      // 古い submitHandler を削除し、再登録
       form.removeEventListener("submit", this.submitHandler)
       form.addEventListener("submit", this.submitHandler)
       form.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
 
-    // モーダル表示
     const modalElement = document.getElementById("memoEditModal")
     if (!modalElement) {
       console.error("❌ モーダルが見つかりません: memoEditModal")
@@ -75,8 +83,18 @@ export default class extends Controller {
     modal.show()
   }
 
+  // ✅ 開閉トグル機能
+  toggle(event) {
+    event.stopPropagation()
+    this.expanded = !this.expanded
+    this.bodyTarget.classList.toggle("expanded", this.expanded)
+
+    // アイコン切り替え
+    this.iconTarget.classList.toggle("bi-arrows-angle-expand", !this.expanded)
+    this.iconTarget.classList.toggle("bi-arrows-angle-contract", this.expanded)
+  }
+
   handleSubmit(event) {
-    // submit直前処理：エディタ内容をhiddenに格納
     const editorRoot = document.getElementById("rich-editor-root")
     const trailingBreaks = editorRoot?.querySelectorAll(".ProseMirror-trailingBreak")
     trailingBreaks?.forEach((br) => br.remove())
@@ -90,5 +108,13 @@ export default class extends Controller {
 
   stop(event) {
     event.stopPropagation()
+  }
+
+  disconnect() {
+    const editorRoot = document.getElementById("rich-editor-root")
+    const proseMirror = editorRoot?.querySelector(".ProseMirror")
+    if (proseMirror) {
+      proseMirror.classList.remove("editing")
+    }
   }
 }

@@ -8,14 +8,16 @@ export default class extends Controller {
   cancel() {
     const confirmModalEl = this.element
     const editorModalEl = document.getElementById("memoEditModal")
-
     if (!editorModalEl) return
-
+  
     confirmModalEl.addEventListener("hidden.bs.modal", () => {
-      const editorModal = new bootstrap.Modal(editorModalEl)
-      editorModal.show()
+      setTimeout(() => {
+        document.querySelectorAll(".modal-backdrop").forEach(el => el.remove())
+        const editorModal = new bootstrap.Modal(editorModalEl)
+        editorModal.show()
+      }, 10)
     }, { once: true })
-
+  
     this.instance().hide()
   }
 

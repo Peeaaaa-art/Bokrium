@@ -1,34 +1,68 @@
 .books-grid {
   display: grid;
-  grid-template-columns: repeat(10, 1fr);
+  grid-template-columns: repeat(7, 1fr);
   gap: 12px 12px;
-  margin: 3px 0;
-}
+  margin: 0;
+  padding: 0 12px;
 
-.book-card {
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-  padding: 8px;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.card-grid-5-cols {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 1.5rem;
 }
 
 @media (max-width: 900px) {
   .books-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(6, 1fr);
+    padding: 0 10px;
   }
 }
 
 @media (max-width: 600px) {
   .books-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
+    padding: 0 8px;
   }
+}
+
+.book-cover {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  display: block;
+  border-radius: 4px;
+  object-fit: contain;
+  box-sizing: border-box;
+  margin: 8px auto;
+}
+.no-cover {
+  position: relative;
+  width: 100%;               /* ← 親グリッドにフィット */
+  max-width: 200px;          /* ← 最大幅制限（例：画像と揃える） */
+  aspect-ratio: 4 / 5;       /* ← 高さも画像と同様に自動比率 */
+  background: #f5d75b;
+  color: #2a1e00;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  font-size: 1em;
+  font-weight: bold;
+  font-family: "Georgia", serif;
+  text-align: center;
+  padding: 8px;
+  padding-bottom: 88px;
+  overflow: hidden;
+  box-sizing: border-box;
+  margin: 8px auto;
+}
+.no-cover::before {
+  content: "Bokrium";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: rgb(79, 78, 78);
+  color: white;
+  font-size: 0.75em;
+  font-weight: normal;
+  text-align: right;
+  padding: 2px 6px;
+  font-family: "Big Shoulders Inline", sans-serif;
+  font-weight: 700;
 }

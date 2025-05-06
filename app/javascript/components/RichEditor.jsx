@@ -46,14 +46,14 @@ const RichEditor = ({ element }) => {
 
   useEffect(() => {
     if (!editor) return
-  
+
     const hiddenField = document.getElementById("memo_content_input")
     let previousHTML = cleanHTML(editor.getHTML())
 
     if (hiddenField) hiddenField.value = previousHTML
 
     if (hiddenField) hiddenField.value = cleanHTML(editor.getHTML())
-  
+
     const updateHandler = () => {
       const currentHTML = cleanHTML(editor.getHTML())
 
@@ -70,9 +70,9 @@ const RichEditor = ({ element }) => {
         charCountEl.textContent = `${editor.storage.characterCount.characters()} 文字`
       }
     }
-  
+
     updateHandler()
-  
+
     editor.on("update", updateHandler)
     return () => editor.off("update", updateHandler)
   }, [editor])
