@@ -1,64 +1,72 @@
 <nav class="navbar navbar-expand-lg navbar-dark rhodia-gray shadow-sm">
   <div class="container-fluid px-md-5 px-4">
-    
-    <!-- ロゴ -->
+
+    <!-- PC用: 大きなロゴ -->
     <%= link_to "Bokrium", root_path,
-          class: "text-light navbar-brand fw-bold text-primary big-shoulders-inline-bold logo-link",
+          class: "text-light navbar-brand fw-bold text-primary big-shoulders-inline-bold logo-link d-none d-lg-block",
           style: "font-size: 3.5rem;" %>
 
-    <!-- ✅ スマホ用: ユーザー + ハンバーガー（右上） -->
-    <div class="d-flex d-lg-none align-items-center ms-auto gap-2">
-      <div class="pe-3">
-        <% if user_signed_in? %>
-          <%= link_to user_path(current_user) do %>
-            <%= image_tag user_avatar(current_user, size: :small), alt: current_user.name, class: "avatar-circle-mini" %>
-          <% end %>
-        <% else %>
-          <%= link_to t('devise.sessions.new.sign_in', default: 'ログイン'), new_user_session_path, class: 'btn btn-sm btn-primary' %>
+    <!-- ✅ スマホ専用ナビ（lg未満で表示） -->
+    <div class="d-flex d-lg-none justify-content-between align-items-center w-100 px-２ py-3" style="min-height: 72px;">
+      <!-- 左: 大きめロゴ -->
+      <%= link_to root_path, class: "text-light text-decoration-none fw-bold big-shoulders-inline-bold", style: "font-size: 2.2rem;" do %>
+        Bokrium
+      <% end %>
+
+      <!-- 中央: ナビアイコン（やや大きく、gapもゆったり） -->
+      <div class="d-flex justify-content-center gap-4 px-2">
+        <%= link_to books_path, class: "text-light" do %>
+          <i data-lucide="library" style="width: 32px; height: 32px;"></i>
+        <% end %>
+        <%= link_to search_books_path, class: "text-light" do %>
+          <i data-lucide="search" style="width: 32px; height: 32px;"></i>
+        <% end %>
+        <%= link_to "#", class: "text-light" do %>
+          <i data-lucide="users" style="width: 32px; height: 32px;"></i>
         <% end %>
       </div>
 
-      <!-- ハンバーガーボタン -->
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar">
-        <span class="navbar-toggler-icon"></span>
-      </button>
+      <!-- 右: アバター -->
+      <div class="ps-2">
+        <% if user_signed_in? %>
+          <%= link_to user_path(current_user) do %>
+            <%= image_tag user_avatar(current_user, size: 40), alt: current_user.name, class: "rounded-circle", style: "width: 36px; height: 36px; object-fit: cover;" %>
+          <% end %>
+        <% else %>
+          <%= link_to new_user_session_path, class: "btn btn-sm btn-primary" do %>
+            ログイン
+          <% end %>
+        <% end %>
+      </div>
     </div>
-
     <!-- ナビゲーションとユーザー -->
-    <div class="collapse navbar-collapse justify-content-between" id="mainNavbar">
-      <ul class="navbar-nav text-end mx-auto mb-2 mb-lg-0">
+    <div class="navbar-collapse justify-content-between d-none d-lg-block">
+      <ul class="navbar-nav text-end mx-auto mb-2 mb-lg-0" style="font-size: 1.25rem;">
         <li class="nav-item">
           <%= nav_link_to root_path do %>
-            <i data-lucide="home" class="me-1"></i>
+            <i data-lucide="home" class="me-2" style="width: 20px; height: 20px;"></i>
             <%= t('nav.home', default: 'ホーム') %>
           <% end %>
         </li>
         <li class="nav-item">
           <%= nav_link_to books_path do %>
-            <i data-lucide="library" class="me-1"></i>
-            <%= t('nav.service', default: 'My本棚') %>
+            <i data-lucide="library" class="me-2" style="width: 20px; height: 20px;"></i>
+            <%= t('nav.service', default: 'じぶんの本棚') %>
           <% end %>
         </li>
         <li class="nav-item">
           <%= nav_link_to search_books_path do %>
-            <i data-lucide="search" class="me-1"></i>
+            <i data-lucide="search" class="me-2" style="width: 20px; height: 20px;"></i>
             <%= t('nav.portfolio', default: '書籍検索') %>
           <% end %>
         </li>
         <li class="nav-item">
           <%= nav_link_to "#" do %>
-            <i data-lucide="users" class="me-1"></i>
+            <i data-lucide="users" class="me-2" style="width: 20px; height: 20px;"></i>
             <%= t('nav.price', default: 'みんなの本棚') %>
           <% end %>
         </li>
       </ul>
-
-      <div class="p-3">
-        <i data-lucide="search"></i>
-        <i data-lucide="book-open"></i>
-        <i data-lucide="users"></i>
-      </div>
-
       <!-- PC用：ユーザーアイコンまたは認証ボタン -->
       <div class="d-none d-lg-flex align-items-center gap-2 ms-lg-3">
         <% if user_signed_in? %>
