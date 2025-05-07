@@ -19,7 +19,7 @@
 <% end %>
 
 <% if @google_book_results.present? %>
-  <%= render "search/google_results", books: @google_book_results %>
+  <%= render "search/google_results", books: @google_book_results, total_count: @google_total_count, total_pages: @google_total_pages %>
 <% end %>
 
 <% if @google_book_results.present? && @google_book_results.size < 30 %>
