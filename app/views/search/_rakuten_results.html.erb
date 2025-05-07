@@ -14,13 +14,16 @@
                 loading="lazy">
           </div>
           <div class="card-body d-flex flex-column">
-            <h6 class="card-title mb-2"><%= book.title.truncate(40) %></h6>
+            <h6 class="card-title mb-2"><%= book.title.truncate(20) %></h6>
             <div class="mb-auto">
               <p class="card-text text-muted small mb-1">
                 <strong>著者:</strong> <%= book.author || '情報なし' %>
               </p>
-              <p class="card-text text-muted small">
+              <p class="card-text text-muted small mb-1">
                 <strong>出版社:</strong> <%= book.publisher_name || '情報なし' %>
+              </p>
+              <p class="card-text text-muted small">
+                <strong>ISBN:</strong> <%= book.isbn || '情報なし' %>
               </p>
             </div>
             <%= button_to "My本棚に追加", books_path(book: {

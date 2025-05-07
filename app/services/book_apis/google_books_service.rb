@@ -61,18 +61,38 @@ module BookApis
 
     def self.parse_multiple(data)
       return [] unless data["items"].is_a?(Array)
-
-      data["items"].map do |item|
+    
+      with_isbn = []
+      without_isbn = []
+    
+      data["items"].each do |item|
         volume_info = item["volumeInfo"] || {}
-        {
+        identifiers = volume_info["industryIdentifiers"]
+        isbn = extract_isbn(identifiers)
+    
+        book_data = {
           title: volume_info["title"],
           author: Array(volume_info["authors"]).join(", "),
           publisher: volume_info["publisher"],
-          isbn: volume_info["industryIdentifiers"]&.find { |id| id["type"].include?("ISBN") }&.dig("identifier"),
+          isbn: isbn,
           price: nil,
           book_cover: https_image(volume_info.dig("imageLinks", "thumbnail"))
         }
+    
+        if isbn.present?
+          with_isbn << book_data
+        else
+          without_isbn << book_data
+        end
       end
+    
+      # ISBN ありを先に、足りないぶんだけ ISBN なしで補完
+      (with_isbn + without_isbn).take(30)
+    end
+    def self.extract_isbn(identifiers)
+      identifiers ||= []
+      identifiers.find { |id| id["type"] == "ISBN_13" }&.dig("identifier") ||
+        identifiers.find { |id| id["type"] == "ISBN_10" }&.dig("identifier")
     end
 
     def self.https_image(url)

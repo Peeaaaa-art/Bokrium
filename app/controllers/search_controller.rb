@@ -51,7 +51,7 @@ class SearchController < ApplicationController
     @query = query
     @page = page
 
-    response = GoogleBooksService.fetch_by_title_or_author(query, page)
+    response = BookApis::GoogleBooksService.fetch_by_title_or_author(query, page)
     @google_book_results = response[:items] || []
     
     if @google_book_results.blank?

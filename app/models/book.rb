@@ -9,4 +9,6 @@ class Book < ApplicationRecord
     reading: 1,     # 読書中
     finished: 2    # 読了
   }
+
+  validates :isbn, uniqueness: { scope: :user_id }, allow_blank: true
 end
