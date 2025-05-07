@@ -53,7 +53,7 @@ class SearchController < ApplicationController
 
     response = BookApis::GoogleBooksService.fetch_by_title_or_author(query, page)
     @google_book_results = response[:items] || []
-    
+
     if @google_book_results.blank?
       if page == 1
         flash.now[:warning] = "Google Booksで該当する書籍が見つかりませんでした（#{query}）"
@@ -65,8 +65,8 @@ class SearchController < ApplicationController
         @google_total_pages = page - 1
       end
     end
-    
-    @google_total_count = [response[:total_count], 300].min
+
+    @google_total_count = [ response[:total_count], 300 ].min
     @google_total_pages = (@google_total_count / 30.0).ceil
 
     render :index

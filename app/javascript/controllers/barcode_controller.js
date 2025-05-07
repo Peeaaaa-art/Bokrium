@@ -59,11 +59,19 @@ export default class extends Controller {
   }
 
   disconnect() {
-    if (this.reader) {
-      this.reader.reset?.()
+    // ZXingの停止（必要に応じて）
+    this.reader?.reset?.()
+  
+    // カメラストリームの停止
+    const videoEl = this.videoTarget
+    const stream = videoEl?.srcObject
+    if (stream) {
+      stream.getTracks().forEach(track => track.stop())
+      videoEl.srcObject = null
+      console.log("📴 カメラストリームを停止しました")
     }
+  
     scannerStarted = false
-    console.log("📴 barcode_controller disconnected!")
   }
 
   createScanFrame() {
