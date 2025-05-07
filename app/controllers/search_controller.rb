@@ -132,24 +132,23 @@ class SearchController < ApplicationController
     result = {}
 
     APIs.each do |api|
-      Rails.logger.debug "📘 API呼び出し: #{api}"
-      api_result = api.fetch(isbn)
-      Rails.logger.debug "🔍 #{api} 結果: #{api_result.inspect}"
+      data = api.fetch(isbn)
+      next unless data
 
-      api_result&.compact&.each do |key, value|
+      data.compact.each do |key, value|
         result[key] = value if result[key].blank?
       end
 
       break if complete?(result)
     end
 
-    Rails.logger.debug "✅ 統合結果: #{result.inspect}"
-    result
+    result.presence
   end
 
   def complete?(data)
-    data[:title].present?
-    # data[:author].present? &&
-    # data[:publisher].present?
+    data[:title].present? &&
+    data[:author].present? &&
+    data[:publisher].present? &&
+    data[:book_cover].present?
   end
 end

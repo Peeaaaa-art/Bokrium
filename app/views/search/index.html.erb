@@ -5,7 +5,6 @@
 <%= render "search/entry_buttons" %>
 
 <% if @book_data.present? %>
-<pre><%= @book_data.inspect %></pre>
   <%= render "search/isbn_result", book: @book_data %>
 <% end %>
 
