@@ -36,7 +36,6 @@ class BooksController < ApplicationController
   def create
     @book = current_user.books.build(book_params)
 
-    # タグ追加
     if params[:tags].present?
       @book.tag_list = params[:tags].to_s.split(/\s+/).map(&:strip)
     end
@@ -48,7 +47,10 @@ class BooksController < ApplicationController
         format.html { redirect_to books_path, notice: "My本棚に『#{@book.title.truncate(30)}』を追加しました" }
       end
     else
-      flash.now[:danger] = "追加に失敗しました"
+
+      error_msg = @book.errors.full_messages.to_sentence.presence || "追加に失敗しました"
+      flash.now[:danger] = error_msg
+
       respond_to do |format|
         format.turbo_stream
         format.html { render :new, status: :unprocessable_entity }

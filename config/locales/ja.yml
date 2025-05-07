@@ -1,4 +1,8 @@
 ja:
+  activerecord:
+    attributes:
+      book:
+        isbn: "ISBN"
   books:
     status:
       want_to_read: "読みたい"

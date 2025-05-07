@@ -10,5 +10,5 @@ class Book < ApplicationRecord
     finished: 2    # 読了
   }
 
-  validates :isbn, uniqueness: { scope: :user_id }, allow_blank: true
+  validates :isbn, uniqueness: { scope: :user_id, message: "この書籍はMy本棚に登録済みです" }, allow_blank: true
 end

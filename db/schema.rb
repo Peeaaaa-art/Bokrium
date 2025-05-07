@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_05_03_125830) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_07_080141) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -54,6 +54,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_03_125830) do
     t.string "author"
     t.integer "price"
     t.integer "status", default: 0, null: false
+    t.index ["user_id", "isbn"], name: "index_books_on_user_id_and_isbn_unique_if_isbn", unique: true, where: "(isbn IS NOT NULL)"
     t.index ["user_id"], name: "index_books_on_user_id"
   end
 

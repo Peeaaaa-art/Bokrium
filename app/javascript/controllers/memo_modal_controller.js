@@ -16,7 +16,7 @@ export default class extends Controller {
     this.expanded = false // ← 追加
   }
 
-  open(event) {
+  open() {
     document.activeElement?.blur?.(); // iOS Safari対策
 
     const memoId = this.element.dataset.memoModalMemoIdValue
@@ -94,7 +94,7 @@ export default class extends Controller {
     this.iconTarget.classList.toggle("bi-arrows-angle-contract", this.expanded)
   }
 
-  handleSubmit(event) {
+  handleSubmit() {
     const editorRoot = document.getElementById("rich-editor-root")
     const trailingBreaks = editorRoot?.querySelectorAll(".ProseMirror-trailingBreak")
     trailingBreaks?.forEach((br) => br.remove())
