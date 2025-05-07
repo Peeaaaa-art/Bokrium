@@ -26,21 +26,38 @@
 
     <!-- ナビゲーションとユーザー -->
     <div class="collapse navbar-collapse justify-content-between" id="mainNavbar">
-      <!-- メニュー（中央寄せ） -->
       <ul class="navbar-nav text-end mx-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <%= nav_link_to t('nav.home', default: 'ホーム'), root_path %>
+          <%= nav_link_to root_path do %>
+            <i data-lucide="home" class="me-1"></i>
+            <%= t('nav.home', default: 'ホーム') %>
+          <% end %>
         </li>
         <li class="nav-item">
-          <%= nav_link_to t('nav.service', default: 'My本棚'), books_path %>
+          <%= nav_link_to books_path do %>
+            <i data-lucide="library" class="me-1"></i>
+            <%= t('nav.service', default: 'My本棚') %>
+          <% end %>
         </li>
         <li class="nav-item">
-          <%= nav_link_to t('nav.portfolio', default: '書籍検索'), search_books_path %>
+          <%= nav_link_to search_books_path do %>
+            <i data-lucide="search" class="me-1"></i>
+            <%= t('nav.portfolio', default: '書籍検索') %>
+          <% end %>
         </li>
         <li class="nav-item">
-          <%= nav_link_to t('nav.price', default: 'みんなの本棚'), "#" %>
+          <%= nav_link_to "#" do %>
+            <i data-lucide="users" class="me-1"></i>
+            <%= t('nav.price', default: 'みんなの本棚') %>
+          <% end %>
         </li>
       </ul>
+
+      <div class="p-3">
+        <i data-lucide="search"></i>
+        <i data-lucide="book-open"></i>
+        <i data-lucide="users"></i>
+      </div>
 
       <!-- PC用：ユーザーアイコンまたは認証ボタン -->
       <div class="d-none d-lg-flex align-items-center gap-2 ms-lg-3">

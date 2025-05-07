@@ -27,4 +27,10 @@ window.bootstrap = bootstrap  // グローバルにしたい場合
 import * as Turbo from "@hotwired/turbo"
 window.Turbo = Turbo
 
+import { createIcons, icons } from "lucide"
+
+document.addEventListener("turbo:load", () => {
+  createIcons({ icons })  // ✅ すべてのアイコンを登録
+})
+
 export { application }
