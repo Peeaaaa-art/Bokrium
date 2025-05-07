@@ -1,6 +1,6 @@
 class SearchController < ApplicationController
   SEARCH_TYPES = %w[isbn author title].freeze
-  APIs = %i[OpenBdService RakutenService GoogleBooksService NdlService]
+  APIs = %i[NdlService]
             .map { |name| BookApis.const_get(name) }
 
   def index
@@ -132,20 +132,24 @@ class SearchController < ApplicationController
     result = {}
 
     APIs.each do |api|
-      api.fetch(isbn)&.compact&.each do |key, value|
+      Rails.logger.debug "📘 API呼び出し: #{api}"
+      api_result = api.fetch(isbn)
+      Rails.logger.debug "🔍 #{api} 結果: #{api_result.inspect}"
+
+      api_result&.compact&.each do |key, value|
         result[key] = value if result[key].blank?
       end
 
       break if complete?(result)
     end
 
+    Rails.logger.debug "✅ 統合結果: #{result.inspect}"
     result
   end
 
   def complete?(data)
-    data[:title].present? &&
-    data[:author].present? &&
-    data[:publisher].present? &&
-    data[:book_cover].present?
+    data[:title].present?
+    # data[:author].present? &&
+    # data[:publisher].present?
   end
 end
