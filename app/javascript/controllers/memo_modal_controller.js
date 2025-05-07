@@ -5,24 +5,31 @@ export default class extends Controller {
   static values = {
     initialContent: String,
     memoId: String,
-    bookId: String
+    bookId: String,
+    createdAt: String,
+    updatedAt: String
   }
 
-  static targets = ["body", "icon"] // ← 追加
+  static targets = ["body", "icon"] // ← 表示トグル用
 
   connect() {
     console.log("🔌 memo-modal connected!")
     this.submitHandler = this.handleSubmit.bind(this)
-    this.expanded = false // ← 追加
+    this.expanded = false
   }
 
-  open() {
-    document.activeElement?.blur?.(); // iOS Safari対策
+  open(event) {
+    document.activeElement?.blur?.() // iOS Safari 対策
 
-    const memoId = this.element.dataset.memoModalMemoIdValue
-    const bookId = this.element.dataset.memoModalBookIdValue
-    const isNew = memoId === "new"
+    const trigger = event.currentTarget
 
+    // データ取得
+    const memoId = trigger.dataset.memoModalMemoIdValue
+    const bookId = trigger.dataset.memoModalBookIdValue
+    const createdAt = trigger.dataset.memoModalCreatedAtValue
+    const updatedAt = trigger.dataset.memoModalUpdatedAtValue
+
+    // HTMLから初期内容取得
     const contentElement = this.element.querySelector(".card-body")
     const contentHTML = contentElement?.innerHTML || ""
     const isPlaceholder = contentHTML.includes('PLACEHOLDER_TOKEN_9fz3!ifhdas094hfgfygq@_$2x')
@@ -52,11 +59,11 @@ export default class extends Controller {
 
     const form = document.getElementById("memo-edit-form")
     if (form) {
-      form.setAttribute("action", isNew ? `/books/${bookId}/memos` : `/books/${bookId}/memos/${memoId}`)
+      form.setAttribute("action", memoId === "new" ? `/books/${bookId}/memos` : `/books/${bookId}/memos/${memoId}`)
       form.setAttribute("method", "post")
 
       let methodInput = form.querySelector("input[name='_method']")
-      if (!isNew) {
+      if (memoId !== "new") {
         if (!methodInput) {
           methodInput = document.createElement("input")
           methodInput.type = "hidden"
@@ -70,26 +77,32 @@ export default class extends Controller {
 
       form.removeEventListener("submit", this.submitHandler)
       form.addEventListener("submit", this.submitHandler)
-      form.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      form.scrollIntoView({ behavior: 'smooth', block: 'center' })
     }
 
+    // モーダルに作成日・更新日を表示
+    const createdAtEl = document.getElementById("modal-created-at")
+    const updatedAtEl = document.getElementById("modal-updated-at")
+    if (createdAtEl && updatedAtEl) {
+      createdAtEl.textContent = createdAt ? `作成日: ${createdAt}` : ""
+      updatedAtEl.textContent = updatedAt ? `更新日: ${updatedAt}` : ""
+    }
+
+    // モーダル開く
     const modalElement = document.getElementById("memoEditModal")
     if (!modalElement) {
       console.error("❌ モーダルが見つかりません: memoEditModal")
       return
     }
-
     const modal = new bootstrap.Modal(modalElement)
     modal.show()
   }
 
-  // ✅ 開閉トグル機能
   toggle(event) {
     event.stopPropagation()
     this.expanded = !this.expanded
     this.bodyTarget.classList.toggle("expanded", this.expanded)
 
-    // アイコン切り替え
     this.iconTarget.classList.toggle("bi-arrows-angle-expand", !this.expanded)
     this.iconTarget.classList.toggle("bi-arrows-angle-contract", this.expanded)
   }
