@@ -16,13 +16,13 @@
       <!-- 中央: ナビアイコン（やや大きく、gapもゆったり） -->
       <div class="d-flex justify-content-center gap-4 px-2">
         <%= link_to books_path, class: "text-light" do %>
-          <i data-lucide="library" style="width: 32px; height: 32px;"></i>
+          <i data-lucide="library-big" style="width: 32px; height: 32px; stroke-width: 1"></i>
         <% end %>
         <%= link_to search_books_path, class: "text-light" do %>
-          <i data-lucide="search" style="width: 32px; height: 32px;"></i>
+          <i data-lucide="search" style="width: 32px; height: 32px; stroke-width: 1.25"></i>
         <% end %>
         <%= link_to "#", class: "text-light" do %>
-          <i data-lucide="users" style="width: 32px; height: 32px;"></i>
+          <i data-lucide="users" style="width: 32px; height: 32px; stroke-width: 1.25"></i>
         <% end %>
       </div>
 
@@ -44,7 +44,7 @@
       <ul class="navbar-nav text-end mx-auto mb-2 mb-lg-0" style="font-size: 1.25rem;">
         <li class="nav-item">
           <%= nav_link_to root_path do %>
-            <i data-lucide="home" class="me-2" style="width: 20px; height: 20px;"></i>
+            <i data-lucide="home" class="me-2" style="width: 20px; height: 20px; stroke-width: 1.75;"></i>
             <%= t('nav.home', default: 'ホーム') %>
           <% end %>
         </li>
