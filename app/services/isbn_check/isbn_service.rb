@@ -1,4 +1,4 @@
-module Search
+module IsbnCheck
   class IsbnService
     class InvalidIsbnError < StandardError; end
 

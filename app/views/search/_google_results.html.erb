@@ -2,8 +2,6 @@
   <h3 class="mb-4 text-center">
     Google Books検索結果 <%= search_result_range(books, total_count) %>
   </h3>
-  <%= debug @google_book_results %>
-
   <div class="row row-cols-1 row-cols-md-3 row-cols-lg-6 g-4 mb-5">
     <% books.each do |book| %>
       <div class="col">
@@ -50,7 +48,6 @@
 </div>
 
 <% if @google_total_pages.present? && @google_total_pages > 1 %>
-  <!-- Google Books検索結果のページネーション -->
   <div class="d-flex justify-content-center mb-5">
     <nav aria-label="ページネーション">
       <ul class="pagination">

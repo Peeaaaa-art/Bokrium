@@ -1,4 +1,4 @@
-module Search
+module IsbnCheck
   class ValidateIsbnService
     attr_reader :isbn, :isbn13, :error_message
 

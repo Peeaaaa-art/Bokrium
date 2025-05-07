@@ -66,9 +66,9 @@
 }
 .no-cover {
   position: relative;
-  width: 100%;               /* ← 親グリッドにフィット */
-  max-width: 200px;          /* ← 最大幅制限（例：画像と揃える） */
-  aspect-ratio: 4 / 5;       /* ← 高さも画像と同様に自動比率 */
+  width: 100%;
+  max-width: 200px;
+  aspect-ratio: 4 / 5;
   background: #f5d75b;
   color: #2a1e00;
   display: flex;

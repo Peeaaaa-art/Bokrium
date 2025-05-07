@@ -1,6 +1,7 @@
 class SearchController < ApplicationController
   SEARCH_TYPES = %w[isbn author title].freeze
-  APIs = [ OpenBdService, RakutenService, GoogleBooksService, NdlService ]
+  APIs = %i[OpenBdService RakutenService GoogleBooksService NdlService]
+            .map { |name| BookApis.const_get(name) }
 
   def index
     type = params[:type]
@@ -19,7 +20,7 @@ class SearchController < ApplicationController
     end
 
     if type == "isbn" || engine == "isbn"
-      validator = Search::ValidateIsbnService.new(query)
+      validator = IsbnCheck::ValidateIsbnService.new(query)
       unless validator.valid?
         flash.now[:warning] = "#{query} #{validator.error_message}）"
         return
