@@ -1,6 +1,6 @@
 class SearchController < ApplicationController
   SEARCH_TYPES = %w[isbn author title].freeze
-  APIs = %i[NdlService]
+  APIs = %i[  RakutenService  ]
             .map { |name| BookApis.const_get(name) }
 
   def index

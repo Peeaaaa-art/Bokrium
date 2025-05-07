@@ -10,14 +10,14 @@
              style="max-height: 480px; max-width: 100%; object-fit: contain;">
       <% else %>
         <div class="d-flex justify-content-center align-items-center rounded"
-             style="width: 100%;">
-          <span class=" no-cover text-muted"><%= book[:title] %></span>
+             style="width: 100%; max-width:200px">
+          <span class="no-cover text-muted"><%= book[:title].truncate(20) %></span>
         </div>
       <% end %>
     </div>
 
     <div class="col-12 col-md-6 d-flex flex-column">
-      <h4 class="mb-2"><%= book[:title] %></h4>
+      <h4 class="mb-2"><%= book[:title].truncate(20) %></h4>
       <p class="mb-1"><strong>著者:</strong> <%= book[:author] %></p>
       <p class="mb-1"><strong>出版社:</strong> <%= book[:publisher] %></p>
 
