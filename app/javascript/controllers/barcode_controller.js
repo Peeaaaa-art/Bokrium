@@ -23,6 +23,10 @@ export default class extends Controller {
       tryHarder: true,
     }
 
+    // 👇 Turboによる画面遷移時にカメラを強制停止
+    this.cleanupHandler = this.stopCamera.bind(this)
+    document.addEventListener("turbo:before-render", this.cleanupHandler)
+
     this.startScanner()
     this.createScanFrame()
   }
@@ -33,15 +37,11 @@ export default class extends Controller {
 
       const isbn = result.getText()
 
-      // 無効 or 重複ISBNは無視
       if (!isbn.startsWith("978") || this.scannedIsbns.has(isbn)) return
 
       console.log("📘 ISBN detected:", isbn)
-
-      // 重複防止用Setに登録
       this.scannedIsbns.add(isbn)
 
-      // イベントディスパッチ
       this.dispatch("scan", {
         detail: { isbn },
         bubbles: true,
@@ -53,24 +53,26 @@ export default class extends Controller {
       this.outputTarget.textContent = `ISBN: ${isbn}`
 
       setTimeout(() => {
-        controls.resume?.() // 安全に再開（バージョンによって存在しないこともある）
+        controls.resume?.()
       }, this.debounceValue)
     })
   }
 
   disconnect() {
-    // ZXingの停止（必要に応じて）
-    this.reader?.reset?.()
-  
-    // カメラストリームの停止
-    const videoEl = this.videoTarget
-    const stream = videoEl?.srcObject
+    this.stopCamera()
+    document.removeEventListener("turbo:before-render", this.cleanupHandler)
+  }
+
+  stopCamera() {
+    if (this.reader?.reset) this.reader.reset()
+
+    const stream = this.videoTarget?.srcObject
     if (stream) {
-      stream.getTracks().forEach(track => track.stop())
-      videoEl.srcObject = null
+      stream.getTracks().forEach((track) => track.stop())
+      this.videoTarget.srcObject = null
       console.log("📴 カメラストリームを停止しました")
     }
-  
+
     scannerStarted = false
   }
 
