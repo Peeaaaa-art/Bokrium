@@ -96,6 +96,7 @@ module BookApis
     end
 
     def self.https_image(url)
+      return nil if url&.include?("no_cover_thumb.gif")
       url&.gsub(/^http:\/\//, "https://")
     end
 
