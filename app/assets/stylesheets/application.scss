@@ -1,6 +1,7 @@
 @import "bootstrap";
-@import "books";
-@import "my_bookshelf";
+@import "book_cover";
+@import "my_bookshelf_pc";
+@import "my_bookshelf_iphone";
 @import "tags";
 @import "header";
 @import "footer";
@@ -8,6 +9,7 @@
 @import "color";
 @import "font";
 @import "tip_tap";
+@import "material";
 
 
 body {

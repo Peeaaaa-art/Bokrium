@@ -1,0 +1,33 @@
+// .book-cover.linen {
+//   background-image: url('/textures/linen-texture.jpg');
+//   background-size: cover;
+//   background-repeat: no-repeat;
+// }
+
+// .book-cover.canvas {
+//   background-image: url('/textures/canvas-texture.jpg');
+//   background-size: cover;
+//   background-repeat: no-repeat;
+// }
+
+// .book-cover.embossed-leather {
+//   background-image: url('/textures/embossed-leather-texture.jpg');
+//   background-size: cover;
+//   background-repeat: no-repeat;
+// }
+
+// .book-cover.washi {
+//   background-image: url('/textures/washi-texture.jpg');
+//   background-size: cover;
+//   background-repeat: no-repeat;
+// }
+
+// @for $i from 1 through 12 {
+//   .book-on-shelf:nth-child(#{$i}) {
+//     $materials: linen, canvas, embossed-leather, washi;
+//     $random-material: nth($materials, random(length($materials)));
+//     .book-cover {
+//       @extend .#{$random-material};
+//     }
+//   }
+// }

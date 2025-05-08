@@ -1,61 +1,17 @@
-.books-grid {
+.books-grid-iphone {
   display: grid;
-  grid-template-columns: repeat(21, 1fr);
+  grid-template-columns: repeat(8, 1fr);
   gap: 10px 10px;
   padding: 0 7px;
 
 }
 
-@media (max-width: 3840px) {
-  .books-grid {
-    grid-template-columns: repeat(18, 1fr);
-  }
-}
+@media (max-width: 1200px) {.books-grid-iphone { grid-template-columns: repeat(7, 1fr);}}
+@media (max-width: 992px) {.books-grid-iphone { grid-template-columns: repeat(6, 1fr);}}
+@media (max-width: 768px) {.books-grid-iphone { grid-template-columns: repeat(5, 1fr);}}
+@media (max-width: 576px) {.books-grid-iphone { grid-template-columns: repeat(4, 1fr);}}
 
-@media (max-width: 2560px) {
-  .books-grid {
-    grid-template-columns: repeat(15, 1fr);
-
-  }
-}
-
-@media (max-width: 1920px) {
-  .books-grid {
-    grid-template-columns: repeat(12, 1fr);
-  }
-}
-
-@media (max-width: 1400px) {
-  .books-grid {
-    grid-template-columns: repeat(10, 1fr);
-  }
-}
-
-@media (max-width: 1200px) {
-  .books-grid {
-    grid-template-columns: repeat(9, 1fr);
-  }
-}
-
-@media (max-width: 992px) {
-  .books-grid {
-    grid-template-columns: repeat(7, 1fr);
-  }
-}
-
-@media (max-width: 768px) {
-  .books-grid {
-    grid-template-columns: repeat(6, 1fr);
-  }
-}
-
-@media (max-width: 576px) {
-  .books-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-.book-cover {
+.book-cover-iphone {
   width: 100%;
   aspect-ratio: 4 / 5;
   display: block;
@@ -64,7 +20,7 @@
   box-sizing: border-box;
   margin: 8px auto;
 }
-.no-cover {
+.no-cover-iphone {
   position: relative;
   width: 100%;
   max-width: 200px;
@@ -75,7 +31,7 @@
   align-items: center;
   justify-content: center;
   border-radius: 4px;
-  font-size: 0.88em;
+  font-size: 0.75em;
   font-weight: bold;
   font-family: "Georgia", serif;
   text-align: center;
@@ -85,7 +41,7 @@
   box-sizing: border-box;
   margin: 8px auto;
 }
-.no-cover::before {
+.no-cover-iphone::before {
   content: "Bokrium";
   position: absolute;
   bottom: 0;

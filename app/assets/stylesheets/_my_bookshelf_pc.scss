@@ -1,0 +1,132 @@
+.books-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 64px;
+  padding: 2rem 1rem;
+  background-color: #f0f4f3;
+}
+
+.shelf {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end; /* 👈 本の下端を揃える */
+  flex-wrap: wrap;
+  gap: 24px;
+  position: relative;
+  min-height: 280px;
+}
+
+.shelf::before {
+  content: "";
+  position: absolute;
+  bottom: -20px;
+  left: 5%;
+  width: 90%;
+  height: 20px;
+  background: linear-gradient(145deg, #1e3d73, #00274d);
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.4),
+    inset 0 -1px 2px rgba(255,255,255,0.15),
+    inset 0 2px 6px rgba(0,0,0,0.2); /* 👈 光沢と陰影 */
+  border-radius: 4px;
+  transform: perspective(800px) rotateX(0.5deg); /* 👈 奥行きパース */
+  z-index: 0;
+}
+
+.shelf::after {
+  content: "";
+  position: absolute;
+  bottom: -20px;
+  left: 5%;
+  width: 90%;
+  height: 4px;
+  background: linear-gradient(to right, rgba(255,255,255,0.4), rgba(255,255,255,0.1));
+  border-radius: 2px;
+  z-index: 1; // 👈 棚より前に出す
+  pointer-events: none;
+  opacity: 0.8;
+  box-shadow:
+    0 1px 2px rgba(255, 255, 255, 0.3),
+    0 -1px 2px rgba(0, 0, 0, 0.2); // 上面と下面の光と影
+  mix-blend-mode: screen;          // ⛳ 光の屈折感（必殺技）
+}
+
+.book-on-shelf {
+  position: relative;
+  z-index: 1;
+  width: 120px;
+
+  @media (max-width: 576px) {
+
+    width: 70px;
+  }
+
+  display: flex;
+  justify-content: center;
+  margin-bottom: -2px;
+  perspective: 400px;
+
+  /* カスタムプロパティで傾きとY位置を受け取る */
+  transform:
+    rotate(var(--tilt, 0deg))           // 左右の首かしげ
+    translateY(var(--y-offset, 0px))    // 微妙な上下ずれ
+    rotateX(var(--lean, 0deg));         // 👈 奥行き方向の傾き（遠近感）
+  transform-style: preserve-3d;
+}
+
+/* 擬似的にランダムな傾きを与える */
+@for $i from 1 through 12 {
+  .book-on-shelf:nth-child(#{$i}) {
+    --tilt: #{(random(5) - 2) / 10}deg;       // → -0.2deg〜+0.2deg（Z軸：横傾き）
+    --y-offset: #{(random(5) - 3) / 10}px;     // → -0.3px〜+0.1px（上下位置）
+    --lean: #{(random(5) - 2) / 10}deg;        // → -0.2deg〜+0.2deg（X軸：奥方向）
+  }
+}
+
+.book-cover {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+  border-radius: 6px;
+  box-shadow:
+    0 4px 6px rgba(0, 0, 0, 0.1),
+    2px 12px 16px -4px rgba(0, 0, 0, 0.2); /* 👈 後ろ下に流れる影 */
+  filter:
+  drop-shadow(1px 1px 1px rgba(0, 0, 0, 0.05))   // 微細な立体縁
+  drop-shadow(2px 8px 12px rgba(0, 0, 0, 0.18)); // 接地影の強調
+  transform:
+    translateY(0)
+    translateZ(1px); // 👈 微細な前面演出（視差感）
+  transition: transform 0.2s ease, filter 0.2s ease, box-shadow 0.2s ease;
+  backface-visibility: hidden;
+}
+
+.book-cover::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 5%;
+  bottom: 5%;
+  width: 3px;
+  background: rgba(0, 0, 0, 0.06);
+  border-radius: 2px;
+  transform: translateX(-2px);
+  z-index: 0;
+  pointer-events: none;
+}
+
+.book-cover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 16px rgba(0,0,0,0.25);
+}
+
+.book-cover-show {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  display: block;
+  border-radius: 4px;
+  object-fit: contain;
+  box-sizing: border-box;
+  margin: 8px auto;
+}

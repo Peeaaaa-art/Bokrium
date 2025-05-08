@@ -5,7 +5,7 @@
       <div class="row">
         <!-- 表紙カラム -->
         <div class="col-5 col-md-3">
-          <div class="book-cover">
+          <div class="book-cover-show">
             <% if @book.book_cover_s3.attached? %>
               <%= image_tag @book.book_cover_s3, alt: @book.title, class: "img-fluid rounded" %>
             <% elsif @book.book_cover.present? %>

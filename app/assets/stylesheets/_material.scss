@@ -1,0 +1,65 @@
+.material-paper .book-cover {
+  background: repeating-linear-gradient(
+    45deg,
+    #f8f4e3,
+    #f8f4e3 2px,
+    #f5f0d9 4px
+  );
+  background-blend-mode: multiply;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.material-cloth .book-cover {
+  background: linear-gradient(135deg, #d8cfc4 0%, #c8bdb1 100%);
+  background-size: 8px 8px;
+  background-image: url('/textures/cloth.png'); // ← optional布テクスチャ
+  filter: contrast(1.1) brightness(0.95);
+}
+
+.material-leather .book-cover {
+  background: radial-gradient(circle at 20% 20%, #5c4033, #2f1e17);
+  background-blend-mode: overlay;
+  box-shadow:
+    inset 0 1px 2px rgba(255,255,255,0.1),
+    0 3px 6px rgba(0,0,0,0.2);
+  border-radius: 8px;
+  filter: contrast(1.2) saturate(1.1);
+}
+
+.material-wood .book-cover {
+  background: url('/textures/woodgrain.jpg'); /* または base64 */
+  background-size: cover;
+  background-position: center;
+  filter: brightness(0.95) contrast(1.1);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+}
+
+.material-stone .book-cover {
+  background: url('/textures/stone.jpg');
+  background-size: cover;
+  background-position: center;
+  filter: grayscale(0.3) contrast(1.2);
+  box-shadow: inset 0 1px 2px rgba(255,255,255,0.1), 0 6px 12px rgba(0,0,0,0.25);
+}
+
+.material-painted .book-cover {
+  background: linear-gradient(120deg, #ffefd5, #ffe4b5);
+  background-image: repeating-linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.1) 0px,
+    rgba(255, 255, 255, 0.1) 4px,
+    transparent 4px,
+    transparent 8px
+  );
+  background-blend-mode: multiply;
+  filter: saturate(1.2);
+}
+
+.material-glossy .book-cover {
+  background-color: #f9f9f9;
+  background-image: linear-gradient(135deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.1) 100%);
+  box-shadow:
+    inset 0 1px 2px rgba(255,255,255,0.4),
+    0 6px 10px rgba(0, 0, 0, 0.1);
+  filter: brightness(1.05) contrast(1.05);
+}

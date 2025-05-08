@@ -8,6 +8,7 @@ import MemoModalController from "./controllers/memo_modal_controller"
 import ModalSwipeController from "./controllers/modal_swipe_controller"
 import ConfirmModalController from "./controllers/confirm_modal_controller"
 import ImageUploadController from "./controllers/image_upload_controller"
+import BookShelfController from "./controllers/book_shelf_controller"
 
 const application = Application.start()
 window.Stimulus = application
@@ -21,6 +22,8 @@ application.register("memo-modal", MemoModalController)
 application.register("image-upload", ImageUploadController)
 application.register("modal-swipe", ModalSwipeController)
 application.register("confirm-modal", ConfirmModalController)
+application.register("book-shelf", BookShelfController)
+
 
 import * as bootstrap from "bootstrap"
 window.bootstrap = bootstrap  // グローバルにしたい場合
