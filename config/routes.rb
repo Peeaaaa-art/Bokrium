@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get "public_bookshelf/index"
+  get "public_bookshelf/show"
   get "search", to: "search#index", as: :search_books
   get "search/barcode", to: "search#barcode"
   get "search/search_isbn_turbo", to: "search#search_isbn_turbo"
