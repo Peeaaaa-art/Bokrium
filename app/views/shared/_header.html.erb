@@ -21,7 +21,7 @@
         <%= link_to search_books_path, class: "text-light" do %>
           <i data-lucide="search" style="width: 32px; height: 32px; stroke-width: 1.25"></i>
         <% end %>
-        <%= link_to "#", class: "text-light" do %>
+        <%= link_to public_bookshelf_index_path, class: "text-light" do %>
           <i data-lucide="users" style="width: 32px; height: 32px; stroke-width: 1.25"></i>
         <% end %>
       </div>
@@ -61,7 +61,7 @@
           <% end %>
         </li>
         <li class="nav-item">
-          <%= nav_link_to "#" do %>
+          <%= nav_link_to public_bookshelf_index_path do %>
             <i data-lucide="users" class="me-2" style="width: 20px; height: 20px;"></i>
             <%= t('nav.price', default: 'みんなの本棚') %>
           <% end %>
