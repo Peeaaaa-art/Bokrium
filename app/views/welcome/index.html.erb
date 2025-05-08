@@ -94,4 +94,40 @@
       </div>
     <% end %>
   <% end %>
+
+  <% if @others_random_memo && @others_random_memo.book && @others_random_memo.user %>
+  <%= link_to book_path(@others_random_memo.book), class: "text-decoration-none text-reset" do %>
+    <div class="container my-4">
+      <h3 class="mb-3 mb-md-5">ランダム公開メモ</h3>
+
+      <div class="card shadow-sm p-3 mx-auto" style="max-width: 720px;">
+        <div class="d-flex flex-column flex-md-row align-items-start gap-3">
+
+          <!-- 書影 -->
+          <% if @others_random_memo.book.book_cover.present? %>
+            <%= image_tag @others_random_memo.book.book_cover, class: "img-fluid rounded w-100 w-md-auto mx-auto mx-md-0", style: "max-width: 160px;" %>
+          <% else %>
+            <div class="no-cover d-flex align-items-center justify-content-center text-muted text-center rounded w-100 w-md-auto" style="max-width: 160px; aspect-ratio: 2/3;">
+              <span class="small px-2"><%= @others_random_memo.book.title %></span>
+            </div>
+          <% end %>
+
+          <!-- テキストエリア -->
+          <div class="flex-grow-1">
+            <h5 class="fw-bold mb-1"><%= @others_random_memo.book.title %></h5>
+            <p class="text-muted mb-2"><%= @others_random_memo.book.author %></p>
+            <p class="text-muted mb-2 small"><%= truncate(strip_tags(@others_random_memo.content), length: 280) %></p>
+
+            <!-- 投稿者 -->
+            <div class="d-flex align-items-center gap-2 mt-3">
+              <%= image_tag user_avatar(@others_random_memo.user), class: "rounded-circle", alt: @others_random_memo.user.name, style: "width: 36px; height: 36px; object-fit: cover;" %>
+              <span class="text-muted small"><%= @others_random_memo.user.name %></span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  <% end %>
+<% end %>
 </div>
