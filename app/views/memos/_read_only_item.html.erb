@@ -6,12 +6,14 @@
   data-memo-modal-memo-id-value="<%= memo.id || 'new' %>"
   data-memo-modal-book-id-value="<%= book.id %>"
   data-memo-modal-initial-content-value="<%= memo.content || "" %>"
+  data-memo-modal-created-at-value="<%= memo.created_at&.strftime('%F %R') %>"
+  data-memo-modal-updated-at-value="<%= memo.updated_at&.strftime('%F %R') %>"
   style="overflow: visible; z-index: 1;"
 >
 
   <!-- ✅ トグルボタン -->
   <button
-    class="btn btn-sm btn-light position-absolute top-0 start-0 m-2"
+    class="btn btn-sm bg-trasperant position-absolute top-0 start-0 m-2"
     data-action="click->memo-modal#toggle click->memo-modal#stop"
     aria-label="表示切り替え"
   >
@@ -21,8 +23,8 @@
   <!-- ✅ ドロップダウン（右上） -->
   <% unless memo.new_record? %>
     <div class="dropdown position-absolute top-0 end-0 m-2" data-action="click->memo-modal#stop">
-      <button class="btn btn-sm btn-light" data-bs-toggle="dropdown" aria-expanded="false">
-        ⋯
+      <button class="btn btn-sm bg-transperent" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="bi bi-three-dots"></i>
       </button>
       <ul class="dropdown-menu dropdown-menu-end">
         <li>

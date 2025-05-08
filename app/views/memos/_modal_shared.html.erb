@@ -1,7 +1,9 @@
 <div class="modal fade modal-dialog-scrollable" id="memoEditModal"
-     data-controller="modal-swipe"
-     data-modal-swipe-target="modal"
-     tabindex="-1" aria-hidden="true">
+      data-controller="modal-swipe"
+      data-modal-swipe-target="modal"
+      tabindex="-1" aria-hidden="true"
+    >
+
   <div class="modal-dialog modal-xl modal-dialog-centered">
     <div class="modal-content position-relative">
       <div class="modal-body">
@@ -28,8 +30,13 @@
             <% end %>
           </div>
 
-          <!-- 文字数表示 -->
-          <div class="text-end text-muted small pe-3 mt-1" id="char-count">
+          <!-- 日付・文字数表示 -->
+          <div class="d-flex justify-content-between text-muted small px-3 mt-1">
+            <div>
+              <span id="modal-created-at"></span>
+              <span class="ms-3" id="modal-updated-at"></span>
+            </div>
+            <div id="char-count"></div>
           </div>
 
         <% end %>

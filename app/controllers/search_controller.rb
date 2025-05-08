@@ -1,6 +1,7 @@
 class SearchController < ApplicationController
   SEARCH_TYPES = %w[isbn author title].freeze
-  APIs = [ OpenBdService, RakutenService, GoogleBooksService, NdlService ]
+  APIs = %i[ OpenBdService RakutenService GoogleBooksService NdlService ]
+            .map { |name| BookApis.const_get(name) }
 
   def index
     type = params[:type]
@@ -19,7 +20,7 @@ class SearchController < ApplicationController
     end
 
     if type == "isbn" || engine == "isbn"
-      validator = Search::ValidateIsbnService.new(query)
+      validator = IsbnCheck::ValidateIsbnService.new(query)
       unless validator.valid?
         flash.now[:warning] = "#{query} #{validator.error_message}）"
         return
@@ -50,15 +51,23 @@ class SearchController < ApplicationController
     @query = query
     @page = page
 
-    response = GoogleBooksService.fetch_by_title_or_author(query, page)
-
-    @google_book_results = response[:items]
-    @google_total_count = [ response[:total_count], 300 ].min
-    @google_total_pages = (@google_total_count / 30.0).ceil
+    response = BookApis::GoogleBooksService.fetch_by_title_or_author(query, page)
+    @google_book_results = response[:items] || []
 
     if @google_book_results.blank?
-      flash.now[:warning] = "Google Booksで該当する書籍が見つかりませんでした（#{query}）"
+      if page == 1
+        flash.now[:warning] = "Google Booksで該当する書籍が見つかりませんでした（#{query}）"
+        @google_total_count = 0
+        @google_total_pages = 0
+      else
+        flash.now[:warning] = "Google Booksでこれ以上の結果が見つかりませんでした（#{query}）"
+        @google_total_count = (page - 1) * 30
+        @google_total_pages = page - 1
+      end
     end
+
+    @google_total_count = [ response[:total_count], 300 ].min
+    @google_total_pages = (@google_total_count / 30.0).ceil
 
     render :index
   end
@@ -123,14 +132,17 @@ class SearchController < ApplicationController
     result = {}
 
     APIs.each do |api|
-      api.fetch(isbn)&.compact&.each do |key, value|
+      data = api.fetch(isbn)
+      next unless data
+
+      data.compact.each do |key, value|
         result[key] = value if result[key].blank?
       end
 
       break if complete?(result)
     end
 
-    result
+    result.presence
   end
 
   def complete?(data)

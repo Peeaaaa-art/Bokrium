@@ -1,6 +1,6 @@
 <% book = local_assigns[:book_data] || @book_data %>
 
-<div class="card shadow-sm p-4 mb-1 mx-auto" style="max-width: 1200px;">
+<div class="card bg-transparent p-4 mb-1 mx-auto" style="max-width: 1200px;">
   <div class="row g-3 align-items-center justify-content-center flex-column flex-md-row">
     <div class="col-12 col-md-6 d-flex justify-content-center mb-3 mb-md-0">
       <% if book[:book_cover].present? %>
@@ -9,15 +9,15 @@
              class="rounded shadow-sm"
              style="max-height: 480px; max-width: 100%; object-fit: contain;">
       <% else %>
-        <div class="bg-light d-flex justify-content-center align-items-center rounded shadow-sm"
-             style="height: 320px; width: 100%; max-width: 320px;">
-          <span class="text-muted">画像なし</span>
+        <div class="d-flex justify-content-center align-items-center rounded"
+             style="width: 100%; max-width:200px">
+          <span class="no-cover text-muted"><%= book[:title].truncate(20) %></span>
         </div>
       <% end %>
     </div>
 
     <div class="col-12 col-md-6 d-flex flex-column">
-      <h4 class="mb-2"><%= book[:title] %></h4>
+      <h4 class="mb-2"><%= book[:title].truncate(20) %></h4>
       <p class="mb-1"><strong>著者:</strong> <%= book[:author] %></p>
       <p class="mb-1"><strong>出版社:</strong> <%= book[:publisher] %></p>
 
