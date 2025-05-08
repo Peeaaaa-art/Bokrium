@@ -1,4 +1,5 @@
 class Memo < ApplicationRecord
+  include RandomSelectable
   belongs_to :user
   belongs_to :book
 
@@ -12,7 +13,6 @@ class Memo < ApplicationRecord
   def self.random_published_memo
     published_to_others
       .with_book_and_user_avatar
-      .order("RANDOM()")
-      .first
+      .random_one
   end
 end
