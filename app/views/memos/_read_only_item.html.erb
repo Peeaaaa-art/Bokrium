@@ -8,6 +8,8 @@
   data-memo-modal-initial-content-value="<%= memo.content || "" %>"
   data-memo-modal-created-at-value="<%= memo.created_at&.strftime('%F %R') %>"
   data-memo-modal-updated-at-value="<%= memo.updated_at&.strftime('%F %R') %>"
+  data-memo-modal-created-date-value="<%= memo.created_at&.strftime('%F') %>"
+  data-memo-modal-updated-date-value="<%= memo.updated_at&.strftime('%F') %>"
   style="overflow: visible; z-index: 1;"
 >
 
