@@ -84,8 +84,8 @@ export default class extends Controller {
     const createdAtEl = document.getElementById("modal-created-at")
     const updatedAtEl = document.getElementById("modal-updated-at")
     if (createdAtEl && updatedAtEl) {
-      createdAtEl.textContent = createdAt ? `作成日: ${createdAt}` : ""
-      updatedAtEl.textContent = updatedAt ? `更新日: ${updatedAt}` : ""
+      createdAtEl.textContent = createdAt ? `作成: ${createdAt}` : ""
+      updatedAtEl.textContent = updatedAt ? `更新: ${updatedAt}` : ""
     }
 
     // モーダル開く

@@ -1,0 +1,32 @@
+<div class="col">
+  <div class="card h-100 shadow-sm p-3">
+    <div class="row g-3">
+      <!-- 書影 -->
+      <div class="col-auto">
+        <% if memo.book.book_cover.present? %>
+          <%= image_tag memo.book.book_cover,
+                class: "img-fluid rounded-2",
+                style: "width: 100px; height: auto; object-fit: cover;" %>
+        <% else %>
+          <div class="no-cover text-muted d-flex align-items-center justify-content-center rounded-2"
+               style="width: 100px; height: 150px;">
+            <span class="small text-center px-1"><%= memo.book.title %></span>
+          </div>
+        <% end %>
+      </div>
+
+      <!-- 右側テキスト情報 -->
+      <div class="col d-flex flex-column gap-1">
+        <h6 class="mb-1 fw-bold lh-sm"><%= truncate(memo.book.title, length: 40) %></h6>
+        <p class="text-muted mb-1 small lh-sm"><%= truncate(memo.book.author, length: 30) %></p>
+        <p class="text-muted small lh-sm mb-2"><%= truncate(strip_tags(memo.content), length: 60) %></p>
+
+        <!-- ユーザー -->
+        <div class="mt-auto d-flex align-items-center gap-2 pt-2">
+          <%= image_tag user_avatar(memo.user), class: "rounded-circle border", style: "width: 28px; height: 28px; object-fit: cover;" %>
+          <small class="text-muted"><%= memo.user.name.presence || "no name" %>さん</small>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
