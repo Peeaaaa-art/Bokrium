@@ -84,3 +84,9 @@ Rails.application.configure do
   config.web_console.permissions = "192.168.0.33"
   config.web_console.permissions = "192.168.0.74"
 end
+
+Rails.application.routes.default_url_options = {
+  protocol: "https",
+  host: "localhost",
+  port: 3000
+}

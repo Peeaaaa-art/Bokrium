@@ -34,7 +34,11 @@ class Memo < ApplicationRecord
   end
 
   def public_url
-    "/shared/memos/#{public_token}"
+    Rails.application.routes.url_helpers.shared_memo_url(public_token, host: default_host)
+  end
+
+  def default_host
+    Rails.application.routes.default_url_options[:host] || "localhost:3000"
   end
 
   scope :published_to_others, -> { where(visibility: %i[link_only public_site]) }
