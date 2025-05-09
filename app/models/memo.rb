@@ -9,9 +9,9 @@ class Memo < ApplicationRecord
     public_site: 2
   }.freeze
 
-  before_create :generate_public_token_if_shared
+  before_save :ensure_public_token_if_shared
 
-  def generate_public_token_if_shared
+  def ensure_public_token_if_shared
     if shared? && public_token.blank?
       self.public_token = SecureRandom.hex(10)
     end
