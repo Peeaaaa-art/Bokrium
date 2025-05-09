@@ -32,10 +32,10 @@
         <li>
           <%= form_with model: [book, memo], method: :patch, data: { turbo_confirm: "公開設定を切り替えますか？" } do |f| %>
             <%= f.hidden_field :content, value: memo.content %>
-            <%= f.hidden_field :published, value: memo.published == "you_can_see" ? "only_i_can_see" : "you_can_see" %>
+            <%= f.hidden_field :visibility, value: memo.visibility == "only_me" ? "link_only" : "only_me" %>
             <button type="submit" class="dropdown-item">
-              <i class="bi <%= memo.published == "you_can_see" ? "bi-eye-slash" : "bi-eye text-success" %> me-1"></i>
-              <%= memo.published == "only_i_can_see" ? "公開する" : "非公開にする" %>
+              <i class="bi <%= memo.only_i_can_see? ? "bi-eye text-success" : "bi-eye-slash text-muted" %> me-1"></i>
+              <%= memo.only_i_can_see? ? "公開する" : "非公開にする" %>
             </button>
           <% end %>
         </li>
@@ -72,8 +72,8 @@
   <!-- ステータスアイコン -->
   <% if memo.persisted? %>
     <div class="position-absolute bottom-0 end-0 m-2" style="z-index: 2;">
-      <i class="bi <%= memo.published == "you_can_see" ? "bi-eye text-success" : "bi-eye-slash text-muted" %>"
-        title="<%= memo.published == "you_can_see" ? "公開中" : "非公開" %>"></i>
+      <i class="bi <%= memo.visibility?(:only_me) ? "bi-eye-slash text-muted" : "bi-eye text-success" %>"
+        title="<%= memo.visibility?(:only_me) ? "非公開" : "公開中" %>"></i>
     </div>
   <% end %>
 </div>

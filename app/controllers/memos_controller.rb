@@ -56,15 +56,16 @@ class MemosController < ApplicationController
 
   def set_memo
     @memo = Memo.find(params[:id])
-    unless @memo.user_id == current_user.id || @memo.published
+    unless @memo.user_id == current_user.id || @memo.shared?
       redirect_to book_memo_path(@book), alert: "アクセス権限がありません"
     end
   end
 
   def memo_params
-    params.require(:memo).permit(:content, :published).tap do |prm|
-      # enum変換
-      prm[:published] = Memo.publisheds[prm[:published]] if prm[:published]
+    params.require(:memo).permit(:content, :visibility).tap do |prm|
+    # enum変換
+    # memo_params
+    prm[:visibility] = Memo::VISIBILITY[prm[:visibility].to_sym] if prm[:visibility]
     end
   end
 end

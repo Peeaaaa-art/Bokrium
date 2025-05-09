@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_05_07_080141) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_09_044835) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -120,10 +120,10 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_07_080141) do
     t.bigint "user_id", null: false
     t.bigint "book_id", null: false
     t.text "content"
-    t.tsvector "text_index"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "published", default: 0, null: false
+    t.integer "visibility", default: 0, null: false
+    t.tsvector "text_index"
     t.index ["book_id"], name: "index_memos_on_book_id"
     t.index ["user_id"], name: "index_memos_on_user_id"
   end

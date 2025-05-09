@@ -17,8 +17,11 @@ export default class extends Controller {
   getSliceCount() {
     const width = window.innerWidth
 
-    if (width < 768) return 4
-    if (width < 1200) return 8
+    // if (width < 768) return 4
+    // if (width < 1200) return 8
+    if (width < 1700) return 8
+    if (width < 1900) return 10
+    if (width < 2000) return 11
     return 12
   }
 }
