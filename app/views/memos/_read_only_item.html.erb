@@ -1,6 +1,6 @@
 <div
   id="<%= dom_id(memo) %>"
-  class="card memo-display position-relative mb-3"
+  class="card memo-display position-relative mb-3 shadow-sm rounded"
   data-controller="memo-modal"
   data-action="click->memo-modal#open"
   data-memo-modal-memo-id-value="<%= memo.id || 'new' %>"

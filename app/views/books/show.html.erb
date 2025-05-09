@@ -49,10 +49,11 @@
         <div class="col-12 col-md-4">
           <div class="card h-100 border-0 shadow-none bg-transparent">
             <div class="card-body">
-            <!-- タグ -->
-            <%= render partial: "tags/tag_panel", locals: { book: @book, user_tags: @user_tags } %>
               <!-- ✅ PC専用：ステータス + アクション + 画像アップロード -->
               <div class="d-none d-sm-flex flex-column gap-2 mt-3">
+                <!-- タグ -->
+                <%= render partial: "tags/tag_panel_pc", locals: { book: @book, user_tags: @user_tags } %>
+                <%= render "tags/tag_badge_list", book: @book %>
                 <!-- ステータスセレクト -->
                 <%= form_with(model: @book, local: false, class: "status-form") do |f| %>
                   <div class="d-flex align-items-center mb-2">
@@ -106,17 +107,9 @@
         </div>
       </div>
       <!-- ✅ スマホ専用：ステータス + アクション + アップロード 横並び -->
-      <div class="d-flex d-sm-none flex-row align-items-center justify-content-between px-3">
-        <!-- ステータスセレクト -->
-        <%= form_with(model: @book, local: false, class: "status-form mb-0") do |f| %>
-          <%= f.select :status,
-                Book.statuses.keys.map { |s| [t("books.status.#{s}"), s] },
-                {},
-                class: "btn btn-outline-secondary px-4",
-                style: "height: calc(1.5em + .5rem + 3px);",
-                onchange: "this.form.requestSubmit();" %>
-        <% end %>
-        <!-- 画像アップロード -->
+      <div class="d-flex d-sm-none flex-row align-items-center justify-content-between bg-rhodia-blue shadow-sm rounded px-3 py-1">
+        <%= render partial: "tags/tag_panel_mobile", locals: { book: @book, user_tags: @user_tags } %>
+                <!-- 画像アップロード -->
         <div data-controller="image-upload">
           <%= form_with model: [@book, Image.new], local: false,
                 html: {
@@ -132,15 +125,15 @@
                     action: "change->image-upload#triggerUpload"
                   },
                   id: "customFileInputSm" %>
-            <label for="customFileInputSm" class="btn btn-outline-secondary btn-sm px-4 mb-0">
-              <i class="bi bi-camera-fill fs-6"></i>
+            <label for="customFileInputSm" class="btn btn-sm text-white mb-0">
+              <i class="bi bi-camera fs-4"></i>
             </label>
           <% end %>
         </div>
         <!-- アクション：ドロップダウン -->
         <div class="dropdown">
-          <button class="btn btn-outline-secondary btn-sm px-4 dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <i class="bi bi-gear-fill fs-6"></i>
+          <button class="btn  btn-sm dropdown-toggle text-white" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-gear fs-4"></i>
           </button>
           <ul class="dropdown-menu dropdown-menu-end">
             <li>
@@ -161,9 +154,22 @@
             </li>
           </ul>
         </div>
+        <!-- ステータスセレクト -->
+        <%= form_with(model: @book, local: false, class: "status-form mb-0") do |f| %>
+          <%= f.select :status,
+                Book.statuses.keys.map { |s| [t("books.status.#{s}"), s] },
+                {},
+                class: "btn btn-outline-secondary text-white",
+                style: "height: calc(1.5em + .5rem + 3px);",
+                onchange: "this.form.requestSubmit();" %>
+        <% end %>
+      </div>
+      <!-- タグ -->
+      <div class="d-sm-none px-1 pt-1">
+        <%= render "tags/tag_badge_list", book: @book %>
       </div>
       <!-- 画像リスト -->
-      <div class="row row-cols-4 row-cols-md-6 g-2 mb-4 mt-2" id="image-list">
+      <div class="row row-cols-4 row-cols-md-6 g-2 mb-4" id="image-list">
         <% @book.images.each_with_index do |img, idx| %>
           <div class="col">
             <%= render partial: "images/card", locals: { image: img, book: @book, thumb: true, identifier: idx } %>
@@ -197,7 +203,7 @@
         } do %>
           <i class="bi bi-pen"></i> もっと書く
         <% end %>
-        <%= link_to "戻る", books_path, class: "btn btn-secondary" %>
+        <%= link_to "戻る", books_path, class: "btn btn-outline-secondary" %>
       </div>
     </div>
   </div>
