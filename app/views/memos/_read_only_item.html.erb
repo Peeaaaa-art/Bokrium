@@ -44,7 +44,7 @@
         </li>
 
         <!-- ✅ 公開リンクのコピー（link_only or public_site の場合） -->
-        <% if memo.shared? %>
+        <% if memo.shared? && memo.public_token.present? %>
           <li>
             <button
               class="dropdown-item"
@@ -65,7 +65,7 @@
                         },
                         form: { data: { turbo_stream: true } },
                         class: "dropdown-item text-danger" do %>
-            <i class="bi bi-trash me-1"></i> 削除する
+            <i class="bi bi-trash me-1"></i> メモを削除する
           <% end %>
         </li>
       </ul>
