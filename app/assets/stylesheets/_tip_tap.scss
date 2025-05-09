@@ -34,14 +34,14 @@
   }
 }
 
-@media (max-width: 3840px) {
+@media (min-width: 1200px) {
   .ProseMirror.editing {
     max-height: 80dvh !important;
     overflow-y: auto;
   }
 
   .ProseMirror {
-    padding: 2rem 4rem;
+    padding: 1rem 4rem;
   }
 }
 
@@ -83,20 +83,24 @@
 }
 
 
-.ProseMirror.rhodia-grid-bg {
-  background-color: #f8f9faf5;
-  background-image:
-    linear-gradient(to right, rgba(0, 47, 255, 0.1) 0.01em, transparent 1px),
-    linear-gradient(to bottom, rgba(0, 85, 255, 0.1) 0.0rem, transparent 1px);
-  background-size: 1.2em 1.2em;
-}
+// .rhodia-grid-bg {
+//   background: url('/textures/note_general.jpeg');
+//   background-size: contain;
+//   background-position: center;
+//   // background-color: #f8f9faf5;
+//   // background-image:
+//   //   linear-gradient(to right, rgba(0, 47, 255, 0.1) 0.01em, transparent 1px),
+//   //   linear-gradient(to bottom, rgba(0, 85, 255, 0.1) 0.0rem, transparent 1px);
+//   // background-size: 1.2em 1.2em;
+// }
 
 .rhodia-grid-bg {
-  background-color: #f8f9faf5;
-  background-image:
-    linear-gradient(to right, rgba(0, 47, 255, 0.1) 0.01em, transparent 1px),
-    linear-gradient(to bottom, rgba(0, 85, 255, 0.1) 0.0rem, transparent 1px);
-  background-size: 1.2em 1.2em;
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.88), rgba(255, 255, 255, 0.88)), /* 白の薄いオーバーレイ */
+    url('/textures/molesikin_note.jpg');
+  background-size: cover;
+  background-position: center;
+  background-blend-mode: lighten;
 }
 .modal-body {
 
