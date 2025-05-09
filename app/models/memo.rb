@@ -43,19 +43,20 @@ class Memo < ApplicationRecord
   end
 
   scope :published_to_others, -> { where(visibility: %i[link_only public_site]) }
+  scope :publicly_listed, -> { where(visibility: VISIBILITY[:public_site]) }
   scope :exclude_user, ->(user) { user.present? ? where.not(user_id: user.id) : all }
   scope :with_book_and_user_avatar, -> {
     includes(:book, user: { avatar_s3_attachment: :blob })
   }
 
-  def self.random_published_memo
-    published_to_others
+  def self.random_public_memo
+    publicly_listed
       .with_book_and_user_avatar
       .random_1
   end
 
-  def self.random_nine(exclude_user: nil)
-    published_to_others
+  def self.random_nine_public(exclude_user: nil)
+    publicly_listed
       .exclude_user(exclude_user)
       .with_book_and_user_avatar
       .random_9
