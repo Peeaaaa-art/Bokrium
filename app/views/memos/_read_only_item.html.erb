@@ -12,7 +12,6 @@
   data-memo-modal-updated-date-value="<%= memo.updated_at&.strftime('%F') %>"
   style="overflow: visible; z-index: 1;"
 >
-
   <!-- ✅ トグルボタン -->
   <button
     class="btn btn-sm bg-trasperant position-absolute top-0 start-0 m-2"
@@ -29,16 +28,31 @@
         <i class="bi bi-three-dots"></i>
       </button>
       <ul class="dropdown-menu dropdown-menu-end">
+        <!-- 🔁 公開/非公開トグル -->
         <li>
           <%= form_with model: [book, memo], method: :patch, data: { turbo_confirm: "公開設定を切り替えますか？" } do |f| %>
             <%= f.hidden_field :content, value: memo.content %>
             <%= f.hidden_field :visibility, value: memo.visibility == "only_me" ? "link_only" : "only_me" %>
             <button type="submit" class="dropdown-item">
-              <i class="bi <%= memo.only_i_can_see? ? "bi-eye text-success" : "bi-eye-slash text-muted" %> me-1"></i>
-              <%= memo.only_i_can_see? ? "公開する" : "非公開にする" %>
+              <i class="bi <%= memo.visibility?(:only_me) ? "bi-eye text-success" : "bi-eye-slash text-muted" %> me-1"></i>
+              <%= memo.visibility?(:only_me) ? "公開する" : "非公開にする" %>
             </button>
           <% end %>
         </li>
+
+        <!-- ✅ 公開リンクのコピー（link_only or public_site の場合） -->
+        <% if memo.shared? %>
+          <li>
+            <button
+              class="dropdown-item"
+              onclick="navigator.clipboard.writeText('<%= memo.public_url %>'); alert('共有URLをコピーしました');"
+            >
+              <i class="bi bi-clipboard me-1"></i> 共有URLをコピー
+            </button>
+          </li>
+        <% end %>
+
+        <!-- 🗑️ 削除 -->
         <li>
           <%= button_to book_memo_path(book, memo),
                         method: :delete,
@@ -55,25 +69,25 @@
     </div>
   <% end %>
 
-  <!-- ヘッダー -->
+  <!-- ✅ ヘッダー -->
   <div class="card-header bg-rhodia-orange d-flex justify-content-center py-2">
     <i class="bi bi-cloud-fog2-fill"></i>
     <i class="bi bi-cloud-haze2"></i>
     <i class="bi bi-cloud-fog2-fill"></i>
   </div>
 
-  <!-- ✅ 高さ制御付き本文 -->
+  <!-- ✅ 本文 -->
   <div class="memo-body" data-memo-modal-target="body">
     <div class="card-body rhodia-grid-bg">
       <%= memo.content&.html_safe.presence || memo_placeholder_html %>
     </div>
   </div>
 
-  <!-- ステータスアイコン -->
+  <!-- ✅ ステータスアイコン -->
   <% if memo.persisted? %>
     <div class="position-absolute bottom-0 end-0 m-2" style="z-index: 2;">
       <i class="bi <%= memo.visibility?(:only_me) ? "bi-eye-slash text-muted" : "bi-eye text-success" %>"
-        title="<%= memo.visibility?(:only_me) ? "非公開" : "公開中" %>"></i>
+         title="<%= memo.visibility?(:only_me) ? "非公開" : "公開中" %>"></i>
     </div>
   <% end %>
 </div>

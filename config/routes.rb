@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get "/shared/memos/:token", to: "shared_memos#show", as: :shared_memo
   get "public_bookshelf/index"
   get "public_bookshelf/show"
   get "search", to: "search#index", as: :search_books

@@ -9,6 +9,14 @@ class Memo < ApplicationRecord
     public_site: 2
   }.freeze
 
+  before_create :generate_public_token_if_shared
+
+  def generate_public_token_if_shared
+    if shared? && public_token.blank?
+      self.public_token = SecureRandom.hex(10)
+    end
+  end
+
   def visibility
     VISIBILITY.key(self[:visibility])&.to_s
   end
