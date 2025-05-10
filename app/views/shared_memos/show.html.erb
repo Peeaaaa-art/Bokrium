@@ -19,7 +19,7 @@
         </div>
         <!-- メモ本文 -->
         <div class="card-body rhodia-grid-bg px-4 py-3">
-          <%= @memo.content&.html_safe.presence || "<p class='text-muted'>（このメモにはまだ内容がありません）</p>".html_safe %>
+          <%= sanitize(@memo.content.presence || "<p class='text-muted'>（このメモにはまだ内容がありません）</p>") %>
         </div>
         <!-- 更新情報 -->
         <div class="card-footer d-flex justify-content-between small text-muted">
