@@ -3,6 +3,8 @@ class User < ApplicationRecord
   has_many :books, dependent: :destroy
   has_many :memos, dependent: :destroy
   has_many :tags, class_name: "ActsAsTaggableOn::Tag"
+  has_many :like_memos, dependent: :destroy
+  has_many :liked_memos, through: :like_memos, source: :memo
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,

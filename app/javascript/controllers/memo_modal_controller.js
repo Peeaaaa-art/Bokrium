@@ -10,7 +10,7 @@ export default class extends Controller {
     updatedAt: String
   }
 
-  static targets = ["body", "icon"] // ← 表示トグル用
+  static targets = ["body", "icon"]
 
   connect() {
     console.log("🔌 memo-modal connected!")
@@ -26,8 +26,10 @@ export default class extends Controller {
     // データ取得
     const memoId = trigger.dataset.memoModalMemoIdValue
     const bookId = trigger.dataset.memoModalBookIdValue
-    const createdAt = trigger.dataset.memoModalCreatedAtValue
-    const updatedAt = trigger.dataset.memoModalUpdatedAtValue
+    const createdAtFull = trigger.dataset.memoModalCreatedAtValue
+    const updatedAtFull = trigger.dataset.memoModalUpdatedAtValue
+    const createdAtShort = trigger.dataset.memoModalCreatedDateValue
+    const updatedAtShort = trigger.dataset.memoModalUpdatedDateValue
 
     // HTMLから初期内容取得
     const contentElement = this.element.querySelector(".card-body")
@@ -80,15 +82,26 @@ export default class extends Controller {
       form.scrollIntoView({ behavior: 'smooth', block: 'center' })
     }
 
-    // モーダルに作成日・更新日を表示
+    // モーダルに作成日・更新日を表示（スマホ対応）
     const createdAtEl = document.getElementById("modal-created-at")
     const updatedAtEl = document.getElementById("modal-updated-at")
-    if (createdAtEl && updatedAtEl) {
-      createdAtEl.textContent = createdAt ? `作成日: ${createdAt}` : ""
-      updatedAtEl.textContent = updatedAt ? `更新日: ${updatedAt}` : ""
+    const isMobile = window.innerWidth < 576
+
+    const fallbackDate = (full) => full?.split(" ")[0] || ""
+
+    if (createdAtEl) {
+      createdAtEl.textContent = createdAtFull
+        ? `作成日: ${isMobile ? createdAtShort || fallbackDate(createdAtFull) : createdAtFull}`
+        : ""
     }
 
-    // モーダル開く
+    if (updatedAtEl) {
+      updatedAtEl.textContent = updatedAtFull
+        ? `更新日: ${isMobile ? updatedAtShort || fallbackDate(updatedAtFull) : updatedAtFull}`
+        : ""
+    }
+
+    // モーダル表示
     const modalElement = document.getElementById("memoEditModal")
     if (!modalElement) {
       console.error("❌ モーダルが見つかりません: memoEditModal")

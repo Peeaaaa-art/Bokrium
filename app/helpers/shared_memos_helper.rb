@@ -1,0 +1,2 @@
+module SharedMemosHelper
+end

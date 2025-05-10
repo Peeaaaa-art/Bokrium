@@ -73,3 +73,8 @@ Rails.application.configure do
   # Only use :id for inspections in production.
   config.active_record.attributes_for_inspect = [ :id ]
 end
+
+Rails.application.routes.default_url_options = {
+  protocol: "https",
+  host: "bokriumm-5c4e18c57830.herokuapp.com"
+}

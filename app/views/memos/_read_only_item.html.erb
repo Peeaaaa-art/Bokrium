@@ -1,6 +1,6 @@
 <div
   id="<%= dom_id(memo) %>"
-  class="card memo-display position-relative mb-3"
+  class="card memo-display position-relative mb-3 shadow-sm rounded"
   data-controller="memo-modal"
   data-action="click->memo-modal#open"
   data-memo-modal-memo-id-value="<%= memo.id || 'new' %>"
@@ -8,9 +8,10 @@
   data-memo-modal-initial-content-value="<%= memo.content || "" %>"
   data-memo-modal-created-at-value="<%= memo.created_at&.strftime('%F %R') %>"
   data-memo-modal-updated-at-value="<%= memo.updated_at&.strftime('%F %R') %>"
+  data-memo-modal-created-date-value="<%= memo.created_at&.strftime('%F') %>"
+  data-memo-modal-updated-date-value="<%= memo.updated_at&.strftime('%F') %>"
   style="overflow: visible; z-index: 1;"
 >
-
   <!-- ✅ トグルボタン -->
   <button
     class="btn btn-sm bg-trasperant position-absolute top-0 start-0 m-2"
@@ -27,16 +28,34 @@
         <i class="bi bi-three-dots"></i>
       </button>
       <ul class="dropdown-menu dropdown-menu-end">
+        <!-- 🔁 公開/非公開トグル -->
         <li>
-          <%= form_with model: [book, memo], method: :patch, data: { turbo_confirm: "公開設定を切り替えますか？" } do |f| %>
+          <%= form_with model: [book, memo], method: :patch do |f| %>
             <%= f.hidden_field :content, value: memo.content %>
-            <%= f.hidden_field :published, value: memo.published == "you_can_see" ? "only_i_can_see" : "you_can_see" %>
-            <button type="submit" class="dropdown-item">
-              <i class="bi <%= memo.published == "you_can_see" ? "bi-eye-slash" : "bi-eye text-success" %> me-1"></i>
-              <%= memo.published == "only_i_can_see" ? "公開する" : "非公開にする" %>
-            </button>
+            <div class="dropdown-item">
+              <%= f.label :visibility, "公開範囲", class: "form-label small text-muted mb-1" %>
+              <%= f.select :visibility,
+                    [["非公開", "only_me"], ["リンク限定", "link_only"], ["サイトにも掲載", "public_site"]],
+                    { selected: memo.visibility },
+                    class: "form-select form-select-sm",
+                    onchange: "this.form.requestSubmit();" %>
+            </div>
           <% end %>
         </li>
+
+        <!-- ✅ 公開リンクのコピー（link_only or public_site の場合） -->
+        <% if memo.shared? && memo.public_token.present? %>
+          <li>
+            <button
+              class="dropdown-item"
+              onclick="navigator.clipboard.writeText('<%= memo.public_url %>'); alert('共有URLをコピーしました');"
+            >
+              <i class="bi bi-clipboard me-1"></i> 共有URLをコピー
+            </button>
+          </li>
+        <% end %>
+
+        <!-- 🗑️ 削除 -->
         <li>
           <%= button_to book_memo_path(book, memo),
                         method: :delete,
@@ -46,32 +65,43 @@
                         },
                         form: { data: { turbo_stream: true } },
                         class: "dropdown-item text-danger" do %>
-            <i class="bi bi-trash me-1"></i> 削除する
+            <i class="bi bi-trash me-1"></i> メモを削除する
           <% end %>
         </li>
       </ul>
     </div>
   <% end %>
 
-  <!-- ヘッダー -->
+  <!-- ✅ ヘッダー -->
   <div class="card-header bg-rhodia-orange d-flex justify-content-center py-2">
     <i class="bi bi-cloud-fog2-fill"></i>
     <i class="bi bi-cloud-haze2"></i>
     <i class="bi bi-cloud-fog2-fill"></i>
   </div>
 
-  <!-- ✅ 高さ制御付き本文 -->
+  <!-- ✅ 本文 -->
   <div class="memo-body" data-memo-modal-target="body">
     <div class="card-body rhodia-grid-bg">
       <%= memo.content&.html_safe.presence || memo_placeholder_html %>
     </div>
   </div>
 
-  <!-- ステータスアイコン -->
+  <!-- ✅ ステータスアイコン -->
+  <% if current_user == memo.user && memo.like_memos.present? %>
+    <span class="small d-inline-flex align-items-center ms-2">
+      <i class="bi bi-heart-fill text-danger me-1"></i>
+      <span class="text-muted opacity-75"><%= memo.like_memos.count %></span>
+    </span>
+  <% end %>
   <% if memo.persisted? %>
     <div class="position-absolute bottom-0 end-0 m-2" style="z-index: 2;">
-      <i class="bi <%= memo.published == "you_can_see" ? "bi-eye text-success" : "bi-eye-slash text-muted" %>"
-        title="<%= memo.published == "you_can_see" ? "公開中" : "非公開" %>"></i>
+      <% if memo.visibility?(:public_site) %>
+        <span class="bdge bg-uccess"><i class="bi bi-globe"></i> </span>
+      <% elsif memo.visibility?(:link_only) %>
+        <span class="bade bg-scondary"><i class="bi bi-link-45deg"></i></span>
+      <% else %>
+        <span class="bage bg-mued"><i class="bi bi-lock-fill"></i></span>
+      <% end %>
     </div>
   <% end %>
 </div>

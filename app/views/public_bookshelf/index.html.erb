@@ -1,0 +1,15 @@
+<div class="container text-center my-4">
+  <% if @others_random_memo && @others_random_memo.book && @others_random_memo.user %>
+  <div class="container">
+    <h2 class="text-center mb-4">みんなの本棚</h2>
+
+    <div id="memo-grid" class="row row-cols-1 row-cols-md-3 g-4">
+      <%= render partial: "public_bookshelf/public_card", collection: @random_memos, as: :memo %>
+    </div>
+
+    <div class="text-center mt-4">
+      <%= button_to "もっと見る", public_bookshelf_index_path, method: :get, remote: true, class: "btn btn-outline-secondary", id: "load-more-memos" %>
+    </div>
+  </div>
+<% end %>
+</div>

@@ -1,0 +1,17 @@
+<%= turbo_frame_tag "like_button" do %>
+  <% if user_signed_in? %>
+    <% if current_user.like_memos.exists?(memo: memo) %>
+      <%= button_to shared_memo_like_memo_path(memo.public_token),
+          method: :delete, remote: true, class: "btn btn-outline-danger like-circle-btn" do %>
+        <i class="bi bi-heart-fill"></i>
+      <% end %>
+    <% else %>
+      <%= button_to shared_memo_like_memo_path(memo.public_token),
+          method: :post, remote: true, class: "btn btn-outline-secondary like-circle-btn" do %>
+        <i class="bi bi-heart"></i>
+      <% end %>
+    <% end %>
+  <% else %>
+    <i class="bi bi-heart text-muted"></i>
+  <% end %>
+<% end %>

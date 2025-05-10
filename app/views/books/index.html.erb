@@ -3,6 +3,7 @@
     こちらはサンプル表示です。自分の本棚を作成するには、ログイン・アカウント登録が必要です。
   </div>
 <% end %>
+
 <% if @no_books %>
   <div class="alert alert-info text-center">
     <p>こちらはサンプル表示です。最初の本を登録しましょう！</p>
@@ -13,21 +14,15 @@
 <% end %>
 
 <% if current_user && !@no_books %>
-  <div class="books-grid">
-    <% @books.each do |book| %>
-        <%= link_to book_path(book) do %>
-          <% if book.book_cover_s3.attached? %>
-            <%= image_tag book.book_cover_s3.variant(resize_to_limit: [200, 300]), alt: book.title, class: "book-cover img-fluid rounded" %>
-          <% elsif book.book_cover.present? %>
-            <img src="<%= book.book_cover %>" style="border-radius: 12px;" alt="表紙画像" class="book-cover rounded" >
-          <% else %>
-            <div class="no-cover book-cover"><%= book.title %></div>
-          <% end %>
-        <% end %>
-    <% end %>
+  <!-- PC表示用 -->
+  <div class="d-none d-xxl-block">
+    <%= render partial: "bookshelf/kino_books_grid", locals: { books: @books } %>
+  </div>
+  <!-- スマホ表示用 -->
+  <div class="d-xxl-none">
+    <%= render partial: "bookshelf/simple_card", locals: { books: @books } %>
   </div>
 <% end %>
-
 
 <% if @no_books || @not_logged_in %>
   <div class="books-grid">
@@ -36,7 +31,6 @@
     <% end %>
   </div>
 <% end %>
-
 
 <% if @not_logged_in %>
   <div class="registration-cta text-center mt-5 text-dark fw-bold  big-shoulders-inline-bold">

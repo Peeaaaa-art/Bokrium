@@ -1,0 +1,133 @@
+<!-- タグ未選択ボタン（PC表示） -->
+<button class="btn btn-sm text-start" data-bs-toggle="modal" data-bs-target="#tagSelectModalPC">
+  <i class="bi bi-tags fs-5"></i>
+</button>
+
+<!-- タグ選択モーダル（PC） -->
+<div class="modal fade" id="tagSelectModalPC" tabindex="-1" aria-labelledby="tagSelectModalLabelPC" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="tagSelectModalLabelPC"><i class="bi bi-tags-fill"></i> タグを選択</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
+      </div>
+      <div class="modal-body">
+        <div class="d-flex flex-wrap m-3 gap-2">
+          <% if user_tags.present? %>
+            <% user_tags.each do |tag| %>
+              <% selected = book.tags.include?(tag) %>
+              <%= button_to toggle_tag_book_path(book, tag_name: tag.name), method: :post,
+                  class: "badge rounded-pill border-0 #{selected ? 'selected-tag' : 'unselected-tag'}",
+                  style: "background-color: #{tag.color.presence || '#6c757d'};" do %>
+                <%= tag.name %>
+              <% end %>
+            <% end %>
+          <% end %>
+        </div>
+        <hr>
+        <div class="d-flex justify-content-center gap-2 my-3">
+          <button class="btn btn-outline-primary btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#tagCreateModalPC">
+            <i class="bi bi-plus-circle"></i> 新しいタグを作成
+          </button>
+          <button class="btn btn-outline-secondary btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#tagManageModalPC">
+            <i class="bi bi-gear"></i> タグを管理する
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- タグ作成モーダル（PC） -->
+<div class="modal fade" id="tagCreateModalPC" tabindex="-1" aria-labelledby="tagCreateModalLabelPC" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="tagCreateModalLabelPC"><i class="bi bi-tag"></i> 新しいタグを作成</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
+      </div>
+      <div class="modal-body mx-3">
+        <%= form_with url: tags_path, method: :post, local: true do |f| %>
+          <div class="my-3">
+            <%= f.label :name, "タグ名", class: "form-label" %>
+            <%= f.text_field :name, class: "form-control", name: "tag[name]", placeholder: "タグ名を入力してください" %>
+          </div>
+          <div class="mb-3">
+            <%= f.label :color, "タグの色", class: "form-label" %>
+            <%= f.color_field :color, class: "form-control form-control-color", name: "tag[color]", value: "#6c757d" %>
+          </div>
+          <div class="text-center mb-3">
+            <%= f.submit "作成", class: "btn btn-primary" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- タグ管理モーダル（PC） -->
+<div class="modal fade" id="tagManageModalPC" tabindex="-1" aria-labelledby="tagManageModalLabelPC" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="tagManageModalLabelPC"><i class="bi bi-tag-fill"></i> タグの管理</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
+      </div>
+      <div class="modal-body d-flex flex-wrap gap-2 my-3">
+        <% if user_tags.present? %>
+          <% user_tags.each do |tag| %>
+            <div class="d-flex align-items-center gap-1 mt-2 mx-2 px-2 py-1 border rounded-pill"
+                style="background-color: <%= tag.color %>; color: white; max-width: 100%;">
+              <span class="text-truncate" style="max-width: 80px;">
+                <%= tag.name %>
+              </span>
+              <button class="btn btn-outline-light btn-sm p-0 px-1 border-0"
+                      title="編集"
+                      data-bs-toggle="modal"
+                      data-bs-target="#editTagModalPC<%= tag.id %>"
+                      data-bs-dismiss="modal">
+                <i class="bi bi-pencil"></i>
+              </button>
+              <%= button_to tag_path(tag), method: :delete,
+                    data: { turbo_confirm: "このタグを削除しますか？" },
+                    class: "btn btn-outline-light btn-sm p-0 px-1 border-0", title: "削除" do %>
+                <i class="bi bi-trash"></i>
+              <% end %>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- タグ編集モーダル群（PC・個別） -->
+<% if user_tags.present? %>
+  <% user_tags.each do |tag| %>
+    <div class="modal fade" id="editTagModalPC<%= tag.id %>" tabindex="-1" aria-labelledby="editTagModalLabelPC<%= tag.id %>" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <%= form_with model: tag, url: tag_path(tag), method: :patch, local: true, scope: :tag do |f| %>
+            <div class="modal-header">
+              <h5 class="modal-title" id="editTagModalLabelPC<%= tag.id %>">タグの編集</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
+            </div>
+            <div class="modal-body mx-3">
+              <div class="my-3">
+                <%= f.label :name, "タグ名", class: "form-label" %>
+                <%= f.text_field :name, class: "form-control" %>
+              </div>
+              <div class="mb-3">
+                <%= f.label :color, "タグの色", class: "form-label" %>
+                <%= f.color_field :color, class: "form-control form-control-color" %>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <%= f.submit "更新", class: "btn btn-primary" %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+<% end %>

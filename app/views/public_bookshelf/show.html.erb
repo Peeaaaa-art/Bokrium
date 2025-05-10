@@ -1,0 +1,7 @@
+<div class="container my-4 my-md-5">
+  <%= render partial: "books/public_details", locals: { book: @book, memos: @memos } %>
+
+  <div class="text-center mt-4">
+    <%= link_to "公開本棚にもどる", public_bookshelf_index_path, class: "btn btn-secondary" %>
+  </div>
+</div>

@@ -1,0 +1,2 @@
+module PublicBookshelfHelper
+end

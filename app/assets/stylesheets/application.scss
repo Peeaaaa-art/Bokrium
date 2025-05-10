@@ -1,6 +1,7 @@
 @import "bootstrap";
-@import "books";
-@import "my_bookshelf";
+@import "book_cover";
+@import "my_bookshelf_pc";
+@import "my_bookshelf_iphone";
 @import "tags";
 @import "header";
 @import "footer";
@@ -8,13 +9,15 @@
 @import "color";
 @import "font";
 @import "tip_tap";
+@import "material";
+@import "like_button";
 
 
 body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background-color:rgba(221, 231, 233, 0.33);
+  background-color:rgba(221, 231, 233, 0.662);
 }
 
 .flash-message {
