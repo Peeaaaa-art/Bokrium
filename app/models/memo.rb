@@ -3,6 +3,9 @@ class Memo < ApplicationRecord
   belongs_to :user
   belongs_to :book
 
+  has_many :like_memos, dependent: :destroy
+  has_many :liked_users, through: :like_memos, source: :user
+
   VISIBILITY = {
     only_me: 0,
     link_only: 1,

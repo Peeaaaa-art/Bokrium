@@ -87,6 +87,9 @@
   </div>
 
   <!-- ✅ ステータスアイコン -->
+  <% if current_user == memo.user && memo.like_memos.present? %>
+    <span class="text-muted small"><i class="bi bi-heart-fill ms-2 text-danger"></i> <%= memo.like_memos.count %></span>
+  <% end %>
   <% if memo.persisted? %>
     <div class="position-absolute bottom-0 end-0 m-2" style="z-index: 2;">
       <% if memo.visibility?(:public_site) %>

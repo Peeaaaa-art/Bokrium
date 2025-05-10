@@ -17,7 +17,9 @@ Rails.application.routes.draw do
 
   resources :tags, only: [ :create, :update, :destroy ]
 
-  resources :shared_memos, only: [ :show ], param: :token
+  resources :shared_memos, only: [ :show ], param: :token do
+    resource :like_memo, only: [ :create, :destroy ]
+  end
 
   resources :public_bookshelf, only: [ :index, :show ]
 
