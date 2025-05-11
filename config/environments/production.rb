@@ -73,11 +73,11 @@ Rails.application.configure do
   # Only use :id for inspections in production.
   config.active_record.attributes_for_inspect = [ :id ]
   # fly.io対策?
-  # config.hosts.clear
+  config.hosts.clear
   # config.assets.js_compressor = nil
 end
 
-Rails.application.routes.default_url_options = {
-  protocol: "https",
-  host: "bokriumm-5c4e18c57830.herokuapp.com"
-}
+# Rails.application.routes.default_url_options = {
+#   protocol: "https",
+#   host: "bokriumm-5c4e18c57830.herokuapp.com"
+# }
