@@ -4,16 +4,18 @@ class BooksController < ApplicationController
   before_action :authorize_book, only: [ :edit, :update, :destroy ]
 
   def index
-    if user_signed_in?
-      @books = current_user.books.order(created_at: :desc)
-      if @books.empty?
-        @books = sample_books
-        @no_books = true
+    @books =
+      if user_signed_in?
+        books = current_user.books.order(created_at: :desc)
+        if books.exists?
+          books
+        else
+          @no_books = true
+          sample_books
+        end
+      else
+        sample_books
       end
-    else
-      @books = sample_books
-      @not_logged_in = true
-    end
   end
 
   def show

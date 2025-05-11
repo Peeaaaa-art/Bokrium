@@ -1,4 +1,5 @@
 class Memo < ApplicationRecord
+  include PgSearch::Model
   include RandomSelectable
   belongs_to :user
   belongs_to :book
@@ -13,6 +14,19 @@ class Memo < ApplicationRecord
   }.freeze
 
   before_save :ensure_public_token_if_shared
+
+  pg_search_scope :search_by_content,
+  against: :content,
+  using: {
+    tsearch: {
+      tsvector_column: "text_index",
+      dictionary: "simple",
+      prefix: true
+    },
+    trigram: {
+      threshold: 0.05
+    }
+  }
 
   def ensure_public_token_if_shared
     if shared? && public_token.blank?

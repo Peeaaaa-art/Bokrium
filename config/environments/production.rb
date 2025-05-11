@@ -21,8 +21,8 @@ Rails.application.configure do
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   # config.asset_host = "http://assets.example.com"
 
-  # Store uploaded files on the local file system (see config/storage.yml for options).
-  config.active_storage.service = :amazon
+  # Store uploaded files in Tigris Global Object Storage (see config/storage.yml for options).
+  config.active_storage.service = :tigris
 
   # Assume all access to the app is happening through a SSL-terminating reverse proxy.
   config.assume_ssl = true
@@ -72,6 +72,9 @@ Rails.application.configure do
 
   # Only use :id for inspections in production.
   config.active_record.attributes_for_inspect = [ :id ]
+  # fly.io対策?
+  # config.hosts.clear
+  # config.assets.js_compressor = nil
 end
 
 Rails.application.routes.default_url_options = {

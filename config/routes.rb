@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get "explore/index"
+  get "explore/suggestions"
   get "search", to: "search#index", as: :search_books
   get "search/barcode", to: "search#barcode", as: :search_barcode
   get "search/isbn_turbo", to: "search#search_isbn_turbo", as: :search_isbn_turbo
@@ -23,8 +25,10 @@ Rails.application.routes.draw do
 
   resources :public_bookshelf, only: [ :index, :show ]
 
+  get "/explore", to: "explore#index", as: :explore
+
   root "welcome#index"
-  get "up" => "rails/health#show", as: :rails_health_check
+  get "/up", to: proc { [ 200, {}, [ "OK" ] ] }
 end
 
 # 公式リファレンス https://guides.rubyonrails.org/routing.html

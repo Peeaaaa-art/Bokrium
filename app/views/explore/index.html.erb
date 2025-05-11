@@ -1,0 +1,11 @@
+<div class="container mt-4">
+  <div id="search-box"></div>
+</div>
+  <% if @results.any? %>
+    <h2 class="mt-4 mb-3 container text-center">検索結果（<%= @results.size %>件）</h2>
+
+      <%= render partial: "bookshelf/kino_books_grid", locals: { books: @results } %>
+
+  <% else %>
+    <p class="text-center text-muted  mt-4">該当する書籍が見つかりませんでした。</p>
+  <% end %>

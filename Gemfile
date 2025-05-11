@@ -31,6 +31,7 @@ gem "rexml"
 gem "redcarpet", "~> 3.6", ">= 3.6.1"
 gem "acts-as-taggable-on"
 gem "nokogiri"
+gem "pg_search"
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: %i[ windows jruby ]
@@ -68,3 +69,5 @@ group :test do
 end
 
 gem "letter_opener", "~> 1.10"
+
+gem "dockerfile-rails", ">= 1.7", group: :development

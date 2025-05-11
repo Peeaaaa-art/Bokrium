@@ -11,7 +11,7 @@ export default class extends Controller {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), this.timeoutValue);
 
-    fetch(`/search/search_isbn_turbo?isbn=${isbn}`, {
+    fetch(`/search/isbn_turbo?isbn=${isbn}`, {
       headers: {
         Accept: "text/vnd.turbo-stream.html",
         "X-CSRF-Token": this.getCsrfToken(),

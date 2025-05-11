@@ -1,5 +1,5 @@
 <div class="container text-center my-4">
-  <% if !current_user %>
+  <% if !current_user || !@memo_exists %>
     <h3 class="my-3 fw-bold">Bokriumへようこそ</h3>
     <div class="lead mb-4">
       本を「読んで終わり」にしない<br>

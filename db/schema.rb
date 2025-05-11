@@ -10,9 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_05_09_062738) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_11_045949) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+  enable_extension "pg_trgm"
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -126,6 +127,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_09_062738) do
     t.tsvector "text_index"
     t.string "public_token"
     t.index ["book_id"], name: "index_memos_on_book_id"
+    t.index ["content"], name: "index_memos_on_content_trgm", opclass: :gin_trgm_ops, using: :gin
     t.index ["public_token"], name: "index_memos_on_public_token", unique: true
     t.index ["user_id"], name: "index_memos_on_user_id"
   end
