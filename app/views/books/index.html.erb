@@ -1,4 +1,4 @@
-<% if @not_logged_in %>
+<% if !user_signed_in? %>
   <div class="alert alert-info text-center">
     こちらはサンプル表示です。自分の本棚を作成するには、ログイン・アカウント登録が必要です。
   </div>
@@ -13,20 +13,10 @@
   </div>
 <% end %>
 
-<% if current_user && !@no_books %>
+<% if user_signed_in? && !@no_books %>
   <!-- 検索窓 -->
-  <%= form_with url: explore_path, method: :get, local: true, class: "my-2 my-md-3 d-flex justify-content-center" do %>
-    <%= hidden_field_tag :scope, "mine" %>
-    <div class="input-group shadow-sm bg-light rounded-2 overflow-hidden" style="max-width: 480px; width: 100%;">
-      <span class="input-group-text bg-light border-0 ps-3">
-        <i class="bi bi-search text-muted"></i>
-      </span>
-      <%= text_field_tag :q, params[:q], placeholder: "自分の本やメモを検索", class: "form-control form-control-lg border-0 bg-light" %>
-      <button type="submit" class="btn btn-primary border-0 px-4">
-        検索
-      </button>
-    </div>
-  <% end %>
+    <%= render "shared/search_bar", scope: "mine", placeholder: "自分の本やメモを検索",
+                            form_class: "my-2 my-md-3 d-flex justify-content-center" %>
   <!-- PC表示用 -->
   <div class="d-none d-xxl-block">
     <%= render partial: "bookshelf/kino_books_grid", locals: { books: @books } %>
@@ -37,15 +27,11 @@
   </div>
 <% end %>
 
-<% if @no_books || @not_logged_in %>
-  <div class="books-grid-iphone">
-    <% @books.each do |book| %>
-      <%= image_tag asset_path(book.title), alt: book.title, class: "img-fluid rounded" %>
-    <% end %>
-  </div>
+<% if @no_books || !user_signed_in? %>
+  <%= render partial: "bookshelf/sample_books", locals: { books: @books } %>
 <% end %>
 
-<% if @not_logged_in %>
+<% if !user_signed_in? %>
   <div class="registration-cta text-center mt-5 text-dark fw-bold  big-shoulders-inline-bold">
     <h4>あなたの読書体験をもっと豊かに</h4>
     <p>Bokriumで読書メモを管理し、知識を整理しましょう</p>

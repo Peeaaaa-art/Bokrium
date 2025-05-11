@@ -22,7 +22,7 @@ Rails.application.configure do
   # config.asset_host = "http://assets.example.com"
 
   # Store uploaded files in Tigris Global Object Storage (see config/storage.yml for options).
-  config.active_storage.service = :tigris
+  config.active_storage.service = :amazon
 
   # Assume all access to the app is happening through a SSL-terminating reverse proxy.
   config.assume_ssl = true
@@ -73,11 +73,11 @@ Rails.application.configure do
   # Only use :id for inspections in production.
   config.active_record.attributes_for_inspect = [ :id ]
   # fly.io対策?
-  # config.hosts.clear
+  config.hosts.clear
   # config.assets.js_compressor = nil
 end
 
-Rails.application.routes.default_url_options = {
-  protocol: "https",
-  host: "bokriumm-5c4e18c57830.herokuapp.com"
-}
+# Rails.application.routes.default_url_options = {
+#   protocol: "https",
+#   host: "bokriumm-5c4e18c57830.herokuapp.com"
+# }

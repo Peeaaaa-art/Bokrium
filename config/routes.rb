@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get "/up", to: proc { [ 200, {}, [ "OK" ] ] }
   get "explore/index"
   get "explore/suggestions"
   get "search", to: "search#index", as: :search_books
@@ -28,7 +29,6 @@ Rails.application.routes.draw do
   get "/explore", to: "explore#index", as: :explore
 
   root "welcome#index"
-  get "/up", to: proc { [ 200, {}, [ "OK" ] ] }
 end
 
 # 公式リファレンス https://guides.rubyonrails.org/routing.html
