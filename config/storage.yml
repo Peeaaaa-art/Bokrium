@@ -21,9 +21,9 @@ amazon:
   region: <%= ENV["AWS_DEFAULT_REGION"] %>
   bucket: <%= ENV["S3_BUCKET_NAME"] %>
 
-tigris:
-  service: S3
-  access_key_id: <%= ENV["AWS_ACCESS_KEY_ID"] %>
-  secret_access_key: <%= ENV["AWS_SECRET_ACCESS_KEY"] %>
-  endpoint: <%= ENV["AWS_ENDPOINT_URL_S3"] %>
-  bucket: <%= ENV["BUCKET_NAME"] %>
+# tigris:
+#   service: S3
+#   access_key_id: <%= ENV["AWS_ACCESS_KEY_ID"] %>
+#   secret_access_key: <%= ENV["AWS_SECRET_ACCESS_KEY"] %>
+#   endpoint: <%= ENV["AWS_ENDPOINT_URL_S3"] %>
+#   bucket: <%= ENV["BUCKET_NAME"] %>
