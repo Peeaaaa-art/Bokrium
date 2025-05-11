@@ -1,0 +1,5 @@
+  <div class="books-grid-iphone">
+    <% books.each do |book| %>
+      <%= image_tag asset_path(book.title), alt: book.title, class: "img-fluid rounded" %>
+    <% end %>
+  </div>

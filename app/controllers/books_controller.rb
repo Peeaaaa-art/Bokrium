@@ -4,17 +4,10 @@ class BooksController < ApplicationController
   before_action :authorize_book, only: [ :edit, :update, :destroy ]
 
   def index
-    unless user_signed_in?
-      @books = sample_books
-      return
-    end
+    return @books = sample_books unless user_signed_in?
 
     books = current_user.books
-    unless books.exists?
-      @no_books = true
-      @books = sample_books
-      return
-    end
+    return @books = sample_books.tap { @no_books = true } unless books.exists?
 
     @books = books.order(created_at: :desc)
   end

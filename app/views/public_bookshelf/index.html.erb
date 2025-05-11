@@ -1,21 +1,9 @@
 <div class="container text-center my-4">
   <% if @others_random_memo && @others_random_memo.book && @others_random_memo.user %>
   <div class="container">
-    <h2 class="text-center mb-4">みんなの本棚</h2>
-
-    <%= form_with url: explore_path, method: :get, local: true, class: "mb-md-5 mb-2 d-flex justify-content-center" do %>
-      <%= hidden_field_tag :scope, "public" %>
-
-      <div class="input-group shadow-sm bg-light rounded overflow-hidden" style="max-width: 480px; width: 100%;">
-        <span class="input-group-text bg-light border-0 ps-3">
-          <i class="bi bi-search text-muted"></i>
-        </span>
-        <%= text_field_tag :q, params[:q], placeholder: "タイトル・著者・メモ", class: "form-control form-control-lg border-0 bg-light" %>
-        <button type="submit" class="btn btn-primary border-0 px-4">
-          検索
-        </button>
-      </div>
-    <% end %>
+    <!-- 検索窓 -->
+    <%= render "shared/search_bar", scope: "public", placeholder: "タイトル・著者・メモ",
+                              form_class: "mb-md-5 mb-2 d-flex justify-content-center" %>
 
     <div id="memo-grid" class="row row-cols-1 row-cols-md-3 g-4">
       <%= render partial: "public_bookshelf/public_card", collection: @random_memos, as: :memo %>
