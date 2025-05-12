@@ -1,11 +1,25 @@
-<div class="mb-3 text-center">
-  <strong>タグで絞り込む：</strong>
-  <% current_user.tags.each do |tag| %>
-    <%= link_to tag.name, books_path(tag: tag.name), class: "badge rounded-pill", style: "background-color: #{tag.color}; color: white;" %>
-  <% end %>
-  <%= link_to "すべて表示", books_path, class: "badge bg-secondary ms-2" %>
-</div>
+<div data-controller="tag-toggle ui-toggle" data-tag-toggle-selected-tags-value="<%= @filtered_tags&.join(',') %>">
+  <!-- タグアイコン（クリックで表示切り替え） -->
+  <div class="text-center mb-2">
+    <button type="button"
+            class="btn"
+            data-action="click->ui-toggle#toggle"
+            aria-expanded="false">
+      <i class="bi bi-tags fs-4"></i>
+    </button>
+  </div>
 
-<% if defined?(@filtered_tag) && @filtered_tag.present? %>
-  <p class="text-muted text-center">タグ「<%= @filtered_tag %>」で絞り込み中</p>
-<% end %>
+  <!-- タグボタン群（初期非表示） -->
+  <div class="fade collapse text-center" data-ui-toggle-target="content">
+    <% current_user.tags.each do |tag| %>
+      <span
+        role="button"
+        class="badge rounded-pill mx-1 mb-2 tag-btn"
+        data-action="click->tag-toggle#toggle"
+        data-tag-toggle-name-param="<%= tag.name %>"
+        style="background-color: <%= tag.color %>; color: white; opacity: 0.5; cursor: pointer;">
+        <%= tag.name %>
+      </span>
+    <% end %>
+  </div>
+</div>

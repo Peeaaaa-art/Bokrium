@@ -1,0 +1,3 @@
+<%= turbo_stream.update "books_frame" do %>
+  <%= render partial: "books/books_frame", locals: { books: @books } %>
+<% end %>

@@ -15,20 +15,16 @@
 
 <% if user_signed_in? && !@no_books %>
   <!-- 検索窓 -->
-    <%= render "shared/search_bar", scope: "mine", placeholder: "自分の本やメモを検索",
+  <%= render "shared/search_bar", scope: "mine", placeholder: "自分の本やメモを検索",
                             form_class: "my-2 my-md-3 d-flex justify-content-center" %>
   <!-- タグによるフィルター機能 -->
-  <%= render "tag_filter" %>
+  <%= render "tag_filter", filtered_tags: @filtered_tags %>
   <!-- ソート機能 -->
   <%= render "sort_controls", filtered_tag: @filtered_tag, current_sort: params[:sort] %>
-  <!-- PC表示用 -->
-  <div class="d-none d-xxl-block">
-    <%= render partial: "bookshelf/kino_books_grid", locals: { books: @books } %>
-  </div>
-  <!-- スマホ表示用 -->
-  <div class="d-xxl-none">
-    <%= render partial: "bookshelf/simple_card", locals: { books: @books } %>
-  </div>
+
+  <turbo-frame id="books_frame">
+    <%= render partial: "books/books_frame", locals: { books: @books } %>
+  </turbo-frame>
 <% end %>
 
 <% if @no_books || !user_signed_in? %>

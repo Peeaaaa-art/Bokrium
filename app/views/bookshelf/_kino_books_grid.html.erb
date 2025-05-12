@@ -3,7 +3,7 @@
     <div class="shelf">
       <% row_books.each do |book| %>
         <div class="book-on-shelf">
-          <%= link_to book_path(book) do %>
+          <%= link_to book_path(book), data: { turbo_frame: "_top" } do %>
             <% if book.book_cover_s3.attached? %>
               <%= image_tag book.book_cover_s3.variant(resize_to_limit: [180, 270]),
                     alt: book.title,

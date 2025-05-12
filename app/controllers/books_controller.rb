@@ -10,8 +10,11 @@ class BooksController < ApplicationController
 
     return @books = sample_books.tap { @no_books = true } unless books.exists?
 
-    books = books.tagged_with(params[:tag], owned_by: current_user) if params[:tag].present?
-    @filtered_tag = params[:tag] if params[:tag].present?
+    if params[:tags].present?
+      tag_names = Array(params[:tags])
+      books = books.tagged_with(tag_names, owned_by: current_user)
+      @filtered_tags = tag_names
+    end
 
     sort_param = params[:sort]
     case sort_param
@@ -30,6 +33,11 @@ class BooksController < ApplicationController
       books = books.order(created_at: :desc)
     end
     @books = books
+
+    respond_to do |format|
+      format.html { render :index }
+      format.turbo_stream # => 自動的に index.turbo_stream.erb を探す
+    end
   end
 
   def show

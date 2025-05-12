@@ -2,13 +2,13 @@ import { Application } from "@hotwired/stimulus"
 import BarcodeController from "./controllers/barcode_controller"
 import ScanController from "./controllers/scan_controller"
 import SpinnerController from "./controllers/spinner_controller"
-// import ImageModalController from "./controllers/image_modal_controller"
 import MemoModalController from "./controllers/memo_modal_controller"
-// import TagModalController from "./controllers/tag_modal_controller"
 import ModalSwipeController from "./controllers/modal_swipe_controller"
 import ConfirmModalController from "./controllers/confirm_modal_controller"
 import ImageUploadController from "./controllers/image_upload_controller"
 import BookShelfController from "./controllers/book_shelf_controller"
+import TagToggleController from "./controllers/tag_toggle_controller"
+import UiToggleController from "./controllers/ui_toggle_controller"
 
 const application = Application.start()
 window.Stimulus = application
@@ -16,13 +16,13 @@ window.Stimulus = application
 application.register("barcode", BarcodeController)
 application.register("scan", ScanController)
 application.register("spinner", SpinnerController)
-// application.register("image-modal", ImageModalController)
-// application.register("tag-modal", TagModalController)
 application.register("memo-modal", MemoModalController)
 application.register("image-upload", ImageUploadController)
 application.register("modal-swipe", ModalSwipeController)
 application.register("confirm-modal", ConfirmModalController)
 application.register("book-shelf", BookShelfController)
+application.register("tag-toggle", TagToggleController)
+application.register("ui-toggle", UiToggleController)
 
 
 import * as bootstrap from "bootstrap"
