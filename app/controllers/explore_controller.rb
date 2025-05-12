@@ -9,6 +9,16 @@ class ExploreController < ApplicationController
       else
         search_public_memos(@query)
       end
+
+    if turbo_frame_request?
+      render turbo_stream: turbo_stream.replace(
+        "books_frame",
+        partial: @scope == "mine" ? "bookshelf/kino_books_grid" : "public_bookshelf/public_card_grid",
+        locals: @scope == "mine" ? { books: @results } : { memos: @results }
+      )
+    else
+      render :index
+    end
   end
 
   private

@@ -1,13 +1,31 @@
-<%= form_with url: explore_path, method: :get, local: true, class: local_assigns[:form_class] || "my-3 d-flex justify-content-center" do %>
-  <%= hidden_field_tag :scope, scope %>
-
-  <div class="input-group shadow-sm bg-light rounded-2 overflow-hidden" style="max-width: 480px; width: 100%;">
-    <span class="input-group-text bg-light border-0 ps-3">
-      <i class="bi bi-search text-muted"></i>
-    </span>
-    <%= text_field_tag :q, params[:q], placeholder: placeholder || "検索", class: "form-control border-0 bg-light py-2" %>
-    <button type="submit" class="btn btn-primary border-0 px-3">
-      検索
+<div data-controller="ui-toggle">
+  <!-- 検索トグルボタン（虫眼鏡アイコン） -->
+  <div class="text-center mb-2">
+    <button type="button"
+            class="btn"
+            data-action="click->ui-toggle#toggle"
+            aria-expanded="false">
+      <i class="bi bi-search fs-4"></i>
     </button>
   </div>
-<% end %>
+
+  <!-- 検索フォーム（初期は非表示） -->
+  <div class="fade collapse" data-ui-toggle-target="content">
+    <%= form_with url: explore_path, method: :get,
+                  data: { turbo_frame: "books_frame" },
+                  class: local_assigns[:form_class] || "my-3 d-flex justify-content-center" do %>
+
+      <%= hidden_field_tag :scope, scope %>
+
+      <div class="input-group shadow-sm bg-light rounded-2 overflow-hidden" style="max-width: 480px; width: 100%;">
+        <span class="input-group-text bg-light border-0 ps-3">
+          <i class="bi bi-search text-muted"></i>
+        </span>
+        <%= text_field_tag :q, params[:q], placeholder: placeholder || "検索", class: "form-control border-0 bg-light py-2" %>
+        <button type="submit" class="btn btn-primary border-0 px-3">
+          検索
+        </button>
+      </div>
+    <% end %>
+  </div>
+</div>
