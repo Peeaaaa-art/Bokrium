@@ -50,7 +50,7 @@ Rails.application.configure do
   config.cache_store = :solid_cache_store
 
   # Set host to be used by links generated in mailer templates.
-  config.action_mailer.default_url_options = { protocol: "https", host: "bokriumm-5c4e18c57830.herokuapp.com" }
+  config.action_mailer.default_url_options = { protocol: "https", host: "bokrium.com" }
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
     address:              "smtp.gmail.com",

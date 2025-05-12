@@ -7,12 +7,12 @@ default: &default
 
 development:
   <<: *default
-  database: bokriumm_development
+  database: bokrium_development
 
 
 test:
   <<: *default
-  database: bokriumm_test
+  database: bokrium_test
 
 
 production:

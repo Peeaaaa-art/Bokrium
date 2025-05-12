@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/bokriumm.iml" filepath="$PROJECT_DIR$/.idea/bokriumm.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/bokrium.iml" filepath="$PROJECT_DIR$/.idea/bokrium.iml" />
     </modules>
   </component>
 </project>
