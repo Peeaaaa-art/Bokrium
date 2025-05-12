@@ -6,4 +6,7 @@
   <%= link_to "古い順",
               books_path(tag: local_assigns[:filtered_tag], sort: "oldest"),
               class: "btn btn-outline-secondary btn-sm" %>
+  <%= link_to "タイトル順",
+              books_path(tag: filtered_tag, sort: 'title_asc'),
+              class: "btn btn-outline-secondary btn-sm #{'active' if current_sort == 'title_asc'}" %>
 </div>

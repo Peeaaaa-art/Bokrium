@@ -20,7 +20,7 @@
   <!-- タグによるフィルター機能 -->
   <%= render "tag_filter" %>
   <!-- ソート機能 -->
-  <%= render "sort_controls", filtered_tag: @filtered_tag %>
+  <%= render "sort_controls", filtered_tag: @filtered_tag, current_sort: params[:sort] %>
   <!-- PC表示用 -->
   <div class="d-none d-xxl-block">
     <%= render partial: "bookshelf/kino_books_grid", locals: { books: @books } %>

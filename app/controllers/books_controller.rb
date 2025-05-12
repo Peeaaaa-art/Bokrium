@@ -17,8 +17,10 @@ class BooksController < ApplicationController
     case sort_param
     when "oldest"
       books = books.order(created_at: :asc)
+    when "title_asc"
+      books = books.order(Arel.sql("title COLLATE \"ja-x-icu\" ASC"))
     else
-      books = books.order(created_at: :desc) # デフォルト：新しい順
+      books = books.order(created_at: :desc)
     end
     @books = books
   end
