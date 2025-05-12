@@ -1,12 +1,17 @@
-<div class="d-flex justify-content-end align-items-center gap-2 mb-3 me-5">
-  <strong class="text-muted">並び替え:</strong>
-  <%= link_to "新しい順",
-              books_path(tag: local_assigns[:filtered_tag], sort: nil),
-              class: "btn btn-outline-secondary btn-sm" %>
-  <%= link_to "古い順",
-              books_path(tag: local_assigns[:filtered_tag], sort: "oldest"),
-              class: "btn btn-outline-secondary btn-sm" %>
-  <%= link_to "タイトル順",
-              books_path(tag: filtered_tag, sort: 'title_asc'),
-              class: "btn btn-outline-secondary btn-sm #{'active' if current_sort == 'title_asc'}" %>
-</div>
+<%= form_with url: books_path, method: :get, local: true, class: "mb-3 me-5 d-flex justify-content-end", role: "sort-form" do %>
+  <%= hidden_field_tag :tag, filtered_tag if filtered_tag.present? %>
+
+  <div class="input-group" style="max-width: 220px;">
+    <span class="input-group-text bg-light text-muted">並び順</span>
+    <%= select_tag :sort,
+          options_for_select([
+            ["新しい順", nil],
+            ["古い順", "oldest"],
+            ["タイトル順", "title_asc"],
+            ["著者順", "author_asc"],
+            ["メモの更新日", "latest_memo"]
+          ], selected: current_sort),
+          class: "form-select",
+          onchange: "this.form.submit();" %>
+  </div>
+<% end %>

@@ -19,6 +19,13 @@ class BooksController < ApplicationController
       books = books.order(created_at: :asc)
     when "title_asc"
       books = books.order(Arel.sql("title COLLATE \"ja-x-icu\" ASC"))
+    when "author_asc"
+      books = books.order(author: :asc)
+    when "latest_memo"
+      books = books
+                .left_joins(:memos)
+                .group("books.id")
+                .order(Arel.sql("MAX(memos.updated_at) DESC NULLS LAST"))
     else
       books = books.order(created_at: :desc)
     end
