@@ -78,8 +78,8 @@ Rails.application.configure do
 
   # リダイレクト: www.bokrium.com → bokrium.com
   config.middleware.insert_before(Rack::Runtime, Rack::Rewrite) do
-    r301 %r{.*}, 'https://bokrium.com$&', if: Proc.new { |rack_env|
-      rack_env['SERVER_NAME'] == 'www.bokrium.com'
+    r301 %r{.*}, "https://bokrium.com$&", if: Proc.new { |rack_env|
+      rack_env["SERVER_NAME"] == "www.bokrium.com"
     }
   end
 end

@@ -1,0 +1,11 @@
+<div class="mb-3 text-center">
+  <strong>タグで絞り込む：</strong>
+  <% current_user.tags.each do |tag| %>
+    <%= link_to tag.name, books_path(tag: tag.name), class: "badge rounded-pill", style: "background-color: #{tag.color}; color: white;" %>
+  <% end %>
+  <%= link_to "すべて表示", books_path, class: "badge bg-secondary ms-2" %>
+</div>
+
+<% if defined?(@filtered_tag) && @filtered_tag.present? %>
+  <p class="text-muted text-center">タグ「<%= @filtered_tag %>」で絞り込み中</p>
+<% end %>

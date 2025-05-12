@@ -7,7 +7,11 @@ class BooksController < ApplicationController
     return @books = sample_books unless user_signed_in?
 
     books = current_user.books
+
     return @books = sample_books.tap { @no_books = true } unless books.exists?
+
+    books = books.tagged_with(params[:tag], owned_by: current_user) if params[:tag].present?
+    @filtered_tag = params[:tag] if params[:tag].present?
 
     @books = books.order(created_at: :desc)
   end
@@ -37,16 +41,15 @@ class BooksController < ApplicationController
     end
 
     if @book.save
+      set_tagger_for_all_taggings(@book)
+
       flash.now[:success] = "My本棚に『#{@book.title.truncate(30)}』を追加しました"
       respond_to do |format|
         format.turbo_stream
         format.html { redirect_to books_path, notice: "My本棚に『#{@book.title.truncate(30)}』を追加しました" }
       end
     else
-
-      error_msg = @book.errors.full_messages.to_sentence.presence || "追加に失敗しました"
-      flash.now[:danger] = error_msg
-
+      flash.now[:danger] = @book.errors.full_messages.to_sentence.presence || "追加に失敗しました"
       respond_to do |format|
         format.turbo_stream
         format.html { render :new, status: :unprocessable_entity }
@@ -63,6 +66,7 @@ class BooksController < ApplicationController
     end
 
     if @book.update(book_params)
+      set_tagger_for_all_taggings(@book)
       redirect_to @book, notice: "書籍情報が更新されました"
     else
       render :edit
@@ -74,10 +78,8 @@ class BooksController < ApplicationController
 
     respond_to do |format|
       if request.referrer&.include?("/books/#{@book.id}")
-        # 詳細ページからの削除ならHTMLでリダイレクト
         format.html { redirect_to books_path, notice: "書籍が削除されました" }
       else
-        # 一覧などからの削除ならTurbo Stream対応
         format.turbo_stream
         format.html { redirect_to books_path, notice: "書籍が削除されました" }
       end
@@ -87,10 +89,15 @@ class BooksController < ApplicationController
   def assign_tag
     @book = Book.find(params[:id])
     tag_name = params[:tag_name]
-    @book.tag_list.add(tag_name)
-    @book.save
 
-    redirect_back fallback_location: book_path(@book), notice: "#{tag_name} をタグ付けしました"
+    @book.tag_list.add(tag_name)
+
+    if @book.save
+      set_tagger_for_specific_tag(@book, tag_name)
+      redirect_back fallback_location: book_path(@book), notice: "#{tag_name} をタグ付けしました"
+    else
+      redirect_back fallback_location: book_path(@book), alert: "タグの追加に失敗しました"
+    end
   end
 
   def toggle_tag
@@ -103,7 +110,10 @@ class BooksController < ApplicationController
       @book.tag_list.add(tag_name)
     end
 
-    @book.save
+    if @book.save
+      set_tagger_for_specific_tag(@book, tag_name)
+    end
+
     redirect_back fallback_location: @book
   end
 
@@ -123,5 +133,16 @@ class BooksController < ApplicationController
 
   def sample_books
     (1..15).map { |i| Book.new(title: "optimized#{i}.jpg") }
+  end
+
+  def set_tagger_for_all_taggings(book)
+    book.taggings.update_all(tagger_id: current_user.id, tagger_type: "User")
+  end
+
+  def set_tagger_for_specific_tag(book, tag_name)
+    tag = ActsAsTaggableOn::Tag.find_by(name: tag_name)
+    return unless tag
+
+    book.taggings.where(tag_id: tag.id).update_all(tagger_id: current_user.id, tagger_type: "User")
   end
 end

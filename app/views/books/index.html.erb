@@ -17,6 +17,8 @@
   <!-- 検索窓 -->
     <%= render "shared/search_bar", scope: "mine", placeholder: "自分の本やメモを検索",
                             form_class: "my-2 my-md-3 d-flex justify-content-center" %>
+  <!-- タグによるフィルター機能 -->
+  <%= render "tag_filter" %>
   <!-- PC表示用 -->
   <div class="d-none d-xxl-block">
     <%= render partial: "bookshelf/kino_books_grid", locals: { books: @books } %>
