@@ -14,13 +14,40 @@
 <% end %>
 
 <% if user_signed_in? && !@no_books %>
-  <!-- 検索窓 -->
-  <%= render "shared/search_bar", scope: "mine", placeholder: "自分の本やメモを検索",
-                            form_class: "my-2 my-md-3 d-flex justify-content-center" %>
-  <!-- タグによるフィルター機能 -->
-  <%= render "tag_filter", filtered_tags: @filtered_tags %>
-  <!-- ソート機能 -->
-  <%= render "sort_controls", filtered_tag: @filtered_tag, current_sort: params[:sort] %>
+  <!-- 検索・タグ・ソートトグル 横並び -->
+  <!-- 📦 トップの3アイコンボタンを横並びに固定 -->
+  <div class="d-flex justify-content-center gap-3 mb-2">
+    <!-- 各トグルボタン（アイコン）だけ表示）-->
+    <button class="btn" data-bs-toggle="collapse" data-bs-target="#searchCollapse" aria-expanded="false">
+      <i class="bi bi-search fs-4"></i>
+    </button>
+    <button class="btn" data-bs-toggle="collapse" data-bs-target="#sortCollapse" aria-expanded="false">
+      <i class="bi bi-filter fs-4"></i>
+    </button>
+    <button class="btn" data-bs-toggle="collapse" data-bs-target="#tagCollapse" aria-expanded="false">
+      <i class="bi bi-tags fs-4"></i>
+    </button>
+  </div>
+
+  <!-- 📦 下の行：トグルで展開される内容（初期は非表示） -->
+  <div class="text-center">
+    <!-- 検索フォーム -->
+    <div class="collapse mb-2" id="searchCollapse">
+      <%= render "shared/search_bar", scope: "mine", placeholder: "自分の本やメモを検索" %>
+    </div>
+
+    <!-- ソート -->
+    <div class="collapse mb-2" id="sortCollapse">
+      <%= render "sort_controls", filtered_tag: @filtered_tag, current_sort: params[:sort] %>
+    </div>
+
+    <!-- タグ -->
+    <div class="collapse mb-2" id="tagCollapse"
+          data-controller="tag-toggle"
+          data-tag-toggle-selected-tags-value="<%= @filtered_tags&.join(',') %>">
+      <%= render "tag_filter", filtered_tags: @filtered_tags %>
+    </div>
+  </div>
 
   <turbo-frame id="books_frame">
     <%= render partial: "books/books_frame", locals: { books: @books } %>

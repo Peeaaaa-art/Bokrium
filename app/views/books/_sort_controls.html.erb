@@ -1,11 +1,7 @@
 <!-- ソートトグルボタン -->
-<div data-controller="ui-toggle">
-  <button class="btn btn-sm" type="button" data-action="click->ui-toggle#toggle">
-    <i class="bi bi-filter fs-4"></i>
-  </button>
 
   <!-- ソートリンク群 -->
-  <div class="mt-2" data-ui-toggle-target="content" hidden>
+  <div class="mt-2" data-ui-toggle-target="content">
     <div class="btn-group" role="group" aria-label="Sort options">
       <%= link_to "新しい順", books_path(tag: filtered_tag, sort: nil),
             class: "btn btn-outline-secondary btn-sm #{'active' if current_sort.blank?}" %>
@@ -19,4 +15,3 @@
             class: "btn btn-outline-secondary btn-sm #{'active' if current_sort == 'latest_memo'}" %>
     </div>
   </div>
-</div>
