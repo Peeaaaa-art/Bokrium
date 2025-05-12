@@ -75,9 +75,16 @@ Rails.application.configure do
   # fly.io対策?
   config.hosts.clear
   # config.assets.js_compressor = nil
+
+  # リダイレクト: www.bokrium.com → bokrium.com
+  config.middleware.insert_before(Rack::Runtime, Rack::Rewrite) do
+    r301 %r{.*}, 'https://bokrium.com$&', if: Proc.new { |rack_env|
+      rack_env['SERVER_NAME'] == 'www.bokrium.com'
+    }
+  end
 end
 
-# Rails.application.routes.default_url_options = {
-#   protocol: "https",
-#   host: "bokriumm-5c4e18c57830.herokuapp.com"
-# }
+Rails.application.routes.default_url_options = {
+  protocol: "https",
+  host: "bokrium.com"
+}
