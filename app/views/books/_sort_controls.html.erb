@@ -1,0 +1,9 @@
+<div class="d-flex justify-content-end align-items-center gap-2 mb-3 me-5">
+  <strong class="text-muted">並び替え:</strong>
+  <%= link_to "新しい順",
+              books_path(tag: local_assigns[:filtered_tag], sort: nil),
+              class: "btn btn-outline-secondary btn-sm" %>
+  <%= link_to "古い順",
+              books_path(tag: local_assigns[:filtered_tag], sort: "oldest"),
+              class: "btn btn-outline-secondary btn-sm" %>
+</div>

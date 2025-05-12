@@ -19,6 +19,8 @@
                             form_class: "my-2 my-md-3 d-flex justify-content-center" %>
   <!-- タグによるフィルター機能 -->
   <%= render "tag_filter" %>
+  <!-- ソート機能 -->
+  <%= render "sort_controls", filtered_tag: @filtered_tag %>
   <!-- PC表示用 -->
   <div class="d-none d-xxl-block">
     <%= render partial: "bookshelf/kino_books_grid", locals: { books: @books } %>

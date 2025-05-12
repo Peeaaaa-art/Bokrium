@@ -13,7 +13,14 @@ class BooksController < ApplicationController
     books = books.tagged_with(params[:tag], owned_by: current_user) if params[:tag].present?
     @filtered_tag = params[:tag] if params[:tag].present?
 
-    @books = books.order(created_at: :desc)
+    sort_param = params[:sort]
+    case sort_param
+    when "oldest"
+      books = books.order(created_at: :asc)
+    else
+      books = books.order(created_at: :desc) # デフォルト：新しい順
+    end
+    @books = books
   end
 
   def show
