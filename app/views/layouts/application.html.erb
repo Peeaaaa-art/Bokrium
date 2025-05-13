@@ -44,7 +44,9 @@
         <span class="visually-hidden">Loading...</span>
       </div>
     </div>
-    <%= yield %>
+     <main style="flex: 1;">
+      <%= yield %>
+    </main>
     <%= render "shared/footer" %>
     <%= turbo_frame_tag "modal" %>
   </body>

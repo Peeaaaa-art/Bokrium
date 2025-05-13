@@ -1,15 +1,14 @@
-<!-- ソートリンク群 -->
-<div class="mt-2" data-ui-toggle-target="content">
-  <div class="btn-group" role="group" aria-label="Sort options">
+<div class="d-flex justify-content-center">
+  <div class="d-flex flex-wrap gap-2 px-3 py-2 bg-white border rounded-pill shadow-sm align-items-center">
     <%= link_to "新しい順", books_path(tag: filtered_tag, sort: nil),
-          class: "btn btn-outline-secondary btn-sm #{'active' if current_sort.blank?}" %>
+          class: "btn btn-outline-secondary btn-sm rounded-pill #{'active' if current_sort.blank?}" %>
     <%= link_to "古い順", books_path(tag: filtered_tag, sort: "oldest"),
-          class: "btn btn-outline-secondary btn-sm #{'active' if current_sort == 'oldest'}" %>
+          class: "btn btn-outline-secondary btn-sm rounded-pill #{'active' if current_sort == 'oldest'}" %>
     <%= link_to "タイトル順", books_path(tag: filtered_tag, sort: "title_asc"),
-          class: "btn btn-outline-secondary btn-sm #{'active' if current_sort == 'title_asc'}" %>
+          class: "btn btn-outline-secondary btn-sm rounded-pill #{'active' if current_sort == 'title_asc'}" %>
     <%= link_to "著者順", books_path(tag: filtered_tag, sort: "author_asc"),
-          class: "btn btn-outline-secondary btn-sm #{'active' if current_sort == 'author_asc'}" %>
+          class: "btn btn-outline-secondary btn-sm rounded-pill #{'active' if current_sort == 'author_asc'}" %>
     <%= link_to "メモ更新順", books_path(tag: filtered_tag, sort: "latest_memo"),
-          class: "btn btn-outline-secondary btn-sm #{'active' if current_sort == 'latest_memo'}" %>
+          class: "btn btn-outline-secondary btn-sm rounded-pill #{'active' if current_sort == 'latest_memo'}" %>
   </div>
 </div>
