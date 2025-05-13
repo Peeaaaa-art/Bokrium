@@ -1,9 +1,13 @@
 .books-grid {
   display: flex;
   flex-direction: column;
-  gap: 64px;
-  padding: 2rem 1rem;
-  background-color:rgba(221, 231, 233, 0.148);
+  gap: 24px;
+  // padding: 0.2rem 0.1rem;
+  background-color:rgba(219, 229, 231, 0.294);
+
+  @media (max-width: 576px) {
+    gap: 12px;
+  }
 }
 
 .shelf {
@@ -14,6 +18,11 @@
   gap: 24px;
   position: relative;
   min-height: 280px;
+
+  @media (max-width: 576px) {
+    gap: 8px;
+    min-height: 140px;
+  }
 }
 
 .shelf::before {
@@ -23,7 +32,7 @@
   left: 5%;
   width: 90%;
   height: 20px;
-  background: linear-gradient(145deg, #1e3d73, #00274d);
+  background: linear-gradient(145deg, #1e3d73, #04294ec9);
   box-shadow:
     0 2px 8px rgba(0, 0, 0, 0.4),
     inset 0 -1px 2px rgba(255,255,255,0.15),
@@ -40,7 +49,7 @@
   left: 5%;
   width: 90%;
   height: 4px;
-  background: linear-gradient(to right, rgba(255,255,255,0.4), rgba(255,255,255,0.1));
+  background: linear-gradient(to right, rgba(6, 29, 82, 0.27), rgba(10, 4, 94, 0.1));
   border-radius: 2px;
   z-index: 1; // 👈 棚より前に出す
   pointer-events: none;
@@ -49,6 +58,16 @@
     0 1px 2px rgba(255, 255, 255, 0.3),
     0 -1px 2px rgba(0, 0, 0, 0.2); // 上面と下面の光と影
   mix-blend-mode: screen;          // ⛳ 光の屈折感（必殺技）
+}
+
+.shelf::before,
+.shelf::after {
+
+
+  @media (max-width: 576px) {
+    left: 2%;
+    width: 96%;
+  }
 }
 
 .book-on-shelf {

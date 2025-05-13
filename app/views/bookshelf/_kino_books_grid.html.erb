@@ -1,5 +1,5 @@
 <div id="books-grid" class="books-grid" data-controller="book-shelf">
-  <% books.each_slice((params[:slice] || 12).to_i) do |row_books| %>
+  <% books.each_slice(@slice || 10) do |row_books| %>
     <div class="shelf">
       <% row_books.each do |book| %>
         <div class="book-on-shelf">
