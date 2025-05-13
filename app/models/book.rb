@@ -1,5 +1,4 @@
 class Book < ApplicationRecord
-  include MeiliSearch::Rails
   include PgSearch::Model
 
   belongs_to :user
@@ -22,10 +21,4 @@ class Book < ApplicationRecord
                     tsearch: { prefix: true },
                     trigram: { threshold: 0.1 }
                   }
-
-  meilisearch do
-    attribute :id, :title, :author, :publisher, :isbn,  :status
-    attribute :tag_list
-    attribute :created_at, :updated_at
-  end
 end
