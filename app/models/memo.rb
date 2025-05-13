@@ -22,10 +22,11 @@ class Memo < ApplicationRecord
     tsearch: {
       tsvector_column: "text_index",
       dictionary: "simple",
-      prefix: true
+      prefix: true,
+      any_word: true
     },
     trigram: {
-      threshold: 0.05
+      threshold: 0.03
     }
   }
 
