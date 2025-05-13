@@ -4,10 +4,9 @@
 
   <%= hidden_field_tag :scope, scope %>
 
-  <div class="input-group shadow-sm bg-light rounded-2 overflow-hidden" style="max-width: 550px; width: 90%;">
-
-    <%= text_field_tag :q, params[:q], placeholder: placeholder || "検索", class: "form-control border-0 bg-light py-2" %>
-    <button type="submit" class="btn btn-primary border-0 px-3">
+  <div class="input-group search-box shadow-sm bg-white border rounded-pill overflow-hidden" style="max-width: 550px; width: 90%;">
+    <%= text_field_tag :q, params[:q], placeholder: placeholder || "検索", class: "form-control border-0 bg-white py-2" %>
+    <button type="submit" class="btn btn-primary border-0 px-4 rounded-pill">
       検索
     </button>
   </div>

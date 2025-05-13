@@ -16,21 +16,28 @@
 <% if user_signed_in? && !@no_books %>
   <!-- 検索・タグ・ソートトグル 横並び -->
   <!-- 📦 トップの3アイコンボタンを横並びに固定 -->
-  <div class="d-flex justify-content-center gap-3 mb-2">
-    <!-- 各トグルボタン（アイコン）だけ表示）-->
-    <button class="btn" data-bs-toggle="collapse" data-bs-target="#searchCollapse" aria-expanded="false">
-      <i class="bi bi-search fs-4"></i>
+ <!-- 📦 トップの3アイコンボタン（洗練版） -->
+<div class="d-flex justify-content-center mt-3 mb-3">
+  <div class="filter-controls border rounded-pill shadow-sm px-4 py-2 d-flex align-items-center gap-3">
+    <!-- 検索 -->
+    <button class="btn btn-icon" data-bs-toggle="collapse" data-bs-target="#searchCollapse" aria-expanded="false">
+      <i class="bi bi-search icon-refined"></i>
     </button>
-    <button class="btn" data-bs-toggle="collapse" data-bs-target="#sortCollapse" aria-expanded="false">
-      <i class="bi bi-filter fs-4"></i>
+
+    <!-- ソート -->
+    <button class="btn btn-icon" data-bs-toggle="collapse" data-bs-target="#sortCollapse" aria-expanded="false">
+      <i class="bi bi-filter icon-refined"></i>
     </button>
-    <button class="btn" data-bs-toggle="collapse" data-bs-target="#tagCollapse" aria-expanded="false">
-      <i class="bi bi-tags fs-4"></i>
+
+    <!-- タグ -->
+    <button class="btn btn-icon" data-bs-toggle="collapse" data-bs-target="#tagCollapse" aria-expanded="false">
+      <i class="bi bi-tags icon-refined"></i>
     </button>
   </div>
+</div>
 
   <!-- 📦 下の行：トグルで展開される内容（初期は非表示） -->
-  <div class="text-center">
+  <div class="">
     <!-- 検索フォーム -->
     <div class="collapse mb-2" id="searchCollapse">
       <%= render "shared/search_bar", scope: "mine", placeholder: "自分の本やメモを検索" %>

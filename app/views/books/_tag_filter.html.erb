@@ -1,10 +1,14 @@
-<% current_user.tags.each do |tag| %>
-  <span
-    role="button"
-    class="badge rounded-pill mx-1 mb-2 tag-btn"
-    data-action="click->tag-toggle#toggle"
-    data-tag-toggle-name-param="<%= tag.name %>"
-    style="background-color: <%= tag.color %>; color: white; opacity: 0.5; cursor: pointer;">
-    <%= tag.name %>
-  </span>
-<% end %>
+<div class="d-flex justify-content-center">
+  <div class="d-flex flex-wrap gap-2 px-3 py-2 bg-white border rounded-pill shadow-sm align-items-center">
+    <% current_user.tags.each do |tag| %>
+      <span
+        role="button"
+        class="badge rounded-pill tag-btn text-white"
+        data-action="click->tag-toggle#toggle"
+        data-tag-toggle-name-param="<%= tag.name %>"
+        style="background-color: <%= tag.color %>; cursor: pointer;">
+        <%= tag.name %>
+      </span>
+    <% end %>
+  </div>
+</div>

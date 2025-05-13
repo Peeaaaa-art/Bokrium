@@ -1,19 +1,10 @@
-<footer class="footer rhodia-gray border-top py-4 mt-auto">
+<footer class="border-top rhodia-paper-header py-3 mt-5">
   <div class="container text-center">
-    <div>
-      <%= link_to "Bokrium", root_path, class: "big-shoulders-inline-bold logo-footer text-light", style: "font-size: 2.5rem; text-decoration: none;" %>
+    <div class="d-flex flex-wrap justify-content-center gap-4 small text-secondary">
+      <%= link_to "利用規約", root_path, class: "text-decoration-none footer-link" %>
+      <%= link_to "プライバシーポリシー", root_path, class: "text-decoration-none footer-link" %>
+      <%= link_to "お問い合わせ", root_path, class: "text-decoration-none footer-link" %>
     </div>
-
-    <div class="d-flex justify-content-center flex-nowrap gap-3 mt-2 mb-0 small overflow-x-auto" style="list-style: none; padding-left: 0;">
-      <div class="text-nowrap">
-        <%= link_to "利用規約", root_path, class: "footer-link text-white-50" %>
-      </div>
-      <div class="text-nowrap">
-        <%= link_to "プライバシーポリシー", root_path, class: "footer-link text-white-50" %>
-      </div>
-      <div class="text-nowrap">
-        <%= link_to "お問い合わせ", root_path, class: "footer-link text-white-50" %>
-      </div>
-    </div>
+    <div class="mt-2 small text-muted">&copy; <%= Time.current.year %> Bokrium. All rights reserved.</div>
   </div>
 </footer>
