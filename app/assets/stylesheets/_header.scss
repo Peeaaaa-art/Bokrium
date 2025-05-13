@@ -3,3 +3,30 @@
     font-size: 1.1rem;
   }
 }
+
+/* 共通拡大アニメーション */
+.navbar img,
+.navbar .rounded-circle {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.navbar img:hover,
+.navbar .rounded-circle:hover {
+  transform: scale(1.08);
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Lucideアイコン（<svg data-lucide=...>）にホバーアニメーションを付与 */
+.navbar svg[data-lucide] {
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.navbar svg[data-lucide]:hover {
+  transform: translateY(-1px) scale(1.05);
+  color: #0d6efd; /* 好きなアクセントカラーに変更可 */
+}
+
+.navbar svg[data-lucide].active,
+.navbar a.active svg[data-lucide] {
+  stroke: #0d6efd; // 青く
+}

@@ -1,9 +1,12 @@
 <footer class="border-top rhodia-paper-header py-3 mt-5">
   <div class="container text-center">
+    <%= link_to root_path, class: "navbar-brand fw-bold text-dark big-shoulders-inline-bold", style: "font-size: 3.6rem; letter-spacing: 0.03em;" do %>
+      Bokrium
+    <% end %>
     <div class="d-flex flex-wrap justify-content-center gap-4 small text-secondary">
-      <%= link_to "利用規約", root_path, class: "text-decoration-none footer-link" %>
-      <%= link_to "プライバシーポリシー", root_path, class: "text-decoration-none footer-link" %>
-      <%= link_to "お問い合わせ", root_path, class: "text-decoration-none footer-link" %>
+      <%= link_to "Terms", root_path, class: "text-decoration-none footer-link" %>
+      <%= link_to "Privacy", root_path, class: "text-decoration-none footer-link" %>
+      <%= link_to "Contact", root_path, class: "text-decoration-none footer-link" %>
     </div>
     <div class="mt-2 small text-muted">&copy; <%= Time.current.year %> Bokrium. All rights reserved.</div>
   </div>

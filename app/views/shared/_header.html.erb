@@ -2,28 +2,35 @@
   <div class="container-fluid d-flex justify-content-between align-items-center" style="min-height: 72px;">
 
     <!-- 左：ロゴ -->
-    <%= link_to root_path, class: "navbar-brand fw-bold text-dark big-shoulders-inline-bold", style: "font-size: 1.8rem; letter-spacing: 0.03em;" do %>
-      Bokrium
+    <%= link_to root_path, class: "navbar-brand rounded", style: "letter-spacing: 0.03em;" do %>
+      <%= image_tag "bok_logo2.jpg", alt: "Bokrium", class: "rounded-circle shadow-sm", style: "width: 50px; height: 50px; object-fit: cover;" %>
     <% end %>
 
     <!-- 中央：ナビアイコン -->
     <div class="d-flex align-items-center justify-content-center gap-4 gap-md-5">
-      <%= link_to books_path, class: "text-dark" do %>
-        <i data-lucide="library-big" style="width: 24px; height: 24px;"></i>
-      <% end %>
-      <%= link_to search_books_path, class: "text-dark" do %>
+      <% current_path = request.path %>
+      <!-- 🔍 検索ページ -->
+      <%= link_to search_books_path, class: "text-dark #{current_path.starts_with?('/search') ? 'active' : ''}" do %>
         <i data-lucide="search" style="width: 24px; height: 24px;"></i>
       <% end %>
-      <%= link_to public_bookshelf_index_path, class: "text-dark" do %>
+
+      <!-- 📚 本棚ページ -->
+      <%= link_to books_path, class: "text-dark #{current_path.starts_with?('/books') ? 'active' : ''}" do %>
+        <i data-lucide="library-big" style="width: 24px; height: 24px;"></i>
+      <% end %>
+
+      <!-- 👥 公開本棚ページ -->
+      <%= link_to public_bookshelf_index_path, class: "text-dark #{current_path.starts_with?('/public_bookshelf') ? 'active' : ''}" do %>
         <i data-lucide="users" style="width: 24px; height: 24px;"></i>
       <% end %>
+
     </div>
 
     <!-- 右：アバター -->
     <div class="d-flex align-items-center">
       <% if user_signed_in? %>
         <%= link_to user_path(current_user) do %>
-          <%= image_tag user_avatar(current_user, size: 36), class: "rounded-circle shadow-sm", style: "width: 36px; height: 36px; object-fit: cover;" %>
+          <%= image_tag user_avatar(current_user, size: 36), class: "rounded-circle shadow-sm", style: "width: 48px; height: 48px; object-fit: cover;" %>
         <% end %>
       <% else %>
         <%= link_to 'ログイン', new_user_session_path, class: "btn btn-outline-dark btn-sm" %>
