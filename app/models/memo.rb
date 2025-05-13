@@ -1,6 +1,8 @@
 class Memo < ApplicationRecord
   include PgSearch::Model
   include RandomSelectable
+  include MeiliSearch::Rails
+
   belongs_to :user
   belongs_to :book
 
@@ -27,6 +29,18 @@ class Memo < ApplicationRecord
       threshold: 0.05
     }
   }
+
+  meilisearch do
+    attribute :content
+    attribute :visibility
+    attribute :book_id
+    attribute :book_title do
+      book&.title || ""
+    end
+    attribute :book_author do
+      book&.author || ""
+    end
+  end
 
   def ensure_public_token_if_shared
     if shared? && public_token.blank?

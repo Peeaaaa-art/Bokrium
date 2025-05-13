@@ -63,7 +63,6 @@ class MemosController < ApplicationController
 
   def memo_params
     params.require(:memo).permit(:content, :visibility).tap do |prm|
-    # enum変換
     # memo_params
     prm[:visibility] = Memo::VISIBILITY[prm[:visibility].to_sym] if prm[:visibility]
     end
