@@ -1,6 +1,6 @@
   <div class="books-grid-iphone">
     <% books.each do |book| %>
-        <%= link_to book_path(book) do %>
+        <%= link_to book_path(book), data: { turbo_frame: "_top" } do %>
           <% if book.book_cover_s3.attached? %>
             <%= image_tag book.book_cover_s3.variant(resize_to_limit: [200, 300]), alt: book.title, class: "book-cover-iphone img-fluid rounded" %>
           <% elsif book.book_cover.present? %>

@@ -1,6 +1,7 @@
 class Memo < ApplicationRecord
   include PgSearch::Model
   include RandomSelectable
+
   belongs_to :user
   belongs_to :book
 
@@ -21,12 +22,14 @@ class Memo < ApplicationRecord
     tsearch: {
       tsvector_column: "text_index",
       dictionary: "simple",
-      prefix: true
+      prefix: true,
+      any_word: true
     },
     trigram: {
-      threshold: 0.05
+      threshold: 0.03
     }
   }
+
 
   def ensure_public_token_if_shared
     if shared? && public_token.blank?

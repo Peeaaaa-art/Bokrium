@@ -1,0 +1,9 @@
+<!-- PC表示用 -->
+<div class="d-none d-xxl-block">
+  <%= render partial: "bookshelf/kino_books_grid", locals: { books: books } %>
+</div>
+
+<!-- スマホ表示用 -->
+<div class="d-xxl-none">
+  <%= render partial: "bookshelf/simple_card", locals: { books: books } %>
+</div>
