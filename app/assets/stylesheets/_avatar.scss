@@ -17,3 +17,11 @@
 .avatar-circle-mini {
   @include avatar-circle(40px);
 }
+
+.line-qr {
+  max-width: 200px;
+
+  @media (max-width: 576px) {
+    max-width: 165px;
+  }
+}
