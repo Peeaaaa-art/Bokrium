@@ -33,6 +33,7 @@ gem "acts-as-taggable-on"
 gem "nokogiri"
 gem "pg_search"
 gem "rack-rewrite"
+gem "line-bot-api"
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: %i[ windows jruby ]

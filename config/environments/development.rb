@@ -83,6 +83,8 @@ Rails.application.configure do
 
   config.web_console.permissions = "192.168.0.33"
   config.web_console.permissions = "192.168.0.74"
+
+  config.hosts << /[a-z0-9\-]+\.ngrok\-free\.app/
 end
 
 Rails.application.routes.default_url_options = {
