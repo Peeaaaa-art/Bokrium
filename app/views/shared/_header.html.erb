@@ -3,7 +3,7 @@
 
     <!-- 左：ロゴ -->
     <%= link_to root_path, class: "navbar-brand rounded", style: "letter-spacing: 0.03em;" do %>
-      <%= image_tag "bok_logo2.jpg", alt: "Bokrium", class: "rounded-circle shadow-sm", style: "width: 50px; height: 50px; object-fit: cover;" %>
+      <%= raw File.read(Rails.root.join("app/assets/images/bokrium_logo.svg")) %>
     <% end %>
 
     <!-- 中央：ナビアイコン -->
@@ -39,3 +39,4 @@
 
   </div>
 </nav>
+
