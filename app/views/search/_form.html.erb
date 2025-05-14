@@ -1,4 +1,4 @@
-<div class="d-flex justify-content-center px-3">
+<div class="d-flex justify-content-center px-3 mt-4 mt-md-5">
   <div style="max-width: 800px; width: 100%;">
     <%= form_with url: "#", method: :get, local: true, id: "search-form", data: { controller: "spinner" } do %>
       <div class="row g-2 align-items-center">
@@ -6,15 +6,15 @@
           <%= label_tag :type, "検索種別", class: "form-label" %>
           <%= select_tag :type,
                 options_for_select([["タイトル", "title"], ["著者", "author"], ["ISBN", "isbn"]], params[:type]),
-                class: "form-select",
+                class: "form-select bg-light-bok",
                 onchange: "this.form.submit()" %>
         </div>
 
         <div class="col-md-6">
           <%= label_tag :query, "検索キーワード", class: "form-label" %>
           <div class="input-group">
-            <span class="input-group-text"><i class="bi bi-search"></i></span>
-            <%= text_field_tag :query, params[:query], class: "form-control", placeholder: placeholder_for(params[:type]) %>
+            <span class="input-group-text bg-light-bok"><i class="bi bi-search"></i></span>
+            <%= text_field_tag :query, params[:query], class: "form-control bg-light-bok", placeholder: placeholder_for(params[:type]) %>
           </div>
         </div>
 

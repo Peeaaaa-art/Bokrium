@@ -1,14 +1,13 @@
 <nav class="navbar shadow-sm border-bottom rhodia-paper-header py-2 px-3">
   <div class="container-fluid d-flex justify-content-between align-items-center" style="min-height: 72px;">
-
+    <% current_path = request.path %>
     <!-- 左：ロゴ -->
-    <%= link_to root_path, class: "navbar-brand rounded", style: "letter-spacing: 0.03em;" do %>
+    <%= link_to root_path, class: "navbar-brand rounded  #{current_page?(root_path) ? 'active' : ''}", style: "letter-spacing: 0.03em;" do %>
       <%= raw File.read(Rails.root.join("app/assets/images/bokrium_logo.svg")) %>
     <% end %>
 
     <!-- 中央：ナビアイコン -->
-    <div class="d-flex align-items-center justify-content-center gap-4 gap-md-5">
-      <% current_path = request.path %>
+    <div class="d-flex align-items-center justify-content-center gap-5">
       <!-- 🔍 検索ページ -->
       <%= link_to search_books_path, class: "text-dark #{current_path.starts_with?('/search') ? 'active' : ''}" do %>
         <i data-lucide="search" style="width: 24px; height: 24px;"></i>
@@ -30,7 +29,7 @@
     <div class="d-flex align-items-center">
       <% if user_signed_in? %>
         <%= link_to user_path(current_user) do %>
-          <%= image_tag user_avatar(current_user, size: 36), class: "rounded-circle shadow-sm", style: "width: 48px; height: 48px; object-fit: cover;" %>
+          <%= image_tag user_avatar(current_user, size: 36), class: "rounded-circle shadow-sm ms-2", style: "width: 48px; height: 48px; object-fit: cover;" %>
         <% end %>
       <% else %>
         <%= link_to 'ログイン', new_user_session_path, class: "btn btn-outline-dark btn-sm" %>

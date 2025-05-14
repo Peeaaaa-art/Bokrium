@@ -1,28 +1,29 @@
+<% content_for :title, "ユーザー - Bokrium" %>
+
 <div class="container my-5">
-  <div class="card shadow mb-4">
-    <div class="card-header bg-primary text-white">
-      <h3 class="mb-0"><%= t('users.show.title', default: 'ユーザー詳細') %></h3>
+  <div class="card shadow-sm mb-4">
+    <div class="card-header bg-rhodia-blue text-white">
     </div>
-    <div class="card-body">
+    <div class="card-body bg-light-blue">
       <div class="row align-items-center">
         <div class="col-md-3 text-center">
-            <%= image_tag user_avatar(current_user, size: :large), alt: current_user.name, class: "avatar-circle" %>
+            <%= image_tag user_avatar(current_user, size: :large), alt: current_user.name, class: "avatar-circle mb-3" %>
         </div>
         <div class="col-md-9">
           <ul class="list-group list-group-flush">
-            <li class="list-group-item">
+            <li class="list-group-item bg-light-bok">
               <strong><%= User.human_attribute_name(:name) %>:</strong>
               <span class="ms-2"><%= current_user.name %></span>
             </li>
-            <li class="list-group-item">
+            <li class="list-group-item  bg-light-bok">
               <strong><%= User.human_attribute_name(:email) %>:</strong>
               <span class="ms-2"><%= current_user.email %></span>
             </li>
-            <li class="list-group-item">
+            <li class="list-group-item  bg-light-bok">
               <strong><%= User.human_attribute_name(:introduction) %>:</strong>
               <span class="ms-2"><%= current_user.introduction %></span>
             </li>
-            <li class="list-group-item">
+            <li class="list-group-item  bg-light-bok">
               <strong><%= t('users.show.registered_at', default: '登録日') %>:</strong>
               <span class="ms-2"><%= l(current_user.created_at, format: :long) %></span>
             </li>
