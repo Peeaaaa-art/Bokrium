@@ -41,14 +41,14 @@
 
 </div>
 
-  <div class="text-center my-2">
-    <%= link_to "/auth/line", class: "btn btn-success mb-3 d-inline-flex align-items-center gap-2" do %>
-      <i class="bi bi-line" style="font-size: 1.6rem;"></i>
-      <span>LINEと連携する</span>
-    <% end %>
-  </div>
-   <div class="text-center my-2">
-    <%= image_tag "line_qr_code.png",
-                  alt: "LINE友達追加",
-                  class: "img-fluid rounded line-qr" %>
-  </div>
+<div class="text-center my-2">
+  <p class="text-muted mb-2">
+    LINEと連携すると、あなたが書いた読書メモから<br class="d-sm-none">
+    1日1件ランダムで通知をお届けします。
+  </p>
+
+  <%= link_to "/auth/line", class: "btn btn-success mt-3 d-inline-flex align-items-center gap-2" do %>
+    <i class="bi bi-line" style="font-size: 1.6rem;"></i>
+    <span>LINEと連携する</span>
+  <% end %>
+</div>
