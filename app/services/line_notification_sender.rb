@@ -1,5 +1,11 @@
 # app/services/line_notification_sender.rb
 class LineNotificationSender
+  def self.send_all
+    User.joins(:line_user).find_each do |user|
+      send_random_memo_to(user)
+    end
+  end
+
   def self.send_random_memo_to(user)
     return unless user&.line_user&.line_id.present?
     return if user.memos.empty?
@@ -11,7 +17,7 @@ class LineNotificationSender
 
     request = Line::Bot::V2::MessagingApi::PushMessageRequest.new(
       to: user.line_user.line_id,
-      messages: [ message ]
+      messages: [message]
     )
 
     client = Line::Bot::V2::MessagingApi::ApiClient.new(

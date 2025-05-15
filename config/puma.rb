@@ -1,19 +1,19 @@
 threads_count = ENV.fetch("RAILS_MAX_THREADS", 3)
 threads threads_count, threads_count
 
-if defined?(Rails) && Rails.env.development? && ENV["USE_SSL"] == "true"
-  key_path  = File.expand_path("~/ssl-dev/localhost.key")
-  cert_path = File.expand_path("~/ssl-dev/localhost.crt")
+# if defined?(Rails) && Rails.env.development? && ENV["USE_SSL"] == "true"
+#   key_path  = File.expand_path("~/ssl-dev/localhost.key")
+#   cert_path = File.expand_path("~/ssl-dev/localhost.crt")
 
-  if File.exist?(key_path) && File.exist?(cert_path)
-    ssl_bind "0.0.0.0", "3000", {
-      key: key_path,
-      cert: cert_path
-    }
-  end
-else
+#   if File.exist?(key_path) && File.exist?(cert_path)
+#     ssl_bind "0.0.0.0", "3000", {
+#       key: key_path,
+#       cert: cert_path
+#     }
+#   end
+# else
   port ENV.fetch("PORT", 3000)
-end
+# end
 
 # Allow puma to be restarted by `bin/rails restart` command.
 plugin :tmp_restart
