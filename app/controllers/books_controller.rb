@@ -1,7 +1,7 @@
 class BooksController < ApplicationController
-  before_action :authenticate_user!, only: [ :create, :edit, :update, :destroy ]
+  before_action :authenticate_user!, only: [ :create, :show, :edit, :update, :destroy ]
   before_action :set_book, only: [ :show, :edit, :update, :destroy ]
-  before_action :authorize_book, only: [ :edit, :update, :destroy ]
+  before_action :authorize_book, only: [ :show, :edit, :update, :destroy ]
 
   def index
     return @books = sample_books unless user_signed_in?

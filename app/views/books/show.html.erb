@@ -184,7 +184,7 @@
           <%= render "memos/read_only_item", book: @book, memo: memo %>
         <% end %>
 
-        <%= render partial: "memos/read_only_item", collection: @memos.drop(1), as: :memo, locals: { book: @book } %>
+        <%= render partial: "memos/read_only_item", collection: @memos.drop(1).compact, as: :memo, locals: { book: @book } %>
       <% else %>
         <!-- 新規メモの read_only 表示（まだ保存されていない状態） -->
         <%= render "memos/read_only_item", book: @book, memo: @new_memo %>

@@ -20,14 +20,14 @@
 # Learn more: http://github.com/javan/whenever
 
 set :output, "log/cron.log"
-set :environment, 'development'
+set :environment, "development"
 # rbenv を手動で初期化（超重要！）
-env :PATH,"/Users/hayashiakira/.rbenv/shims:/Users/hayashiakira/.rbenv/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin"
+env :PATH, "/Users/hayashiakira/.rbenv/shims:/Users/hayashiakira/.rbenv/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin"
 
 # rbenvの初期化＋rails runner実行を定義
 job_type :runner, %Q{cd :path && export PATH="$HOME/.rbenv/bin:$HOME/.rbenv/shims:$PATH" && eval "$(rbenv init - bash)" && bundle exec bin/rails runner -e :environment ':task' :output}
 
-every 1.day, at: '9:00 am' do
+every 1.day, at: "9:00 am" do
   runner "LineNotificationSender.send_all"
 end
 
