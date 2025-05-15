@@ -32,6 +32,6 @@ every 1.day, at: "9:00 am" do
 end
 
 # 1分おきにテスト
-# every 1.minute do
-#   runner "LineNotificationSender.send_all"
-# end
+every 1.minute do
+  runner "LineNotificationSender.send_all"
+end

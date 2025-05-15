@@ -47,6 +47,25 @@
       <i class="bi bi-line"></i>
       LINE連携済み
     </span>
+    <div class="d-flex justify-content-center my-5">
+      <div class="subtle-shadow bg-light-bok rounded-3 px-4 py-3 d-flex justify-content-between align-items-center gap-3 w-100" style="max-width: 440px;">
+        <label for="notifications_enabled" class="fw-semibold fs-6 mb-0">
+          ランダム通知は<%= current_user.line_user.notifications_enabled? ? "ON" : "OFF" %>です
+        </label>
+        <%= form_with model: current_user.line_user, url: toggle_notifications_path, method: :patch, class: "m-0" do |f| %>
+          <div class="form-check form-switch m-0">
+            <%= f.check_box :notifications_enabled,
+                  class: "form-check-input",
+                  id: "notifications_enabled",
+                  role: "switch",
+                  checked: current_user.line_user.notifications_enabled,
+                  value: true,
+                  data: { turbo: false },
+                  onchange: "this.form.submit()" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
   <% else %>
     <p class="text-muted mb-2">
       LINEと連携すると、あなたの作成した読書メモから<br class="d-sm-none">

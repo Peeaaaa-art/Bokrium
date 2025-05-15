@@ -1,7 +1,7 @@
 # app/services/line_notification_sender.rb
 class LineNotificationSender
   def self.send_all
-    User.joins(:line_user).find_each do |user|
+    User.joins(:line_user).merge(LineUser.where(notifications_enabled: true)).find_each do |user|
       send_random_memo_to(user)
     end
   end
@@ -12,9 +12,8 @@ class LineNotificationSender
 
     memo = user.memos.order("RANDOM()").first
     book = memo.book
-    app_host = "https://43df-240b-13-8060-400-dd8d-e04-4dc-f2a6.ngrok-free.app/" || Rails.application.routes.default_url_options[:host] || ENV["APP_HOST"] || "https://bokrium.com"
+    app_host = ENV["APP_HOST"] || Rails.application.routes.default_url_options[:host] || "https://bokrium.com"
     book_url = Rails.application.routes.url_helpers.book_url(book, host: app_host)
-    book_url = "https://43df-240b-13-8060-400-dd8d-e04-4dc-f2a6.ngrok-free.app/books/24"
 
     message_text = <<~TEXT
       📚 今日のあなたのメモ

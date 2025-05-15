@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   post "/presigned_url", to: "uploads#presigned_url"
   post "/callback", to: "line_webhooks#callback"
   get "/auth/line/callback", to: "line_sessions#create"
+  patch "/line_notifications/toggle", to: "line_notifications#toggle", as: :toggle_notifications
 
   devise_for :users, controllers: { registrations: "users/registrations" }
   resources :users, only: [ :index, :show ]
