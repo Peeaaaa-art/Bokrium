@@ -3,7 +3,9 @@ module UsersHelper
     image = if user.avatar_s3.attached?
               variant_for(user.avatar_s3, size)
     else
-              asset_path("avatar_default.jpg")
+        num = (user.id % 7) + 1
+        # num = rand(1..7)
+        asset_path("avatar_default#{num}.png")
     end
     image
   end
