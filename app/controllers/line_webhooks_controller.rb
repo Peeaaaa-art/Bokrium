@@ -4,8 +4,8 @@ class LineWebhooksController < ApplicationController
 
   def callback
     body = request.body.read
-    signature = request.env['HTTP_X_LINE_SIGNATURE']
-    parser = Line::Bot::V2::WebhookParser.new(channel_secret: ENV['LINE_CHANNEL_SECRET'])
+    signature = request.env["HTTP_X_LINE_SIGNATURE"]
+    parser = Line::Bot::V2::WebhookParser.new(channel_secret: ENV["LINE_CHANNEL_SECRET"])
 
     begin
       events = parser.parse(body: body, signature: signature)

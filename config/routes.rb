@@ -7,7 +7,8 @@ Rails.application.routes.draw do
   get "search/isbn_turbo", to: "search#search_isbn_turbo", as: :search_isbn_turbo
   get "search/search_google_books", to: "search#search_google_books", as: :search_google_books
   post "/presigned_url", to: "uploads#presigned_url"
-  post '/callback', to: 'line_webhooks#callback'
+  post "/callback", to: "line_webhooks#callback"
+  get "/auth/line/callback", to: "line_sessions#create"
 
   devise_for :users, controllers: { registrations: "users/registrations" }
   resources :users, only: [ :index, :show ]

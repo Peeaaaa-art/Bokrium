@@ -12,7 +12,7 @@ message = Line::Bot::V2::MessagingApi::TextMessage.new(text: "こんにちは、
 
 request = Line::Bot::V2::MessagingApi::PushMessageRequest.new(
   to: ENV.fetch("MY_LINE_USER_ID"),
-  messages: [message]
+  messages: [ message ]
 )
 
 response = client.push_message(push_message_request: request)
