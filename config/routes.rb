@@ -10,6 +10,8 @@ Rails.application.routes.draw do
   post "/callback", to: "line_webhooks#callback"
   get "/auth/line/callback", to: "line_sessions#create"
   patch "/line_notifications/toggle", to: "line_notifications#toggle", as: :toggle_notifications
+  post "line_notifications/trigger", to: "line_notifications#trigger"
+  resource :line_user, only: [ :destroy ]
 
   devise_for :users, controllers: { registrations: "users/registrations" }
   resources :users, only: [ :index, :show ]
