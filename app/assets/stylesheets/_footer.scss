@@ -1,7 +1,10 @@
 .logo-footer {
-  font-family: "Big Shoulders Inline", sans-serif;
-  font-weight: 700;
-  letter-spacing: 0.02em;
+  font-size: 2.4rem;
+  letter-spacing: 0.03em;
+
+  @media (max-width: 576px) {
+  font-size: 1.8rem;
+  }
 }
 
 .rhodia-paper-header {
@@ -9,11 +12,11 @@
 }
 
 .footer-link {
-  color: #6c757d; // 通常の Bootstrap の text-secondary 色
+  color: #6c757d;
   transition: color 0.2s ease;
 
   &:hover {
-    color: #212529; // Bootstrapの text-body 色と同等（濃い黒寄り）
+    color: #212529;
     text-decoration: underline;
   }
 }

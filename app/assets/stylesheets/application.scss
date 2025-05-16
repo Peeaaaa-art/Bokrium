@@ -10,13 +10,15 @@
 @import "font";
 @import "tip_tap";
 @import "like_button";
+@import "filter_controls";
+
 
 
 body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background-color:rgba(221, 231, 233, 0.662);
+  background-color:rgb(221, 231, 233);
 }
 
 .flash-message {
@@ -67,55 +69,4 @@ body {
   width: 1em;
   height: 1em;
   vertical-align: -0.125em;
-}
-
-.filter-controls {
-  background-color: #e0e7f0;
-  border-radius: 0.5rem;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
-  padding: 0.75rem 1.5rem;
-  display: inline-flex;
-  gap: 1rem;
-  align-items: center;
-}
-
-.filter-controls {
-  backdrop-filter: blur(4px);
-  background-color: rgba(228, 236, 237, 0.825);
-  border: 1px solid #dee2e6;
-  transition: box-shadow 0.2s ease;
-
-  &:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  }
-}
-
-.btn-icon {
-  background: transparent;
-  border: none;
-  padding: 0.25rem;
-  transition: transform 0.2s ease;
-
-  &:hover .icon-refined {
-    transform: scale(1.15);
-    color: #343a40;
-  }
-}
-
-.icon-refined {
-  font-size: 1.25rem; // 約20px（やや小ぶり）
-  color: #6c757d; // text-secondary相当
-  transition: color 0.2s ease, transform 0.2s ease;
-}
-
-.tag-btn {
-  opacity: 0.85;
-  transition: all 0.2s ease;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-
-  &:hover {
-    opacity: 1;
-    transform: translateY(-1px);
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-  }
 }

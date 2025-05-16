@@ -1,5 +1,9 @@
 class ExploreController < ApplicationController
   def index
+    slice = params[:slice].to_i
+    slice = 4 if slice <= 0
+    @slice = slice
+
     @query = params[:q].to_s.strip
     @scope = params[:scope]
 

@@ -7,6 +7,11 @@ Rails.application.routes.draw do
   get "search/isbn_turbo", to: "search#search_isbn_turbo", as: :search_isbn_turbo
   get "search/search_google_books", to: "search#search_google_books", as: :search_google_books
   post "/presigned_url", to: "uploads#presigned_url"
+  post "/callback", to: "line_webhooks#callback"
+  get "/auth/line/callback", to: "line_sessions#create"
+  patch "/line_notifications/toggle", to: "line_notifications#toggle", as: :toggle_notifications
+  post "line_notifications/trigger", to: "line_notifications#trigger"
+  resource :line_user, only: [ :destroy ]
 
   devise_for :users, controllers: { registrations: "users/registrations" }
   resources :users, only: [ :index, :show ]

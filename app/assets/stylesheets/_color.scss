@@ -26,7 +26,7 @@
 }
 
 .rhodia-gray-with-paper {
-  background: 
+  background:
     linear-gradient(rgba(31, 29, 20, 0.89), rgba(31, 29, 20, 0.89)), /* 半透明カラーオーバーレイ */
     url('/textures/stone_paper.jpeg'); /* 背景画像 */
   background-size: cover;
@@ -39,7 +39,6 @@
 .rhodia-gray .navbar-text {
   color: #fff !important;
 }
-
 
 
 .bg-rhodia-orange {
@@ -63,4 +62,26 @@
     linear-gradient(135deg, #3b65ab 0%, #406ba7e2 100%);
   background-size: cover, 100% 100%;
   background-blend-mode: multiply;
+}
+.bg-light-blue {
+  background-color:rgba(213, 223, 225, 0.82);
+}
+
+.bg-light-bok {
+  background-color:rgba(236, 236, 239, 0.754);
+}
+
+.btn-primary-bok {
+  background-color: #4271c3;
+  color: white;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #2f5392;
+    color: white;
+  }
+}
+
+.text-primary-bok{
+  color:rgb(22, 67, 180)
 }

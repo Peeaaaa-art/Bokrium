@@ -17,3 +17,24 @@
 .avatar-circle-mini {
   @include avatar-circle(40px);
 }
+
+.line-qr {
+  max-width: 200px;
+
+  @media (max-width: 576px) {
+    max-width: 165px;
+  }
+}
+
+.subtle-shadow {
+  box-shadow:
+    0 4px 8px rgba(0, 0, 0, 0.06),
+    0 1px 3px rgba(0, 0, 0, 0.04);
+  transition: all 0.2s ease;
+}
+
+.subtle-shadow:hover {
+  box-shadow:
+    0 6px 12px rgba(0, 0, 0, 0.08),
+    0 2px 4px rgba(0, 0, 0, 0.06);
+}

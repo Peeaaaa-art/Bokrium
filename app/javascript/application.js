@@ -9,6 +9,7 @@ import ImageUploadController from "./controllers/image_upload_controller"
 import BookShelfController from "./controllers/book_shelf_controller"
 import TagToggleController from "./controllers/tag_toggle_controller"
 import UiToggleController from "./controllers/ui_toggle_controller"
+import ResponsiveSliceController from "./controllers/responsive_slice_controller.js"
 
 const application = Application.start()
 window.Stimulus = application
@@ -23,6 +24,7 @@ application.register("confirm-modal", ConfirmModalController)
 application.register("book-shelf", BookShelfController)
 application.register("tag-toggle", TagToggleController)
 application.register("ui-toggle", UiToggleController)
+application.register("responsive-slice", ResponsiveSliceController)
 
 
 import * as bootstrap from "bootstrap"
