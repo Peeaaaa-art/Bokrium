@@ -16,8 +16,12 @@
 <% end %>
 
 <% if user_signed_in? && !@no_books %>
+<!-- app/views/books/index.html.erb など -->
+<div class="mb-3 d-flex gap-2">
+  <%= link_to "📚 棚ビュー", books_path(view: "shelf"), class: "btn btn-sm #{'btn-primary' if @view_mode == 'shelf'}" %>
+  <%= link_to "🧾 カードビュー", books_path(view: "card"), class: "btn btn-sm #{'btn-primary' if @view_mode == 'card'}" %>
+</div>
   <!-- 検索・タグ・ソートトグル 横並び -->
-  <!-- 📦 トップの3アイコンボタンを横並びに固定 -->
 <div class="d-flex justify-content-center mt-3 mt-md-5 mb-3">
   <div class="filter-controls border rounded-pill shadow-sm px-4 py-2 d-flex align-items-center gap-3">
     <!-- 検索 -->
