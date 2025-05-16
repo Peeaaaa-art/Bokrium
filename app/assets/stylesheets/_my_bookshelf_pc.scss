@@ -2,8 +2,6 @@
   display: flex;
   flex-direction: column;
   gap: 24px;
-  // padding: 0.2rem 0.1rem;
-  background-color:rgba(219, 229, 231, 0.294);
 
   @media (max-width: 576px) {
     gap: 12px;
@@ -32,7 +30,10 @@
   left: 5%;
   width: 90%;
   height: 20px;
-  background: linear-gradient(145deg, #1e3d73, #04294ec9);
+  background-image:
+    linear-gradient(160deg, #002fa7, #002d90),
+    repeating-radial-gradient(circle at 40% 60%, rgba(255,255,255,0.02) 0, transparent 1px, transparent 3px);
+  background-blend-mode: overlay;
   box-shadow:
     0 2px 8px rgba(0, 0, 0, 0.4),
     inset 0 -1px 2px rgba(255,255,255,0.15),
@@ -40,6 +41,14 @@
   border-radius: 4px;
   transform: perspective(800px) rotateX(0.5deg); /* 👈 奥行きパース */
   z-index: 0;
+
+    @media (max-width: 576px) {
+    height: 13px;
+    box-shadow:
+      0 1px 4px rgba(0, 0, 0, 0.2),
+      inset 0 -1px 1px rgba(255, 255, 255, 0.1),
+      inset 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
 }
 
 .shelf::after {
@@ -49,15 +58,19 @@
   left: 5%;
   width: 90%;
   height: 4px;
-  background: linear-gradient(to right, rgba(6, 29, 82, 0.27), rgba(10, 4, 94, 0.1));
+  background: linear-gradient(to right, rgba(0, 47, 167, 0.15), rgba(0, 47, 167, 0.1));
   border-radius: 2px;
-  z-index: 1; // 👈 棚より前に出す
+  z-index: 1;
   pointer-events: none;
-  opacity: 0.8;
+  opacity: 0.5;
   box-shadow:
-    0 1px 2px rgba(255, 255, 255, 0.3),
-    0 -1px 2px rgba(0, 0, 0, 0.2); // 上面と下面の光と影
-  mix-blend-mode: screen;          // ⛳ 光の屈折感（必殺技）
+    0 1px 2px rgba(255, 255, 255, 0.1),
+    0 -1px 2px rgba(0, 0, 0, 0.15);
+  mix-blend-mode: normal;
+
+    @media (max-width: 576px) {
+    height: 2px;
+  }
 }
 
 .shelf::before,
@@ -74,33 +87,30 @@
   position: relative;
   z-index: 1;
   width: 120px;
-
-  @media (max-width: 576px) {
-
-    width: 70px;
-  }
-
   display: flex;
   justify-content: center;
   margin-bottom: -2px;
   perspective: 400px;
-
-  /* カスタムプロパティで傾きとY位置を受け取る */
   transform:
     rotate(var(--tilt, 0deg))           // 左右の首かしげ
     translateY(var(--y-offset, 0px))    // 微妙な上下ずれ
-    rotateX(var(--lean, 0deg));         // 👈 奥行き方向の傾き（遠近感）
+    rotateX(var(--lean, 0deg));        // 👈 奥行き方向の傾き（遠近感）
   transform-style: preserve-3d;
-}
 
-/* 擬似的にランダムな傾きを与える */
-@for $i from 1 through 12 {
-  .book-on-shelf:nth-child(#{$i}) {
-    --tilt: #{(random(5) - 2) / 10}deg;       // → -0.2deg〜+0.2deg（Z軸：横傾き）
-    --y-offset: #{(random(5) - 3) / 10}px;     // → -0.3px〜+0.1px（上下位置）
-    --lean: #{(random(5) - 2) / 10}deg;        // → -0.2deg〜+0.2deg（X軸：奥方向）
+  @media (max-width: 576px) {
+    margin-bottom: -9px;
+    width: 70px;
   }
 }
+
+@for $i from 1 through 12 {
+  .book-on-shelf:nth-child(#{$i}) {
+    --tilt: #{(random(5) - 2) / 10}deg;
+    --y-offset: #{(random(5) - 3) / 10}px;
+    --lean: #{(random(5) - 2) / 10}deg;
+  }
+}
+
 
 .book-cover {
   position: relative;

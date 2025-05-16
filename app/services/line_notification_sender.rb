@@ -1,4 +1,3 @@
-# app/services/line_notification_sender.rb
 class LineNotificationSender
   def self.send_all
     User.joins(:line_user).merge(LineUser.where(notifications_enabled: true)).find_each do |user|

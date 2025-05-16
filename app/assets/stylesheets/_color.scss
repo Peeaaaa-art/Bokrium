@@ -1,3 +1,10 @@
+.bg-basic {
+  background-color:#f5f5f7;
+}
+
+.bg-apple-light {
+  background-color:rgba(245, 245, 247, 0.8);
+}
 
 .yomoo-color {
   background-color:rgba(221, 231, 233, 0.4);
@@ -51,8 +58,8 @@
 }
 
 .bg-offwhite {
-  // background-color:rgba(221, 231, 233, 0.4);
-  background-color: rgb(77, 98, 152);
+  background-color:rgba(221, 231, 233, 0.4);
+  // background-color: rgb(77, 98, 152);
 }
 .bg-rhodia-blue {
   background-color: #5578a8bd
@@ -84,4 +91,11 @@
 
 .text-primary-bok{
   color:rgb(22, 67, 180)
+}
+
+.bg-ikb {
+  background-image:
+    linear-gradient(rgba(0, 47, 167, 0.95), rgba(0, 47, 167, 0.95));
+  color: white;
+  box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.1);
 }
