@@ -15,7 +15,7 @@
 
 .book-row {
   display: flex;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   justify-content: center;
   gap: 12px;
   max-width: 94%;
@@ -23,13 +23,17 @@
 }
 
 .book-on-shelf {
-  flex: 1 1 auto;
+  flex: 0 0 120px;
   max-width: 120px;
-    @media (max-width: 900px) {
-    max-width: calc((94% - 48px) / 10);
+  min-width: 60px;
+
+  @media (max-width: 900px) {
+    flex: 0 0 calc((94% - 120px) / 10);
+    max-width: calc((94% - 120px) / 10);
   }
 
   @media (max-width: 576px) {
+    flex: 0 0 calc((94% - 48px) / 5);
     max-width: calc((94% - 48px) / 5);
   }
   aspect-ratio: 2 / 3;
@@ -46,19 +50,23 @@
   object-position: center bottom;
   // aspect-ratio: 2 / 3;
   filter: drop-shadow(0 8px 6px rgba(0, 0, 0, 0.2));
-  transform: rotateX(6deg);
+  transform: rotateX(4deg);
+  margin-bottom: 2px;
 }
 
 .shelf-bar {
   width: 90%;
-  height: 20px;
-  background: linear-gradient(160deg, #002fa7, #002d90);
+  height: 22px;
+  background: linear-gradient(160deg, #13307e, #132d78); // 深みと落ち着き
   border-radius: 4px;
   box-shadow:
-    0 2px 8px rgba(0, 0, 0, 0.4),
-    inset 0 -1px 2px rgba(255, 255, 255, 0.15),
-    inset 0 2px 6px rgba(0, 0, 0, 0.2);
-  margin-top: -5px; // 👈 本の下部に重なるように調整
+    0 1px 2px rgba(0, 0, 0, 0.2); // 控えめな立体感
+  margin-top: -5px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+
+  @media (max-width: 576px) {
+    height: 18px;
+  }
 }
 
 .no-cover {
