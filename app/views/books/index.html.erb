@@ -17,7 +17,7 @@
 
 <% if user_signed_in? && !@no_books %>
 
-<div class="d-flex align-items-center justify-content-between mt-3 mt-md-5 mb-3 px-3">
+<div class="d-flex align-items-center justify-content-between my-4 px-3">
 
   <!-- ⬅ 左端：ビュー切り替え -->
   <div class="flex-shrink-0">
@@ -26,9 +26,9 @@
                 style: "width: 40px; height: 40px; border-radius: 50%; line-height: 1;",
                 title: (@view_mode == "shelf" ? "カードビューに切り替え" : "棚ビューに切り替え") do %>
       <% if @view_mode == "shelf" %>
-        <i class="bi bi-card-text fs-5"></i>
+        <i class="bi bi-card-text fs-5 icon-refined"></i>
       <% else %>
-        <i class="bi bi-layout-three-columns fs-5"></i>
+        <i class="bi bi-layout-three-columns fs-5 icon-refined"></i>
       <% end %>
     <% end %>
   </div>
@@ -54,7 +54,7 @@
 
       <!-- ステータス -->
       <button class="btn btn-icon" data-bs-toggle="collapse" data-bs-target="#statusCollapse" aria-expanded="false">
-        <i class="bi bi-filter-circle icon-refined"></i>
+        <i class="bi bi-journal-check icon-refined"></i>
       </button>
 
     </div>
