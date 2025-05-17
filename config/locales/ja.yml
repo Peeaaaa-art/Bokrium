@@ -3,6 +3,9 @@ ja:
     attributes:
       book:
         isbn: "ISBN"
+  time:
+    formats:
+      only_date: "%Y/%m/%d"
   books:
     status:
       want_to_read: "読みたい"
