@@ -16,6 +16,11 @@ class BooksController < ApplicationController
       @filtered_tags = tag_names
     end
 
+    if params[:status].present? && Book.statuses.key?(params[:status])
+      books = books.where(status: params[:status])
+      @filtered_status = params[:status]
+    end
+
     session[:view_mode] = params[:view] if params[:view].present?
     @view_mode = session[:view_mode] || "shelf"
 

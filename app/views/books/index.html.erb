@@ -16,54 +16,82 @@
 <% end %>
 
 <% if user_signed_in? && !@no_books %>
-<!-- app/views/books/index.html.erb など -->
-<div class="mb-3 d-flex gap-2">
-  <%= link_to "📚 棚ビュー", books_path(view: "shelf"), class: "btn btn-sm #{'btn-primary' if @view_mode == 'shelf'}" %>
-  <%= link_to "🧾 カードビュー", books_path(view: "card"), class: "btn btn-sm #{'btn-primary' if @view_mode == 'card'}" %>
+
+<div class="d-flex align-items-center justify-content-between mt-3 mt-md-5 mb-3 px-3">
+
+  <!-- ⬅ 左端：ビュー切り替え -->
+  <div class="flex-shrink-0">
+    <%= link_to books_path(view: @view_mode == "shelf" ? "card" : "shelf"),
+                class: "btn btn-light border shadow-sm d-flex align-items-center justify-content-center",
+                style: "width: 40px; height: 40px; border-radius: 50%; line-height: 1;",
+                title: (@view_mode == "shelf" ? "カードビューに切り替え" : "棚ビューに切り替え") do %>
+      <% if @view_mode == "shelf" %>
+        <i class="bi bi-card-text fs-5"></i>
+      <% else %>
+        <i class="bi bi-layout-three-columns fs-5"></i>
+      <% end %>
+    <% end %>
+  </div>
+
+  <!-- 🎯 中央：フィルターボタン群 -->
+  <div class="mx-auto">
+    <div class="filter-controls border rounded-pill shadow-sm px-4 py-md-1 d-flex align-items-center gap-3">
+
+      <!-- 検索 -->
+      <button class="btn btn-icon" data-bs-toggle="collapse" data-bs-target="#searchCollapse" aria-expanded="false">
+        <i class="bi bi-search icon-refined"></i>
+      </button>
+
+      <!-- ソート -->
+      <button class="btn btn-icon" data-bs-toggle="collapse" data-bs-target="#sortCollapse" aria-expanded="false">
+        <i class="bi bi-arrow-down-up icon-refined"></i>
+      </button>
+
+      <!-- タグ -->
+      <button class="btn btn-icon" data-bs-toggle="collapse" data-bs-target="#tagCollapse" aria-expanded="false">
+        <i class="bi bi-tags icon-refined"></i>
+      </button>
+
+      <!-- ステータス -->
+      <button class="btn btn-icon" data-bs-toggle="collapse" data-bs-target="#statusCollapse" aria-expanded="false">
+        <i class="bi bi-filter-circle icon-refined"></i>
+      </button>
+
+    </div>
+  </div>
+
+  <!-- ➡ 右側スペース（空でOK）-->
+  <div class="flex-shrink-0" style="width: 48px;"></div> <!-- サイズ合わせ用 -->
 </div>
-  <!-- 検索・タグ・ソートトグル 横並び -->
-<div class="d-flex justify-content-center mt-3 mt-md-5 mb-3">
-  <div class="filter-controls border rounded-pill shadow-sm px-4 py-2 d-flex align-items-center gap-3">
-    <!-- 検索 -->
-    <button class="btn btn-icon" data-bs-toggle="collapse" data-bs-target="#searchCollapse" aria-expanded="false">
-      <i class="bi bi-search icon-refined"></i>
-    </button>
 
-    <!-- ソート -->
-    <button class="btn btn-icon" data-bs-toggle="collapse" data-bs-target="#sortCollapse" aria-expanded="false">
-      <i class="bi bi-filter icon-refined"></i>
-    </button>
+<!-- 📦 下の行：トグルで展開される内容 -->
+<div class="">
+  <!-- 検索フォーム -->
+  <div class="collapse mb-2" id="searchCollapse">
+    <%= render "shared/search_bar", scope: "mine", placeholder: "自分の本やメモを検索" %>
+  </div>
 
-    <!-- タグ -->
-    <button class="btn btn-icon" data-bs-toggle="collapse" data-bs-target="#tagCollapse" aria-expanded="false">
-      <i class="bi bi-tags icon-refined"></i>
-    </button>
+  <!-- ソート -->
+  <div class="collapse mb-2" id="sortCollapse">
+    <%= render "sort_controls", filtered_tag: @filtered_tag, current_sort: params[:sort] %>
+  </div>
+
+  <!-- タグ -->
+  <div class="collapse mb-2" id="tagCollapse"
+        data-controller="tag-toggle"
+        data-tag-toggle-selected-tags-value="<%= @filtered_tags&.join(',') %>">
+    <%= render "tag_filter", filtered_tags: @filtered_tags %>
+  </div>
+
+  <!-- ✅ ステータス -->
+  <div class="collapse mb-2" id="statusCollapse">
+    <%= render "status_filter", current_status: @filtered_status %>
   </div>
 </div>
 
-  <!-- 📦 下の行：トグルで展開される内容（初期は非表示） -->
-  <div class="">
-    <!-- 検索フォーム -->
-    <div class="collapse mb-2" id="searchCollapse">
-      <%= render "shared/search_bar", scope: "mine", placeholder: "自分の本やメモを検索" %>
-    </div>
-
-    <!-- ソート -->
-    <div class="collapse mb-2" id="sortCollapse">
-      <%= render "sort_controls", filtered_tag: @filtered_tag, current_sort: params[:sort] %>
-    </div>
-
-    <!-- タグ -->
-    <div class="collapse mb-2" id="tagCollapse"
-          data-controller="tag-toggle"
-          data-tag-toggle-selected-tags-value="<%= @filtered_tags&.join(',') %>">
-      <%= render "tag_filter", filtered_tags: @filtered_tags %>
-    </div>
-  </div>
-
-  <turbo-frame id="books_frame">
-    <%= render partial: "books/books_frame", locals: { books: @books } %>
-  </turbo-frame>
+<turbo-frame id="books_frame">
+  <%= render partial: "books/books_frame", locals: { books: @books } %>
+</turbo-frame>
 <% end %>
 
 <% if @no_books || !user_signed_in? %>
