@@ -1,41 +1,54 @@
-<div class="container my-5" style="max-width: 600px;">
-  <div class="card shadow-sm mb-5">
-  <h2 class="mt-4 mb-4 text-center text-primary">
-    <%= t('.title', resource: devise_i18n_fix_model_name_case(resource.model_name.human, i18n_key: 'registrations.edit.title')) %>
-  </h2>
+<div class="container my-5" style="max-width: 640px;">
+  <div class="card shadow-sm border-0">
+    <div class="card-body px-4 py-5">
+      <h2 class="text-center mb-4 text-primary fw-bold">アカウント情報の変更</h2>
+
+      <%= form_with(model: resource, url: registration_path(resource_name), method: :put, local: true, html: { multipart: true }) do |f| %>
+        <%= render "devise/shared/error_messages", resource: resource %>
+
+        <!-- 名前 -->
+        <div class="mb-3">
+          <%= f.label :name, "ユーザー名", class: "form-label fw-semibold" %>
+          <%= f.text_field :name, class: "form-control", placeholder: "例：山田 太郎" %>
+        </div>
+
+        <!-- アバター画像 -->
+        <div class="mb-3">
+          <%= f.label :avatar_s3, "アバター画像", class: "form-label fw-semibold" %>
+          <%= f.file_field :avatar_s3, class: "form-control", direct_upload: true %>
+            <div class="mt-2 text-center">
+              <%= image_tag user_avatar(resource, size: :medium), alt: resource.name, class: "avatar-circle-medium shadow-sm" %>
+            </div>
+        </div>
+
+        <!-- メールアドレス -->
+        <div class="mb-3">
+          <%= f.label :email, "メールアドレス", class: "form-label fw-semibold" %>
+          <%= f.email_field :email, class: "form-control" %>
+        </div>
+
+        <!-- 送信 -->
+        <div class="d-grid mb-3">
+          <%= f.submit "変更を保存", class: "btn btn-primary btn-lg shadow-sm" %>
+        </div>
+      <% end %>
+    </div>
   </div>
-  <%= form_with(model: resource, url: registration_path(resource_name), method: :put, local: true, html: { class: "needs-validation", multipart: true }) do |f| %>
-    <%= render "devise/shared/error_messages", resource: resource %>
 
-    <div class="mb-3">
-      <%= f.label :name, class: "form-label" %>
-      <%= f.text_field :name, class: "form-control" %>
-    </div>
-
-    <div class="mb-3">
-      <%= f.label :introduction, class: "form-label" %>
-      <%= f.text_area :introduction, class: "form-control" %>
-    </div>
-
-    <div class="mb-3">
-      <%= f.label :avatar_s3, "アバター画像", class: "form-label" %>
-      <%= f.file_field :avatar_s3, class: "form-control", direct_upload: true %>
-      <div class="mt-2">
-        <%= image_tag user_avatar(resource, size: :medium), alt: resource.name, class: "avatar-circle-medium" %>
-      </div>
-    </div>
-    <div class="d-grid mb-4">
-      <%= f.submit t('.update'), class: "btn btn-primary btn-lg" %>
-    </div>
-  <% end %>
-
-  <div class="card mt-5">
-    <div class="card-body">
-      <%= button_to t('.cancel_my_account'), registration_path(resource_name), data: { confirm: t('.are_you_sure'), turbo_confirm: t('.are_you_sure') }, method: :delete, class: "btn btn-outline-danger w-100" %>
+  <!-- アカウント削除 -->
+  <div class="card mt-4 border-0">
+    <div class="card-body text-center">
+      <h5 class="text-danger fw-bold mb-2">アカウント削除</h5>
+      <p class="text-muted small mb-3">この操作は元に戻せません。全てのメモ・書籍データが削除されます。</p>
+      <%= button_to "アカウントを削除する", registration_path(resource_name),
+            method: :delete,
+            data: { confirm: "本当に削除してもよろしいですか？", turbo_confirm: "本当に削除してもよろしいですか？" },
+            class: "btn btn-outline-danger w-100" %>
     </div>
   </div>
 
+  <!-- 戻る -->
   <div class="mt-4 text-center">
-    <%= link_to t('devise.shared.links.back'), :back, class: "btn btn-link" %>
+    <%= link_to "戻る", :back, class: "btn btn-link text-decoration-none" %>
   </div>
 </div>

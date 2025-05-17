@@ -28,7 +28,7 @@
     <!-- 右：アバター -->
     <div class="d-flex align-items-center">
       <% if user_signed_in? %>
-        <%= link_to user_path(current_user) do %>
+        <%= link_to mypage_path do %>
           <%= image_tag user_avatar(current_user, size: 36), class: "rounded-circle shadow-sm ms-2", style: "width: 48px; height: 48px; object-fit: cover;" %>
         <% end %>
       <% else %>
