@@ -1,19 +1,19 @@
 <div class="d-flex justify-content-center mt-4 mt-md-5 px-3">
   <div class="search-bar-container w-100" style="max-width: 800px;">
-    <%= form_with url: "#", method: :get, local: true, data: { controller: "spinner" } do %>
+    <%= form_with url: search_books_path, method: :get, local: true, data: { controller: "spinner" } do %>
       <div class="search-bar-grid">
         <!-- セレクト -->
         <div>
           <%= select_tag :type,
                 options_for_select([["タイトル", "title"], ["著者", "author"], ["ISBN", "isbn"]], params[:type]),
-                class: "form-select bg-light-bok rounded-pill embossed w-100 w-md-auto mx-auto",
+                class: "form-select bg-light rounded-pill embossed w-100 w-md-auto mx-auto",
                 onchange: "this.form.submit()" %>
         </div>
 
         <!-- キーワード -->
         <div>
           <%= text_field_tag :query, params[:query],
-                class: "form-control bg-light-bok rounded-pill embossed border-0 py-2 w-100",
+                class: "form-control bg-light rounded-pill embossed border-0 py-2 w-100",
                 placeholder: placeholder_for(params[:type]) %>
         </div>
 

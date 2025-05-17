@@ -2,45 +2,44 @@
   <h3 class="mb-4 text-center">
     楽天ブックス検索結果 <%= search_result_range(books, total_count) %>
   </h3>
-  <div class="row row-cols-1 row-cols-md-3 row-cols-lg-6 g-4 mb-5">
-    <% books.each do |book| %>
-      <div class="col">
-        <div class="card h-100 shadow-sm">
-          <div class="card-img-top-container" style="height: 250px; background-color: #f8f9fa;">
-            <img src="<%= book.large_image_url || book.medium_image_url %>"
-                alt="<%= book.title %>の表紙画像"
-                class="img-fluid p-3"
-                style="height: 100%; width: 100%; object-fit: contain;"
-                loading="lazy">
-          </div>
-          <div class="card-body d-flex flex-column">
-            <h6 class="card-title mb-2"><%= book.title.truncate(20) %></h6>
-            <div class="mb-auto">
-              <p class="card-text text-muted small mb-1">
-                <strong>著者:</strong> <%= book.author || '情報なし' %>
-              </p>
-              <p class="card-text text-muted small mb-1">
-                <strong>出版社:</strong> <%= book.publisher_name || '情報なし' %>
-              </p>
-              <p class="card-text text-muted small">
-                <strong>ISBN:</strong> <%= book.isbn || '情報なし' %>
-              </p>
+    <div class="row row-cols-1 row-cols-md-3 row-cols-lg-6 g-4 mb-5">
+      <% books.each do |book| %>
+        <div class="col">
+          <div class="card h-100 shadow-sm d-flex flex-row flex-md-column">
+            <!-- 書影 -->
+            <div class="card-img-top-container flex-shrink-0"
+                style="width: 120px; height: auto; background-color: #f8f9fa;"
+                >
+              <img src="<%= book.large_image_url || book.medium_image_url %>"
+                  alt="<%= book.title %>の表紙画像"
+                  class="img-fluid p-2"
+                  style="height: 100%; width: 100%; object-fit: contain;"
+                  loading="lazy">
             </div>
-            <%= button_to "My本棚に追加", books_path(book: {
-              title:     book.title,
-              author:    book.author,
-              publisher: book.publisher_name,
-              isbn:      book.isbn,
-              price:     book.item_price,
-              book_cover: book.large_image_url || book.medium_image_url || book.small_image_url
-            }), method: :post, class: "btn btn-success" %>
 
+            <!-- 情報 -->
+            <div class="card-body d-flex flex-column px-3 py-2">
+              <h6 class="card-title mb-2 text-truncate"><%= book.title.truncate(20) %></h6>
+
+              <div class="mb-auto small text-muted">
+                <p class="mb-1"><strong>著者:</strong> <%= book.author || '情報なし' %></p>
+                <p class="mb-1"><strong>出版社:</strong> <%= book.publisher_name || '情報なし' %></p>
+                <p class="mb-1"><strong>ISBN:</strong> <%= book.isbn || '情報なし' %></p>
+              </div>
+
+              <%= button_to "My本棚に追加", books_path(book: {
+                title:     book.title,
+                author:    book.author,
+                publisher: book.publisher_name,
+                isbn:      book.isbn,
+                price:     book.item_price,
+                book_cover: book.large_image_url || book.medium_image_url || book.small_image_url
+              }), method: :post, class: "btn btn-success btn-sm mt-2" %>
+            </div>
           </div>
         </div>
-      </div>
-    <% end %>
-  </div>
-
+      <% end %>
+    </div>
   <% if total_pages > 1 %>
     <div class="d-flex justify-content-center mb-5">
       <nav aria-label="ページネーション">
