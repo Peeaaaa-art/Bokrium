@@ -3,3 +3,7 @@
     <%= render partial: "images/card", locals: { image: @image, book: @book, thumb: true, identifier: @image.id } %>
   </div>
 <% end %>
+
+<%= turbo_stream.append "modal-container" do %>
+  <%= render "images/image_modal", image: @image, identifier: @image.id %>
+<% end %>

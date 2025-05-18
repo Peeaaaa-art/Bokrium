@@ -16,6 +16,14 @@ class BooksController < ApplicationController
       @filtered_tags = tag_names
     end
 
+    if params[:status].present? && Book.statuses.key?(params[:status])
+      books = books.where(status: params[:status])
+      @filtered_status = params[:status]
+    end
+
+    session[:view_mode] = params[:view] if params[:view].present?
+    @view_mode = session[:view_mode] || "shelf"
+
     sort_param = params[:sort]
     case sort_param
     when "oldest"
@@ -32,11 +40,13 @@ class BooksController < ApplicationController
     else
       books = books.order(created_at: :desc)
     end
+
     @books = books
+    @books_per_row = params[:slice]&.to_i.presence || 12
 
     respond_to do |format|
       format.html { render :index }
-      format.turbo_stream # => 自動的に index.turbo_stream.erb を探す
+      format.turbo_stream
     end
   end
 

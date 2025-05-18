@@ -1,27 +1,23 @@
-// app/javascript/controllers/book_shelf_controller.js
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
   connect() {
-    const slice = this.getSliceCount()
-
-    const currentUrl = new URL(window.location.href)
-    const currentSlice = currentUrl.searchParams.get("slice")
-
-    if (parseInt(currentSlice) !== slice) {
-      currentUrl.searchParams.set("slice", slice)
-      window.location.href = currentUrl.toString()
-    }
-  }
-
-  getSliceCount() {
     const width = window.innerWidth
+    let booksPerRow = 12
 
-    // if (width < 768) return 4
-    // if (width < 1200) return 8
-    if (width < 1700) return 8
-    if (width < 1900) return 10
-    if (width < 2000) return 11
-    return 12
+    if (width < 576) {
+      booksPerRow = 5
+    } else if (width < 900) {
+      booksPerRow = 10
+    }
+
+    const currentParams = new URLSearchParams(window.location.search)
+    const currentSlice = parseInt(currentParams.get("slice"))
+
+    if (!currentSlice || currentSlice !== booksPerRow) {
+      currentParams.set("slice", booksPerRow)
+      const newUrl = `${window.location.pathname}?${currentParams.toString()}`
+      Turbo.visit(newUrl, { action: "replace" })
+    }
   }
 }

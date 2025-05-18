@@ -50,7 +50,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
   #   devise_parameter_sanitizer.permit(:account_update, keys: [:attribute])
   # end
   def after_update_path_for(resource)
-    user_path(resource) # 例：/users/:id など、編集後に遷移したいパス
+    mypage_path # 例：/users/:id など、編集後に遷移したいパス
   end
 
   # The path used after sign up.

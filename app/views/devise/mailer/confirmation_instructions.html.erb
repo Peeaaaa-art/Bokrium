@@ -1,5 +1,74 @@
-<p><%= t('.greeting', recipient: @email) %></p>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <style>
+      .email-container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 40px;
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        background-color: #f9f9f9;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
 
-<p><%= t('.instruction') %></p>
+      .email-header {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 20px;
+        color: #333;
+        text-align: center;
+      }
 
-<p><%= link_to t('.action'), confirmation_url(@resource, confirmation_token: @token) %></p>
+      .email-body {
+        font-size: 16px;
+        color: #555;
+        line-height: 1.6;
+      }
+
+      .email-footer {
+        margin-top: 40px;
+        font-size: 12px;
+        color: #999;
+        text-align: center;
+      }
+
+      .action-button {
+        display: inline-block;
+        margin-top: 30px;
+        padding: 12px 24px;
+        background-color:rgb(249, 194, 93);
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="email-container">
+      <div class="email-header">
+        Bokrium
+      </div>
+
+      <div class="email-body">
+        <p><%= t('devise.mailer.confirmation_instructions.greeting', recipient: @resource.email) %></p>
+
+        <p><%= t('devise.mailer.confirmation_instructions.instruction') %></p>
+
+        <p style="text-align: center;">
+          <a href="<%= confirmation_url(@resource, confirmation_token: @token) %>" class="action-button">
+            <%= t('devise.mailer.confirmation_instructions.action') %>
+          </a>
+        </p>
+
+        <p><%= t('devise.mailer.confirmation_instructions.warning') %></p>
+      </div>
+
+      <div class="email-footer">
+        &copy; <%= Time.current.year %> Bokrium. All rights reserved.
+      </div>
+    </div>
+  </body>
+</html>

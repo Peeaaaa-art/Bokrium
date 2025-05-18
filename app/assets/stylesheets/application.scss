@@ -11,6 +11,7 @@
 @import "tip_tap";
 @import "like_button";
 @import "filter_controls";
+@import "shadows";
 
 
 
@@ -18,7 +19,6 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background-color:rgb(221, 231, 233);
 }
 
 .flash-message {

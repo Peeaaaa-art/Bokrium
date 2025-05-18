@@ -1,0 +1,27 @@
+.embossed {
+  box-shadow: inset 1px 1px 4px rgba(0, 0, 0, 0.233),
+              inset -1px -1px 4px rgba(255, 255, 255, 0.7);
+}
+
+.search-bar-container {
+  border: 1px solid #dee2e6;
+  border-radius: 2rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+  padding: 0.75rem 1.5rem;
+  backdrop-filter: blur(4px);
+}
+
+/* Gridベースの構成 */
+.search-bar-grid {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 1rem;
+  align-items: stretch;
+}
+
+/* スマホ対応（必要に応じて） */
+@media (max-width: 576px) {
+  .search-bar-grid {
+    grid-template-columns: 1fr;
+  }
+}

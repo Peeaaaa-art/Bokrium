@@ -1,25 +1,28 @@
 <% book = local_assigns[:book_data] || @book_data %>
 
-<div class="card bg-transparent p-4 mb-1 mx-auto" style="max-width: 1200px;">
-  <div class="row g-3 align-items-center justify-content-center flex-column flex-md-row">
-    <div class="col-12 col-md-6 d-flex justify-content-center mb-3 mb-md-0">
+<div class="card bg-transparent p-4 mb-1 mx-auto" style="max-width: 800px;">
+  <div class="d-flex flex-row flex-md-column justify-content-md-center align-items-md-center gap-3">
+
+    <!-- 書影 -->
+    <div style="width: 100px;" class="flex-shrink-0">
       <% if book[:book_cover].present? %>
         <img src="<%= book[:book_cover] %>"
              alt="書影"
-             class="rounded shadow-sm"
-             style="max-height: 480px; max-width: 100%; object-fit: contain;">
+             class="rounded shadow-sm img-fluid"
+             style="width: 100px; height: auto; object-fit: contain;">
       <% else %>
-        <div class="d-flex justify-content-center align-items-center rounded"
-             style="width: 100%; max-width:200px">
-          <span class="no-cover text-muted"><%= book[:title].truncate(20) %></span>
+        <div class="d-flex justify-content-center align-items-center rounded bg-light"
+             style="width: 100px; height: 140px;">
+          <span class="no-cover text-muted text-center px-2 small"><%= book[:title].truncate(10) %></span>
         </div>
       <% end %>
     </div>
 
-    <div class="col-12 col-md-6 d-flex flex-column">
-      <h4 class="mb-2"><%= book[:title].truncate(20) %></h4>
-      <p class="mb-1"><strong>著者:</strong> <%= book[:author] %></p>
-      <p class="mb-1"><strong>出版社:</strong> <%= book[:publisher] %></p>
+    <!-- 情報 + フォーム -->
+    <div class="flex-grow-1 text-md-center" style="max-width: 100%;">
+      <p class="mb-1 small"><strong><%= book[:title]&.truncate(40) %></strong></p>
+      <p class="mb-1 small"><strong>著者:</strong> <%= book[:author] || "情報なし" %></p>
+      <p class="mb-1 small"><strong>出版社:</strong> <%= book[:publisher] || "情報なし" %></p>
 
       <%= form_with model: Book.new, url: books_path, local: true do |f| %>
         <%= f.hidden_field :isbn, value: book[:isbn] %>
@@ -30,10 +33,10 @@
         <%= f.hidden_field :page, value: book[:page] %>
 
         <% if book[:book_cover].present? %>
-          <%= f.hidden_field :book_cover, value: book[:book_cover], direct_upload: true %>
+          <%= f.hidden_field :book_cover, value: book[:book_cover] %>
         <% end %>
 
-        <%= f.submit "My本棚に追加", class: "btn btn-success mt-3" %>
+        <%= f.submit "My本棚に追加", class: "btn btn-success btn-sm mt-3" %>
       <% end %>
     </div>
   </div>

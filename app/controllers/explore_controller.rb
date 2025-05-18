@@ -18,7 +18,7 @@ class ExploreController < ApplicationController
       render turbo_stream: turbo_stream.update(
         "books_frame",
         partial: @scope == "mine" ? "bookshelf/kino_books_grid" : "public_bookshelf/public_card_grid",
-        locals: @scope == "mine" ? { books: @results } : { memos: @results }
+        locals: @scope == "mine" ? { books: @results, books_per_row: @slice } : { memos: @results }
       )
     else
       render :index

@@ -10,12 +10,12 @@
 
     <%= yield :head %>
 
-    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
-    <%# = tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
-
+    <%= favicon_link_tag "/favicon.ico" %> <!-- 一番上に -->
     <link rel="icon" href="/icon.png" type="image/png">
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="/icon.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <%= tag.link rel: "manifest", href: "/manifest.json" %>
+
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -44,10 +44,11 @@
         <span class="visually-hidden">Loading...</span>
       </div>
     </div>
-      <main style="flex: 1;">
+      <main class="bg-basic" style="flex: 1;">
       <%= yield %>
     </main>
     <%= render "shared/footer" %>
     <%= turbo_frame_tag "modal" %>
+    <%= yield :modals %>
   </body>
 </html>

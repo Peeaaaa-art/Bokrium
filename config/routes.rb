@@ -13,8 +13,11 @@ Rails.application.routes.draw do
   post "line_notifications/trigger", to: "line_notifications#trigger"
   resource :line_user, only: [ :destroy ]
 
-  devise_for :users, controllers: { registrations: "users/registrations" }
-  resources :users, only: [ :index, :show ]
+  devise_for :users, controllers: {
+    registrations: "users/registrations",
+    confirmations: "users/confirmations"
+    }
+  get "mypage", to: "users#show", as: :mypage
 
   resources :books do
     resources :memos, only: [ :create, :new, :edit, :update, :destroy ]
@@ -34,6 +37,7 @@ Rails.application.routes.draw do
   get "/explore", to: "explore#index", as: :explore
 
   root "welcome#index"
+  get "/manifest.json", to: "pwa#manifest", defaults: { format: :json }
 end
 
 # 公式リファレンス https://guides.rubyonrails.org/routing.html

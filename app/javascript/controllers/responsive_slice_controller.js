@@ -1,19 +1,28 @@
+// controllers/responsive_slice_controller.js
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["input"]
+  static targets = ["input", "selector"]
 
   connect() {
-    this.setSlice()
-    this.element.addEventListener("submit", this.setSlice.bind(this)) // ← フォーム送信前に実行
+    if (!this.hasSelectorTarget || this.selectorTarget.value === "") {
+      const width = window.innerWidth
+      let booksPerRow = 12
+
+      if (width < 576) {
+        booksPerRow = 5
+      } else if (width < 900) {
+        booksPerRow = 10
+      }
+
+      this.inputTarget.value = booksPerRow
+    } else {
+      this.inputTarget.value = this.selectorTarget.value
+    }
   }
 
-  setSlice() {
-    const isMobile = window.innerWidth <= 576
-    const value = isMobile ? 5 : 10
-
-    if (this.hasInputTarget) {
-      this.inputTarget.value = value
-    }
+  userSelected(event) {
+    this.inputTarget.value = event.target.value
+    this.element.requestSubmit() // 💡 自動で再検索
   }
 }

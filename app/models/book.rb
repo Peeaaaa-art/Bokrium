@@ -1,5 +1,6 @@
 class Book < ApplicationRecord
   include PgSearch::Model
+  before_validation :normalize_isbn
 
   belongs_to :user
   has_one_attached :book_cover_s3, dependent: :purge_later
@@ -21,4 +22,10 @@ class Book < ApplicationRecord
                     tsearch: { prefix: true },
                     trigram: { threshold: 0.03 }
                   }
+
+  private
+
+  def normalize_isbn
+    self.isbn = nil if isbn.blank?
+  end
 end
