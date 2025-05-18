@@ -50,16 +50,15 @@
         </div>
       </div>
 
-<div class="container mt-3">
-      <div class="d-flex flex-row align-items-center justify-content-between  filter-controls border rounded-pill shadow-sm px-3">
+
+      <div class="d-flex flex-row align-items-center justify-content-between  filter-controls border rounded-pill shadow-sm px-3 mt-3">
         <!-- タグ -->
         <button class="btn btn-sm text-white" data-bs-toggle="modal" data-bs-target="#tagSelectModal">
             <i class="bi bi-tags fs-5 icon-refined"></i>
-          </button>
-
-          <% content_for :modals do %>
-            <%= render "tags/tag_modals", book: @book, user_tags: @user_tags %>
-          <% end %>
+        </button>
+        <% content_for :modals do %>
+          <%= render "tags/tag_modals", book: @book, user_tags: @user_tags %>
+        <% end %>
         <!-- 画像アップロード -->
         <div data-controller="image-upload">
           <%= form_with model: [@book, Image.new], local: false,
@@ -81,30 +80,13 @@
             </label>
           <% end %>
         </div>
-        <!-- アクション：ドロップダウン -->
-        <div class="dropdown">
-          <button class="btn  btn-sm dropdown-toggle text-white" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <i class="bi bi-gear fs-5 icon-refined"></i>
-          </button>
-          <ul class="dropdown-menu dropdown-menu-end">
-            <li>
-              <%= link_to edit_book_path(@book), class: "dropdown-item" do %>
-                <i class="bi bi-pencil-square"></i> 編集
-              <% end %>
-            </li>
-            <li>
-              <%= button_to book_path(@book),
-              method: :delete,
-              data: {
-                turbo: true,
-                turbo_confirm: "本のデータとメモが削除されると、もとに戻すことはできません。\n本当に削除してもよろしいでしょうか？"
-              },
-                class: "dropdown-item text-danger" do %>
-                <i class="bi bi-trash2"></i> 削除
-              <% end %>
-            </li>
-          </ul>
-        </div>
+        <!-- アクション：ギアボタン -->
+        <button class="btn btn-sm text-white" type="button" data-bs-toggle="modal" data-bs-target="#settingsModal">
+          <i class="bi bi-gear fs-5 icon-refined"></i>
+        </button>
+        <% content_for :modals do %>
+          <%= render "books/modal_edit_destroy", book: @book %>
+        <% end %>
         <!-- ステータスセレクト -->
         <%= form_with(model: @book, local: false, class: "status-form mb-0") do |f| %>
           <%= f.select :status,
@@ -115,6 +97,7 @@
                 onchange: "this.form.requestSubmit();" %>
         <% end %>
       </div>
+
       <!-- タグ -->
       <div class="px-1 pt-1">
         <%= render "tags/tag_badge_list", book: @book %>
@@ -138,11 +121,8 @@
         <!-- 新規メモの read_only 表示（まだ保存されていない状態） -->
         <%= render "memos/read_only_item", book: @book, memo: @new_memo %>
       <% end %>
-
-
       <!-- 📌 共通のモーダルは1個だけ -->
       <%= render "memos/modal_shared", memo: @new_memo %>
-
       <!-- アクションボタン -->
       <div class="d-flex justify-content-center gap-3 mt-4 mb-3">
         <!-- 新規メモ作成ボタン -->
@@ -159,5 +139,5 @@
     </div>
   </div>
 </div>
-</div>
+
 <div id="modal-container"></div>

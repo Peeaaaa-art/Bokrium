@@ -1,0 +1,41 @@
+<div class="modal fade" id="settingsModal" tabindex="-1" aria-labelledby="settingsModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title" id="settingsModalLabel">
+          <i class="bi bi-gear me-2"></i> 本の操作
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="閉じる" style="margin-top: -0.2rem;"></button>
+      </div>
+
+      <div class="modal-body" style="padding: 0.5rem 1.5rem 1.5rem;">
+        <ul class="my-3" style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.75rem;">
+          <li class="mx-2">
+            <%= link_to edit_book_path(book),
+                style: "display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 0.8rem 1rem; background: white; border-radius: 12px; font-size: 0.95rem; text-decoration: none; color: #1e3a8a; border: 1px solid #c7d2fe;" do %>
+              <span style="display: flex; align-items: center;">
+                <i class="bi bi-pencil-square me-2"></i> 編集する
+              </span>
+              <i class="bi bi-chevron-right small"></i>
+            <% end %>
+          </li>
+          <li class="mx-2">
+            <%= button_to book_path(book),
+              method: :delete,
+              data: {
+                turbo: true,
+                turbo_confirm: "本のデータとメモが削除されると、もとに戻すことはできません。\n本当に削除してもよろしいでしょうか？"
+              },
+              style: "display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 0.8rem 1rem; background: white; border-radius: 12px; font-size: 0.95rem; text-decoration: none; color: #b91c1c; border: 1px solid #fecaca;" do %>
+              <span style="display: flex; align-items: center;">
+                <i class="bi bi-trash2 me-2"></i> 削除する
+              </span>
+              <i class="bi bi-chevron-right small"></i>
+            <% end %>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
