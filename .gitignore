@@ -45,3 +45,5 @@
 
 /elasticsearch
 /elasticsearch/*
+
+.DS_Store

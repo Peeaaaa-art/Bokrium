@@ -8,18 +8,18 @@ WORKDIR /rails
 # 共通のシステムパッケージ + Node.js 追加
 RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y \
-      curl \
-      libjemalloc2 \
-      libvips \
-      libyaml-dev \
-      libffi-dev \
-      node-gyp \
-      python-is-python3 \
-      postgresql-client \
-      gnupg && \
+    curl \
+    libjemalloc2 \
+    libvips \
+    libyaml-dev \
+    libffi-dev \
+    node-gyp \
+    python-is-python3 \
+    postgresql-client \
+    gnupg && \
     curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
     apt-get install -y nodejs && \
-    rm -rf /var/lib/apt/lists /var/cache/apt/archives
+    rm -rf /var/lib/apt/lists/* /var/cache/apt/archives
 
 ENV RAILS_ENV=production \
     BUNDLE_DEPLOYMENT=1 \
@@ -31,11 +31,10 @@ FROM base AS build
 
 RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y \
-      build-essential \
-      git \
-      libpq-dev \
-      pkg-config && \
-    rm -rf /var/lib/apt/lists /var/cache/apt/archives
+    build-essential \
+    git \
+    libpq-dev \
+    pkg-config
 
 COPY package.json package-lock.json ./
 RUN npm install
