@@ -19,13 +19,13 @@
   justify-content: center;
   gap: 12px;
   max-width: 94%;
+  min-width: 94%;
   padding: 0 8px;
 }
 
 .book-on-shelf {
-  flex: 0 0 120px;
-  max-width: 120px;
-  min-width: 60px;
+  flex: 0 0 calc((94% - 148px) / 12);
+  max-width: calc((94% - 148px) / 12);
 
   @media (max-width: 900px) {
     flex: 0 0 calc((94% - 120px) / 10);
@@ -36,59 +36,106 @@
     flex: 0 0 calc((94% - 48px) / 5);
     max-width: calc((94% - 48px) / 5);
   }
+
   aspect-ratio: 2 / 3;
   position: relative;
   display: flex;
   justify-content: center;
   align-items: flex-end;
   height: auto;
+  margin-bottom: -4px;
+  z-index: 2;
 }
 
 .book-cover {
   width: 100%;
   object-fit: contain;
   object-position: center bottom;
-  // aspect-ratio: 2 / 3;
-  filter: drop-shadow(0 8px 6px rgba(0, 0, 0, 0.2));
-  transform: rotateX(4deg);
+  filter: drop-shadow(0 8px 6px rgba(0, 0, 0, 0.1));
+  transform: rotateX(3deg);
   margin-bottom: 2px;
 }
 
 .shelf-bar {
   width: 90%;
   height: 22px;
-  background: linear-gradient(160deg, #13307e, #132d78); // 深みと落ち着き
+  background: linear-gradient(to bottom, #1a337e 0%, #122964 100%);
   border-radius: 4px;
+
   box-shadow:
-    0 1px 2px rgba(0, 0, 0, 0.2); // 控えめな立体感
-  margin-top: -5px;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
+    inset 0 2px 3px rgba(255, 255, 255, 0.05),  // 上面のハイライト（光）
+    0 4px 6px rgba(0, 0, 0, 0.15);              // 下に落ちる影（棚感）
+
+  position: relative;
+  z-index: 1;
 
   @media (max-width: 576px) {
     height: 18px;
   }
 }
 
+.shelf-bar::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 5px;
+  background: rgba(35, 58, 151, 0.788);
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+}
+
+.shelf-bar::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: rgba(0, 0, 0, 0.077);
+  filter: blur(1px);
+  border-radius: 0 0 4px 4px;
+}
+
 .no-cover {
   position: relative;
   width: 100%;
+  max-width: 240px;
   aspect-ratio: 2 / 3;
-  background: #f5d75b; // レクラム文庫のような黄色
+  background: #f5d75b; /* レクラム文庫のような黄色 */
   color: #2a1e00;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 4px;
-  font-size: 0.8em;
-  font-weight: bold;
-  font-family: "Georgia", serif;
   text-align: center;
-  padding: 8px;
-  padding-bottom: 32px; // 下帯のスペース
+  border-radius: 4px;
+  font-family: "Kosugi Mono", monospace;
+  font-size: 0.85em;
+  font-weight: bold;
+  line-height: 1.4;
+  padding: 12px;
+  padding-bottom: 40px; /* 下帯のスペース */
   overflow: hidden;
   box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1);
   box-sizing: border-box;
-  text-wrap: balance;
+}
+
+.no-cover .title {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-word;
+  font-size: clamp(0.5rem, 1.2vw, 0.75rem);
+  width: 100%;
+}
+
+.book-on-shelf a {
+  text-decoration: none;
+  color: inherit;
 }
 
 .no-cover::before {

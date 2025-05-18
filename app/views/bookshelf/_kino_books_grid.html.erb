@@ -11,7 +11,7 @@
               <% elsif book.book_cover.present? %>
                 <img src="<%= book.book_cover %>" alt="表紙画像" class="book-cover">
               <% else %>
-                <div class="no-cover"><%= book.title %></div>
+                <div class="no-cover"><span class="title"><%= book.title.truncate(24, omission: "").ljust(10).gsub(" ", "&nbsp;").html_safe %></span></div>
               <% end %>
             <% end %>
           </div>

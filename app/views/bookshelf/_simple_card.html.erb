@@ -33,7 +33,7 @@
         <% elsif book.book_cover.present? %>
           <img src="<%= book.book_cover %>" style="border-radius: 12px;" alt="表紙画像" class="book-cover-iphone rounded" >
         <% else %>
-          <div class="no-cover-iphone book-cover-iphone"><%= book.title %></div>
+          <div class="no-cover-iphone book-cover-iphone"><%= book.title.truncate(10, omission: "").ljust(10).gsub(" ", "&nbsp;").html_safe %></div>
         <% end %>
       <% end %>
     <% end %>
