@@ -46,7 +46,7 @@ class BooksController < ApplicationController
 
     respond_to do |format|
       format.html { render :index }
-      format.turbo_stream # => 自動的に index.turbo_stream.erb を探す
+      format.turbo_stream
     end
   end
 

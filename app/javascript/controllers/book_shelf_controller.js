@@ -17,7 +17,7 @@ export default class extends Controller {
     if (!currentSlice || currentSlice !== booksPerRow) {
       currentParams.set("slice", booksPerRow)
       const newUrl = `${window.location.pathname}?${currentParams.toString()}`
-      Turbo.visit(newUrl, { action: "replace" }) // ← 履歴を残さず即反映
+      Turbo.visit(newUrl, { action: "replace" })
     }
   }
 }
