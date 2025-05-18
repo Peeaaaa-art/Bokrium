@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get "pwa/manifest"
   get "/up", to: proc { [ 200, {}, [ "OK" ] ] }
   get "explore/index"
   get "explore/suggestions"
