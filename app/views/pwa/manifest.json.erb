@@ -1,23 +1,23 @@
-{
-  "name": "Bokrium",
-  "short_name": "Bokrium",
-  "icons": [
+<%= raw({
+  name: "Bokrium",
+  short_name: "Bokrium",
+  icons: [
     {
-      "src": "/icon.png",
-      "type": "image/png",
-      "sizes": "512x512"
+      src: "/bok_logo.png",
+      type: "image/png",
+      sizes: "640x640"
     },
     {
-      "src": "/icon.png",
-      "type": "image/png",
-      "sizes": "512x512",
-      "purpose": "maskable"
+      src: "/bok_logo.png",
+      type: "image/png",
+      sizes: "640x640",
+      purpose: "maskable"
     }
   ],
-  "start_url": "/",
-  "display": "standalone",
-  "scope": "/",
-  "description": "Bokrium helps you save and share your reading notes - made in Japan",
-  "theme_color": "blue",
-  "background_color": "blue"
-}
+  start_url: "/",
+  display: "standalone",
+  scope: "/",
+  description: "Bokrium helps you save and share your reading notes – made in Japan",
+  theme_color: "blue",
+  background_color: "blue"
+}.to_json) %>

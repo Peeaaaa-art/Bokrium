@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-  get "pwa/manifest"
   get "/up", to: proc { [ 200, {}, [ "OK" ] ] }
   get "explore/index"
   get "explore/suggestions"
@@ -38,6 +37,7 @@ Rails.application.routes.draw do
   get "/explore", to: "explore#index", as: :explore
 
   root "welcome#index"
+  get "/manifest.json", to: "pwa#manifest", defaults: { format: :json }
 end
 
 # 公式リファレンス https://guides.rubyonrails.org/routing.html
