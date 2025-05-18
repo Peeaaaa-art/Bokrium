@@ -1,15 +1,24 @@
 .books-grid-iphone {
   display: grid;
-  grid-template-columns: repeat(8, 1fr);
+  grid-template-columns: repeat(12, 1fr);
   gap: 10px 10px;
   padding: 0 7px;
 
+  @media (max-width: 576px) {
+    grid-template-columns: repeat(4, 1fr);}
 }
 
-@media (max-width: 1200px) {.books-grid-iphone { grid-template-columns: repeat(7, 1fr);}}
-@media (max-width: 992px) {.books-grid-iphone { grid-template-columns: repeat(6, 1fr);}}
-@media (max-width: 768px) {.books-grid-iphone { grid-template-columns: repeat(5, 1fr);}}
-@media (max-width: 576px) {.books-grid-iphone { grid-template-columns: repeat(4, 1fr);}}
+.books-grid-iphone.cols-3  { grid-template-columns: repeat(3, 1fr); }
+.books-grid-iphone.cols-4  { grid-template-columns: repeat(4, 1fr); }
+.books-grid-iphone.cols-6  { grid-template-columns: repeat(6, 1fr); }
+.books-grid-iphone.cols-8  { grid-template-columns: repeat(8, 1fr); }
+.books-grid-iphone.cols-10 { grid-template-columns: repeat(10, 1fr); }
+
+.books-grid-iphone.cols-12 { grid-template-columns: repeat(12, 1fr); }
+.books-grid-iphone.cols-15 { grid-template-columns: repeat(15, 1fr); }
+.books-grid-iphone.cols-18 { grid-template-columns: repeat(18, 1fr); }
+.books-grid-iphone.cols-21 { grid-template-columns: repeat(21, 1fr); }
+.books-grid-iphone.cols-24 { grid-template-columns: repeat(24, 1fr); }
 
 .book-cover-iphone {
   width: 100%;
@@ -23,7 +32,6 @@
 .no-cover-iphone {
   position: relative;
   width: 100%;
-  max-width: 200px;
   aspect-ratio: 4 / 5;
   background: #f5d75b;
   color: #2a1e00;
@@ -31,16 +39,17 @@
   align-items: center;
   justify-content: center;
   border-radius: 4px;
-  font-size: 0.75em;
+  font-size: clamp(0.5rem, 1.2vw, 0.75rem); /* 柔軟に縮む文字 */
   font-weight: bold;
   font-family: "Georgia", serif;
   text-align: center;
-  padding: 8px;
-  padding-bottom: 88px;
-  overflow: hidden;
+  padding: 4%;
   box-sizing: border-box;
+  overflow: hidden;
   margin: 8px auto;
+  line-height: 1.2;
 }
+
 .no-cover-iphone::before {
   content: "Bokrium";
   position: absolute;
@@ -49,10 +58,10 @@
   width: 100%;
   background: rgb(79, 78, 78);
   color: white;
-  font-size: 0.66em;
-  font-weight: normal;
+  font-size: clamp(0.4rem, 1vw, 0.66rem); /* 自動スケール */
+  font-weight: 700;
   text-align: right;
   padding: 2px 6px;
   font-family: "Big Shoulders Inline", sans-serif;
-  font-weight: 700;
+  box-sizing: border-box;
 }
