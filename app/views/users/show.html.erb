@@ -1,5 +1,5 @@
 <% content_for :title, "ユーザー - Bokrium" %>
-
+<% if current_user %>
 <div class="container my-5">
   <div class="card subtle-shadow mb-4">
     <div class="card-header bg-rhodia-blue text-white">
@@ -32,11 +32,11 @@
       </div>
     </div>
   </div>
-
 </div>
+<% end %>
 
 <div class="text-center my-2">
-  <% if current_user.line_user.present? %>
+  <% if current_user && current_user.line_user.present? %>
     <span class="badge bg-success subtle-shadow rounded-pill fs-6 p-3">
       <i class="bi bi-line"></i>
       LINE連携済み

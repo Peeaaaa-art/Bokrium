@@ -1,12 +1,15 @@
 <% content_for :title, "本棚 - Bokrium" %>
 
 <% if !user_signed_in? %>
-  <div class="alert alert-info text-center">
-    こちらはサンプル表示です。自分の本棚を作成するには、ログイン・アカウント登録が必要です。
+  <div class="alert-bokrium-info d-flex align-items-center text-center py-2 py-md-3">
+    <div class="container text-center text-sample">
+          <i class="bi bi-info-circle-fill fs-6 me-2"></i>
+    こちらはサンプル表示です。自分の本棚をつくるためには、<%= link_to 'ログイン', new_user_session_path %>・<%= link_to "アカウント登録", new_user_registration_path %>が必要です。
+    </div>
   </div>
 <% end %>
 
-<% if @no_books %>
+<% if current_user && @no_books  %>
   <div class="alert alert-ifo text-center">
     <p>こちらはサンプル表示です。最初の本を登録しましょう！</p>
     <div class="mt-3">
@@ -94,13 +97,51 @@
 <% end %>
 
 <% if @no_books || !user_signed_in? %>
-  <%= render partial: "bookshelf/sample_books", locals: { books: @books } %>
+<div class="d-flex align-items-center justify-content-between my-4 px-3">
+
+  <!-- ⬅ 左端：ビュー切り替え -->
+  <div class="flex-shrink-0">
+    <%= link_to guest_books_path(view: @view_mode == "shelf" ? "card" : "shelf"),
+                class: "btn btn-light border shadow-sm d-flex align-items-center justify-content-center",
+                style: "width: 40px; height: 40px; border-radius: 50%; line-height: 1;",
+                title: (@view_mode == "shelf" ? "カードビューに切り替え" : "棚ビューに切り替え") do %>
+      <% if @view_mode == "shelf" %>
+        <i class="bi bi-card-text fs-5 icon-refined"></i>
+      <% else %>
+        <i class="bi bi-layout-three-columns fs-5 icon-refined"></i>
+      <% end %>
+    <% end %>
+  </div>
+    <div class="mx-auto">
+    <div class="filter-controls border rounded-pill shadow-sm px-4 py-md-1 d-flex align-items-center gap-3">
+
+      <!-- 検索 -->
+      <button class="btn btn-icon">
+        <i class="bi bi-search icon-refined"></i>
+      </button>
+
+      <!-- ソート -->
+      <button class="btn btn-icon">
+        <i class="bi bi-arrow-down-up icon-refined"></i>
+      </button>
+
+      <!-- タグ -->
+      <button class="btn btn-icon">
+        <i class="bi bi-tags icon-refined"></i>
+      </button>
+
+      <!-- ステータス -->
+      <button class="btn btn-icon">
+        <i class="bi bi-journal-check icon-refined"></i>
+      </button>
+    </div>
+  </div>
+</div>
+  <turbo-frame id="books_frame">
+    <%= render partial: "books/books_frame", locals: { books: @books } %>
+  </turbo-frame>
 <% end %>
 
-<% if !user_signed_in? %>
-  <div class="registration-cta text-center mt-5 text-dark fw-bold  big-shoulders-inline-bold">
-    <h4>あなたの読書体験をもっと豊かに</h4>
-    <p>Bokriumで読書メモを管理し、知識を整理しましょう</p>
-    <%= link_to "今すぐ始める（無料登録）", new_user_registration_path, class: "btn btn-lg btn-success mt-2 mb-5" %>
-  </div>
-<% end %>
+
+
+

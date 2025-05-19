@@ -1,10 +1,10 @@
 module UsersHelper
   def user_avatar(user, size: :large)
-    image = if user.avatar_s3.attached?
+    image = if user && user.avatar_s3.attached?
               variant_for(user.avatar_s3, size)
     else
-        num = (user.id % 7) + 1
-        # num = rand(1..7)
+        num = user ? (user.id % 7) + 1 : 1
+
         asset_path("avatar_default#{num}.png")
     end
     image

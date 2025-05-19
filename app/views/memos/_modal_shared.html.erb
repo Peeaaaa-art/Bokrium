@@ -10,7 +10,7 @@
         <%= form_with url: "#", method: :post, id: "memo-edit-form", data: { turbo_frame: "_top" } do |f| %>
 
           <!-- アイコン：中央上部 -->
-          <div class="card-header d-flex justify-content-center py-3">
+          <div class="card-header d-flex justify-content-center bg-rhodia-orange py-3">
             <i class="bi bi-cloud-fog2-fill"></i>
             <i class="bi bi-cloud-haze2"></i>
             <i class="bi bi-cloud-fog2-fill"></i>
@@ -22,7 +22,7 @@
           <!-- 保存ボタン：右上に絶対配置 -->
           <div class="position-absolute end-0 top-0 p-2">
             <%= button_tag type: "submit",
-                class: "btn btn-primary rounded-circle d-flex align-items-center justify-content-center shadow-sm",
+                class: "btn btn-primary-bok rounded-circle d-flex align-items-center justify-content-center shadow-sm",
                 title: "保存",
                 data: { action: "click->memo-modal#forceSubmit" },
                 style: "width: 40px; height: 40px;" do %>

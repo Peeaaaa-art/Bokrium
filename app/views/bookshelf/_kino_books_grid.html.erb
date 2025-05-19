@@ -1,23 +1,26 @@
-<div class="books-grid mt-5" data-controller="book-shelf">
-  <% books.each_slice(books_per_row) do |row_books| %>
-    <div class="shelf-row mt-3 mt-md-5">
-      <div class="book-row">
-        <% row_books.each do |book| %>
-          <div class="book-on-shelf">
-            <%= link_to book_path(book), data: { turbo_frame: "_top" } do %>
-              <% if book.book_cover_s3.attached? %>
-                <%= image_tag book.book_cover_s3.variant(resize_to_limit: [180, 270]),
-                      alt: book.title, class: "book-cover" %>
-              <% elsif book.book_cover.present? %>
-                <img src="<%= book.book_cover %>" alt="表紙画像" class="book-cover">
-              <% else %>
-                <div class="no-cover"><span class="title"><%= book.title.truncate(24, omission: "").ljust(10).gsub(" ", "&nbsp;").html_safe %></span></div>
-              <% end %>
+<% books.each_slice(books_per_row) do |row_books| %>
+  <div class="shelf-row" data-controller="book-shelf">
+    <div class="book-row">
+      <% row_books.each do |book| %>
+        <div class="book-on-shelf">
+          <%= link_to book_link_path(book), data: { turbo_frame: "_top" } do %>
+            <% if book.book_cover_s3.attached? %>
+              <%= image_tag book.book_cover_s3.variant(resize_to_limit: [200, 200]),
+                    alt: book.title, class: "book-cover" %>
+            <% elsif book.book_cover.present? %>
+              <img src="<%= book.book_cover %>" alt="表紙画像" class="book-cover">
+            <% else %>
+              <div class="no-cover">
+                <span class="title">
+                  <%= book.title.truncate(24, omission: "").ljust(10).gsub(" ", "&nbsp;").html_safe %>
+                </span>
+              </div>
             <% end %>
-          </div>
-        <% end %>
-      </div>
-      <div class="shelf-bar"></div>
+          <% end %>
+        </div>
+      <% end %>
     </div>
-  <% end %>
-</div>
+    <div class="shelf-bar"></div>
+    <div class="shelf-depth"></div>
+  </div>
+<% end %>

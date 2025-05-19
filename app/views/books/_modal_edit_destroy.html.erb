@@ -24,7 +24,7 @@
             <%= button_to book_path(book),
               method: :delete,
               data: {
-                turbo: true,
+                turbo: false,
                 turbo_confirm: "本のデータとメモが削除されると、もとに戻すことはできません。\n本当に削除してもよろしいでしょうか？"
               },
               style: "display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 0.8rem 1rem; background: white; border-radius: 12px; font-size: 0.95rem; text-decoration: none; color: #b91c1c; border: 1px solid #fecaca;" do %>

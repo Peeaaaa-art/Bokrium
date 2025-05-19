@@ -166,7 +166,7 @@ class BooksController < ApplicationController
   end
 
   def sample_books
-    (1..15).map { |i| Book.new(title: "optimized#{i}.jpg") }
+    Book.where(user_id: 999).limit(12)
   end
 
   def set_tagger_for_all_taggings(book)

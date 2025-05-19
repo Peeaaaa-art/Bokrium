@@ -1,6 +1,6 @@
 class MemosController < ApplicationController
   include ActionView::RecordIdentifier
-  # before_action :authenticate_user!
+  before_action :authenticate_user!
   before_action :set_book
   before_action :set_memo, only: [ :show, :edit, :update, :destroy ]
 
@@ -29,11 +29,9 @@ class MemosController < ApplicationController
 
 
   def update
-    logger.debug "🪵 params: #{params.inspect}"
     @memos = @book.memos.order(created_at: :asc)
     @memo = Memo.find(params[:id])
     if @memo.update(memo_params)
-      Rails.logger.debug "🪵 converted_params: #{memo_params.inspect}"
       redirect_to book_path(@memo.book), notice: "メモを保存しました"
     else
       render status: :unprocessable_entity
