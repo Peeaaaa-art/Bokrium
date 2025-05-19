@@ -7,7 +7,11 @@ export default class extends Controller {
 
     if (width < 576) {
       booksPerRow = 5
-    } else if (width < 900) {
+    } else if (width < 768) {
+      booksPerRow = 6
+    } else if (width < 992) {
+      booksPerRow = 8
+    } else if (width < 1200) {
       booksPerRow = 10
     }
 

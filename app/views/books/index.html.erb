@@ -1,11 +1,10 @@
 <% content_for :title, "本棚 - Bokrium" %>
 
 <% if !user_signed_in? %>
-  <div class="alert-bokrium-info d-flex align-items-center text-center px-4 py-3">
-
+  <div class="alert-bokrium-info d-flex align-items-center text-center px-3 py-3">
     <div class="container text-center">
           <i class="bi bi-info-circle-fill fs-5 me-2"></i>
-    こちらはサンプル表示です。自分の本棚を作成するには、<%= link_to 'ログイン', new_user_session_path %>・<%= link_to "アカウント登録", new_user_registration_path %>が必要です。
+    こちらはサンプル表示です。自分の本棚をつくるには、<%= link_to 'ログイン', new_user_session_path %>・<%= link_to "アカウント登録", new_user_registration_path %>が必要です。
     </div>
 </div>
 <% end %>

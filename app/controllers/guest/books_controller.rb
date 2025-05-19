@@ -17,7 +17,7 @@ module Guest
     end
 
     def index
-      @books = guest_user.books.all
+      @books = guest_user.books.order(created_at: :desc)
       @no_books = true
 
       @filtered_tags = []

@@ -1,5 +1,5 @@
 <% books.each_slice(books_per_row) do |row_books| %>
-  <div class="shelf-row mt-3 mt-md-5">
+  <div class="shelf-row mt-3 mt-md-5" data-controller="book-shelf">
     <div class="book-row">
       <% row_books.each do |book| %>
         <div class="book-on-shelf">
