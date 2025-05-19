@@ -58,12 +58,20 @@
     </div>
     <div class="mb-4 small text-muted">
       Bokriumは「本を読むだけで終わらせない」思いから生まれました。<br>
-      整理・実践・共有という仕組みで、読書による知識の蓄積を日常に息づかせます。<br>
-      あなたの読書体験を深め、社会全体で「読書人階級」を育てることを目指しています。
+      整理・実践・共有という仕組みで、読書による知識の蓄積を日常に息づかせます。
+    </div>
+
+
+    <div class="registration-cta text-center mt-5 text-dark fw-bold  big-shoulders-inline-bold">
+      <h4>あなたの読書体験をもっと豊かに</h4>
+      <p>Bokriumで読書メモを管理し、知識を整理しましょう</p>
+      <%= link_to "今すぐ始める（無料登録）", new_user_registration_path, class: "btn btn-lg btn-success mt-2 mb-5" %>
     </div>
 
     <%= link_to "書籍を追加しましょう",  search_books_path, class: "btn btn-secondary" %>
   <% end %>
+
+  <%= link_to "ゲストとして試してみる", guest_books_path, class: "btn btn-outline-secondary" %>
 
   <% if current_user && @random_memo && @random_memo.book %>
     <%= link_to book_path(@random_memo.book), class: "text-decoration-none text-reset" do %>
