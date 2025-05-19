@@ -9,7 +9,7 @@ module Guest
       end
 
       @memos = @book.memos.order(created_at: :desc)
-      @new_memo = nil
+      @new_memo = Memo.new(book_id: @book.id)
       @user_tags = []
       @readonly = true
 
@@ -17,7 +17,7 @@ module Guest
     end
 
     def index
-      @books = Book.where(user_id: 999).limit(12)
+      @books = Book.where(user_id: 999)
       @no_books = true
 
       @filtered_tags = []
