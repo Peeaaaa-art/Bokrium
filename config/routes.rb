@@ -37,6 +37,10 @@ Rails.application.routes.draw do
   get "/explore", to: "explore#index", as: :explore
 
   root "welcome#index"
+
+  namespace :guest do
+    resources :books, only: [ :index, :show ]
+  end
   get "/manifest.json", to: "pwa#manifest", defaults: { format: :json }
 end
 
