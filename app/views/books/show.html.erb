@@ -51,7 +51,8 @@
       </div>
 
 
-      <div class="d-flex flex-row align-items-center justify-content-between  filter-controls border rounded-pill shadow-sm px-3 mt-3">
+      <div class="d-flex flex-row align-items-center justify-content-between  filter-controls border rounded-pill shadow-sm px-3 mt-3"
+            style="<%= 'pointer-events: none; opacity: 0.6;' if @readonly %>">
         <!-- タグ -->
         <button class="btn btn-sm text-white" data-bs-toggle="modal" data-bs-target="#tagSelectModal">
             <i class="bi bi-tags fs-5 icon-refined"></i>
@@ -121,7 +122,7 @@
         <!-- 新規メモの read_only 表示（まだ保存されていない状態） -->
         <%= render "memos/read_only_item", book: @book, memo: @new_memo %>
       <% end %>
-      <!-- 📌 共通のモーダルは1個だけ -->
+      <!--  共通のモーダルは1個だけ -->
       <%= render "memos/modal_shared", memo: @new_memo %>
       <!-- アクションボタン -->
       <div class="d-flex justify-content-center gap-3 mt-4 mb-3">
@@ -134,7 +135,7 @@
         } do %>
           <i class="bi bi-pen"></i> もっと書く
         <% end %>
-        <%= link_to "戻る", books_path, class: "btn btn-outline-secondary" %>
+        <%= link_to "戻る", "javascript:history.back()", class: "btn btn-outline-secondary" %>
       </div>
     </div>
   </div>
