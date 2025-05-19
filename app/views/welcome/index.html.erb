@@ -1,77 +1,91 @@
-<div class="container text-center my-4">
+<div class="container text-center my-3">
   <% if !current_user || !@memo_exists %>
-    <h3 class="my-3 fw-bold">Bokriumへようこそ</h3>
-    <div class="lead mb-4">
-      本を「読んで終わり」にしない<br>
-      書籍管理アプリです。
+    <div class="my-1 logo-welcome big-shoulders-inline-bold"><span title="ボクリウム">Bokrium</span></div>
+    <div class="mb-1">
+      「読んだだけ」で終わらせない。
+        Bokriumは、読書の記憶を育てる本棚アプリです。
     </div>
+      <div class="list-unstyled mb-4 text-center mx-auto" style="max-width: 600px;">
+        <%= image_tag "bokrium_welcome.webp", class: "img-fluid rounded shadow-sm", style: "max-width: 80%; height: auto;" %>
+      </div>
     <ul class="list-unstyled mb-4 text-start mx-auto" style="max-width: 600px;">
-      <li class="mb-4 d-flex align-items-start">
-        <span class="me-3 text-primary fs-3">
+      <li class="ms-4 mb-4 d-flex align-items-start">
+        <span class="me-3 fs-3 text-success">
           <i class="bi bi-upc-scan"></i>
         </span>
         <div>
-          <span class="fw-bold text-primary">ISBNバーコードスキャンで簡単登録</span><br>
+          <span class="fw-bold text-primary-bok">ISBNバーコードスキャンで簡単登録</span><br>
           <span class="text-muted small">書籍情報をすばやく電子本棚に追加できます。</span>
         </div>
       </li>
-      <li class="mb-4 d-flex align-items-start">
-        <span class="me-3 text-success fs-3">
+      <li class="ms-4 mb-4 d-flex align-items-start">
+        <span class="me-3 fs-3 text-success">
           <i class="bi bi-journal-richtext"></i>
         </span>
         <div>
-          <span class="fw-bold text-success">読書メモや画像を整理・保存</span><br>
+          <span class="fw-bold text-primary-bok">読書メモや画像を整理・保存</span><br>
           <span class="text-muted small">本ごとに感想や学びを記録し、いつでも振り返りが可能です。</span>
         </div>
       </li>
-      <li class="mb-4 d-flex align-items-start">
-        <span class="me-3 text-warning fs-3">
+      <li class="ms-4 mb-4 d-flex align-items-start">
+        <span class="me-3 fs-3 text-success">
           <i class="bi bi-collection"></i>
         </span>
         <div>
-          <span class="fw-bold text-warning">重複購入を防ぎ、蔵書を一目で把握</span><br>
+          <span class="fw-bold text-primary-bok">重複購入を防ぎ、蔵書を一目で把握</span><br>
           <span class="text-muted small">あなたの本棚を可視化し、同じ本を何度も買ってしまう心配がなくなります。</span>
         </div>
       </li>
-      <li class="mb-4 d-flex align-items-start">
-        <span class="me-3 text-info fs-3">
+      <li class="ms-4 mb-4 d-flex align-items-start">
+        <span class="me-3 fs-3 text-success">
           <i class="bi bi-shuffle"></i>
         </span>
         <div>
-          <span class="fw-bold text-info">過去のメモをランダム表示</span><br>
+          <span class="fw-bold text-primary-bok">過去のメモをランダム表示</span><br>
           <span class="text-muted small">忘れかけていた知識や気づきを日常に活かせます。</span>
         </div>
       </li>
-      <li class="mb-4 d-flex align-items-start">
-        <span class="me-3 text-danger fs-3">
+      <li class="ms-4 mb-4 d-flex align-items-start">
+        <span class="me-3 fs-3 text-success">
           <i class="bi bi-people"></i>
         </span>
         <div>
-          <span class="fw-bold text-danger">読書メモの共有機能</span><br>
+          <span class="fw-bold text-primary-bok">読書メモの共有機能</span><br>
           <span class="text-muted small">他のユーザーの視点や知識に触れ、新たな発見を得られます。</span>
         </div>
       </li>
     </ul>
 
-    <div class="my-5">
-      <span class="h5 text-success">蔵書を活かしたい読書家や、管理に悩む方へ。</span>
-    </div>
-    <div class="mb-4 small text-muted">
-      Bokriumは「本を読むだけで終わらせない」思いから生まれました。<br>
-      整理・実践・共有という仕組みで、読書による知識の蓄積を日常に息づかせます。
-    </div>
 
 
-    <div class="registration-cta text-center mt-5 text-dark fw-bold  big-shoulders-inline-bold">
-      <h4>あなたの読書体験をもっと豊かに</h4>
+
+    <div class="text-center mt-5 big-shoulders-inline-bold">
+      <h5>あなたの読書体験をもっと豊かに</h5>
       <p>Bokriumで読書メモを管理し、知識を整理しましょう</p>
-      <%= link_to "今すぐ始める（無料登録）", new_user_registration_path, class: "btn btn-lg btn-success mt-2 mb-5" %>
+      <%= link_to "今すぐはじめる（あなたの本棚をつくる）", new_user_registration_path, class: "btn btn-success mt-2 mb-4" %>
     </div>
+      <p>↓↓↓とりあえず試してみる</p>
+    <div class="d-flex flex-wrap justify-content-center align-items-center gap-2 mt-3">
 
-    <%= link_to "書籍を追加しましょう",  search_books_path, class: "btn btn-secondary" %>
+      <%= link_to search_books_path, class: "btn btn-sm btn-outline-primary d-flex align-items-center gap-2 fs-6 shadow-sm" do %>
+        <i data-lucide="search" style="width: 18px; height: 18px;"></i>
+        本を探す
+      <% end %>
+
+      <%= link_to guest_books_path, class: "btn btn-sm btn-outline-success d-flex align-items-center gap-2 fs-6" do %>
+        <i data-lucide="library-big" style="width: 18px; height: 18px;"></i>
+        本棚を見る
+      <% end %>
+
+      <%= link_to public_bookshelf_index_path, class: "btn btn-sm btn-outline-danger d-flex align-items-center gap-2 fs-6" do %>
+        <i data-lucide="users" style="width: 18px; height: 18px;"></i>
+        みんなのメモ
+      <% end %>
+
+    </div>
   <% end %>
 
-  <%= link_to "ゲストとして試してみる", guest_books_path, class: "btn btn-outline-secondary" %>
+
 
   <% if current_user && @random_memo && @random_memo.book %>
     <%= link_to book_path(@random_memo.book), class: "text-decoration-none text-reset" do %>
