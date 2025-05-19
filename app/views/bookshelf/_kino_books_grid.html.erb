@@ -1,6 +1,7 @@
 <div class="books-grid mt-5" data-controller="book-shelf">
   <% books.each_slice(books_per_row) do |row_books| %>
     <div class="shelf-row mt-3 mt-md-5">
+
       <div class="book-row">
         <% row_books.each do |book| %>
           <div class="book-on-shelf">
@@ -18,6 +19,7 @@
         <% end %>
       </div>
       <div class="shelf-bar"></div>
+      <div class="shelf-depth"></div>
     </div>
   <% end %>
 </div>
