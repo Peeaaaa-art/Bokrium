@@ -1,7 +1,7 @@
 module Guest
   class BooksController < ApplicationController
     def show
-      @book = Book.find_by(id: params[:id], user_id: 999)
+      @book = Book.find_by(id: params[:id], user_id: guest_user.id)
 
       unless @book
         redirect_to root_path, alert: "この本はゲスト表示できません"
@@ -17,7 +17,7 @@ module Guest
     end
 
     def index
-      @books = Book.where(user_id: 999)
+      @books = guest_user.books.all
       @no_books = true
 
       @filtered_tags = []
