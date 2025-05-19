@@ -1,14 +1,14 @@
 <div class="container text-center my-3">
   <% if !current_user || !@memo_exists %>
     <div class="my-1 logo-welcome big-shoulders-inline-bold"><span title="ボクリウム">Bokrium</span></div>
-    <div class="mb-1">
+    <div class="mb-3">
       「読んだだけ」で終わらせない。
         Bokriumは、読書の記憶を育てる本棚アプリです。
     </div>
-      <div class="list-unstyled mb-4 text-center mx-auto" style="max-width: 600px;">
+      <div class="mb-5 text-center mx-auto" style="max-width: 600px;">
         <%= image_tag "bokrium_welcome.webp", class: "img-fluid rounded shadow-sm", style: "max-width: 80%; height: auto;" %>
       </div>
-    <ul class="list-unstyled mb-4 text-start mx-auto" style="max-width: 600px;">
+    <ul class="list-unstyled mb-5 text-start mx-auto" style="max-width: 600px;">
       <li class="ms-4 mb-4 d-flex align-items-start">
         <span class="me-3 fs-3 text-success">
           <i class="bi bi-upc-scan"></i>
@@ -59,13 +59,13 @@
 
 
 
-    <div class="text-center mt-5 big-shoulders-inline-bold">
+    <div class="registration-cta text-center mt-5 big-shoulders-inline-bold">
       <h5>あなたの読書体験をもっと豊かに</h5>
       <p>Bokriumで読書メモを管理し、知識を整理しましょう</p>
-      <%= link_to "今すぐはじめる（あなたの本棚をつくる）", new_user_registration_path, class: "btn btn-success mt-2 mb-4" %>
+      <%= link_to "今すぐはじめる（あなたの本棚をつくる）", new_user_registration_path, class: "btn btn-success mt-2 mb-5" %>
     </div>
       <p>↓↓↓とりあえず試してみる</p>
-    <div class="d-flex flex-wrap justify-content-center align-items-center gap-2 mt-3">
+    <div class="d-flex flex-wrap justify-content-center align-items-center gap-2 my-4">
 
       <%= link_to search_books_path, class: "btn btn-sm btn-outline-primary d-flex align-items-center gap-2 fs-6 shadow-sm" do %>
         <i data-lucide="search" style="width: 18px; height: 18px;"></i>
