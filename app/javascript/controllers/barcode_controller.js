@@ -8,10 +8,8 @@ export default class extends Controller {
   static values = { debounce: { type: Number, default: 1500 } }
 
   connect() {
-    console.log("📸 barcode_controller connected!")
 
     if (scannerStarted) {
-      console.warn("⚠️ スキャナーはすでに起動済みです")
       return
     }
 
@@ -39,7 +37,6 @@ export default class extends Controller {
 
       if (!isbn.startsWith("978") || this.scannedIsbns.has(isbn)) return
 
-      console.log("📘 ISBN detected:", isbn)
       this.scannedIsbns.add(isbn)
 
       this.dispatch("scan", {
@@ -70,7 +67,6 @@ export default class extends Controller {
     if (stream) {
       stream.getTracks().forEach((track) => track.stop())
       this.videoTarget.srcObject = null
-      console.log("📴 カメラストリームを停止しました")
     }
 
     scannerStarted = false

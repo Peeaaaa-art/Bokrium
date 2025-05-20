@@ -4,7 +4,6 @@ export default class extends Controller {
   static values = { timeout: { type: Number, default: 5000 } }
 
   scan(event) {
-    console.log("📥 ScanController received:", event.detail.isbn)
     const isbn = event.detail.isbn;
     if (!isbn || !isbn.startsWith('978')) return;
 
@@ -20,7 +19,6 @@ export default class extends Controller {
       signal: controller.signal
     })
     .then(response => {
-      console.log("Response status:", response.status);
       clearTimeout(timeoutId);
 
       if (!response.ok) {
@@ -28,8 +26,6 @@ export default class extends Controller {
       }
 
       return response.text().then(html => {
-        console.log("Raw Response:", html);
-
         if (typeof html === "string" && html.includes("<turbo-stream")) {
           Turbo.renderStreamMessage(html);
           return html;
@@ -38,11 +34,10 @@ export default class extends Controller {
       });
     })
     .catch(error => {
-      console.error("検索エラー:", error);
       Turbo.renderStreamMessage(
         `<turbo-stream action="prepend" target="scanned-books">
           <template>
-            <div class="alert alert-danger">通信エラー: ${error.message}</div>
+            通信エラー: ${error.message}
           </template>
         </turbo-stream>`
       );

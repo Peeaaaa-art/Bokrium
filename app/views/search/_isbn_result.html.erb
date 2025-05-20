@@ -24,20 +24,25 @@
       <p class="mb-1 small"><strong>著者:</strong> <%= book[:author] || "情報なし" %></p>
       <p class="mb-1 small"><strong>出版社:</strong> <%= book[:publisher] || "情報なし" %></p>
 
-      <%= form_with model: Book.new, url: books_path, local: true do |f| %>
-        <%= f.hidden_field :isbn, value: book[:isbn] %>
-        <%= f.hidden_field :title, value: book[:title] %>
-        <%= f.hidden_field :author, value: book[:author] %>
-        <%= f.hidden_field :publisher, value: book[:publisher] %>
-        <%= f.hidden_field :price, value: book[:price] %>
-        <%= f.hidden_field :page, value: book[:page] %>
+        <%= form_with model: Book.new, url: books_path, local: true do |f| %>
+          <%= f.hidden_field :isbn, value: book[:isbn] %>
+          <%= f.hidden_field :title, value: book[:title] %>
+          <%= f.hidden_field :author, value: book[:author] %>
+          <%= f.hidden_field :publisher, value: book[:publisher] %>
+          <%= f.hidden_field :price, value: book[:price] %>
+          <%= f.hidden_field :page, value: book[:page] %>
 
-        <% if book[:book_cover].present? %>
-          <%= f.hidden_field :book_cover, value: book[:book_cover] %>
+          <% if book[:book_cover].present? %>
+            <%= f.hidden_field :book_cover, value: book[:book_cover] %>
+          <% end %>
+        <% if user_signed_in? %>
+          <%= f.submit "My本棚に追加", class: "btn btn-success btn-sm mt-3" %>
+        <% else %>
+          <button class="btn btn-success btn-sm mt-3" disabled title="ログインすると追加できます">
+            My本棚に追加
+          </button>
         <% end %>
-
-        <%= f.submit "My本棚に追加", class: "btn btn-success btn-sm mt-3" %>
-      <% end %>
+        <% end %>
     </div>
   </div>
 </div>
