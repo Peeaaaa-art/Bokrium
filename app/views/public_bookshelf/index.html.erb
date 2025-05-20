@@ -4,7 +4,7 @@
   <% if @others_random_memo && @others_random_memo.book && @others_random_memo.user %>
   <div class="container">
     <!-- 検索窓 -->
-    <%= render "shared/search_bar", scope: "public", placeholder: "タイトル・著者・メモ",
+    <%= render "shared/search_bar", scope: "public", placeholder: "タイトル・著者",
                               form_class: "mb-md-5 mb-2 d-flex justify-content-center" %>
 
     <div id="memo-grid" class="row row-cols-1 row-cols-md-3 g-4">
