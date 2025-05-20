@@ -13,7 +13,7 @@ class LineSessionsController < ApplicationController
         line_user.line_name = line_name
       end
 
-      redirect_to user_path(current_user), notice: "LINE連携が完了しました！"
+      redirect_to mypage_path(current_user), notice: "LINE連携が完了しました！"
     else
       redirect_to root_path, alert: "ログインしてからLINE連携してください"
     end
