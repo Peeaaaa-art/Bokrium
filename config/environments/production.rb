@@ -53,11 +53,11 @@ Rails.application.configure do
   config.action_mailer.default_url_options = { protocol: "https", host: "bokrium.com" }
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-    address:              "smtp.gmail.com",
+    address:              "mail.privateemail.com",
     port:                 587,
-    domain:               "gmail.com",
-    user_name:            ENV["GMAIL_USER_NAME"],
-    password:             ENV["GMAIL_PASSWORD"],
+    domain:               "bokrium.com",
+    user_name:            "support@bokrium.com",
+    password:             ENV["PRIVATE_EMAIL_PASSWORD"],
     authentication:       "plain",
     enable_starttls_auto: true
   }
