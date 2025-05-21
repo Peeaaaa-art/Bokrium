@@ -11,6 +11,7 @@ import TagToggleController from "./controllers/tag_toggle_controller"
 import UiToggleController from "./controllers/ui_toggle_controller"
 import ResponsiveSliceController from "./controllers/responsive_slice_controller.js"
 import ColumnSelectorController from "./controllers/column_selector_controller.js"
+import AutoRemoveController from "./controllers/auto_remove_controller.js"
 
 const application = Application.start()
 window.Stimulus = application
@@ -27,6 +28,7 @@ application.register("tag-toggle", TagToggleController)
 application.register("ui-toggle", UiToggleController)
 application.register("responsive-slice", ResponsiveSliceController)
 application.register("column-selector", ColumnSelectorController)
+application.register("auto-remove", AutoRemoveController)
 
 
 import * as bootstrap from "bootstrap"

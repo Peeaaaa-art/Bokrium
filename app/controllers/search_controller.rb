@@ -93,7 +93,8 @@ class SearchController < ApplicationController
       else
         render turbo_stream: turbo_stream.prepend(
           "scanned-books",
-          html: "#{isbn}の書籍が見つかりません"
+          partial: "search/isbn_flash",
+          locals: { message: "#{isbn} の書籍が見つかりません" }
         )
       end
     rescue => e
