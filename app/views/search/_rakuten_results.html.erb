@@ -26,17 +26,22 @@
                 <p class="mb-1"><strong>出版社:</strong> <%= book.publisher_name || '情報なし' %></p>
                 <p class="mb-1"><strong>ISBN:</strong> <%= book.isbn || '情報なし' %></p>
               </div>
-
-              <%= button_to books_path(book: {
-                title:     book.title,
-                author:    book.author,
-                publisher: book.publisher_name,
-                isbn:      book.isbn,
-                price:     book.item_price,
-                book_cover: book.large_image_url || book.medium_image_url || book.small_image_url
-              }), method: :post, class: "btn btn-success btn-sm mt-2 w-100" do %>
-              <i class="bi bi-bookmark-plus me-1"></i> My本棚に追加
-            <% end %>
+              <% if user_signed_in? %>
+                <%= button_to books_path(book: {
+                  title:     book.title,
+                  author:    book.author,
+                  publisher: book.publisher_name,
+                  isbn:      book.isbn,
+                  price:     book.item_price,
+                  book_cover: book.large_image_url || book.medium_image_url || book.small_image_url
+                }), method: :post, class: "btn btn-success btn-sm mt-2 w-100" do %>
+                <i class="bi bi-bookmark-plus me-1"></i> My本棚に追加
+                <% end %>
+              <% else %>
+                <button class="btn btn-success btn-sm mt-2 w-100" disabled title="ログインすると追加できます">
+                  <i class="bi bi-bookmark-plus me-1"></i> My本棚に追加
+                </button>
+              <% end %>
             </div>
           </div>
         </div>
