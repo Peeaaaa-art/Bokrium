@@ -10,7 +10,7 @@
         <div class="d-flex flex-wrap m-3 gap-2">
           <% if user_tags.present? %>
             <% user_tags.each do |tag| %>
-              <% selected = book.tags.include?(tag) %>
+              <% selected = book.taggings.any? { |t| t.tag_id == tag.id && t.tagger_id == current_user.id } %>
               <%= button_to toggle_tag_book_path(book, tag_name: tag.name), method: :post,
                   class: "badge rounded-pill border-0 #{selected ? 'selected-tag' : 'unselected-tag'}",
                   style: "background-color: #{tag.color.presence || '#6c757d'};" do %>

@@ -1,14 +1,19 @@
 class BooksController < ApplicationController
   before_action :authenticate_user!, only: [ :create, :show, :edit, :update, :destroy ]
   before_action :set_book, only: [ :show, :edit, :update, :destroy ]
-  before_action :authorize_book, only: [ :show, :edit, :update, :destroy ]
+
+  TITLE_TRUNCATE_LIMIT = 40
 
   def index
-    return @books = sample_books unless user_signed_in?
-
     books = current_user.books
 
-    return @books = sample_books.tap { @no_books = true } unless books.exists?
+    unless books.exists?
+      @books = guest_user.books
+          .includes(book_cover_s3_attachment: :blob)
+          .order(created_at: :desc)
+      @no_books = true
+      return
+    end
 
     if params[:tags].present?
       tag_names = Array(params[:tags])
@@ -41,7 +46,7 @@ class BooksController < ApplicationController
       books = books.order(created_at: :desc)
     end
 
-    @books = books
+    @books = books.includes(book_cover_s3_attachment: :blob)
     @books_per_row = params[:slice]&.to_i.presence || 12
 
     respond_to do |format|
@@ -54,7 +59,7 @@ class BooksController < ApplicationController
     if current_user && @book.user_id == current_user.id
       @memos = @book.memos.order(created_at: :desc)
       @new_memo = @book.memos.new(user_id: current_user.id)
-      @user_tags = ActsAsTaggableOn::Tag.where(user: current_user)
+      @user_tags = ActsAsTaggableOn::Tag.owned_by(current_user)
       @tag = ActsAsTaggableOn::Tag.new
     else
       @memos = []
@@ -70,20 +75,16 @@ class BooksController < ApplicationController
   def create
     @book = current_user.books.build(book_params)
 
-    if params[:tags].present?
-      @book.tag_list = params[:tags].to_s.split(/\s+/).map(&:strip)
-    end
-
     if @book.save
       set_tagger_for_all_taggings(@book)
 
-      flash.now[:success] = "My本棚に『#{@book.title.truncate(30)}』を追加しました"
+      flash[:info] = "My本棚に『#{@book.title.truncate(TITLE_TRUNCATE_LIMIT)}』を追加しました"
       respond_to do |format|
         format.turbo_stream
-        format.html { redirect_to books_path, notice: "My本棚に『#{@book.title.truncate(30)}』を追加しました" }
+        format.html { redirect_to books_path }
       end
     else
-      flash.now[:danger] = @book.errors.full_messages.to_sentence.presence || "追加に失敗しました"
+      flash[:danger] = @book.errors.full_messages.to_sentence.presence || "追加に失敗しました"
       respond_to do |format|
         format.turbo_stream
         format.html { render :new, status: :unprocessable_entity }
@@ -91,17 +92,13 @@ class BooksController < ApplicationController
     end
   end
 
-  def edit
-  end
+  def edit; end
 
   def update
-    if params[:tags].present?
-      @book.tag_list = params[:tags].to_s.split(/\s+/).map(&:strip)
-    end
-
     if @book.update(book_params)
       set_tagger_for_all_taggings(@book)
-      redirect_to @book, notice: "書籍情報が更新されました"
+      flash[:info] = "『#{@book.title.truncate(TITLE_TRUNCATE_LIMIT)}』を更新しました"
+      redirect_to @book
     else
       render :edit
     end
@@ -112,25 +109,13 @@ class BooksController < ApplicationController
 
     respond_to do |format|
       if request.referrer&.include?("/books/#{@book.id}")
-        format.html { redirect_to books_path, notice: "書籍が削除されました" }
+        flash[:info] = "『#{@book.title.truncate(TITLE_TRUNCATE_LIMIT)}』を削除しました"
+        format.html { redirect_to books_path }
       else
+        flash[:info] = "『#{@book.title.truncate(TITLE_TRUNCATE_LIMIT)}』を削除しました"
         format.turbo_stream
-        format.html { redirect_to books_path, notice: "書籍が削除されました" }
+        format.html { redirect_to books_path }
       end
-    end
-  end
-
-  def assign_tag
-    @book = Book.find(params[:id])
-    tag_name = params[:tag_name]
-
-    @book.tag_list.add(tag_name)
-
-    if @book.save
-      set_tagger_for_specific_tag(@book, tag_name)
-      redirect_back fallback_location: book_path(@book), notice: "#{tag_name} をタグ付けしました"
-    else
-      redirect_back fallback_location: book_path(@book), alert: "タグの追加に失敗しました"
     end
   end
 
@@ -138,35 +123,49 @@ class BooksController < ApplicationController
     @book = current_user.books.find(params[:id])
     tag_name = params[:tag_name]
 
-    if @book.tag_list.include?(tag_name)
-      @book.tag_list.remove(tag_name)
-    else
-      @book.tag_list.add(tag_name)
+    tag = ActsAsTaggableOn::Tag.owned_by(current_user).find_by(name: tag_name)
+    unless tag
+      flash[:danger] = "タグが見つかりません"
+      return redirect_back fallback_location: @book
     end
 
-    if @book.save
-      set_tagger_for_specific_tag(@book, tag_name)
+    tagging = @book.taggings.find_by(
+      tag_id: tag.id,
+      tagger_id: current_user.id,
+      tagger_type: "User",
+      context: "tags"
+    )
+
+    if tagging
+      tagging.destroy
+      flash[:info] = "『#{tag_name}』のタグを解除しました"
+    else
+      @book.tag_list.add(tag.name)
+      @book.save
+      flash[:info] = "『#{tag_name}』をタグ付けしました"
+      set_tagger_for_specific_tag(@book, tag.name)
     end
 
     redirect_back fallback_location: @book
   end
 
+  def tag_filter
+    @user_tags = ActsAsTaggableOn::Tag.owned_by(current_user)
+    render partial: "books/tag_filter", locals: { filtered_tags: [] }
+  end
+
   private
 
   def set_book
-    @book = Book.find(params[:id])
-  end
-
-  def authorize_book
-    redirect_to books_path, alert: "アクセス権限がありません" unless @book.user_id == current_user.id
+    @book = if action_name == "show"
+        current_user.books.includes(:tags, :memos, :images, book_cover_s3_attachment: :blob).find(params[:id])
+    else
+        current_user.books.find(params[:id])
+    end
   end
 
   def book_params
     params.require(:book).permit(:isbn, :title, :publisher, :page, :book_cover, :author, :price, :status, :book_cover_s3)
-  end
-
-  def sample_books
-    Book.where(user_id: 999).limit(12)
   end
 
   def set_tagger_for_all_taggings(book)
@@ -174,7 +173,7 @@ class BooksController < ApplicationController
   end
 
   def set_tagger_for_specific_tag(book, tag_name)
-    tag = ActsAsTaggableOn::Tag.find_by(name: tag_name)
+    tag = ActsAsTaggableOn::Tag.owned_by(current_user).find_by(name: tag_name)
     return unless tag
 
     book.taggings.where(tag_id: tag.id).update_all(tagger_id: current_user.id, tagger_type: "User")

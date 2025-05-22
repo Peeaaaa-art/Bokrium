@@ -1,5 +1,12 @@
 <% flash.each do |type, message| %>
-  <div class="flash-message alert alert-<%= type == "success" ? "success" : "danger" %> alert-dismissible fade show"
+  <% bootstrap_class = case type.to_sym
+      when :notice then "success"
+      when :alert then "danger"
+      when :success then "success"
+      when :error then "danger"
+      else "info"
+    end %>
+  <div class="flash-message alert alert-<%= bootstrap_class  %> alert-dismissible fade show"
       role="alert"
       id="flash-<%= SecureRandom.uuid %>"
       data-controller="flash">
