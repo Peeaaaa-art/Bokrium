@@ -10,10 +10,10 @@
 <% end %>
 
 <% if current_user && @no_books  %>
-  <div class="alert alert-ifo text-center">
-    <p>こちらはサンプル表示です。最初の本を登録しましょう！</p>
-    <div class="mt-3">
-      <%= link_to "新規書籍登録", search_books_path, class: "btn btn-primary" %>
+  <div class="alert-bokrium-info d-flex align-items-center text-center py-2 py-md-3">
+    <div class="container text-center text-sample">
+          <i class="bi bi-info-circle-fill fs-6 me-2"></i>
+    こちらはサンプル表示です。<%= link_to "最初の本を登録", search_books_path %>しましょう！
     </div>
   </div>
 <% end %>
@@ -80,9 +80,11 @@
 
   <!-- タグ -->
   <div class="collapse mb-2" id="tagCollapse"
-        data-controller="tag-toggle"
-        data-tag-toggle-selected-tags-value="<%= @filtered_tags&.join(',') %>">
-    <%= render "tag_filter", filtered_tags: @filtered_tags %>
+      data-controller="tag-toggle"
+      data-tag-toggle-selected-tags-value="<%= @filtered_tags&.join(',') %>">
+    <turbo-frame id="tag_filter_frame" src="<%= tag_filter_books_path %>">
+      読み込み中…
+    </turbo-frame>
   </div>
 
   <!-- ✅ ステータス -->

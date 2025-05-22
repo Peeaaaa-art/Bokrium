@@ -4,16 +4,20 @@ class TagsController < ApplicationController
   def create
     @tag = current_user.tags.build(tag_params)
     if @tag.save
-      redirect_back fallback_location: root_path, notice: "タグを作成しました"
+      flash[:info] = "タグ「#{@tag.name}」を保存しました"
+      redirect_back fallback_location: root_path
     else
-      redirect_back fallback_location: root_path, alert: "タグの作成に失敗しました"
+      flash[:danger] = "タグの作成に失敗しました"
+      redirect_back fallback_location: root_path
     end
   end
   def update
     if @tag.update(tag_params)
-      redirect_back fallback_location: root_path, notice: "タグ「#{@tag.name}」を更新しました"
+      flash[:info] = "タグ「#{@tag.name}」を更新しました"
+      redirect_back fallback_location: root_path
     else
-      redirect_back fallback_location: root_path, alert: "タグの更新に失敗しました"
+      flash[:danger] = "タグの更新に失敗しました"
+      redirect_back fallback_location: root_path
     end
   end
 
@@ -22,7 +26,8 @@ class TagsController < ApplicationController
 
   def destroy
       @tag.destroy
-      redirect_back fallback_location: root_path, notice: "タグ「#{@tag.name}」を削除しました"
+      flash[:info] = "タグ「#{@tag.name}」を削除しました"
+      redirect_back fallback_location: root_path
   end
 
   private

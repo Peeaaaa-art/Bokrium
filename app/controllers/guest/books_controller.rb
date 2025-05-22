@@ -1,10 +1,11 @@
 module Guest
   class BooksController < ApplicationController
     def show
-      @book = Book.find_by(id: params[:id], user_id: guest_user.id)
+      @book = guest_user.books.find(params[:id])
 
       unless @book
-        redirect_to root_path, alert: "この本はゲスト表示できません"
+        flash[:danger] = "この本はゲスト表示できません"
+        redirect_to root_path
         return
       end
 
@@ -17,7 +18,9 @@ module Guest
     end
 
     def index
-      @books = guest_user.books.order(created_at: :desc)
+      @books = guest_user.books
+          .includes(book_cover_s3_attachment: :blob)
+          .order(created_at: :desc)
       @no_books = true
 
       @filtered_tags = []

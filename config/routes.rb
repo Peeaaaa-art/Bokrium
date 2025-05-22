@@ -22,8 +22,12 @@ Rails.application.routes.draw do
   resources :books do
     resources :memos, only: [ :create, :new, :edit, :update, :destroy ]
     resources :images, only: [ :create, :destroy ]
-    post "assign_tag", on: :member
+
     post "toggle_tag", on: :member
+
+    collection do
+      get :tag_filter
+    end
   end
 
   resources :tags, only: [ :create, :update, :destroy ]

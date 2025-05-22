@@ -1,1 +1,3 @@
 <%= turbo_stream.remove "image_#{params[:id]}" %>
+
+<%= turbo_stream.append "flash", partial: "shared/flash" %>

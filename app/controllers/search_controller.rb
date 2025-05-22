@@ -93,14 +93,15 @@ class SearchController < ApplicationController
       else
         render turbo_stream: turbo_stream.prepend(
           "scanned-books",
-          html: "<div class='alert alert-warning mt-2'>該当なし: #{isbn}</div>"
+          partial: "search/isbn_flash",
+          locals: { message: "#{isbn} の書籍が見つかりません" }
         )
       end
     rescue => e
       Rails.logger.error(e)
       render turbo_stream: turbo_stream.prepend(
         "scanned-books",
-        html: "<div class='alert alert-danger'>システムエラーが発生しました</div>"
+        html: "システムエラーが発生しました"
       )
     end
   end

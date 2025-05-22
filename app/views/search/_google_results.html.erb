@@ -32,17 +32,22 @@
               <p class="mb-1"><strong>出版社:</strong> <%= book[:publisher] || '情報なし' %></p>
               <p class="mb-1"><strong>ISBN:</strong> <%= book[:isbn].presence || "なし" %></p>
             </div>
-
-            <%= button_to books_path(book: {
-                  title: book[:title],
-                  author: book[:author],
-                  publisher: book[:publisher] || "",
-                  isbn: book[:isbn] || "",
-                  book_cover: book[:book_cover] || ""
-                }),
-                method: :post,
-                class: "btn btn-success btn-sm mt-2 w-100" do %>
-              <i class="bi bi-bookmark-plus me-1"></i> My本棚に追加
+            <% if user_signed_in? %>
+              <%= button_to books_path(book: {
+                    title: book[:title],
+                    author: book[:author],
+                    publisher: book[:publisher] || "",
+                    isbn: book[:isbn] || "",
+                    book_cover: book[:book_cover] || ""
+                  }),
+                  method: :post,
+                  class: "btn btn-success btn-sm mt-2 w-100" do %>
+                <i class="bi bi-bookmark-plus me-1"></i> My本棚に追加
+              <% end %>
+            <% else %>
+              <button class="btn btn-success btn-sm mt-2 w-100" disabled title="ログインすると追加できます">
+                <i class="bi bi-bookmark-plus me-1"></i>My本棚に追加
+              </button>
             <% end %>
           </div>
         </div>

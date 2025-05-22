@@ -10,23 +10,25 @@ class ImagesController < ApplicationController
         format.html { redirect_to @book }
       end
     else
-      redirect_to @book, alert: "画像のアップロードに失敗しました。"
+      flash[:danger] = "画像のアップロードに失敗しました。"
+      redirect_to @book
     end
   end
 
   def destroy
     @image = @book.images.find(params[:id])
     @image.destroy
+    flash[:info] = "画像を削除しました。"
     respond_to do |format|
       format.turbo_stream
-      format.html { redirect_to @book, notice: "画像を削除しました。" }
+      # format.html { redirect_to @book }
     end
   end
 
   private
 
   def set_book
-    @book = Book.find(params[:book_id])
+    @book = current_user.books.find(params[:book_id])
   end
 
   def image_params

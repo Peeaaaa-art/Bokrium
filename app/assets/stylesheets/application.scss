@@ -12,7 +12,6 @@
 @import "like_button";
 @import "filter_controls";
 @import "shadows";
-@import "welcome";
 
 
 
@@ -34,7 +33,7 @@ body {
   text-align: center;
   opacity: 0.97;
   box-shadow: 0 4px 16px rgba(0,0,0,0.12);
-  animation: appear-then-fade 2.5s both;
+  animation: appear-then-fade 2.8s both;
   border-radius: 0.75rem;
   margin: 0 auto;
   padding: 1rem 1.5rem;

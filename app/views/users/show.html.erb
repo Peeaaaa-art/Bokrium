@@ -75,9 +75,14 @@
       毎朝9時に、ランダムで1つお届けします。
     </p>
 
-    <%= link_to "/auth/line", class: "btn btn-success mb-3 d-inline-flex align-items-center gap-2" do %>
+    <%= link_to "/auth/line", class: "btn btn-success mb-5 d-inline-flex align-items-center gap-2" do %>
       <i class="bi bi-line" style="font-size: 1.6rem;"></i>
       <span>LINEと連携する</span>
     <% end %>
   <% end %>
+
+  <p class="text-muted mb-2">↓友達追加はこちらから</p>
+  <div class="mb-5 text-center mx-auto" style="max-width: 200px;">
+    <%= image_tag "line_qr_code.png", class: "img-fluid", style: "max-width: 100%; height: auto;" %>
+  </div>
 </div>
