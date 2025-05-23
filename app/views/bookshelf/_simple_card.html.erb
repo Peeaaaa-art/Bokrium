@@ -5,10 +5,10 @@
             data-action="change->column-selector#change"
             data-column-selector-target="selector"
             class="form-select form-select-sm ms-3 d-block d-md-none"
-            style="width: 80px; font-size: 0.8rem; padding: 0.15rem 0.5rem; border-radius: 6px; background-color: #f9f9f9;">
-      <option value="4">表示数</option>
+            style="width: 60px; font-size: 0.8rem; padding: 0.15rem 0.5rem; border-radius: 999px; background-color: #f9f9f9;">
+      <option value="4">4</option>
       <% [3,6,8,10].each do |n| %>
-        <option value="<%= n %>"><%= n %>冊</option>
+        <option value="<%= n %>"><%= n %></option>
       <% end %>
     </select>
 
@@ -17,10 +17,10 @@
             data-action="change->column-selector#change"
             data-column-selector-target="selector"
             class="form-select form-select-sm ms-3 d-none d-md-block"
-            style="width: 80px; font-size: 0.8rem; padding: 0.15rem 0.5rem; border-radius: 6px; background-color: #f9f9f9;">
-      <option value="12">表示数</option>
+            style="width: 60px; font-size: 0.8rem; padding: 0.15rem 0.5rem; border-radius: 999px; background-color: #f9f9f9;">
+      <option value="12">12</option>
       <% [15, 18, 21, 24].each do |n| %>
-        <option value="<%= n %>"><%= n %>冊</option>
+        <option value="<%= n %>"><%= n %></option>
       <% end %>
     </select>
   </div>
