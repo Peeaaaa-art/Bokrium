@@ -1,6 +1,3 @@
 <%= turbo_stream.remove "book_#{@book.id}" %>
 
-
-<%= turbo_stream.replace "flash" do %>
-  <%= render "shared/flash" %>
-<% end %>
+<%= turbo_stream.append "flash", partial: "shared/flash" %>
