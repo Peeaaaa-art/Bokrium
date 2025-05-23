@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["grid"]
+  static targets = ["selector", "grid"]
 
   connect() {
     this.defaultClass = this.gridTarget.className
