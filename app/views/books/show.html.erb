@@ -18,13 +18,14 @@
         <div class="col-6 d-flex justify-content-center">
           <div class="book-cover-show">
             <% if @book.book_cover_s3.attached? %>
-              <%= image_tag @book.book_cover_s3, alt: @book.title,
+              <%= lazy_image_tag @book.book_cover_s3, alt: @book.title,
                   class: "img-fluid rounded shadow-sm",
                   style: "max-width: 160px; max-height: 240px; object-fit: contain;" %>
             <% elsif @book.book_cover.present? %>
               <img src="<%= @book.book_cover %>" alt="表紙画像"
                   class="img-fluid rounded shadow-sm"
-                  style="max-width: 160px; max-height: 240px; object-fit: contain;">
+                  style="max-width: 160px; max-height: 240px; object-fit: contain;"
+                  loading="lazy">
             <% else %>
               <div class="no-cover text-muted d-flex align-items-center justify-content-center rounded"
                   style="width: 160px; height: 240px;">

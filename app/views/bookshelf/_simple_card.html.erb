@@ -1,41 +1,32 @@
 <div data-controller="column-selector">
-  <div class="d-flex align-items-center mb-2" style="gap: 0.5rem;">
-    <!-- スマホ用 -->
-    <select id="columnSelectorMobile"
-            data-action="change->column-selector#change"
-            data-column-selector-target="selector"
-            class="form-select form-select-sm ms-3 d-block d-md-none"
-            style="width: 60px; font-size: 0.8rem; padding: 0.15rem 0.5rem; border-radius: 999px; background-color: #f9f9f9;">
-      <option value="4">4</option>
-      <% [3,6,8,10].each do |n| %>
-        <option value="<%= n %>"><%= n %></option>
-      <% end %>
-    </select>
 
-    <!-- PC用 -->
-    <select id="columnSelectorDesktop"
-            data-action="change->column-selector#change"
-            data-column-selector-target="selector"
-            class="form-select form-select-sm ms-3 d-none d-md-block"
-            style="width: 60px; font-size: 0.8rem; padding: 0.15rem 0.5rem; border-radius: 999px; background-color: #f9f9f9;">
-      <option value="12">12</option>
-      <% [15, 18, 21, 24].each do |n| %>
-        <option value="<%= n %>"><%= n %></option>
-      <% end %>
-    </select>
+  <% default_value = @mobile ? 4 : 12 %>
+  <% options = @mobile ? [4, 3, 6, 8, 10] : [12, 15, 18, 21, 24] %>
+
+  <div class="d-flex align-items-center mb-4 ms-3" style="gap: 0.5rem;">
+    <%= select_tag :column,
+        options_for_select(options, @books_per_row || default_value),
+        id: "columnSelect",
+        data: {
+          action: "change->column-selector#change",
+          column_selector_target: "selector"
+        },
+        class: "form-select form-select-sm text-secondary shadow-sm books-per-row"
+    %>
   </div>
 
   <div data-column-selector-target="grid" class="books-grid-iphone mt-3">
     <% books.each do |book| %>
       <%= link_to book_link_path(book), data: { turbo_frame: "_top" } do %>
         <% if book.book_cover_s3.attached? %>
-          <%= image_tag book.book_cover_s3.variant(resize_to_limit: [200, 200]), alt: book.title, class: "book-cover-iphone img-fluid rounded" %>
+          <%= lazy_image_tag book.book_cover_s3.variant(resize_to_limit: [200, 200]), alt: book.title, class: "book-cover-iphone img-fluid rounded" %>
         <% elsif book.book_cover.present? %>
-          <img src="<%= book.book_cover %>" style="border-radius: 12px;" alt="表紙画像" class="book-cover-iphone rounded" >
+          <img src="<%= book.book_cover %>" style="border-radius: 12px;" alt="表紙画像" class="book-cover-iphone rounded" loading="lazy">
         <% else %>
           <div class="no-cover-iphone book-cover-iphone"><%= book.title.truncate(10, omission: "").ljust(10).gsub(" ", "&nbsp;").html_safe %></div>
         <% end %>
       <% end %>
     <% end %>
   </div>
+
 </div>

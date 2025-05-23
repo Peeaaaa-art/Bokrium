@@ -1,36 +1,21 @@
-<%= form_with url: books_path, method: :get,
-      data: { controller: "auto-submit" },
-      local: true,
-      class: "ms-3 d-block d-md-none" do %>
+<%= form_with url: (@no_books ? guest_books_path : books_path), method: :get,
+              data: { controller: "auto-submit" },
+              local: true,
+              class: "ms-3" do %>
 
-    <%= hidden_field_tag :view, "shelf" %>
+  <%= hidden_field_tag :view, "shelf" %>
 
-    <%= select_tag :per,
-        options_for_select([5, 10], @books_per_row),
-        class: "form-select form-select-sm",
-        style: "width: 60px; font-size: 0.8rem; padding: 0.15rem 0.5rem; border-radius: 999px; background-color: #f9f9f9;",
-        data: {
-          auto_submit_target: "select",
-          action: "change->auto-submit#change"
-        } %>
+  <% options = @mobile ? [5, 10] : [5, 7, 10, 12] %>
+
+  <%= select_tag :per,
+      options_for_select(options, @books_per_row),
+      class: "form-select form-select-sm text-secondary shadow-sm books-per-row",
+      data: {
+        auto_submit_target: "select",
+        action: "change->auto-submit#change"
+      } %>
 <% end %>
 
-<%= form_with url: books_path, method: :get,
-      data: { controller: "auto-submit" },
-      local: true,
-      class: "ms-3 d-none d-md-block" do %>
-
-    <%= hidden_field_tag :view, "shelf" %>
-
-    <%= select_tag :per,
-        options_for_select([5, 7, 10, 12], @books_per_row),
-        class: "form-select form-select-sm",
-        style: "width: 60px; font-size: 0.8rem; padding: 0.15rem 0.5rem; border-radius: 999px; background-color: #f9f9f9;",
-        data: {
-          auto_submit_target: "select",
-          action: "change->auto-submit#change"
-        } %>
-<% end %>
 
 <% books.each_slice(books_per_row) do |row_books| %>
   <div class="shelf-row" data-controller="book-shelf">
@@ -40,9 +25,9 @@
           <%= link_to book_link_path(book), data: { turbo_frame: "_top" } do %>
             <% if book.book_cover_s3.attached? %>
               <%= image_tag book.book_cover_s3.variant(resize_to_limit: [200, 200]),
-                    alt: book.title, class: "book-cover" %>
+                    alt: book.title, class: "book-cover", loading: "lazy" %>
             <% elsif book.book_cover.present? %>
-              <img src="<%= book.book_cover %>" alt="表紙画像" class="book-cover">
+              <img src="<%= book.book_cover %>" alt="表紙画像" class="book-cover" loading="lazy">
             <% else %>
               <div class="no-cover">
                 <span class="title">
