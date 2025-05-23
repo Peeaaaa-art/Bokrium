@@ -1,6 +1,7 @@
 class BooksController < ApplicationController
   before_action :authenticate_user!, only: [ :create, :show, :edit, :update, :destroy ]
   before_action :set_book, only: [ :show, :edit, :update, :destroy ]
+  rescue_from ActiveRecord::RecordNotFound, with: :handle_record_not_found
 
   TITLE_TRUNCATE_LIMIT = 40
 
@@ -47,7 +48,16 @@ class BooksController < ApplicationController
     end
 
     @books = books.includes(book_cover_s3_attachment: :blob)
-    @books_per_row = params[:slice]&.to_i.presence || 12
+
+    browser = Browser.new(request.user_agent)
+    default = if browser.device.mobile?
+                5
+    elsif browser.device.tablet?
+                8
+    else
+                10
+    end
+    @books_per_row = params[:per]&.to_i.presence || default
 
     respond_to do |format|
       format.html { render :index }
@@ -78,16 +88,29 @@ class BooksController < ApplicationController
     if @book.save
       set_tagger_for_all_taggings(@book)
 
-      flash[:info] = "My本棚に『#{@book.title.truncate(TITLE_TRUNCATE_LIMIT)}』を追加しました"
+      success_message = "My本棚に『#{@book.title.truncate(TITLE_TRUNCATE_LIMIT)}』を追加しました"
+
       respond_to do |format|
-        format.turbo_stream
-        format.html { redirect_to books_path }
+        format.turbo_stream do
+          flash.now[:info] = success_message
+        end
+        format.html do
+          flash[:info] = success_message
+          redirect_to books_path
+        end
       end
+
     else
-      flash[:danger] = @book.errors.full_messages.to_sentence.presence || "追加に失敗しました"
+      failure_message = @book.errors.full_messages.to_sentence.presence || "追加に失敗しました"
+
       respond_to do |format|
-        format.turbo_stream
-        format.html { render :new, status: :unprocessable_entity }
+        format.turbo_stream do
+        flash.now[:danger] = failure_message
+      end
+        format.html do
+          flash.now[:danger] = failure_message
+          render :new, status: :unprocessable_entity
+        end
       end
     end
   end
@@ -107,13 +130,14 @@ class BooksController < ApplicationController
   def destroy
     @book.destroy
 
+    success_message = "『#{@book.title.truncate(TITLE_TRUNCATE_LIMIT)}』を削除しました"
+
     respond_to do |format|
-      if request.referrer&.include?("/books/#{@book.id}")
-        flash[:info] = "『#{@book.title.truncate(TITLE_TRUNCATE_LIMIT)}』を削除しました"
+      if request.referrer&.include?("/books/#{@book.id}")    # 詳細ページから削除した場合の処理
+        flash[:info] = success_message
         format.html { redirect_to books_path }
-      else
-        flash[:info] = "『#{@book.title.truncate(TITLE_TRUNCATE_LIMIT)}』を削除しました"
-        format.turbo_stream
+      else                                                   # それ以外（例：一覧ページなど）から削除した場合の処理
+        flash[:info] = success_message
         format.html { redirect_to books_path }
       end
     end
@@ -177,5 +201,9 @@ class BooksController < ApplicationController
     return unless tag
 
     book.taggings.where(tag_id: tag.id).update_all(tagger_id: current_user.id, tagger_type: "User")
+  end
+
+  def handle_record_not_found
+    redirect_to books_path
   end
 end
