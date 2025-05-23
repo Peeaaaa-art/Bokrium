@@ -9,6 +9,7 @@
   </div>
 <% end %>
 
+
 <% if current_user && @no_books  %>
   <div class="alert-bokrium-info d-flex align-items-center text-center py-2 py-md-3">
     <div class="container text-center text-sample">
@@ -17,6 +18,8 @@
     </div>
   </div>
 <% end %>
+
+
 
 <% if user_signed_in? && !@no_books %>
 

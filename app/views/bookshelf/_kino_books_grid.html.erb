@@ -1,3 +1,37 @@
+<%= form_with url: books_path, method: :get,
+      data: { controller: "auto-submit" },
+      local: true,
+      class: "ms-3 d-block d-md-none" do %>
+
+    <%= hidden_field_tag :view, "shelf" %>
+
+    <%= select_tag :per,
+        options_for_select([5, 10], @books_per_row),
+        class: "form-select form-select-sm",
+        style: "width: 60px; font-size: 0.8rem; padding: 0.15rem 0.5rem; border-radius: 999px; background-color: #f9f9f9;",
+        data: {
+          auto_submit_target: "select",
+          action: "change->auto-submit#change"
+        } %>
+<% end %>
+
+<%= form_with url: books_path, method: :get,
+      data: { controller: "auto-submit" },
+      local: true,
+      class: "ms-3 d-none d-md-block" do %>
+
+    <%= hidden_field_tag :view, "shelf" %>
+
+    <%= select_tag :per,
+        options_for_select([5, 7, 10, 12], @books_per_row),
+        class: "form-select form-select-sm",
+        style: "width: 60px; font-size: 0.8rem; padding: 0.15rem 0.5rem; border-radius: 999px; background-color: #f9f9f9;",
+        data: {
+          auto_submit_target: "select",
+          action: "change->auto-submit#change"
+        } %>
+<% end %>
+
 <% books.each_slice(books_per_row) do |row_books| %>
   <div class="shelf-row" data-controller="book-shelf">
     <div class="book-row">

@@ -1,9 +1,10 @@
 <% flash.each do |type, message| %>
   <% bootstrap_class = case type.to_sym
+      when :success then "success"
       when :notice then "success"
       when :alert then "danger"
-      when :success then "success"
       when :error then "danger"
+      when :danger then "danger"
       else "info"
     end %>
   <div class="flash-message alert alert-<%= bootstrap_class  %> alert-dismissible fade show"
@@ -13,3 +14,4 @@
     <%= message %>
   </div>
 <% end %>
+

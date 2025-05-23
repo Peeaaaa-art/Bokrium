@@ -4,7 +4,7 @@ class TagsController < ApplicationController
   def create
     @tag = current_user.tags.build(tag_params)
     if @tag.save
-      flash[:info] = "タグ「#{@tag.name}」を保存しました"
+      flash[:info] = "タグ「#{@tag.name}」を作成しました"
       redirect_back fallback_location: root_path
     else
       flash[:danger] = "タグの作成に失敗しました"

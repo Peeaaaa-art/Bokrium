@@ -110,6 +110,7 @@ GEM
       popper_js (>= 2.11.8, < 3)
     brakeman (7.0.2)
       racc
+    browser (6.2.0)
     builder (3.3.0)
     capybara (3.40.0)
       addressable
@@ -529,6 +530,7 @@ DEPENDENCIES
   bootsnap
   bootstrap (~> 5.3.5)
   brakeman
+  browser
   capybara
   dartsass-rails
   debug

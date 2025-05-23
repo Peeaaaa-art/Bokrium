@@ -28,8 +28,6 @@
       crossorigin="anonymous"
     />
 
-
-    <%# Includes all stylesheet files in app/assets/stylesheets %>
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
     <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
   </head>
@@ -46,7 +44,7 @@
     </div>
       <main class="bg-basic" style="flex: 1;">
       <%= yield %>
-    </main>
+      </main>
     <%= render "shared/footer" %>
     <%= turbo_frame_tag "modal" %>
     <%= yield :modals %>
