@@ -29,13 +29,17 @@ module Guest
       session[:view_mode] = params[:view] if params[:view].present?
       @view_mode = session[:view_mode] || "shelf"
 
+      browser = Browser.new(request.user_agent)
+      device_type = browser.device
 
-      @books_per_row = params[:slice]&.to_i.presence || 12
-
-      respond_to do |format|
-        format.html { render "books/index" }
-        format.turbo_stream
+      default = case
+      when device_type.mobile? then 5
+      when device_type.tablet? then 8
+      else 10
       end
+
+      @books_per_row = params[:per].to_i.positive? ? params[:per].to_i : default
+      @mobile = device_type.mobile?
     end
   end
 end

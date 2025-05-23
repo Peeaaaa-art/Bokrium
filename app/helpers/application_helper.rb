@@ -26,4 +26,9 @@ module ApplicationHelper
   def book_link_path(book)
     user_signed_in? ? book_path(book) : guest_book_path(book)
   end
+
+  def lazy_image_tag(source, options = {})
+    options[:loading] ||= "lazy"
+    image_tag(source, options)
+  end
 end
