@@ -30,6 +30,12 @@ class BooksController < ApplicationController
     session[:view_mode] = params[:view] if params[:view].present?
     @view_mode = session[:view_mode] || "shelf"
 
+    if @view_mode == "shelf"
+      session[:shelf_per] = params[:per] if params[:per].present?
+    elsif @view_mode == "card"
+      session[:card_columns] = params[:column] if params[:column].present?
+    end
+
     sort_param = params[:sort]
     case sort_param
     when "oldest"
@@ -58,7 +64,9 @@ class BooksController < ApplicationController
     else 10
     end
 
-    @books_per_row = params[:per].to_i.positive? ? params[:per].to_i : default
+    @shelf_per_row  = session[:shelf_per]&.to_i || default
+    @card_columns   = session[:card_columns]&.to_i || default
+
     @mobile = device_type.mobile?
   end
 

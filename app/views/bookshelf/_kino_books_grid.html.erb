@@ -1,14 +1,14 @@
-<%= form_with url: (@no_books ? guest_books_path : books_path), method: :get,
+<%= form_with url: books_path, method: :get,
               data: { controller: "auto-submit" },
               local: true,
               class: "ms-3" do %>
 
   <%= hidden_field_tag :view, "shelf" %>
 
-  <% options = @mobile ? [5, 10] : [5, 7, 10, 12] %>
+  <% options = mobile ? [5, 10] : [5, 7, 10, 12] %>
 
   <%= select_tag :per,
-      options_for_select(options, @books_per_row),
+      options_for_select(options, shelf_per_row),
       class: "form-select form-select-sm text-secondary shadow-sm books-per-row",
       data: {
         auto_submit_target: "select",
@@ -17,7 +17,7 @@
 <% end %>
 
 
-<% books.each_slice(books_per_row) do |row_books| %>
+<% books.each_slice(shelf_per_row) do |row_books| %>
   <div class="shelf-row" data-controller="book-shelf">
     <div class="book-row">
       <% row_books.each do |book| %>
