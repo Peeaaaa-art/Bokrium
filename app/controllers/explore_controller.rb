@@ -1,11 +1,11 @@
 class ExploreController < ApplicationController
   def index
-    slice = params[:slice].to_i
-    slice = 4 if slice <= 0
-    @slice = slice
-
     @query = params[:q].to_s.strip
     @scope = params[:scope]
+
+    uri = URI.parse(request.referer || "")
+    view_mode_from_ref = Rack::Utils.parse_nested_query(uri.query)["view"]
+    @view_mode = view_mode_from_ref.presence_in(%w[shelf card]) || "shelf"
 
     @results =
       if @scope == "mine"
@@ -14,13 +14,34 @@ class ExploreController < ApplicationController
         search_public_memos(@query)
       end
 
+    browser = Browser.new(request.user_agent)
+    device_type = browser.device
+
+    @books_per_row = case
+    when device_type.mobile? then 5
+    when device_type.tablet? then 8
+    else 10
+    end
+
+
     if turbo_frame_request?
+      partial_name =
+        if @scope == "mine"
+          @view_mode == "shelf" ? "bookshelf/kino_books_grid" : "bookshelf/simple_card"
+        else
+          "public_bookshelf/public_card"
+        end
+
       render turbo_stream: turbo_stream.update(
         "books_frame",
-        partial: @scope == "mine" ? "bookshelf/kino_books_grid" : "public_bookshelf/public_card_grid",
-        locals: @scope == "mine" ? { books: @results, books_per_row: @slice } : { memos: @results }
+        partial: partial_name,
+        locals: @scope == "mine" ?
+          { books: @results, books_per_row: @books_per_row } :
+          { memos: @results }
       )
     else
+      @books = @results if @scope == "mine"
+      @memos = @results unless @scope == "mine"
       render :index
     end
   end
@@ -36,7 +57,7 @@ class ExploreController < ApplicationController
     title_author_ids = books.search_by_title_and_author(query).pluck(:id)
     memo_book_ids = current_user.memos.search_by_content(query).pluck(:book_id)
 
-    Book.where(id: (title_author_ids + memo_book_ids).uniq)
+    current_user.books.where(id: (title_author_ids + memo_book_ids).uniq)
   end
 
   def search_public_memos(query)
