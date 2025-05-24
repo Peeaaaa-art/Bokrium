@@ -17,12 +17,18 @@ export default class extends Controller {
   change(event) {
     const cols = event.target.value
 
-    this.gridTarget.className = this.defaultClass // reset
+    this.gridTarget.className = this.defaultClass
     this.gridTarget.classList.add(`cols-${cols}`)
 
     const hiddenInput = document.getElementById("hiddenColumnInput")
     if (hiddenInput) {
       hiddenInput.value = cols
+    }
+
+    // ← ★ここでフォームを送信
+    const form = document.getElementById("columnForm")
+    if (form) {
+      form.requestSubmit() // ← これが大事！
     }
   }
 }
