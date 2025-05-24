@@ -7,11 +7,8 @@
       when :danger then "danger"
       else "info"
     end %>
-  <div class="flash-message alert alert-<%= bootstrap_class  %> alert-dismissible fade show"
-      role="alert"
-      id="flash-<%= SecureRandom.uuid %>"
-      data-controller="flash">
+
+  <div id="flash-message" class="flash-message alert alert-<%= bootstrap_class %> alert-dismissible fade show" role="alert">
     <%= message %>
   </div>
 <% end %>
-

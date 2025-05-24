@@ -1,1 +1,3 @@
 <%= turbo_stream.remove dom_id(@memo) %>
+
+<%= turbo_stream.update "flash", partial: "shared/flash" %>
