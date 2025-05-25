@@ -28,6 +28,12 @@ class BooksController < ApplicationController
     session[:view_mode] = params[:view] if params[:view].present?
     @view_mode = session[:view_mode] || "shelf"
 
+    if @view_mode == "shelf"
+      session[:shelf_per] = params[:per] if params[:per].present?
+    elsif @view_mode == "card"
+      session[:card_columns] = params[:column] if params[:column].present?
+    end
+
     sort_param = params[:sort]
     case sort_param
     when "oldest"
@@ -48,19 +54,18 @@ class BooksController < ApplicationController
     @books = books.includes(book_cover_s3_attachment: :blob)
 
     browser = Browser.new(request.user_agent)
-    default = if browser.device.mobile?
-                5
-    elsif browser.device.tablet?
-                8
-    else
-                10
-    end
-    @books_per_row = params[:per]&.to_i.presence || default
+    device_type = browser.device
 
-    respond_to do |format|
-      format.html { render :index }
-      format.turbo_stream
+    default = case
+    when device_type.mobile? then 5
+    when device_type.tablet? then 8
+    else 10
     end
+
+    @shelf_per_row  = session[:shelf_per]&.to_i || default
+    @card_columns   = session[:card_columns]&.to_i || default
+
+    @mobile = device_type.mobile?
   end
 
   def show
@@ -131,10 +136,10 @@ class BooksController < ApplicationController
     success_message = "『#{@book.title.truncate(TITLE_TRUNCATE_LIMIT)}』を削除しました"
 
     respond_to do |format|
-      if request.referrer&.include?("/books/#{@book.id}")    # 詳細ページから削除した場合の処理
+      if request.referrer&.include?("/books/#{@book.id}") # 詳細ページから削除した場合の処理
         flash[:info] = success_message
         format.html { redirect_to books_path }
-      else                                                   # それ以外（例：一覧ページなど）から削除した場合の処理
+      else                                                # それ以外（例：一覧ページなど）から削除した場合の処理
         flash[:info] = success_message
         format.html { redirect_to books_path }
       end

@@ -1,5 +1,0 @@
-<% if @view_mode == "shelf" %>
-  <%= render "bookshelf/kino_books_grid", books: @books, books_per_row: @books_per_row %>
-<% else %>
-  <%= render partial: "bookshelf/simple_card", locals: { books: books } %>
-<% end %>

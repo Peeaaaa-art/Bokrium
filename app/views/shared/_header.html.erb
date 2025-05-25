@@ -29,7 +29,7 @@
     <div class="d-flex align-items-center">
       <% if user_signed_in? %>
         <%= link_to mypage_path do %>
-          <%= image_tag user_avatar(current_user, size: 36), class: "rounded-circle shadow-sm ms-2", style: "width: 48px; height: 48px; object-fit: cover;" %>
+          <%= lazy_image_tag user_avatar(current_user, size: 36), class: "rounded-circle shadow-sm ms-2", style: "width: 48px; height: 48px; object-fit: cover;" %>
         <% end %>
       <% else %>
         <%= link_to 'ログイン', new_user_session_path, class: "btn btn-outline-dark btn-sm" %>

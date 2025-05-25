@@ -1,15 +1,5 @@
 <% content_for :title, "本棚 - Bokrium" %>
 
-<% if !user_signed_in? %>
-  <div class="alert-bokrium-info d-flex align-items-center text-center py-2 py-md-3">
-    <div class="container text-center text-sample">
-          <i class="bi bi-info-circle-fill fs-6 me-2"></i>
-    こちらはサンプル表示です。自分の本棚をつくるためには、<%= link_to 'ログイン', new_user_session_path %>・<%= link_to "アカウント登録", new_user_registration_path %>が必要です。
-    </div>
-  </div>
-<% end %>
-
-
 <% if current_user && @no_books  %>
   <div class="alert-bokrium-info d-flex align-items-center text-center py-2 py-md-3">
     <div class="container text-center text-sample">
@@ -19,15 +9,11 @@
   </div>
 <% end %>
 
-
-
-<% if user_signed_in? && !@no_books %>
-
-<div class="d-flex align-items-center justify-content-between my-4 px-3">
+<div class="d-flex align-items-center justify-content-between mt-4 mb-3 px-3">
 
   <!-- ⬅ 左端：ビュー切り替え -->
   <div class="flex-shrink-0">
-    <%= link_to books_path(view: @view_mode == "shelf" ? "card" : "shelf"),
+    <%= link_to (books_path(view: @view_mode == "shelf" ? "card" : "shelf")),
                 class: "btn btn-light border shadow-sm d-flex align-items-center justify-content-center",
                 style: "width: 40px; height: 40px; border-radius: 50%; line-height: 1;",
                 title: (@view_mode == "shelf" ? "カードビューに切り替え" : "棚ビューに切り替え") do %>
@@ -38,6 +24,7 @@
       <% end %>
     <% end %>
   </div>
+
   <!-- 🎯 中央：フィルターボタン群 -->
   <div class="mx-auto">
     <div class="filter-controls border rounded-pill shadow-sm px-4 py-md-1 d-flex align-items-center gap-3">
@@ -66,11 +53,11 @@
   </div>
 
   <!-- ➡ 右側スペース（空でOK）-->
-  <div class="flex-shrink-0" style="width: 48px;"></div> <!-- サイズ合わせ用 -->
+  <div class="flex-shrink-0 d-none-sm" style="width: 48px;"></div> <!-- サイズ合わせ用 -->
 </div>
 
+
 <!-- 📦 下の行：トグルで展開される内容 -->
-<div class="">
   <!-- 検索フォーム -->
   <div class="collapse mb-2" id="searchCollapse">
     <%= render "shared/search_bar", scope: "mine", placeholder: "自分の本やメモを検索" %>
@@ -90,63 +77,16 @@
     </turbo-frame>
   </div>
 
-  <!-- ✅ ステータス -->
+  <!-- ステータス -->
   <div class="collapse mb-2" id="statusCollapse">
     <%= render "status_filter", current_status: @filtered_status %>
   </div>
-</div>
+
 
 <turbo-frame id="books_frame">
-  <%= render partial: "books/books_frame", locals: { books: @books } %>
+  <% if @view_mode == "shelf" %>
+    <%= render "bookshelf/kino_books_grid", books: @books, shelf_per_row: @shelf_per_row, mobile: @mobile %>
+  <% else %>
+    <%= render "bookshelf/simple_card", books: @books, card_columns: @card_columns, mobile: @mobile %>
+  <% end %>
 </turbo-frame>
-<% end %>
-
-<% if @no_books || !user_signed_in? %>
-<div class="d-flex align-items-center justify-content-between my-4 px-3">
-
-  <!-- ⬅ 左端：ビュー切り替え -->
-  <div class="flex-shrink-0">
-    <%= link_to guest_books_path(view: @view_mode == "shelf" ? "card" : "shelf"),
-                class: "btn btn-light border shadow-sm d-flex align-items-center justify-content-center",
-                style: "width: 40px; height: 40px; border-radius: 50%; line-height: 1;",
-                title: (@view_mode == "shelf" ? "カードビューに切り替え" : "棚ビューに切り替え") do %>
-      <% if @view_mode == "shelf" %>
-        <i class="bi bi-card-text fs-5 icon-refined"></i>
-      <% else %>
-        <i class="bi bi-layout-three-columns fs-5 icon-refined"></i>
-      <% end %>
-    <% end %>
-  </div>
-    <div class="mx-auto">
-    <div class="filter-controls border rounded-pill shadow-sm px-4 py-md-1 d-flex align-items-center gap-3">
-
-      <!-- 検索 -->
-      <button class="btn btn-icon">
-        <i class="bi bi-search icon-refined"></i>
-      </button>
-
-      <!-- ソート -->
-      <button class="btn btn-icon">
-        <i class="bi bi-arrow-down-up icon-refined"></i>
-      </button>
-
-      <!-- タグ -->
-      <button class="btn btn-icon">
-        <i class="bi bi-tags icon-refined"></i>
-      </button>
-
-      <!-- ステータス -->
-      <button class="btn btn-icon">
-        <i class="bi bi-journal-check icon-refined"></i>
-      </button>
-    </div>
-  </div>
-</div>
-  <turbo-frame id="books_frame">
-    <%= render partial: "books/books_frame", locals: { books: @books } %>
-  </turbo-frame>
-<% end %>
-
-
-
-

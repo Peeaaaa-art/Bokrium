@@ -11,14 +11,13 @@
   <% img_data = thumb ? { bs_toggle: "modal", bs_target: "#imageModal#{identifier}" } : {} %>
 
   <div class="card">
-    <%= image_tag image_src,
+    <%= lazy_image_tag image_src,
           class: "card-img-top img-fluid",
           alt: "Book Image",
           style: "max-width: 240px; width: 100%; height: auto; object-fit: contain;",
           data: img_data %>
   </div>
 
-  <%# モーダル挿入 %>
   <% if thumb %>
     <% content_for :modals do %>
       <%= render "images/image_modal", image: image, identifier: identifier %>

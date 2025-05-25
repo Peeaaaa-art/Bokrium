@@ -1,10 +1,11 @@
 <% content_for :title, "読書メモ - Bokrium" %>
 
-<% if !user_signed_in? %>
+<% if !user_signed_in? || @readonly %>
   <div class="alert-bokrium-info d-flex align-items-center text-center px-1 py-3">
     <div class="container text-center text-sample">
           <i class="bi bi-info-circle-fill fs-6 me-2"></i>
-    こちらはサンプル表示です。メモを保存するためには、<%= link_to 'ログイン', new_user_session_path %>・<%= link_to "アカウント登録", new_user_registration_path %>が必要です。
+    こちらはサンプル表示です。メモを保存するためには、
+    <%= link_to 'ログイン', new_user_session_path %>・<%= link_to "アカウント登録", new_user_registration_path %>が必要です。
     </div>
   </div>
 <% end %>
@@ -18,13 +19,14 @@
         <div class="col-6 d-flex justify-content-center">
           <div class="book-cover-show">
             <% if @book.book_cover_s3.attached? %>
-              <%= image_tag @book.book_cover_s3, alt: @book.title,
+              <%= lazy_image_tag @book.book_cover_s3, alt: @book.title,
                   class: "img-fluid rounded shadow-sm",
                   style: "max-width: 160px; max-height: 240px; object-fit: contain;" %>
             <% elsif @book.book_cover.present? %>
               <img src="<%= @book.book_cover %>" alt="表紙画像"
                   class="img-fluid rounded shadow-sm"
-                  style="max-width: 160px; max-height: 240px; object-fit: contain;">
+                  style="max-width: 160px; max-height: 240px; object-fit: contain;"
+                  loading="lazy">
             <% else %>
               <div class="no-cover text-muted d-flex align-items-center justify-content-center rounded"
                   style="width: 160px; height: 240px;">
@@ -144,7 +146,7 @@
         } do %>
           <i class="bi bi-pen"></i> もっと書く
         <% end %>
-        <%= link_to "戻る", "javascript:history.back()", class: "btn btn-outline-secondary" %>
+        <%= link_to "戻る", books_path, class: "btn btn-outline-secondary" %>
       </div>
     </div>
   </div>

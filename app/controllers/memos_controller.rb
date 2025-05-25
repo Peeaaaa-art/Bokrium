@@ -44,9 +44,14 @@ class MemosController < ApplicationController
 
   def destroy
     @memo.destroy
-    flash[:info] = "メモを削除しました"
+    flash.now[:info] = "メモを削除しました"
     respond_to do |format|
-      format.turbo_stream { render turbo_stream: turbo_stream.remove(dom_id(@memo)) }
+      format.turbo_stream do
+        render turbo_stream: [
+          turbo_stream.remove(dom_id(@memo)),
+          turbo_stream.update("flash", partial: "shared/flash")
+        ]
+      end
       format.html { redirect_to book_path(@book), status: :see_other }
     end
   end
