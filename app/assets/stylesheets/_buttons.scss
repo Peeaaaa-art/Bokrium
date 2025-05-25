@@ -5,3 +5,22 @@
   border-radius: 999px;
   background-color: #f9f9f9;
 }
+
+.btn-primary-bok {
+  background-color: #2d61d1;
+  color: white;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #2f5392;
+    color: white;
+  }
+
+  &:focus,
+  &:focus-visible {
+    background-color: #2f5392; // hoverと同じでもOK
+    color: white;
+    outline: none;
+    box-shadow: 0 0 0 0.25rem rgba(66, 113, 195, 0.5); // 適度な focus 表示
+  }
+}
