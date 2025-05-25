@@ -19,7 +19,7 @@
 
             <!-- 情報 -->
             <div class="card-body d-flex flex-column px-3 py-2">
-              <p class="mb-1 small"><strong><%= book.title.truncate(40) %></strong></p>
+              <p class="mb-1 small"><strong><%= book.title.truncate(ApplicationController::TITLE_TRUNCATE_LIMIT) %></strong></p>
 
               <div class="mb-auto small text-muted">
                 <p class="mb-1"><strong>著者:</strong> <%= book.author || '情報なし' %></p>

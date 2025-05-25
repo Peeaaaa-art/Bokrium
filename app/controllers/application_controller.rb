@@ -9,6 +9,8 @@ class ApplicationController < ActionController::Base
     @guest_user ||= User.find_by(email: guest_email)
   end
 
+  TITLE_TRUNCATE_LIMIT = 40
+
   protected
 
   def configure_permitted_parameters

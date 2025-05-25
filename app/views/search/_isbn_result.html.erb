@@ -20,7 +20,7 @@
 
     <!-- 情報 + フォーム -->
     <div class="flex-grow-1 text-md-center" style="max-width: 100%;">
-      <p class="mb-1 small"><strong><%= book[:title]&.truncate(40) %></strong></p>
+      <p class="mb-1 small"><strong><%= book[:title]&.truncate(ApplicationController::TITLE_TRUNCATE_LIMIT) %></strong></p>
       <p class="mb-1 small"><strong>著者:</strong> <%= book[:author] || "情報なし" %></p>
       <p class="mb-1 small"><strong>出版社:</strong> <%= book[:publisher] || "情報なし" %></p>
 

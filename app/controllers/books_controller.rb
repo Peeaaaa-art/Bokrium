@@ -3,8 +3,6 @@ class BooksController < ApplicationController
   before_action :set_book, only: [ :show, :edit, :update, :destroy ]
   rescue_from ActiveRecord::RecordNotFound, with: :handle_record_not_found
 
-  TITLE_TRUNCATE_LIMIT = 40
-
   def index
     books = current_user.books
 
@@ -96,7 +94,7 @@ class BooksController < ApplicationController
         end
         format.html do
           flash[:info] = success_message
-          redirect_to books_path
+          redirect_to search_books_path
         end
       end
 
