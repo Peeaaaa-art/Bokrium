@@ -104,7 +104,7 @@
           <%= f.select :status,
                 Book.statuses.keys.map { |s| [t("books.status.#{s}"), s] },
                 {},
-                class: "btn text-gray",
+                class: "btn text-secondary",
                 style: "height: calc(2em + .1rem + 3px);",
                 onchange: "this.form.requestSubmit();" %>
         <% end %>
