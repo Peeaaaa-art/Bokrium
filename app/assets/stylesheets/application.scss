@@ -49,6 +49,12 @@ body {
   100% { opacity: 0; }
 }
 
+@media (min-width: 768px) {
+  .flash-message {
+    bottom: 8rem;
+  }
+}
+
 
 .alert-bokrium-info {
   background-color: #fdf8ef; // 薄いクリーム色
