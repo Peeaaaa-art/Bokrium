@@ -36,7 +36,7 @@ RSpec.describe "Books", type: :request do
       follow_redirect!
 
       truncated_title = long_title.truncate(ApplicationController::TITLE_TRUNCATE_LIMIT)
-      expect(response.body).to include("My本棚に『#{truncated_title}』を追加しました")
+      expect(response.body).to include("本棚に『#{truncated_title}』を追加しました")
     end
   end
 

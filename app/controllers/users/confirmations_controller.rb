@@ -12,9 +12,18 @@ class Users::ConfirmationsController < Devise::ConfirmationsController
   # end
 
   # GET /resource/confirmation?confirmation_token=abcdef
-  # def show
-  #   super
-  # end
+  def show
+    self.resource = resource_class.confirm_by_token(params[:confirmation_token])
+
+    if resource.errors.empty?
+      # 自動ログイン（初回のみ）
+      sign_in(resource)
+
+      redirect_to root_path, notice: "メール確認が完了しました。Bokriumへようこそ！"
+    else
+      render :new
+    end
+  end
 
   # protected
 
