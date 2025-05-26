@@ -3,7 +3,7 @@
   <head>
     <title><%= content_for(:title) || "Bokrium" %></title>
 
-    <meta property="og:title" content="<%= content_for?(:og_title) ? yield(:og_title) : 'Bokrium - あなたの読書棚' %>">
+    <meta property="og:title" content="<%= content_for?(:og_title) ? yield(:og_title) : 'Bokrium - 読書メモアプリ' %>">
     <meta property="og:description" content="<%= content_for?(:og_description) ? yield(:og_description) : '「読んだだけ」で終わらせない。Bokriumは、読書の記憶を育てる本棚アプリです。' %>">
     <meta property="og:image" content="<%= content_for?(:og_image) ? yield(:og_image) : image_url("bokrium_ogp.png") %>">
     <meta property="og:url" content="<%= request.original_url %>">

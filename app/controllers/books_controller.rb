@@ -80,7 +80,7 @@ class BooksController < ApplicationController
     if @book.save
       set_tagger_for_all_taggings(@book)
 
-      success_message = "My本棚に『#{@book.title.truncate(TITLE_TRUNCATE_LIMIT)}』を追加しました"
+      success_message = "本棚に『#{@book.title.truncate(TITLE_TRUNCATE_LIMIT)}』を追加しました"
 
       respond_to do |format|
         format.turbo_stream do

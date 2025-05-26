@@ -36,10 +36,10 @@
             <%= f.hidden_field :book_cover, value: book[:book_cover] %>
           <% end %>
         <% if user_signed_in? %>
-          <%= f.submit "My本棚に追加", class: "btn btn-success btn-sm mt-3" %>
+          <%= f.submit "本棚に追加", class: "btn btn-success btn-sm mt-3" %>
         <% else %>
           <button class="btn btn-success btn-sm mt-3" disabled title="ログインすると追加できます">
-            My本棚に追加
+            本棚に追加
           </button>
         <% end %>
         <% end %>

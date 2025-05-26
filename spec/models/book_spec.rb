@@ -17,7 +17,7 @@ RSpec.describe Book, type: :model do
       create(:book, user: user, isbn: "9781234567890")
       duplicate = build(:book, user: user, isbn: "9781234567890")
       expect(duplicate).not_to be_valid
-      expect(duplicate.errors[:isbn]).to include(": この書籍はMy本棚に登録済みです")
+      expect(duplicate.errors[:isbn]).to include(": この書籍は本棚に登録済みです")
     end
 
     it "ISBNが空文字列なら保存される（normalize_isbn）" do
