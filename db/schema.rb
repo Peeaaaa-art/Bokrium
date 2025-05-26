@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_05_17_040532) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_26_063951) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -45,7 +45,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_17_040532) do
 
   create_table "books", force: :cascade do |t|
     t.bigint "user_id", null: false
-    t.string "title"
+    t.string "title", null: false
     t.string "isbn"
     t.string "publisher"
     t.integer "page"

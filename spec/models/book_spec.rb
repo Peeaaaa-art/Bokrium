@@ -8,6 +8,10 @@ RSpec.describe Book, type: :model do
   end
 
   describe "バリデーション" do
+    it "タイトルが空だと無効" do
+      book = FactoryBot.build(:book, title: nil)
+      expect(book).not_to be_valid
+    end
     it "ISBNが重複する場合は無効（同じユーザー内）" do
       user = create(:user)
       create(:book, user: user, isbn: "9781234567890")
