@@ -17,6 +17,7 @@
           </div>
 
           <%= hidden_field_tag "memo[content]", "", id: "memo_content_input" %>
+          <!-- Reactコンポーネントをマウント -->
           <div id="rich-editor-root" class="rich-editor-root"></div>
 
           <!-- 保存ボタン：右上に絶対配置 -->
@@ -31,7 +32,7 @@
           </div>
 
           <!-- 日付・文字数表示 -->
-          <div class="d-flex justify-content-between text-muted small px-3 mt-1">
+          <div class="d-flex justify-content-between date-and-count text-muted small px-3 mt-1">
             <div>
               <span id="modal-created-at"></span>
               <span class="ms-3" id="modal-updated-at"></span>
