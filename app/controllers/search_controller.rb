@@ -22,7 +22,7 @@ class SearchController < ApplicationController
     if type == "isbn" || engine == "isbn"
       validator = IsbnCheck::ValidateIsbnService.new(query)
       unless validator.valid?
-        flash.now[:warning] = "#{query} #{validator.error_message}）"
+        flash.now[:warning] = "#{query} #{validator.error_message}"
         return
       end
 
