@@ -2,24 +2,24 @@
   <div class="container-fluid d-flex justify-content-between align-items-center" style="min-height: 72px;">
     <% current_path = request.path %>
     <!-- 左：ロゴ -->
-    <%= link_to root_path, class: "navbar-brand rounded  #{current_page?(root_path) ? 'active' : ''}", style: "letter-spacing: 0.03em;" do %>
+    <%= link_to root_path, class: "navbar-brand rounded  #{current_page?(root_path) ? 'active' : ''}", style: "letter-spacing: 0.03em;", title: "ホーム" do %>
       <%= raw File.read(Rails.root.join("app/assets/images/bokrium_logo.svg")) %>
     <% end %>
 
     <!-- 中央：ナビアイコン -->
     <div class="d-flex align-items-center justify-content-center gap-5">
       <!-- 🔍 検索ページ -->
-      <%= link_to search_books_path, class: "text-dark #{current_path.starts_with?('/search') ? 'active' : ''}" do %>
+      <%= link_to search_books_path, class: "text-dark #{current_path.starts_with?('/search') ? 'active' : ''}", title: "書籍検索" do %>
         <i data-lucide="search" style="width: 24px; height: 24px;"></i>
       <% end %>
 
       <!-- 📚 本棚ページ -->
-      <%= link_to books_index_path, class: "text-dark #{books_index_active_class}" do %>
+      <%= link_to books_index_path, class: "text-dark #{books_index_active_class}", title: "本棚" do %>
         <i data-lucide="library-big" style="width: 24px; height: 24px;"></i>
       <% end %>
 
       <!-- 👥 公開本棚ページ -->
-      <%= link_to public_bookshelf_index_path, class: "text-dark #{current_path.starts_with?('/public_bookshelf') ? 'active' : ''}" do %>
+      <%= link_to public_bookshelf_index_path, class: "text-dark #{current_path.starts_with?('/public_bookshelf') ? 'active' : ''}", title: "みんなの読書メモ" do %>
         <i data-lucide="users" style="width: 24px; height: 24px;"></i>
       <% end %>
 
