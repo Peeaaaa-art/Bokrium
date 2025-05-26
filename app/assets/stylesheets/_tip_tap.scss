@@ -3,12 +3,11 @@
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   line-height: 1.4;
-  padding: 0.3rem 0.5rem;
+  padding: 0.3rem 0.3rem;
   margin: 0;
   outline: none;
   border: none;
   background: transparent;
-  border-radius: 0.5rem;
 }
 
 .rich-editor-root {
@@ -82,12 +81,26 @@
   outline: none;
 }
 
+ul[data-type="taskList"] {
+  list-style: none;
+
+  li {
+    display: flex;
+    align-items: center;
+    input[type="checkbox"] {
+      margin-right: 0.5rem;
+    }
+  }
+}
 
 .rhodia-grid-bg {
   background:
     linear-gradient(rgba(254, 254, 254, 0.98), rgba(253, 252, 254, 0.88));
 }
 .modal-body {
-
   padding: 0 !important;
+}
+
+.date-and-count {
+  border: 0.25px solid #ced4da;
 }
