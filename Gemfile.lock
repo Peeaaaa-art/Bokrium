@@ -150,7 +150,7 @@ GEM
     dotenv-rails (3.1.8)
       dotenv (= 3.1.8)
       railties (>= 6.1)
-    drb (2.2.1)
+    drb (2.2.3)
     ed25519 (1.4.0)
     erubi (1.13.1)
     et-orbi (1.2.11)
@@ -470,7 +470,7 @@ GEM
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
-    shoulda-matchers (5.3.0)
+    shoulda-matchers (6.5.0)
       activesupport (>= 5.2.0)
     snaky_hash (2.0.1)
       hashie
@@ -586,7 +586,7 @@ DEPENDENCIES
   rspec-rails
   rubocop-rails-omakase
   selenium-webdriver
-  shoulda-matchers (~> 5.0)
+  shoulda-matchers (~> 6.5)
   solid_cable
   solid_cache
   solid_queue
