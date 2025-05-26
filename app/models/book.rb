@@ -13,7 +13,7 @@ class Book < ApplicationRecord
     reading: 1,      # 読書中
     finished: 2      # 読了
   }
-
+  validates :title, presence: { message: ": タイトルは必須です" }
   validates :isbn, uniqueness: { scope: :user_id, message: ": この書籍はMy本棚に登録済みです" }, allow_blank: true
 
   pg_search_scope :search_by_title_and_author,

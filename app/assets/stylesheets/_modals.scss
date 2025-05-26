@@ -1,0 +1,43 @@
+.modal-action-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.modal-action-item {
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+}
+
+.modal-action-button {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 0.8rem 1rem;
+  background: white;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  text-decoration: none;
+  border: 1px solid;
+
+  &.edit {
+    color: #1e3a8a;
+    border-color: #c7d2fe;
+  }
+
+  &.delete {
+    color: #b91c1c;
+    border-color: #fecaca;
+  }
+
+  span {
+    display: flex;
+    align-items: center;
+  }
+
+  cursor: pointer;
+}

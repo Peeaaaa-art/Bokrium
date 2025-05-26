@@ -1,7 +1,7 @@
 <div data-controller="column-selector">
 
-  <% default_value = mobile ? 4 : 12 %>
-  <% options = mobile ? [4, 3, 6, 8, 10] : [12, 15, 18, 21, 24] %>
+  <% default_value = mobile? ? 4 : 12 %>
+  <% options = mobile? ? [4, 3, 6, 8, 10] : [12, 15, 18, 21, 24] %>
 
   <div class="d-flex align-items-center mb-4 ms-3" style="gap: 0.5rem;">
     <%= select_tag :column,

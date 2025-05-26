@@ -13,6 +13,7 @@
 @import "filter_controls";
 @import "shadows";
 @import "buttons";
+@import "modals";
 
 
 
@@ -46,6 +47,12 @@ body {
   10%  { opacity: 0.97; }
   90%  { opacity: 0.97; }
   100% { opacity: 0; }
+}
+
+@media (min-width: 768px) {
+  .flash-message {
+    bottom: 8rem;
+  }
 }
 
 

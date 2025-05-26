@@ -14,15 +14,8 @@ class ExploreController < ApplicationController
         search_public_memos(@query)
       end
 
-    browser = Browser.new(request.user_agent)
-    device_type = browser.device
-
-    @books_per_row = case
-    when device_type.mobile? then 5
-    when device_type.tablet? then 8
-    else 10
-    end
-
+      @books_per_shelf  = session[:shelf_per]&.to_i || default_books_per_shelf
+      @card_columns   = session[:card_columns]&.to_i
 
     if turbo_frame_request?
       partial_name =
@@ -36,7 +29,7 @@ class ExploreController < ApplicationController
         "books_frame",
         partial: partial_name,
         locals: @scope == "mine" ?
-          { books: @results, books_per_row: @books_per_row } :
+          { books: @results, books_per_shelf: @books_per_shelf } :
           { memos: @results }
       )
     else
