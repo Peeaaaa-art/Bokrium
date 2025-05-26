@@ -9,7 +9,7 @@
 
   <%= select_tag :per,
       options_for_select(options, books_per_shelf),
-      class: "form-select form-select-sm text-secondary shadow-sm books-per-row",
+      class: "form-select form-select-sm text-secondary shadow-sm books-per-shelf",
       data: {
         auto_submit_target: "select",
         action: "change->auto-submit#change"

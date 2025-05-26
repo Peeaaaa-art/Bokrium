@@ -1,5 +1,4 @@
 @import "bootstrap";
-@import "book_cover";
 @import "my_bookshelf_pc";
 @import "my_bookshelf_iphone";
 @import "tags";
@@ -49,7 +48,7 @@ body {
   100% { opacity: 0; }
 }
 
-@media (min-width: 768px) {
+@media (min-width: 1440px) {
   .flash-message {
     bottom: 8rem;
   }
@@ -84,10 +83,9 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1050; /* モーダルより上にしたいなら大きめ */
+  z-index: 1050;
 }
 
-/* 例: app/assets/stylesheets/custom.scss または inline style */
 .random-memo {
   background-color: #fdfdfd;
   border-left: 4px solid #007bff;

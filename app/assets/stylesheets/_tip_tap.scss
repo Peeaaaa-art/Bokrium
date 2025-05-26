@@ -85,11 +85,7 @@
 
 .rhodia-grid-bg {
   background:
-    linear-gradient(rgba(254, 254, 254, 0.98), rgba(253, 252, 254, 0.88)), /* 白の薄いオーバーレイ */
-    url('/textures/molesikin_note.jpg');
-  background-size: cover;
-  background-position: center;
-  background-blend-mode: screen;
+    linear-gradient(rgba(254, 254, 254, 0.98), rgba(253, 252, 254, 0.88));
 }
 .modal-body {
 

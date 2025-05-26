@@ -6,67 +6,24 @@
   background-color:rgb(253, 253, 250);
 }
 
-.yomoo-color {
-  background-color:rgba(221, 231, 233, 0.4);
-}
-
-.stone-color {
-  background-color:rgb(204, 218, 221);
-}
-
-
-.rhodia-cover-blue {
-  background-color:rgb(54, 54, 146, 0.8);
-}
-
-.rhodia-gray {
-
-  background: #2d2d2de3;
-  background: #1f1d14e3;
-  background-color:rgb(142, 168, 173);
-
-}
-
 .footer-color {
 
   background-color:rgba(221, 231, 233, 0.662);
 }
 
-.rhodia-gray-with-paper {
-  background:
-    linear-gradient(rgba(31, 29, 20, 0.89), rgba(31, 29, 20, 0.89)), /* 半透明カラーオーバーレイ */
-    url('/textures/stone_paper.jpeg'); /* 背景画像 */
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-}
-
-.rhodia-gray .navbar-nav .nav-link,
-.rhodia-gray .navbar-brand,
-.rhodia-gray .navbar-text {
-  color: #fff !important;
-}
-
-
 .bg-rhodia-orange {
   background-color: #f7a54d;
   background-image:
-    url('/textures/orange-background.jpg'),
+    url('orange-background.jpg'),
     linear-gradient(135deg, #f4a148 0%, #ffb347 100%);
   background-size: cover, 100% 100%;
   background-blend-mode: lighten;
-}
-
-.bg-offwhite {
-  background-color:rgba(221, 231, 233, 0.4);
-  // background-color: rgb(77, 98, 152);
 }
 
 .bg-rhodia-blue {
   background-color: #5578a8bd
   ;
   background-image:
-    url('/textures/blue-texture.jpg'),
     linear-gradient(135deg, #3b65ab 0%, #406ba7e2 100%);
   background-size: cover, 100% 100%;
   background-blend-mode: multiply;
