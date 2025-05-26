@@ -85,8 +85,8 @@
 
 <turbo-frame id="books_frame">
   <% if @view_mode == "shelf" %>
-    <%= render "bookshelf/kino_books_grid", books: @books, shelf_per_row: @shelf_per_row, mobile: @mobile %>
+    <%= render "bookshelf/kino_books_grid", books: @books, books_per_shelf: @books_per_shelf %>
   <% else %>
-    <%= render "bookshelf/simple_card", books: @books, card_columns: @card_columns, mobile: @mobile %>
+    <%= render "bookshelf/simple_card", books: @books, card_columns: @card_columns %>
   <% end %>
 </turbo-frame>

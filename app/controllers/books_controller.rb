@@ -53,19 +53,8 @@ class BooksController < ApplicationController
 
     @books = books.includes(book_cover_s3_attachment: :blob)
 
-    browser = Browser.new(request.user_agent)
-    device_type = browser.device
-
-    default = case
-    when device_type.mobile? then 5
-    when device_type.tablet? then 8
-    else 10
-    end
-
-    @shelf_per_row  = session[:shelf_per]&.to_i || default
-    @card_columns   = session[:card_columns]&.to_i || default
-
-    @mobile = device_type.mobile?
+    @books_per_shelf  = session[:shelf_per]&.to_i || default_books_per_shelf
+    @card_columns   = session[:card_columns]&.to_i
   end
 
   def show

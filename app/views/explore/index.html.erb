@@ -8,7 +8,7 @@
         <%= render partial: "public_bookshelf/public_card", collection: @results, as: :memo %>
       </div>
     <% when "mine" %>
-      <%= render partial: "bookshelf/kino_books_grid", locals: { books: @results } %>
+      <%= render partial: "bookshelf/kino_books_grid", locals: { books: @results, books_per_shelf: @books_per_shelf } %>
     <% else %>
       <p class="text-center text-warning">スコープが不正です</p>
     <% end %>

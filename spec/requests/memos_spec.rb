@@ -5,7 +5,9 @@ RSpec.describe "Memos", type: :request do
   let(:book) { FactoryBot.create(:book, user: user) }
 
   before do
-    sign_in user
+    post user_session_path, params: {
+      user: { email: user.email, password: user.password }
+    }
   end
 
   describe "POST /books/:book_id/memos" do
