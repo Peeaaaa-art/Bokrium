@@ -1,6 +1,6 @@
 module Guest
   class BooksController < ApplicationController
-    CHUNKS_PER_PAGE = 7
+    CHUNKS_PER_PAGE = 14
     def show
       @book = guest_user.books.find(params[:id])
 
@@ -49,18 +49,6 @@ module Guest
 
       books_per_page = unit_per_page * CHUNKS_PER_PAGE
       @pagy, @books = pagy(books, limit: books_per_page)
-
-      if @view_mode == "shelf"
-        if turbo_frame_request?
-          render partial: "bookshelf/kino_chunk", locals: {
-            books: @books,
-            books_per_shelf: @books_per_shelf,
-            pagy: @pagy
-          }, layout: false
-        else
-          render :index
-        end
-      end
     end
   end
 end
