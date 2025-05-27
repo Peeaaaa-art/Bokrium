@@ -14,8 +14,17 @@ class ExploreController < ApplicationController
         search_public_memos(@query)
       end
 
-      @books_per_shelf  = session[:shelf_per]&.to_i || default_books_per_shelf
-      @card_columns   = session[:card_columns]&.to_i
+    @books_per_shelf = session[:shelf_per]&.to_i || default_books_per_shelf
+    @card_columns    = session[:card_columns]&.to_i || default_card_columns
+
+    # ✅ Pagyを使ってページネーションする（@resultsはRelation前提）
+    if @scope == "mine"
+      unit_per_page = @view_mode == "shelf" ? @books_per_shelf : @card_columns
+      items_per_page = (unit_per_page * 3).to_i # ← 3段くらい適当に
+      @pagy, @books = pagy(@results, items: items_per_page)
+    else
+      @pagy, @memos = pagy(@results, items: 20)
+    end
 
     if turbo_frame_request?
       partial_name =
@@ -28,13 +37,21 @@ class ExploreController < ApplicationController
       render turbo_stream: turbo_stream.update(
         "books_frame",
         partial: partial_name,
-        locals: @scope == "mine" ?
-          { books: @results, books_per_shelf: @books_per_shelf } :
-          { memos: @results }
+        locals: if @scope == "mine"
+          {
+            books: @books,
+            books_per_shelf: @books_per_shelf,
+            card_columns: @card_columns,
+            pagy: @pagy
+          }
+                else
+          {
+            memos: @memos,
+            pagy: @pagy
+          }
+                end
       )
     else
-      @books = @results if @scope == "mine"
-      @memos = @results unless @scope == "mine"
       render :index
     end
   end

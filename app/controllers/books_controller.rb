@@ -2,6 +2,7 @@ class BooksController < ApplicationController
   before_action :authenticate_user!, only: [ :create, :show, :edit, :update, :destroy ]
   before_action :set_book, only: [ :show, :edit, :update, :destroy ]
   rescue_from ActiveRecord::RecordNotFound, with: :handle_record_not_found
+  CHUNKS_PER_PAGE = 7
 
   def index
     books = current_user.books
@@ -30,9 +31,17 @@ class BooksController < ApplicationController
 
     if @view_mode == "shelf"
       session[:shelf_per] = params[:per] if params[:per].present?
+      @books_per_shelf = session[:shelf_per]&.to_i || default_books_per_shelf
+      unit_per_page = @books_per_shelf
     elsif @view_mode == "card"
       session[:card_columns] = params[:column] if params[:column].present?
+      @card_columns = session[:card_columns]&.to_i || default_card_columns
+      unit_per_page = @card_columns
     end
+
+    # 念のためにデフォルトを補完（保険）
+    unit_per_page ||= default_books_per_shelf
+    @books_per_shelf ||= default_books_per_shelf
 
     sort_param = params[:sort]
     case sort_param
@@ -51,10 +60,21 @@ class BooksController < ApplicationController
       books = books.order(created_at: :desc)
     end
 
-    @books = books.includes(book_cover_s3_attachment: :blob)
+    books = books.includes(book_cover_s3_attachment: :blob)
+    books_per_page = unit_per_page * CHUNKS_PER_PAGE
+    @pagy, @books = pagy(books, limit: books_per_page)
 
-    @books_per_shelf  = session[:shelf_per]&.to_i || default_books_per_shelf
-    @card_columns   = session[:card_columns]&.to_i
+    if @view_mode == "shelf"
+      if turbo_frame_request?
+        render partial: "bookshelf/kino_chunk", locals: {
+          books: @books,
+          books_per_shelf: @books_per_shelf,
+          pagy: @pagy
+        }, layout: false
+      else
+        render :index
+      end
+    end
   end
 
   def show

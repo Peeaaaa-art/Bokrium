@@ -5,10 +5,10 @@
     <% case params[:scope] %>
     <% when "public" %>
       <div id="memo-grid" class="row row-cols-1 row-cols-md-3 g-4">
-        <%= render partial: "public_bookshelf/public_card", collection: @results, as: :memo %>
+        <%= render partial: "public_bookshelf/public_card", collection: @results, as: :memo, pagy: @pagy %>
       </div>
     <% when "mine" %>
-      <%= render partial: "bookshelf/kino_books_grid", locals: { books: @results, books_per_shelf: @books_per_shelf } %>
+      <%= render partial: "bookshelf/kino_books_grid", locals: { books: @results, books_per_shelf: @books_per_shelf, pagy: @pagy } %>
     <% else %>
       <p class="text-center text-warning">スコープが不正です</p>
     <% end %>

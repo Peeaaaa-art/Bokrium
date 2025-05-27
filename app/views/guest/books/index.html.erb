@@ -1,11 +1,4 @@
-<div class="alert-bokrium-info d-flex align-items-center text-center py-2 py-md-3">
-  <div class="container text-center text-sample">
-        <i class="bi bi-info-circle-fill fs-6 me-2"></i>
-  こちらはサンプル表示です。自分の本棚をつくるためには、
-  <%= link_to "ログイン", new_user_session_path %>・<%= link_to "アカウント登録", new_user_registration_path %>が必要です。
-  </div>
-</div>
-
+<%= bookshelf_sample_notice %>
 
 <div class="d-flex align-items-center justify-content-between mt-4 mb-3 px-3">
 
@@ -23,25 +16,26 @@
     <% end %>
   </div>
     <div class="mx-auto">
-      <div class="filter-controls border rounded-pill shadow-sm px-4 py-md-1 d-flex align-items-center gap-3">
+      <div class="filter-controls border rounded-pill shadow-sm px-4 py-md-1 d-flex align-items-center gap-3"
+      style="pointer-events: none; opacity: 0.7;">
 
         <!-- 検索 -->
-        <button class="btn btn-icon">
+        <button class="btn btn-icon" disabled>
           <i class="bi bi-search icon-refined"></i>
         </button>
 
         <!-- ソート -->
-        <button class="btn btn-icon">
+        <button class="btn btn-icon" disabled>
           <i class="bi bi-arrow-down-up icon-refined"></i>
         </button>
 
         <!-- タグ -->
-        <button class="btn btn-icon">
+        <button class="btn btn-icon" disabled>
           <i class="bi bi-tags icon-refined"></i>
         </button>
 
         <!-- ステータス -->
-        <button class="btn btn-icon">
+        <button class="btn btn-icon" disabled>
           <i class="bi bi-journal-check icon-refined"></i>
         </button>
       </div>
@@ -52,12 +46,16 @@
 
 <turbo-frame id="books_frame">
   <% if @view_mode == "shelf" %>
-    <%= render "bookshelf/kino_books_grid", books: @books, books_per_row: @books_per_row %>
+    <%= render "bookshelf/kino_select_numbers", books_per_shelf: @books_per_shelf %>
+    <%= render "bookshelf/kino_books_grid",
+            books: @books,
+            books_per_shelf: @books_per_shelf,
+            pagy: @pagy,
+            current_chunk_index: @pagy.page %>
   <% else %>
-    <%= render "bookshelf/simple_card", books: @books %>
+    <%= render "bookshelf/simple_card", books: @books, card_columns: @card_columns %>
   <% end %>
 </turbo-frame>
-
 
 
 

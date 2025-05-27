@@ -1,0 +1,56 @@
+  <!-- 🎯 中央：フィルターボタン群 -->
+  <div class="mx-auto">
+    <div class="filter-controls border rounded-pill shadow-sm px-4 py-md-1 d-flex align-items-center gap-3">
+
+      <!-- 検索 -->
+      <button class="btn btn-icon" data-bs-toggle="collapse" data-bs-target="#searchCollapse" aria-expanded="false">
+        <i class="bi bi-search icon-refined"></i>
+      </button>
+
+      <!-- ソート -->
+      <button class="btn btn-icon" data-bs-toggle="collapse" data-bs-target="#sortCollapse" aria-expanded="false">
+        <i class="bi bi-arrow-down-up icon-refined"></i>
+      </button>
+
+      <!-- タグ -->
+      <button class="btn btn-icon" data-bs-toggle="collapse" data-bs-target="#tagCollapse" aria-expanded="false">
+        <i class="bi bi-tags icon-refined"></i>
+      </button>
+
+      <!-- ステータス -->
+      <button class="btn btn-icon" data-bs-toggle="collapse" data-bs-target="#statusCollapse" aria-expanded="false">
+        <i class="bi bi-journal-check icon-refined"></i>
+      </button>
+
+    </div>
+  </div>
+
+  <!-- ➡ 右側スペース（空でOK）-->
+  <div class="flex-shrink-0 d-none-sm" style="width: 48px;"></div> <!-- サイズ合わせ用 -->
+</div>
+
+
+<!-- 📦 下の行：トグルで展開される内容 -->
+  <!-- 検索フォーム -->
+  <div class="collapse mb-2" id="searchCollapse">
+    <%= render "shared/search_bar", scope: "mine", placeholder: "自分の本やメモを検索" %>
+  </div>
+
+  <!-- ソート -->
+  <div class="collapse mb-2" id="sortCollapse">
+    <%= render "sort_controls", filtered_tag: filtered_tag, current_sort: params[:sort] %>
+  </div>
+
+  <!-- タグ -->
+  <div class="collapse mb-2" id="tagCollapse"
+      data-controller="tag-toggle"
+      data-tag-toggle-selected-tags-value="<%= filtered_tags&.join(',') %>">
+    <turbo-frame id="tag_filter_frame" src="<%= tag_filter_books_path %>">
+      読み込み中…
+    </turbo-frame>
+  </div>
+
+  <!-- ステータス -->
+  <div class="collapse mb-2" id="statusCollapse">
+    <%= render "status_filter", current_status: filtered_status %>
+  </div>

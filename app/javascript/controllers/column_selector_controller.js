@@ -6,7 +6,6 @@ export default class extends Controller {
   connect() {
     this.defaultClass = this.gridTarget.className
 
-    // 初期表示時に hiddenInput の値でクラス適用
     const hiddenInput = document.getElementById("hiddenColumnInput")
     if (hiddenInput && hiddenInput.value) {
       const cols = hiddenInput.value
@@ -25,10 +24,9 @@ export default class extends Controller {
       hiddenInput.value = cols
     }
 
-    // ← ★ここでフォームを送信
     const form = document.getElementById("columnForm")
     if (form) {
-      form.requestSubmit() // ← これが大事！
+      form.requestSubmit()
     }
   }
 }

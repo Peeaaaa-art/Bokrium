@@ -1,10 +1,9 @@
 class ApplicationController < ActionController::Base
-  # Only allow modern browsers supporting webp images, web push, badges, import maps, CSS nesting, and CSS :has.
+  include Pagy::Backend
   allow_browser versions: :modern
   before_action :configure_permitted_parameters, if: :devise_controller?
-  helper_method :guest_user
-  helper_method :mobile?
-  helper_method :default_books_per_shelf
+  helper_method :guest_user, :mobile?, :default_books_per_shelf, :default_card_columns
+
 
   def guest_user
     guest_email = ENV["GUEST_USER_EMAIL"]
@@ -36,5 +35,9 @@ class ApplicationController < ActionController::Base
     when browser.device.tablet? then 8
     else 10
     end
+  end
+
+  def default_card_columns
+    mobile? ? 4 : 12
   end
 end

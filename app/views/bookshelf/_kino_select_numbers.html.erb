@@ -1,0 +1,17 @@
+<%= form_with url: books_index_path, method: :get,
+              data: { controller: "auto-submit", turbo: false },
+              local: true,
+              class: "ms-3" do %>
+
+  <%= hidden_field_tag :view, "shelf" %>
+
+  <% options = mobile? ? [5, 10] : [5, 7, 10, 12] %>
+
+  <%= select_tag :per,
+      options_for_select(options, books_per_shelf),
+      class: "form-select form-select-sm text-secondary shadow-sm books-per-shelf",
+      data: {
+        auto_submit_target: "select",
+        action: "change->auto-submit#change"
+      } %>
+<% end %>

@@ -1,0 +1,42 @@
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 2rem;
+
+  .page-item {
+    .page-link {
+      padding: 0.45rem 0.9rem;
+      border-radius: 1.25rem;
+      border: 1px solid #ddd;
+      background-color: #f8f9fa;
+      color: #3b65ab;
+      font-weight: 500;
+      font-size: 0.95rem;
+      font-family: 'Big Shoulders Display', sans-serif;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+      transition: all 0.2s ease-in-out;
+
+      &:hover {
+        background-color: #3b65ab;
+        color: #fff;
+        border-color: #3b65ab;
+        text-decoration: none;
+      }
+    }
+
+    &.active .page-link {
+      background-color: #3b65ab;
+      color: #fff;
+      border-color: #3b65ab;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    &.disabled .page-link {
+      background-color: #e9ecef;
+      color: #aaa;
+      border-color: #e0e0e0;
+      cursor: not-allowed;
+    }
+  }
+}

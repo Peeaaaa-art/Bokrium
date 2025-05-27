@@ -13,6 +13,7 @@
 @import "shadows";
 @import "buttons";
 @import "modals";
+@import "pagination";
 
 
 
@@ -50,7 +51,7 @@ body {
 
 @media (min-width: 1440px) {
   .flash-message {
-    bottom: 8rem;
+    bottom: 4rem;
   }
 }
 

@@ -1,14 +1,6 @@
 <% content_for :title, "読書メモ - Bokrium" %>
 
-<% if !user_signed_in? || @readonly %>
-  <div class="alert-bokrium-info d-flex align-items-center text-center px-1 py-3">
-    <div class="container text-center text-sample">
-          <i class="bi bi-info-circle-fill fs-6 me-2"></i>
-    こちらはサンプル表示です。メモを保存するためには、
-    <%= link_to 'ログイン', new_user_session_path %>・<%= link_to "アカウント登録", new_user_registration_path %>が必要です。
-    </div>
-  </div>
-<% end %>
+<%= sample_mode_notice %>
 
 <div class="container my-5" style="max-width: 1200px;">
   <div class="row justify-content-center">
@@ -146,7 +138,7 @@
         } do %>
           <i class="bi bi-pen"></i> もっと書く
         <% end %>
-        <%= link_to "戻る", books_path, class: "btn btn-outline-secondary" %>
+        <%= link_to "戻る", books_index_path, class: "btn btn-outline-secondary", title: (@readonly ? "サンプル本棚に戻ります" : "自分の本棚に戻ります") %>
       </div>
     </div>
   </div>

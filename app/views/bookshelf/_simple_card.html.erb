@@ -31,7 +31,11 @@
 
 </div>
 
-<%= form_with url: books_path, method: :get, local: true, id: "columnForm" do %>
+<%= form_with url: books_index_path, method: :get, local: true, id: "columnForm" do %>
   <%= hidden_field_tag :view, "card" %>
   <%= hidden_field_tag :column, card_columns, id: "hiddenColumnInput" %>
 <% end %>
+
+<div class="my-5 d-flex justify-content-center">
+  <%== pagy_bootstrap_nav(@pagy) %>
+</div>
