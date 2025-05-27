@@ -1,15 +1,8 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useRef } from "react"
 import { useEditor, EditorContent, BubbleMenu } from "@tiptap/react"
-import BulletList from '@tiptap/extension-bullet-list'
-import OrderedList from '@tiptap/extension-ordered-list'
-import ListItem from '@tiptap/extension-list-item'
-import TaskList from '@tiptap/extension-task-list'
-import TaskItem from '@tiptap/extension-task-item'
-import StarterKit from '@tiptap/starter-kit'
-import CharacterCount from '@tiptap/extension-character-count'
-import BubbleMenuExtension from '@tiptap/extension-bubble-menu'
-
-
+import StarterKit from "@tiptap/starter-kit"
+import BubbleMenuExtension from "@tiptap/extension-bubble-menu"
+import CharacterCount from "@tiptap/extension-character-count"
 
 const RichEditor = ({ element }) => {
   const initialContent = element?.dataset?.initialContent || ""
@@ -29,18 +22,7 @@ const RichEditor = ({ element }) => {
 
   const editor = useEditor({
     extensions: [
-      StarterKit.configure({
-            bulletList: false,
-            orderedList: false,
-            listItem: false,
-          }),
-      BulletList,
-      OrderedList,
-      ListItem,
-      TaskList,
-      TaskItem.configure({
-        nested: true,
-      }),
+      StarterKit,
       BubbleMenuExtension,
       CharacterCount.configure({
         limit: 100000,
@@ -82,7 +64,7 @@ const RichEditor = ({ element }) => {
         console.log("✏️ [update] 内容が変化 → hasUnsavedChanges = true")
       }
 
-      //  文字数カウントの表示を更新
+      // ✅ 文字数カウントの表示を更新
       const charCountEl = document.getElementById("char-count")
       if (charCountEl) {
         charCountEl.textContent = `${editor.storage.characterCount.characters()} 文字`
@@ -164,14 +146,6 @@ const RichEditor = ({ element }) => {
             className={`btn btn-sm btn-outline-secondary ${editor.isActive("orderedList") ? "active" : ""}`}
           >
             1. List
-          </button>
-
-          <button
-            type="button"
-            onClick={() => editor.chain().focus().toggleTaskList().run()}
-            className={`btn btn-sm btn-outline-secondary ${editor.isActive("taskList") ? "active" : ""}`}
-          >
-            <i class="bi bi-check-square"></i>
           </button>
 
           <button
