@@ -44,18 +44,16 @@
   <div class="flex-shrink-0 d-none-sm" style="width: 48px;"></div> <!-- サイズ合わせ用 -->
 </div>
 
-<turbo-frame id="books_frame">
   <% if @view_mode == "shelf" %>
-    <%= render "bookshelf/kino_select_numbers", books_per_shelf: @books_per_shelf %>
-    <%= render "bookshelf/kino_books_grid",
+    <%= render "guest/bookshelf/kino_select_numbers", books_per_shelf: @books_per_shelf %>
+    <%= render "guest/bookshelf/kino_chunk",
             books: @books,
             books_per_shelf: @books_per_shelf,
             pagy: @pagy,
             current_chunk_index: @pagy.page %>
   <% else %>
-    <%= render "bookshelf/simple_card", books: @books, card_columns: @card_columns %>
+    <%= render "guest/bookshelf/simple_card", books: @books, card_columns: @card_columns, pagy: @pagy %>
   <% end %>
-</turbo-frame>
 
 
 
