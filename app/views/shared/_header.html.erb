@@ -14,7 +14,7 @@
       <% end %>
 
       <!-- 📚 本棚ページ -->
-      <%= link_to books_index_path, class: "text-dark #{books_index_active_class}", title: "本棚" do %>
+      <%= link_to books_index_path, class: "text-dark #{books_index_active_class}", title: (user_signed_in? ? "本棚" : "サンプル本棚") do %>
         <i data-lucide="library-big" style="width: 24px; height: 24px;"></i>
       <% end %>
 
