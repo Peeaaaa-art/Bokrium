@@ -2,12 +2,9 @@ class BooksController < ApplicationController
   before_action :authenticate_user!, only: [ :create, :show, :edit, :update, :destroy ]
   before_action :set_book, only: [ :show, :edit, :update, :destroy ]
   rescue_from ActiveRecord::RecordNotFound, with: :handle_record_not_found
-  CHUNKS_PER_PAGE = 5
+  CHUNKS_PER_PAGE = 7
 
   def index
-    # books_controller.rb の index メソッドの冒頭に以下を追加
-    Rails.logger.debug "✅ pagy method defined? #{ defined?(pagy) }"
-    Rails.logger.debug "✅ pagy method defined? #{ method(:pagy) }"
     books = current_user.books
 
     unless books.exists?
@@ -42,7 +39,7 @@ class BooksController < ApplicationController
       unit_per_page = @card_columns
     end
 
-    # 👇ここで念のためにデフォルトを補完（保険）
+    # 念のためにデフォルトを補完（保険）
     unit_per_page ||= default_books_per_shelf
     @books_per_shelf ||= default_books_per_shelf
 
@@ -63,27 +60,20 @@ class BooksController < ApplicationController
       books = books.order(created_at: :desc)
     end
 
-    # Pagyでチャンク取得
     books = books.includes(book_cover_s3_attachment: :blob)
     books_per_page = unit_per_page * CHUNKS_PER_PAGE
-    Rails.logger.debug "🔍 filtered books count: #{books.count}"
-    Rails.logger.debug "🔍 SQL: #{books.to_sql}"
     @pagy, @books = pagy(books, limit: books_per_page)
 
-    Rails.logger.debug "📦 unit_per_page: #{unit_per_page}"
-    Rails.logger.debug "📚 books_per_page: #{books_per_page}"
-    Rails.logger.debug "🧭 current page: #{params[:page] || '1'}"
-    Rails.logger.debug "🧮 @books.size: #{@books.size}"
-    Rails.logger.debug "🧮 @pagy.vars: #{@pagy.vars.inspect}"
-
-    if turbo_frame_request?
-      render partial: "bookshelf/kino_chunk", locals: {
-        books: @books,
-        books_per_shelf: @books_per_shelf,
-        pagy: @pagy
-      }, layout: false
-    else
-      render :index
+    if @view_mode == "shelf"
+      if turbo_frame_request?
+        render partial: "bookshelf/kino_chunk", locals: {
+          books: @books,
+          books_per_shelf: @books_per_shelf,
+          pagy: @pagy
+        }, layout: false
+      else
+        render :index
+      end
     end
   end
 
