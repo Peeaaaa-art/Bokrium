@@ -29,6 +29,12 @@ module Guest
       session[:view_mode] = params[:view] if params[:view].present?
       @view_mode = session[:view_mode] || "shelf"
 
+      if @view_mode == "shelf"
+        session[:shelf_per] = params[:per] if params[:per].present?
+      elsif @view_mode == "card"
+        session[:card_columns] = params[:column] if params[:column].present?
+      end
+
       @books_per_shelf  = session[:shelf_per]&.to_i || default_books_per_shelf
       @card_columns   = session[:card_columns]&.to_i
     end

@@ -1,13 +1,6 @@
 <% content_for :title, "本棚 - Bokrium" %>
 
-<% if current_user && @no_books  %>
-  <div class="alert-bokrium-info d-flex align-items-center text-center py-2 py-md-3">
-    <div class="container text-center text-sample">
-      <i class="bi bi-info-circle-fill fs-6 me-2"></i>
-    こちらはサンプル表示です。<%= link_to "最初の本を登録", search_books_path %>しましょう！
-    </div>
-  </div>
-<% end %>
+<%= empty_bookshelf_notice %>
 
 <div class="d-flex align-items-center justify-content-between mt-4 mb-3 px-3">
 
