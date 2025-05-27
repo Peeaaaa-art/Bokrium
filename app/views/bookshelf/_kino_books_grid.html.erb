@@ -1,22 +1,3 @@
-<%= form_with url: books_index_path, method: :get,
-              data: { controller: "auto-submit" },
-              local: true,
-              class: "ms-3" do %>
-
-  <%= hidden_field_tag :view, "shelf" %>
-
-  <% options = mobile? ? [5, 10] : [5, 7, 10, 12] %>
-
-  <%= select_tag :per,
-      options_for_select(options, books_per_shelf),
-      class: "form-select form-select-sm text-secondary shadow-sm books-per-shelf",
-      data: {
-        auto_submit_target: "select",
-        action: "change->auto-submit#change"
-      } %>
-<% end %>
-
-
 <% books.each_slice(books_per_shelf) do |row_books| %>
   <div class="shelf-row" data-controller="book-shelf">
     <div class="book-row">
@@ -44,7 +25,10 @@
   </div>
 <% end %>
 
-<%== pagy_bootstrap_nav(@pagy) if @pagy && @pagy.pages > 1 %>
-
-<%= debug books_per_shelf %>
-<p><%= @books&.size %> 冊表示されています</p>
+<% if pagy && pagy.next %>
+  <turbo-frame id="next_books" src="<%= books_path(view: @view_mode, page: pagy.next) %>" loading="lazy">
+    <div class="text-center my-4">
+      <div class="spinner-border text-secondary" role="status"></div>
+    </div>
+  </turbo-frame>
+<% end %>

@@ -44,6 +44,7 @@ class BooksController < ApplicationController
 
     # 👇ここで念のためにデフォルトを補完（保険）
     unit_per_page ||= default_books_per_shelf
+    @books_per_shelf ||= default_books_per_shelf
 
     sort_param = params[:sort]
     case sort_param
@@ -74,6 +75,16 @@ class BooksController < ApplicationController
     Rails.logger.debug "🧭 current page: #{params[:page] || '1'}"
     Rails.logger.debug "🧮 @books.size: #{@books.size}"
     Rails.logger.debug "🧮 @pagy.vars: #{@pagy.vars.inspect}"
+
+    if turbo_frame_request?
+      render partial: "bookshelf/kino_chunk", locals: {
+        books: @books,
+        books_per_shelf: @books_per_shelf,
+        pagy: @pagy
+      }, layout: false
+    else
+      render :index
+    end
   end
 
   def show

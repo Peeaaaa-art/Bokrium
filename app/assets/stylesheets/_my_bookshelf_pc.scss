@@ -54,7 +54,7 @@
   object-position: center bottom;
   filter: drop-shadow(0 8px 6px rgba(0, 0, 0, 0.1));
   transform: rotateX(3deg);
-  margin-bottom: 2px;
+  margin-bottom: 2.1px;
 }
 
 .shelf-bar {
@@ -71,7 +71,7 @@
   z-index: 1;
 
   @media (max-width: 576px) {
-    height: 18px;
+    height: 14px;
   }
 }
 

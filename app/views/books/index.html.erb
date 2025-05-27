@@ -22,10 +22,10 @@
   <%= render "books/filter_controlls", filtered_tag: @filtered_tag, filtered_tags: @filtered_tags, filtered_status: @filtered_status %>
 
 
-<turbo-frame id="books_frame">
-  <% if @view_mode == "shelf" %>
-    <%= render "bookshelf/kino_books_grid", books: @books, books_per_shelf: @books_per_shelf %>
-  <% else %>
-    <%= render "bookshelf/simple_card", books: @books, card_columns: @card_columns %>
-  <% end %>
-</turbo-frame>
+  <%= render "bookshelf/books_frame_wrapper",
+              books: @books,
+              books_per_shelf: @books_per_shelf,
+              pagy: @pagy,
+              view_mode: @view_mode,
+              card_columns: @card_columns %>
+

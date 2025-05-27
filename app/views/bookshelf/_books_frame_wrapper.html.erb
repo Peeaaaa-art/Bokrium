@@ -1,0 +1,12 @@
+<turbo-frame id="books_frame">
+  <% if view_mode == "shelf" %>
+    <%= render "bookshelf/kino_select_numbers", books_per_shelf: books_per_shelf %>
+    <%= render "bookshelf/kino_books_grid",
+            books: books,
+            books_per_shelf: books_per_shelf,
+            pagy: pagy,
+            current_chunk_index: pagy.page %>
+  <% else %>
+    <%= render "bookshelf/simple_card", books: books, card_columns: card_columns %>
+  <% end %>
+</turbo-frame>
