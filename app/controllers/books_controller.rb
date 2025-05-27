@@ -2,8 +2,12 @@ class BooksController < ApplicationController
   before_action :authenticate_user!, only: [ :create, :show, :edit, :update, :destroy ]
   before_action :set_book, only: [ :show, :edit, :update, :destroy ]
   rescue_from ActiveRecord::RecordNotFound, with: :handle_record_not_found
+  CHUNKS_PER_PAGE = 5
 
   def index
+    # books_controller.rb の index メソッドの冒頭に以下を追加
+    Rails.logger.debug "✅ pagy method defined? #{ defined?(pagy) }"
+    Rails.logger.debug "✅ pagy method defined? #{ method(:pagy) }"
     books = current_user.books
 
     unless books.exists?
@@ -30,9 +34,16 @@ class BooksController < ApplicationController
 
     if @view_mode == "shelf"
       session[:shelf_per] = params[:per] if params[:per].present?
+      @books_per_shelf = session[:shelf_per]&.to_i || default_books_per_shelf
+      unit_per_page = @books_per_shelf
     elsif @view_mode == "card"
       session[:card_columns] = params[:column] if params[:column].present?
+      @card_columns = session[:card_columns]&.to_i || default_card_columns
+      unit_per_page = @card_columns
     end
+
+    # 👇ここで念のためにデフォルトを補完（保険）
+    unit_per_page ||= default_books_per_shelf
 
     sort_param = params[:sort]
     case sort_param
@@ -51,10 +62,18 @@ class BooksController < ApplicationController
       books = books.order(created_at: :desc)
     end
 
-    @books = books.includes(book_cover_s3_attachment: :blob)
+    # Pagyでチャンク取得
+    books = books.includes(book_cover_s3_attachment: :blob)
+    books_per_page = unit_per_page * CHUNKS_PER_PAGE
+    Rails.logger.debug "🔍 filtered books count: #{books.count}"
+    Rails.logger.debug "🔍 SQL: #{books.to_sql}"
+    @pagy, @books = pagy(books, limit: books_per_page)
 
-    @books_per_shelf  = session[:shelf_per]&.to_i || default_books_per_shelf
-    @card_columns   = session[:card_columns]&.to_i
+    Rails.logger.debug "📦 unit_per_page: #{unit_per_page}"
+    Rails.logger.debug "📚 books_per_page: #{books_per_page}"
+    Rails.logger.debug "🧭 current page: #{params[:page] || '1'}"
+    Rails.logger.debug "🧮 @books.size: #{@books.size}"
+    Rails.logger.debug "🧮 @pagy.vars: #{@pagy.vars.inspect}"
   end
 
   def show

@@ -35,3 +35,6 @@
   <%= hidden_field_tag :view, "card" %>
   <%= hidden_field_tag :column, card_columns, id: "hiddenColumnInput" %>
 <% end %>
+
+<%== pagy_bootstrap_nav(@pagy) %>
+<%= debug books.size %>
