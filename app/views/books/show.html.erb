@@ -9,23 +9,20 @@
       <div class="row g-4 align-items-start">
         <!-- 書影：左半分 -->
         <div class="col-6 d-flex justify-content-center">
-          <div class="book-cover-show">
-            <% if @book.book_cover_s3.attached? %>
-              <%= lazy_image_tag @book.book_cover_s3, alt: @book.title,
-                  class: "img-fluid rounded shadow-sm",
-                  style: "max-width: 160px; max-height: 240px; object-fit: contain;" %>
-            <% elsif @book.book_cover.present? %>
-              <img src="<%= @book.book_cover %>" alt="表紙画像"
-                  class="img-fluid rounded shadow-sm"
-                  style="max-width: 160px; max-height: 240px; object-fit: contain;"
-                  loading="lazy">
-            <% else %>
-              <div class="no-cover text-muted d-flex align-items-center justify-content-center rounded"
-                  style="width: 160px; height: 240px;">
-                <%= @book.title.truncate(20) %>
-              </div>
-            <% end %>
-          </div>
+          <% if @book.book_cover_s3.attached? %>
+            <%= lazy_image_tag @book.book_cover_s3, alt: @book.title, class: "img-fluid rounded shadow-sm book-cover-show" %>
+
+          <% elsif @book.book_cover.present? %>
+            <img src="<%= @book.book_cover %>" alt="表紙画像"
+                class="img-fluid rounded shadow-sm book-cover-show" loading="lazy">
+
+          <% else %>
+            <div class="no-cover book-cover-show">
+              <span class="title  text-muted fs-5 mt-5">
+                <%= @book.title.truncate(40) %>
+              </span>
+            </div>
+          <% end %>
         </div>
 
         <!-- 情報：右半分 -->

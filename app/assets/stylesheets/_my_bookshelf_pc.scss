@@ -107,19 +107,24 @@
   background: #f5d75b; /* レクラム文庫のような黄色 */
   color: #2a1e00;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   text-align: center;
   border-radius: 4px;
   font-family: "Kosugi Mono", monospace;
-  font-size: 0.85em;
+  font-size: 1.1em;
   font-weight: bold;
   line-height: 1.4;
-  padding: 11px;
   padding-bottom: 40px; /* 下帯のスペース */
   overflow: hidden;
   box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1);
   box-sizing: border-box;
+}
+
+  @media (min-width: 768px) {
+  .no-cover  {
+    padding: 0px 4px; // タブレット・PC向け
+  }
 }
 
 .no-cover .title {
@@ -130,8 +135,15 @@
   overflow: hidden;
   text-overflow: ellipsis;
   word-break: break-word;
-  font-size: clamp(0.5rem, 1.2vw, 0.75rem);
   width: 100%;
+  margin-top: 0.8rem;
+  font-size: 0.66rem; // デフォルトはモバイル想定
+}
+
+@media (min-width: 768px) {
+  .no-cover .title {
+    font-size: 0.95rem; // タブレット・PC向け
+  }
 }
 
 .book-on-shelf a {
@@ -145,7 +157,7 @@
   bottom: 0;
   left: 0;
   width: 100%;
-  background: #333;
+  background: #333333e2;
   color: #fff;
   font-size: 0.66em;
   font-weight: 700;
@@ -154,4 +166,11 @@
   font-family: "Big Shoulders Inline", sans-serif;
   letter-spacing: 0.05em;
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.1);
+}
+
+.book-cover-show {
+  max-width: 160px;
+  max-height: 240px;
+  object-fit: contain;
+  padding: 0px 11px;
 }
