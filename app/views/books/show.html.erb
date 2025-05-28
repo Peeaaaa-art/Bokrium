@@ -1,6 +1,8 @@
 <% content_for :title, "読書メモ - Bokrium" %>
 
-<%= sample_mode_notice %>
+<% unless @starter_book %>
+  <%= sample_mode_notice %>
+<% end %>
 
 <div class="container my-5" style="max-width: 1200px;">
   <div class="row justify-content-center">

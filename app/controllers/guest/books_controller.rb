@@ -1,10 +1,9 @@
 module Guest
   class BooksController < ApplicationController
-    CHUNKS_PER_PAGE = 14
-
+    before_action :read_only
     before_action :set_guest_book, only: [ :show ]
     rescue_from ActiveRecord::RecordNotFound, with: :handle_guest_not_found
-
+    CHUNKS_PER_PAGE = 14
     def index
       books = guest_user.books
                   .includes(book_cover_s3_attachment: :blob)
@@ -31,20 +30,18 @@ module Guest
       @memos = @book.memos
       @new_memo = Memo.new(book_id: @book.id)
       @user_tags = []
-      @readonly = true
 
       render "books/show"
-    end
-
-    def how_to_use_index
-      @books = guest_user.books.where(isbn: "9784898111277")
-      render "guest/books/how_to_use_index"
     end
 
     private
 
     def set_guest_book
       @book = guest_user.books.find(params[:id])
+    end
+
+    def read_only
+      @read_only = true
     end
 
     def handle_guest_not_found

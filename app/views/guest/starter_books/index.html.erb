@@ -119,16 +119,12 @@
   </div>
 </div>
 
-
-
-
-
 <% @books.each_slice(@books_per_shelf) do |row_books| %>
   <div class="shelf-row" data-controller="book-shelf">
     <div class="book-row">
       <% row_books.each do |book| %>
         <div class="book-on-shelf">
-          <%= link_to guest_book_path(book), data: { turbo_frame: "_top" } do %>
+          <%= link_to guest_starter_book_path(book), data: { turbo_frame: "_top" } do %>
             <% if book.book_cover_s3.attached? %>
               <%= image_tag book.book_cover_s3.variant(resize_to_limit: [200, 200]),
                     alt: book.title, class: "book-cover", loading: "lazy" %>
