@@ -36,6 +36,11 @@ module Guest
       render "books/show"
     end
 
+    def how_to_use_index
+      @books = guest_user.books.where(isbn: "9784898111277")
+      render "guest/books/how_to_use_index"
+    end
+
     private
 
     def set_guest_book
