@@ -1,37 +1,67 @@
-<div class="container py-5 px-3 px-md-5" style="max-width: 720px;">
+<div class="container py-5 px-3 px-md-5 px-md-0" style="max-width: 720px;">
   <div class="mb-5 text-center">
     <h1 class="display-4 fw-bold mb-2 big-shoulders-inline-bold">
-      Bokrium の使い方
+      <span style="font-size: 1.2em;">Bokrium</span> の使い方
     </h1>
     <p class="lead text-muted" style="font-style: italic;">
       読書体験を、記録し、共有する新しい棚へようこそ。
     </p>
   </div>
 
-
-  <section class="mb-5">
-    <h2 class="border-bottom pb-2 mb-3">
-      <%= link_to search_books_path, title: "書籍検索" do %><i data-lucide="search"></i><% end %> 書籍の検索と登録
-    </h2>
+  <section class="mb-">
+    <h3 class="border-bottom pb-2 mb-3">
+      <%= link_to search_books_path, title: "書籍検索" do %><i data-lucide="search"></i><% end %> <strong>スキャン・検索・入力</strong>
+    </h3>
     <p>本は以下の方法で追加できます：</p>
-    <ol class="mb-3">
-      <li>タイトル・著者・ISBN を入力して検索</li>
-      <li>本のバーコードをスキャン</li>
-      <li>手動でタイトル・著者などを入力し、画像をアップロード</li>
+    <p>タイトル・著者・ISBN を入力して検索</p>
+    <p>本のバーコードをスキャン</p>
+  </section>
+</div>
+
+<div class="shadow rounded-5 p-1"
+      style="
+        display: grid;
+        place-items: center;
+        max-width: 320px;
+        margin: 0 auto;
+        background-color: #0a2540;
+        box-sizing: border-box;
+        border: 2px solid #222;
+      ">
+  <%= link_to "https://bokrium-assets.s3.ap-northeast-1.amazonaws.com/barcode_scan.webm",
+              target: "_blank",
+              style: "display: block; width: 100%;" do %>
+    <video autoplay muted loop playsinline
+            class="rounded-5"
+            style="width: 100%; display: block; box-sizing: border-box;"
+            loading="lazy">
+      <source src="https://bokrium-assets.s3.ap-northeast-1.amazonaws.com/barcode_scan.webm" type="video/webm">
+      お使いのブラウザは video に対応していません。
+    </video>
+  <% end %>
+</div>
+
+<div class="container py-5 px-3 px-md-5 px-md-0" style="max-width: 720px;">
+    <section>
+
+      <p>手動でタイトル・著者などを入力し、画像をアップロード</p>
     </ol>
-    <p>登録後は、<span class="badge bg-info text-dark">タグ</span> で整理したり、<span class="badge bg-success">公開</span>／<span class="badge bg-secondary">非公開</span> を切り替えられます。</p>
+    <p>登録後は、本棚に追加されます。</p>
   </section>
 
   <section class="mb-5">
     <h2 class="border-bottom pb-2 mb-3">
-        <%= link_to books_index_path, title: (user_signed_in? ? "本棚" : "サンプル本棚") do %><i data-lucide="library-big"></i><% end %> 書籍の検索と登録
+        <%= link_to books_index_path, title: (user_signed_in? ? "本棚" : "サンプル本棚") do %><i data-lucide="library-big"></i><% end %> 本棚
     </h2>
-    <p>本は以下の方法で追加できます：</p>
+    <p>本棚では以下の機能が使用できます：</p>
     <ol class="mb-3">
-      <li>タイトル・著者・ISBN を入力して検索</li>
-      <li>本のバーコードをスキャン</li>
-      <li>手動でタイトル・著者などを入力し、画像をアップロード</li>
+      <li>本棚ビュー（カード・棚板）の切り替え、ならび表示冊数の変更</li>
+      <li>タイトル・著者・メモ本文から、キーワード検索</li>
+      <li>追加日・タイトル・著者・メモ更新日による並び替え</li>
+      <li>タグによる絞り込み</li>
+      <li>読みたい・読書中・読了から書籍の絞り込み</li>
     </ol>
+    <%= lazy_image_tag "responsive_bookshelf.png", alt: "Bokriumのレスポンシブ表示例", class: "img-fluid" %>
     <p>登録後は、<span class="badge bg-info text-dark">タグ</span> で整理したり、<span class="badge bg-success">公開</span>／<span class="badge bg-secondary">非公開</span> を切り替えられます。</p>
   </section>
 
@@ -39,23 +69,18 @@
     <h2 class="border-bottom pb-2 mb-3">2. メモの基本操作</h2>
 
     <div class="d-flex justify-content-center my-4">
-      <div class="shadow rounded overflow-hidden" style="max-width: 480px;">
-        <a href="https://gyazo.com/1940b882d66b3841dd92dc7b44b07ced" target="_blank">
-          <img src="https://i.gyazo.com/1940b882d66b3841dd92dc7b44b07ced.gif"
-                alt="Bokriumの使い方GIF"
-                class="img-fluid">
-        </a>
+      <div class="shadow rounded" style="max-width: 720px;">
+        <%= link_to "https://bokrium-assets.s3.ap-northeast-1.amazonaws.com/starter_book1_compressed.webm", target: "_blank" do %>
+          <video autoplay muted loop playsinline
+                class="rounded img-fluid"
+                style="width: 100%;">
+            <source src="https://bokrium-assets.s3.ap-northeast-1.amazonaws.com/starter_book1_compressed.webm" type="video/webm">
+            お使いのブラウザは video に対応していません。
+          </video>
+        <% end %>
       </div>
     </div>
-    <div class="d-flex justify-content-center my-4">
-      <div class="shadow rounded overflow-hidden" style="max-width: 480px;">
-        <a href="https://gyazo.com/39b740595f10a1b5e365af3d0281ab40" target="_blank">
-          <img src="https://i.gyazo.com/39b740595f10a1b5e365af3d0281ab40.gif"
-                alt="Bokriumの使い方GIF"
-                class="img-fluid">
-        </a>
-      </div>
-    </div>
+
     <p>Markdown によるリッチテキスト入力が可能です。以下のように簡単に装飾できます：</p>
     <ul class="list-group list-group-flush mb-3">
       <li class="list-group-item">「# 見出し」で大見出し（H1〜H6）</li>
@@ -181,4 +206,12 @@
     <%= link_to "はじめてみる", search_books_path, class: "btn btn-lg btn-primary shadow-sm px-4 py-2" %>
   </div>
 </div>
+
+
+
+
+
+
+
+
 
