@@ -24,10 +24,13 @@
               <span class="ms-2"><%= l(current_user.created_at, format: :only_date) %></span>
             </li>
           </ul>
-          <div class="d-flex justify-content-left gap-2 mt-3">
-            <%= link_to '編集', edit_user_registration_path(current_user), class: "btn btn-outline-primary" %>
-            <%= link_to t('devise.sessions.signed_in.sign_out', default: 'ログアウト'), destroy_user_session_path, data: { turbo_method: :delete, turbo_confirm: "本当にログアウトしますか？" }, class: 'btn btn-danger' %>
-          </div>
+            <div class="d-flex justify-content-left gap-2 mt-3" data-controller="safari-click-fix">
+              <%= link_to '編集', edit_user_registration_path(current_user), class: "btn btn-outline-primary safari-fix-button" %>
+              <%= link_to t('devise.sessions.signed_in.sign_out', default: 'ログアウト'),
+                    destroy_user_session_path,
+                    data: { turbo_method: :delete, turbo_confirm: "本当にログアウトしますか？" },
+                    class: 'btn btn-danger safari-fix-button safari-modal-action-button' %>
+            </div>
         </div>
       </div>
     </div>

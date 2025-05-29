@@ -24,3 +24,8 @@
     box-shadow: 0 0 0 0.25rem rgba(66, 113, 195, 0.5); // 適度な focus 表示
   }
 }
+
+.safari-modal-action-button {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
