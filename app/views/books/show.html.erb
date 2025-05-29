@@ -16,11 +16,11 @@
 
           <% elsif @book.book_cover.present? %>
             <img src="<%= @book.book_cover %>" alt="表紙画像"
-                class="img-fluid rounded shadow-sm book-cover-show" loading="lazy">
+                class="img-fluid book-cover-show" loading="lazy">
 
           <% else %>
             <div class="no-cover book-cover-show">
-              <span class="title  text-muted fs-5 mt-5">
+              <span class="title text-muted fs-5 mt-5">
                 <%= @book.title.truncate(40) %>
               </span>
             </div>

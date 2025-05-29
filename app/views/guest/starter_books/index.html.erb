@@ -10,18 +10,52 @@
 
 
   <section class="mb-5">
-    <h2 class="border-bottom pb-2 mb-3">1. 書籍の登録と整理</h2>
+    <h2 class="border-bottom pb-2 mb-3">
+      <%= link_to search_books_path, title: "書籍検索" do %><i data-lucide="search"></i><% end %> 書籍の検索と登録
+    </h2>
     <p>本は以下の方法で追加できます：</p>
     <ol class="mb-3">
-      <li>ISBN を入力、またはバーコードをスキャン</li>
-      <li>手動でタイトル・著者などを入力</li>
-      <li>カバー画像のアップロード</li>
+      <li>タイトル・著者・ISBN を入力して検索</li>
+      <li>本のバーコードをスキャン</li>
+      <li>手動でタイトル・著者などを入力し、画像をアップロード</li>
+    </ol>
+    <p>登録後は、<span class="badge bg-info text-dark">タグ</span> で整理したり、<span class="badge bg-success">公開</span>／<span class="badge bg-secondary">非公開</span> を切り替えられます。</p>
+  </section>
+
+  <section class="mb-5">
+    <h2 class="border-bottom pb-2 mb-3">
+        <%= link_to books_index_path, title: (user_signed_in? ? "本棚" : "サンプル本棚") do %><i data-lucide="library-big"></i><% end %> 書籍の検索と登録
+    </h2>
+    <p>本は以下の方法で追加できます：</p>
+    <ol class="mb-3">
+      <li>タイトル・著者・ISBN を入力して検索</li>
+      <li>本のバーコードをスキャン</li>
+      <li>手動でタイトル・著者などを入力し、画像をアップロード</li>
     </ol>
     <p>登録後は、<span class="badge bg-info text-dark">タグ</span> で整理したり、<span class="badge bg-success">公開</span>／<span class="badge bg-secondary">非公開</span> を切り替えられます。</p>
   </section>
 
   <section class="mb-5">
     <h2 class="border-bottom pb-2 mb-3">2. メモの基本操作</h2>
+
+    <div class="d-flex justify-content-center my-4">
+      <div class="shadow rounded overflow-hidden" style="max-width: 480px;">
+        <a href="https://gyazo.com/1940b882d66b3841dd92dc7b44b07ced" target="_blank">
+          <img src="https://i.gyazo.com/1940b882d66b3841dd92dc7b44b07ced.gif"
+                alt="Bokriumの使い方GIF"
+                class="img-fluid">
+        </a>
+      </div>
+    </div>
+    <div class="d-flex justify-content-center my-4">
+      <div class="shadow rounded overflow-hidden" style="max-width: 480px;">
+        <a href="https://gyazo.com/39b740595f10a1b5e365af3d0281ab40" target="_blank">
+          <img src="https://i.gyazo.com/39b740595f10a1b5e365af3d0281ab40.gif"
+                alt="Bokriumの使い方GIF"
+                class="img-fluid">
+        </a>
+      </div>
+    </div>
     <p>Markdown によるリッチテキスト入力が可能です。以下のように簡単に装飾できます：</p>
     <ul class="list-group list-group-flush mb-3">
       <li class="list-group-item">「# 見出し」で大見出し（H1〜H6）</li>
@@ -34,7 +68,7 @@
     </div>
   </section>
 
-  <section class="mb-5">
+  <section class="mb-3">
     <h2 class="border-bottom pb-2 mb-3">3. メモの共有と発見</h2>
     <p>
       Bokriumでは、作成した読書メモの公開範囲を設定できます。デフォルトでは
@@ -83,9 +117,38 @@
       </div>
     </div>
   </section>
+</div>
 
+<% @books.each_slice(@books_per_shelf) do |row_books| %>
+  <div class="shelf-row" data-controller="book-shelf">
+    <div class="book-row">
+      <% row_books.each do |book| %>
+        <div class="book-on-shelf">
+          <%= link_to guest_starter_book_path(book), data: { turbo_frame: "_top" } do %>
+            <% if book.book_cover_s3.attached? %>
+              <%= image_tag book.book_cover_s3.variant(resize_to_limit: [200, 200]),
+                    alt: book.title, class: "book-cover", loading: "lazy" %>
+            <% elsif book.book_cover.present? %>
+              <img src="<%= book.book_cover %>" alt="表紙画像" class="book-cover" loading="lazy">
+            <% else %>
+              <div class="no-cover">
+                <span class="title">
+                  <%= book.title.truncate(30, omission: "").ljust(10).gsub(" ", "&nbsp;").html_safe %>
+                </span>
+              </div>
+            <% end %>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+    <div class="shelf-bar"></div>
+    <div class="shelf-depth"></div>
+  </div>
+<% end %>
+
+<div class="container py-5 px-3 px-md-5 mt-5" style="max-width: 720px;">
   <section class="mb-5">
-    <h2 class="border-bottom pb-2 mb-3">よくある質問</h2>
+    <h2 class="border-bottom pb-2 mb-3 text-center">よくある質問</h2>
     <div class="accordion" id="faqAccordion">
       <div class="accordion-item">
         <h2 class="accordion-header" id="faq1">
@@ -119,29 +182,3 @@
   </div>
 </div>
 
-<% @books.each_slice(@books_per_shelf) do |row_books| %>
-  <div class="shelf-row" data-controller="book-shelf">
-    <div class="book-row">
-      <% row_books.each do |book| %>
-        <div class="book-on-shelf">
-          <%= link_to guest_starter_book_path(book), data: { turbo_frame: "_top" } do %>
-            <% if book.book_cover_s3.attached? %>
-              <%= image_tag book.book_cover_s3.variant(resize_to_limit: [200, 200]),
-                    alt: book.title, class: "book-cover", loading: "lazy" %>
-            <% elsif book.book_cover.present? %>
-              <img src="<%= book.book_cover %>" alt="表紙画像" class="book-cover" loading="lazy">
-            <% else %>
-              <div class="no-cover">
-                <span class="title">
-                  <%= book.title.truncate(30, omission: "").ljust(10).gsub(" ", "&nbsp;").html_safe %>
-                </span>
-              </div>
-            <% end %>
-          <% end %>
-        </div>
-      <% end %>
-    </div>
-    <div class="shelf-bar"></div>
-    <div class="shelf-depth"></div>
-  </div>
-<% end %>
