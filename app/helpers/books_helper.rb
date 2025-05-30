@@ -1,6 +1,6 @@
 module BooksHelper
   def bookshelf_sample_notice
-    return unless !user_signed_in? || @readonly
+    return unless !user_signed_in? || @read_only
 
     content_tag :div, class: "alert-bokrium-info d-flex align-items-center text-center py-2 py-md-3" do
       content_tag :div, class: "container text-center text-sample" do
@@ -15,7 +15,8 @@ module BooksHelper
   end
 
   def sample_mode_notice
-    return unless !user_signed_in? || @readonly
+    return if @starter_book
+    return unless !user_signed_in? || @read_only
 
     content_tag :div, class: "alert-bokrium-info d-flex align-items-center text-center px-1 py-3" do
       content_tag :div, class: "container text-center text-sample" do

@@ -1,54 +1,52 @@
 module Guest
   class BooksController < ApplicationController
+    before_action :read_only
+    before_action :set_guest_book, only: [ :show ]
+    rescue_from ActiveRecord::RecordNotFound, with: :handle_guest_not_found
     CHUNKS_PER_PAGE = 14
-    def show
-      @book = guest_user.books.find(params[:id])
-
-      unless @book
-        flash[:danger] = "この本はゲスト表示できません"
-        redirect_to root_path
-        return
-      end
-
-      @memos = @book.memos.order(created_at: :desc)
-      @new_memo = Memo.new(book_id: @book.id)
-      @user_tags = []
-      @readonly = true
-
-      render "books/show"
-    end
-
     def index
       books = guest_user.books
-          .includes(book_cover_s3_attachment: :blob)
-          .order(created_at: :desc)
+                  .includes(book_cover_s3_attachment: :blob)
+                  .order(created_at: :desc)
       @no_books = true
 
       @filtered_tags = []
       @filtered_status = nil
 
-      session[:view_mode] = params[:view] if params[:view].present?
-      @view_mode = session[:view_mode] || "shelf"
+      display = BooksDisplaySetting.new(session, params, {
+        shelf: default_books_per_shelf,
+        card: default_card_columns
+      })
 
-      if @view_mode == "shelf"
-        session[:shelf_per] = params[:per] if params[:per].present?
-        @books_per_shelf = session[:shelf_per]&.to_i || default_books_per_shelf
-        unit_per_page = @books_per_shelf
-      elsif @view_mode == "card"
-        session[:card_columns] = params[:column] if params[:column].present?
-        @card_columns = session[:card_columns]&.to_i || default_card_columns
-        unit_per_page = @card_columns
-      end
+      @view_mode       = display.view_mode
+      @books_per_shelf = display.books_per_shelf
+      @card_columns    = display.card_columns
 
-      # 念のためにデフォルトを補完（保険）
-      unit_per_page ||= default_books_per_shelf
-      @books_per_shelf ||= default_books_per_shelf
-
-      @books_per_shelf  = session[:shelf_per]&.to_i || default_books_per_shelf
-      @card_columns   = session[:card_columns]&.to_i
-
-      books_per_page = unit_per_page * CHUNKS_PER_PAGE
+      books_per_page = display.unit_per_page * CHUNKS_PER_PAGE
       @pagy, @books = pagy(books, limit: books_per_page)
+    end
+
+    def show
+      @memos = @book.memos
+      @new_memo = Memo.new(book_id: @book.id)
+      @user_tags = []
+
+      render "books/show"
+    end
+
+    private
+
+    def set_guest_book
+      @book = guest_user.books.find(params[:id])
+    end
+
+    def read_only
+      @read_only = true
+    end
+
+    def handle_guest_not_found
+      flash[:danger] = "この本はゲスト表示できません"
+      redirect_to root_path
     end
   end
 end

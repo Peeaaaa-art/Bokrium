@@ -48,7 +48,7 @@
   <div class="d-flex justify-content-between mt-4">
     <%= link_to "戻る", @book.persisted? ? book_path(@book) : search_books_path, class: "btn btn-outline-secondary" %>
     <% if user_signed_in? %>
-      <%= f.submit @book.persisted? ? "更新する" : "登録する", class: "btn btn-primary-bok px-4" %>
+      <%= f.submit @book.persisted? ? "更新する" : "本棚に追加", class: "btn btn-primary-bok px-4" %>
     <% else %>
       <button class="btn btn-primary btn-sm ox-4" disabled title="ログインすると追加できます">
         本棚に追加

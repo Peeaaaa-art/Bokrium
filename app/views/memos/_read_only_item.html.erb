@@ -35,7 +35,7 @@
             <div class="dropdown-item">
               <%= f.label :visibility, "公開範囲", class: "form-label small text-muted mb-1" %>
               <%= f.select :visibility,
-                    [["非公開", "only_me"], ["リンク限定", "link_only"], ["サイトにも掲載", "public_site"]],
+                    [["非公開", "only_me"], ["リンク限定", "link_only"], ["完全公開", "public_site"]],
                     { selected: memo.visibility },
                     class: "form-select form-select-sm",
                     onchange: "this.form.requestSubmit();" %>
@@ -96,11 +96,11 @@
   <% if memo.persisted? %>
     <div class="position-absolute bottom-0 end-0 m-2" style="z-index: 2;">
       <% if memo.visibility?(:public_site) %>
-        <span class="bdge bg-uccess"><i class="bi bi-globe"></i> </span>
+        <span><i class="bi bi-globe text-primary"></i> </span>
       <% elsif memo.visibility?(:link_only) %>
-        <span class="bade bg-scondary"><i class="bi bi-link-45deg"></i></span>
+        <span><i class="bi bi-link-45deg text-secondary"></i></span>
       <% else %>
-        <span class="bage bg-mued"><i class="bi bi-lock-fill"></i></span>
+        <span><i class="bi bi-lock-fill"></i></span>
       <% end %>
     </div>
   <% end %>

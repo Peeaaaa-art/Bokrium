@@ -1,0 +1,217 @@
+<div class="container py-5 px-3 px-md-5 px-md-0" style="max-width: 720px;">
+  <div class="mb-5 text-center">
+    <h1 class="display-4 fw-bold mb-2 big-shoulders-inline-bold">
+      <span style="font-size: 1.2em;">Bokrium</span> の使い方
+    </h1>
+    <p class="lead text-muted" style="font-style: italic;">
+      読書体験を、記録し、共有する新しい棚へようこそ。
+    </p>
+  </div>
+
+  <section class="mb-">
+    <h3 class="border-bottom pb-2 mb-3">
+      <%= link_to search_books_path, title: "書籍検索" do %><i data-lucide="search"></i><% end %> <strong>スキャン・検索・入力</strong>
+    </h3>
+    <p>本は以下の方法で追加できます：</p>
+    <p>タイトル・著者・ISBN を入力して検索</p>
+    <p>本のバーコードをスキャン</p>
+  </section>
+</div>
+
+<div class="shadow rounded-5 p-1"
+      style="
+        display: grid;
+        place-items: center;
+        max-width: 320px;
+        margin: 0 auto;
+        background-color: #0a2540;
+        box-sizing: border-box;
+        border: 2px solid #222;
+      ">
+  <%= link_to "https://bokrium-assets.s3.ap-northeast-1.amazonaws.com/barcode_scan.webm",
+              target: "_blank",
+              style: "display: block; width: 100%;" do %>
+    <video autoplay muted loop playsinline
+            class="rounded-5"
+            style="width: 100%; display: block; box-sizing: border-box;"
+            loading="lazy">
+      <source src="https://bokrium-assets.s3.ap-northeast-1.amazonaws.com/barcode_scan.webm" type="video/webm">
+      お使いのブラウザは video に対応していません。
+    </video>
+  <% end %>
+</div>
+
+<div class="container py-5 px-3 px-md-5 px-md-0" style="max-width: 720px;">
+    <section>
+
+      <p>手動でタイトル・著者などを入力し、画像をアップロード</p>
+    </ol>
+    <p>登録後は、本棚に追加されます。</p>
+  </section>
+
+  <section class="mb-5">
+    <h2 class="border-bottom pb-2 mb-3">
+        <%= link_to books_index_path, title: (user_signed_in? ? "本棚" : "サンプル本棚") do %><i data-lucide="library-big"></i><% end %> 本棚
+    </h2>
+    <p>本棚では以下の機能が使用できます：</p>
+    <ol class="mb-3">
+      <li>本棚ビュー（カード・棚板）の切り替え、ならび表示冊数の変更</li>
+      <li>タイトル・著者・メモ本文から、キーワード検索</li>
+      <li>追加日・タイトル・著者・メモ更新日による並び替え</li>
+      <li>タグによる絞り込み</li>
+      <li>読みたい・読書中・読了から書籍の絞り込み</li>
+    </ol>
+    <%= lazy_image_tag "responsive_bookshelf.png", alt: "Bokriumのレスポンシブ表示例", class: "img-fluid" %>
+    <p>登録後は、<span class="badge bg-info text-dark">タグ</span> で整理したり、<span class="badge bg-success">公開</span>／<span class="badge bg-secondary">非公開</span> を切り替えられます。</p>
+  </section>
+
+  <section class="mb-5">
+    <h2 class="border-bottom pb-2 mb-3">2. メモの基本操作</h2>
+
+    <div class="d-flex justify-content-center my-4">
+      <div class="shadow rounded" style="max-width: 720px;">
+        <%= link_to "https://bokrium-assets.s3.ap-northeast-1.amazonaws.com/starter_book1_compressed.webm", target: "_blank" do %>
+          <video autoplay muted loop playsinline
+                class="rounded img-fluid"
+                style="width: 100%;">
+            <source src="https://bokrium-assets.s3.ap-northeast-1.amazonaws.com/starter_book1_compressed.webm" type="video/webm">
+            お使いのブラウザは video に対応していません。
+          </video>
+        <% end %>
+      </div>
+    </div>
+
+    <p>Markdown によるリッチテキスト入力が可能です。以下のように簡単に装飾できます：</p>
+    <ul class="list-group list-group-flush mb-3">
+      <li class="list-group-item">「# 見出し」で大見出し（H1〜H6）</li>
+      <li class="list-group-item">「**太字**」や「*イタリック*」の強調</li>
+      <li class="list-group-item">リスト（- や 1.）の自動補完</li>
+      <li class="list-group-item">引用「> 読書とは…」などの挿入</li>
+    </ul>
+    <div class="alert alert-secondary border-start border-4 border-warning">
+      <strong>Tip:</strong> テキストを選択すると、上に装飾メニューが表示されます。
+    </div>
+  </section>
+
+  <section class="mb-3">
+    <h2 class="border-bottom pb-2 mb-3">3. メモの共有と発見</h2>
+    <p>
+      Bokriumでは、作成した読書メモの公開範囲を設定できます。デフォルトでは
+      <span class="badge bg-dark">非公開</span> になっており、
+      あなた以外は見ることができません。
+    </p>
+
+    <div class="row row-cols-1 row-cols-md-3 g-3 mt-3">
+      <div class="col">
+        <div class="card h-100 shadow-sm border-0">
+          <div class="card-body">
+            <h5 class="card-title">
+              <i class="bi bi-lock-fill me-2 text-dark"></i>非公開
+            </h5>
+            <p class="card-text text-muted small">
+              あなただけが閲覧できます。安心してメモを保存・整理できます。
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col">
+        <div class="card h-100 shadow-sm border-0">
+          <div class="card-body">
+            <h5 class="card-title">
+              <i class="bi bi-link-45deg me-2 text-secondary"></i>リンク限定
+            </h5>
+            <p class="card-text text-muted small">
+              URLを知っている人だけがアクセスできます。
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col">
+        <div class="card h-100 shadow-sm border-0">
+          <div class="card-body">
+            <h5 class="card-title">
+              <i class="bi bi-globe2 me-2 text-primary"></i>公開
+            </h5>
+            <p class="card-text text-muted small">
+              サイトに表示され、全員が閲覧できます。
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<% @books.each_slice(@books_per_shelf) do |row_books| %>
+  <div class="shelf-row" data-controller="book-shelf">
+    <div class="book-row">
+      <% row_books.each do |book| %>
+        <div class="book-on-shelf">
+          <%= link_to guest_starter_book_path(book), data: { turbo_frame: "_top" } do %>
+            <% if book.book_cover_s3.attached? %>
+              <%= image_tag book.book_cover_s3.variant(resize_to_limit: [200, 200]),
+                    alt: book.title, class: "book-cover", loading: "lazy" %>
+            <% elsif book.book_cover.present? %>
+              <img src="<%= book.book_cover %>" alt="表紙画像" class="book-cover" loading="lazy">
+            <% else %>
+              <div class="no-cover">
+                <span class="title">
+                  <%= book.title.truncate(30, omission: "").ljust(10).gsub(" ", "&nbsp;").html_safe %>
+                </span>
+              </div>
+            <% end %>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+    <div class="shelf-bar"></div>
+    <div class="shelf-depth"></div>
+  </div>
+<% end %>
+
+<div class="container py-5 px-3 px-md-5 mt-5" style="max-width: 720px;">
+  <section class="mb-5">
+    <h2 class="border-bottom pb-2 mb-3 text-center">よくある質問</h2>
+    <div class="accordion" id="faqAccordion">
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="faq1">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse1">
+            Markdownが使えるのはどこですか？
+          </button>
+        </h2>
+        <div id="collapse1" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+          <div class="accordion-body">
+            メモ作成時のテキストエリア（TipTapエディタ）内で利用可能です。
+          </div>
+        </div>
+      </div>
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="faq2">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse2">
+            公開範囲は後から変更できますか？
+          </button>
+        </h2>
+        <div id="collapse2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+          <div class="accordion-body">
+            はい、いつでも変更可能です。メモの編集モーダルから切り替えてください。
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="text-center mt-5">
+    <%= link_to "はじめてみる", search_books_path, class: "btn btn-lg btn-primary shadow-sm px-4 py-2" %>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+

@@ -44,6 +44,7 @@ Rails.application.routes.draw do
 
   namespace :guest do
     resources :books, only: [ :index, :show ]
+    resources :starter_books, only: [ :index, :show ]
   end
   get "/manifest.json", to: "pwa#manifest", defaults: { format: :json }
 end
