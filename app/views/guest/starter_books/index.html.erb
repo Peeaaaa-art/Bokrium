@@ -10,7 +10,7 @@
 
   <section>
 
-    <h4 class="border-bottom pb-2"><%= link_to search_barcode_path, title: "バーコードスキャン" do %><i class="bi bi-upc-scan"></i><% end %> スマホでパッと読み取り、本棚に追加</h4>
+    <h5 class="border-bottom pb-2"><%= link_to search_barcode_path, title: "バーコードスキャン" do %><i class="bi bi-upc-scan"></i><% end %> <strong>スマホでパッと読み取り、本棚に追加</strong></h4>
     <p class="text-muted small">
       カメラ性能が高いタブレット・PCでもご利用いただけます。ただし、環境によって正しく読み取れないことがあります。その場合は、検索や手入力をご利用ください。
     </p>
@@ -46,14 +46,22 @@
         <%= link_to books_index_path, title: (user_signed_in? ? "本棚" : "サンプル本棚") do %><i data-lucide="library-big"></i><% end %> 本棚
     </h2>
     <p>本棚では以下の機能が使用できます：</p>
-    <ol class="mb-3">
+    <ol class="mb-5">
       <li>本棚ビュー（カード・棚板）の切り替え、ならび表示冊数の変更</li>
       <li>タイトル・著者・メモ本文から、キーワード検索</li>
       <li>追加日・タイトル・著者・メモ更新日による並び替え</li>
       <li>タグによる絞り込み</li>
       <li>読みたい・読書中・読了から書籍の絞り込み</li>
     </ol>
-    <%= lazy_image_tag "responsive_bookshelf.png", alt: "Bokriumのレスポンシブ表示例", class: "img-fluid" %>
+
+    <p class="lead text-muted text-center">
+      手のひらでも、大きな画面でも。<br>
+      Bokriumはスマホ・タブレット・PCすべてに最適化されています。
+      <%= lazy_image_tag "responsive_bookshelf.png", alt: "Bokriumのレスポンシブ表示例", class: "img-fluid" %>
+    </p>
+    
+
+    
     <p>登録後は、<span class="badge bg-info text-dark">タグ</span> で整理したり、<span class="badge bg-success">公開</span>／<span class="badge bg-secondary">非公開</span> を切り替えられます。</p>
   </section>
 
