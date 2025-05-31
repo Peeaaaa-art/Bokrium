@@ -35,7 +35,7 @@
             <div class="dropdown-item">
               <%= f.label :visibility, "公開範囲", class: "form-label small text-muted mb-1" %>
               <%= f.select :visibility,
-                    [["非公開", "only_me"], ["リンク限定", "link_only"], ["完全公開", "public_site"]],
+                    [["非公開", "only_me"], ["リンク限定", "link_only"], ["公開", "public_site"]],
                     { selected: memo.visibility },
                     class: "form-select form-select-sm",
                     onchange: "this.form.requestSubmit();" %>
