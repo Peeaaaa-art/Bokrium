@@ -4,7 +4,6 @@ module Guest
 
     def index
       set_starter_books
-      @books_per_shelf = 5
     end
 
     def show
@@ -13,7 +12,6 @@ module Guest
       @memos = @book.memos
       @new_memo = Memo.new(book_id: @book.id)
       @user_tags = []
-      @starter_book = true
 
       render "books/show"
     end
@@ -23,6 +21,8 @@ module Guest
     def set_starter_books
       isbn_list = %w[9781001001001]
       @books = guest_user.books.where(isbn: isbn_list)
+
+      @starter_book = true
     end
 
     def handle_guest_not_found
