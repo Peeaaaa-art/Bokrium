@@ -1,0 +1,24 @@
+<div class="d-flex justify-content-center my-4">
+  <div class="video-wrapper position-relative shadow rounded overflow-hidden w-100" style="max-width: 720px;">
+    <video
+      id="starterPlayButton"
+      controls
+      playsinline
+      preload="metadata"
+      class="rounded img-fluid w-100"
+      style="display: block;"
+      poster="<%= asset_path('starter_book1_compressed.png') %>"
+      >
+      <source src="https://bokrium-assets.s3.ap-northeast-1.amazonaws.com/starter_book1_compressed.webm" type="video/webm">
+      お使いのブラウザは video に対応していません。
+    </video>
+      <button
+    type="button"
+    class="btn btn-danger btn-lg position-absolute top-50 start-50 translate-middle shadow"
+    style="z-index: 10; border-radius: 50%;"
+    onclick="document.getElementById('starterPlayButton').play(); this.style.display='none';"
+  >
+    <i class="bi bi-play-fill fs-1"></i>
+  </button>
+  </div>
+</div>
