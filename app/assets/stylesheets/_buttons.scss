@@ -5,24 +5,22 @@
   border-radius: 999px;
   background-color: #f9f9f9;
 }
-
 .btn-primary-bok {
-  background-color: #2d61d1;
-  color: white;
-  transition: background-color 0.3s ease;
+  --bs-btn-color: #fff;
+  --bs-btn-bg: #2d61d1;
+  --bs-btn-border-color: #2d61d1;
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: #2f5392;
+  --bs-btn-hover-border-color: #2f5392;
+  --bs-btn-focus-shadow-rgb: 45, 97, 209;
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: #294d88;
+  --bs-btn-active-border-color: #27477f;
+  --bs-btn-disabled-color: #fff;
+  --bs-btn-disabled-bg: #2d61d1;
+  --bs-btn-disabled-border-color: #2d61d1;
 
-  &:hover {
-    background-color: #2f5392;
-    color: white;
-  }
-
-  &:focus,
-  &:focus-visible {
-    background-color: #2f5392; // hoverと同じでもOK
-    color: white;
-    outline: none;
-    box-shadow: 0 0 0 0.25rem rgba(66, 113, 195, 0.5); // 適度な focus 表示
-  }
+  @extend .btn; // Bootstrap の基本ボタンを継承
 }
 
 .safari-modal-action-button {
