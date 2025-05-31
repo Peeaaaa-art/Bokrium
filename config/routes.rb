@@ -46,6 +46,10 @@ Rails.application.routes.draw do
     resources :books, only: [ :index, :show ]
     resources :starter_books, only: [ :index, :show ]
   end
+
+  get "faq", to: "pages#faq"
+  get "terms", to: "pages#terms"
+  get "privacy", to: "pages#privacy"
   get "/manifest.json", to: "pwa#manifest", defaults: { format: :json }
 end
 

@@ -2,7 +2,7 @@
   <div class="container-fluid position-relative">
     <!-- 右上ヘルプ：ページの右端まで寄る -->
     <div class="position-absolute" style="top: 0.7rem; right: 1rem;">
-      <%= link_to guest_starter_books_path, title: "はじめてガイド", class: "text-dark" do %>
+      <%= link_to guest_starter_books_path, title: "はじめてガイド", class: "howto_use" do %>
         <i class="bi bi-question-circle-fill fs-5"></i>
       <% end %>
     </div>
@@ -13,9 +13,10 @@
         Bokrium
       <% end %>
       <div class="d-flex flex-wrap justify-content-center gap-4 small text-secondary">
-        <%= link_to "Terms", root_path, class: "text-decoration-none footer-link", title: "利用規約" %>
-        <%= link_to "Privacy", root_path, class: "text-decoration-none footer-link", title: "プライバシーポリシー" %>
-        <%= link_to "Contact", root_path, class: "text-decoration-none footer-link", title: "お問い合わせ" %>
+        <%= link_to "Terms", terms_path, class: "text-decoration-none footer-link", title: "利用規約" %>
+        <%= link_to "Privacy", privacy_path, class: "text-decoration-none footer-link", title: "プライバシーポリシー" %>
+        <%= mail_to "support@bokrium.com", "Contact", class: "text-decoration-none footer-link", title: "お問い合わせ" %>
+        <%= link_to "FAQ", faq_path, class: "text-decoration-none footer-link", title: "よくある質問" %>
       </div>
       <div class="small text-muted">&copy; <%= Time.current.year %> Bokrium. All rights reserved.</div>
     </div>

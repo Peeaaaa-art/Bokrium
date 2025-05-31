@@ -26,6 +26,8 @@ module ApplicationHelper
   end
 
   def book_link_path(book)
+    return guest_starter_book_path(book) if @starter_book
+
     user_signed_in? ? book_path(book) : guest_book_path(book)
   end
 

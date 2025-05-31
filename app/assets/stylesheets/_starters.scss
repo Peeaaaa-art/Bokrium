@@ -1,0 +1,16 @@
+.barcode-scan-preview-container {
+  display: grid;
+  place-items: center;
+  max-width: 320px;
+  margin: 0 auto;
+  background-color: #010516;
+  box-sizing: border-box;
+  border: 0.3rem solid #010516;
+  padding: 0.25rem;
+
+  video {
+    width: 100%;
+    display: block;
+    box-sizing: border-box;
+  }
+}

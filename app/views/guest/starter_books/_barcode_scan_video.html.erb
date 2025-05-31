@@ -1,0 +1,27 @@
+<div class="barcode-scan-preview-container rounded-5 shadow-sm position-relative">
+  <video
+    id="barcodeVideo"
+    class="video-click-to-play rounded-5 w-100 d-block"
+    preload="metadata"
+    controls
+    muted
+    loop
+    playsinline
+    poster="<%= image_path('barcode_scan.png') %>"
+    style="background-color: black;"
+  >
+
+    <source src="https://bokrium-assets.s3.ap-northeast-1.amazonaws.com/barcode_scan.webm" type="video/webm">
+    お使いのブラウザは video に対応していません。
+  </video>
+
+  <!-- 再生ボタン -->
+  <button
+    type="button"
+    class="btn btn-danger btn-lg position-absolute top-50 start-50 translate-middle shadow"
+    style="z-index: 10; border-radius: 50%;"
+    onclick="document.getElementById('barcodeVideo').play(); this.style.display='none';"
+  >
+    <i class="bi bi-play-fill fs-1"></i>
+  </button>
+</div>
