@@ -1,4 +1,11 @@
 Rails.application.routes.draw do
+  devise_for :users, controllers: {
+    registrations: "users/registrations",
+    confirmations: "users/confirmations",
+    omniauth_callbacks: "users/omniauth_callbacks"
+    },
+    omniauth_providers: [:line]
+
   get "/up", to: proc { [ 200, {}, [ "OK" ] ] }
   get "explore/index"
   get "explore/suggestions"
@@ -12,11 +19,6 @@ Rails.application.routes.draw do
   post "line_notifications/trigger", to: "line_notifications#trigger"
   resource :line_user, only: [ :destroy ]
 
-  devise_for :users, controllers: {
-    registrations: "users/registrations",
-    confirmations: "users/confirmations",
-    omniauth_callbacks: "users/omniauth_callbacks"
-    }
   get "mypage", to: "users#show", as: :mypage
 
   resources :books do
@@ -54,3 +56,4 @@ Rails.application.routes.draw do
 end
 
 # 公式リファレンス https://guides.rubyonrails.org/routing.html
+Rails.logger.info "[DEBUG ROUTES] OmniAuth Providers: #{Devise.omniauth_configs.keys.inspect}"

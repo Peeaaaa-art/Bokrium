@@ -1,42 +1,46 @@
 # frozen_string_literal: true
 
 class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
-  # You should configure your model like this:
-  # devise :omniauthable, omniauth_providers: [:twitter]
-
-  # You should also create an action method in this controller like this:
-  # def twitter
-  # end
-
   def line
-    @user = User.from_omniauth(request.env["omniauth.auth"])
+    Rails.logger.info "[LINE] callback triggered"
+  Rails.logger.info "[LINE] request.env['omniauth.auth']: #{request.env['omniauth.auth'].inspect}"
+    auth = request.env['omniauth.auth']
+    line_id = auth.uid
+    line_name = auth.info.name
 
-    if @user.persisted?
-      sign_in_and_redirect @user, event: :authentication
-      flash[:notice] = "LINEでログインしました！" if is_navigational_format?
-    else
-      session["devise.line_data"] = request.env["omniauth.auth"].except("extra")
-      redirect_to new_user_registration_url, alert: "LINEでのログインに失敗しました。"
+    # すでにLINE連携済みのユーザー
+    if (line_user = LineUser.find_by(line_id: line_id))
+      user = line_user.user
+      sign_in_and_redirect user, event: :authentication
+      flash[:notice] = "LINEでログインしました。" if is_navigational_format?
+      return
     end
+
+    # ログイン中のユーザーがLINE連携を試みた場合
+    if user_signed_in?
+      current_user.create_line_user!(line_id: line_id, line_name: line_name)
+      redirect_to user_path(current_user), notice: "LINE連携が完了しました。"
+      return
+    end
+
+    # 新規ユーザーとして作成
+    user = User.create!(
+      name: line_name || "LINE User",
+      email: "#{line_id}@example.com", # 仮のemail
+      password: Devise.friendly_token[0, 20],
+      confirmed_at: Time.current
+    )
+    user.create_line_user!(line_id: line_id, line_name: line_name)
+
+    sign_in_and_redirect user, event: :authentication
+    flash[:notice] = "LINEアカウントで登録・ログインしました。" if is_navigational_format?
+  rescue => e
+    Rails.logger.error("LINEログイン失敗: #{e.message}")
+    redirect_to new_user_registration_url, alert: "LINEログインに失敗しました。"
   end
 
-  # More info at:
-  # https://github.com/heartcombo/devise#omniauth
-
-  # GET|POST /resource/auth/twitter
-  # def passthru
-  #   super
-  # end
-
-  # GET|POST /users/auth/twitter/callback
-  # def failure
-  #   super
-  # end
-
-  # protected
-
-  # The path used when OmniAuth fails
-  # def after_omniauth_failure_path_for(scope)
-  #   super(scope)
-  # end
+  def method_missing(name, *args)
+    Rails.logger.info "Called missing method: #{name}"
+    super
+  end
 end

@@ -1,6 +1,7 @@
 class ApplicationController < ActionController::Base
   include Pagy::Backend
   allow_browser versions: :modern
+  protect_from_forgery with: :exception
   before_action :configure_permitted_parameters, if: :devise_controller?
   helper_method :guest_user, :mobile?, :default_books_per_shelf, :default_card_columns
 
