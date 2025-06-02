@@ -7,7 +7,32 @@ class User < ApplicationRecord
   has_many :like_memos, dependent: :destroy
   has_many :liked_memos, through: :like_memos, source: :memo
   # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
+  # :lockable, :timeoutable, :trackable
   devise :database_authenticatable, :registerable,
-        :recoverable, :rememberable, :validatable, :confirmable
+        :recoverable, :rememberable, :validatable, :confirmable,
+        :omniauthable, omniauth_providers: [:line]
+  def self.from_omniauth(auth)
+    line_id = auth["uid"]
+    line_name = auth["info"]["name"]
+
+    line_user = LineUser.find_by(line_id: line_id)
+
+    if line_user
+      line_user.user
+    else
+      user = User.create!(
+        name: line_name.presence || "LINE User",
+        email: "#{line_id}@example.com",
+        password: Devise.friendly_token[0, 20],
+        confirmed_at: Time.current # メール確認をスキップ
+      )
+
+      user.create_line_user!(
+        line_id: line_id,
+        line_name: line_name
+      )
+
+      user
+    end
+  end
 end
