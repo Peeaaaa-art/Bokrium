@@ -1,4 +1,22 @@
 Rails.application.routes.draw do
+  devise_for :users, controllers: {
+    registrations: "users/registrations",
+    confirmations: "users/confirmations",
+    passwords: "users/passwords",
+    omniauth_callbacks: "users/omniauth_callbacks"
+    },
+    omniauth_providers: [ :line ]
+
+  devise_scope :user do
+    get  "users/password/send_reset_link", to: "users/passwords#send_reset_link", as: :send_reset_link_user_password
+    post "users/password/trigger_reset",   to: "users/passwords#trigger_reset",   as: :trigger_reset_user_password
+
+    get "users/email/edit",   to: "users/emails#edit",   as: :edit_user_email
+    patch "users/email/update", to: "users/emails#update", as: :update_user_email
+
+    get "users/auth/line/connect", to: "users/omniauth_callbacks#line_connect", as: :user_line_connect
+  end
+
   get "/up", to: proc { [ 200, {}, [ "OK" ] ] }
   get "explore/index"
   get "explore/suggestions"
@@ -8,15 +26,11 @@ Rails.application.routes.draw do
   get "search/search_google_books", to: "search#search_google_books", as: :search_google_books
   post "/presigned_url", to: "uploads#presigned_url"
   post "/callback", to: "line_webhooks#callback"
-  get "/auth/line/callback", to: "line_sessions#create"
+
   patch "/line_notifications/toggle", to: "line_notifications#toggle", as: :toggle_notifications
   post "line_notifications/trigger", to: "line_notifications#trigger"
   resource :line_user, only: [ :destroy ]
 
-  devise_for :users, controllers: {
-    registrations: "users/registrations",
-    confirmations: "users/confirmations"
-    }
   get "mypage", to: "users#show", as: :mypage
 
   resources :books do

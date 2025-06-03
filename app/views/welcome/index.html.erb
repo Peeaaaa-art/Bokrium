@@ -62,7 +62,9 @@
     <div class="registration-cta text-center mt-5 big-shoulders-inline-bold">
       <h5>あなたの読書体験をもっと豊かに</h5>
       <p>Bokriumで読書メモを管理し、知識を整理しましょう</p>
-      <%= link_to "今すぐはじめる（あなたの本棚をつくる）", new_user_registration_path, class: "btn btn-success mt-2 mb-5" %>
+      <%= link_to new_user_registration_path, class: "btn btn-success btn-lg mt-2 mb-5" do %>
+        今すぐはじめる<br class="d-sm-none">（あなたの本棚をつくる）
+      <% end %>
     </div>
       <p>↓↓↓とりあえず試してみる</p>
     <div class="d-flex flex-wrap justify-content-center align-items-center gap-2 my-4">

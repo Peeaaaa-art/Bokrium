@@ -11,7 +11,6 @@ class BooksController < ApplicationController
 
     unless books&.exists?
       @books = guest_user.books.includes(book_cover_s3_attachment: :blob).order(created_at: :desc)
-      @no_books = true
       return
     end
 

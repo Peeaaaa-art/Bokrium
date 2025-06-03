@@ -1,3 +1,5 @@
+<% devise_mapping ||= Devise.mappings[:user] %>
+
 <%- if controller_name != 'sessions' %>
   <%= link_to t(".sign_in"), new_session_path(resource_name) %><br />
 <% end %>
@@ -18,8 +20,22 @@
   <%= link_to t('.didn_t_receive_unlock_instructions'), new_unlock_path(resource_name) %><br />
 <% end %>
 
-<%- if devise_mapping.omniauthable? %>
-  <%- resource_class.omniauth_providers.each do |provider| %>
-    <%= button_to t('.sign_in_with_provider', provider: OmniAuth::Utils.camelize(provider)), omniauth_authorize_path(resource_name, provider), data: { turbo: false } %><br />
+<% if devise_mapping.omniauthable? %>
+  <% Devise.omniauth_configs.keys.each do |provider| %>
+    <% provider_class = "btn btn-block d-flex align-items-center justify-content-center gap-2 mb-2" %>
+    <% icon = case provider.to_s
+              when "line"
+                "<i class='bi bi-line' style='font-size: 1.5rem;'></i>".html_safe
+              else
+                "<i class='bi bi-person-circle'></i>".html_safe
+              end %>
+
+    <%= link_to send("user_#{provider}_omniauth_authorize_path"),
+                method: :get,
+                class: "#{provider_class} btn-success mt-3",
+                data: { turbo: false } do %>
+      <%= icon %>
+      <%= t(".sign_in_with_provider", provider: OmniAuth::Utils.camelize(provider)) %>
+    <% end %>
   <% end %>
 <% end %>

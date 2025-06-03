@@ -1,31 +1,30 @@
-<nav class="navbar shadow-sm  border-bottom py-2 px-3 bg-apple-light">
+<nav class="navbar shadow-sm border-bottom py-2 px-3 bg-apple-light">
   <div class="container-fluid d-flex justify-content-between align-items-center" style="min-height: 72px;">
     <% current_path = request.path %>
+
     <!-- 左：ロゴ -->
-    <%= link_to root_path, class: "navbar-brand rounded  #{current_page?(root_path) ? 'active' : ''}", style: "letter-spacing: 0.03em;", title: "ホーム" do %>
+    <%= link_to root_path, class: "navbar-brand rounded #{current_page?(root_path) ? 'active' : ''}", style: "letter-spacing: 0.03em;", title: "ホーム" do %>
       <%= raw File.read(Rails.root.join("app/assets/images/bokrium_logo.svg")) %>
     <% end %>
 
     <!-- 中央：ナビアイコン -->
-    <div class="d-flex align-items-center justify-content-center gap-5">
-      <!-- 🔍 検索ページ -->
-      <%= link_to search_books_path, class: "text-dark #{current_path.starts_with?('/search') ? 'active' : ''}", title: "書籍検索" do %>
-        <i data-lucide="search" style="width: 24px; height: 24px;"></i>
-      <% end %>
+    <div class="d-flex align-items-center justify-content-evenly flex-grow-1" style="max-width: 360px;">
+      <% icons = [
+        { path: search_books_path, icon: "search", title: "書籍検索", active: current_path.starts_with?('/search') },
+        { path: books_index_path, icon: "library-big", title: (user_signed_in? && current_user.books.exists? ? "本棚" : "サンプル本棚"), active: books_index_active_class.present? },
+        { path: public_bookshelf_index_path, icon: "users", title: "みんなの読書メモ", active: current_path.starts_with?('/public_bookshelf') }
+      ] %>
 
-      <!-- 📚 本棚ページ -->
-      <%= link_to books_index_path, class: "text-dark #{books_index_active_class}", title: (user_signed_in? ? "本棚" : "サンプル本棚") do %>
-        <i data-lucide="library-big" style="width: 24px; height: 24px;"></i>
+      <% icons.each do |item| %>
+        <%= link_to item[:path], class: "text-dark #{item[:active] ? 'active' : ''}", title: item[:title] do %>
+          <div class="d-flex align-items-center justify-content-center" style="width: 44px; height: 44px;">
+            <i data-lucide="<%= item[:icon] %>" style="width: 24px; height: 24px; display: block;"></i>
+          </div>
+        <% end %>
       <% end %>
-
-      <!-- 👥 公開本棚ページ -->
-      <%= link_to public_bookshelf_index_path, class: "text-dark #{current_path.starts_with?('/public_bookshelf') ? 'active' : ''}", title: "みんなの読書メモ" do %>
-        <i data-lucide="users" style="width: 24px; height: 24px;"></i>
-      <% end %>
-
     </div>
 
-    <!-- 右：アバター -->
+    <!-- 右：アバター or ログイン -->
     <div class="d-flex align-items-center">
       <% if user_signed_in? %>
         <%= link_to mypage_path do %>
@@ -35,7 +34,5 @@
         <%= link_to 'ログイン', new_user_session_path, class: "btn btn-outline-dark btn-sm" %>
       <% end %>
     </div>
-
   </div>
 </nav>
-

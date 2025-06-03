@@ -1,91 +1,41 @@
 <% content_for :title, "ユーザー - Bokrium" %>
 <% if current_user %>
-<div class="container my-5">
-  <div class="card subtle-shadow mb-4">
-    <div class="card-header bg-rhodia-blue text-white">
-    </div>
-    <div class="card-body bg-light-bok">
-      <div class="row align-items-center">
-        <div class="col-md-3 text-center">
-            <%= image_tag user_avatar(current_user, size: :large), alt: current_user.name, class: "avatar-circle mb-3" %>
-        </div>
-        <div class="col-md-9">
-          <ul class="list-group list-group-flush">
-            <li class="list-group-item">
-              <strong><%= User.human_attribute_name(:name) %>:</strong>
-              <span class="ms-2"><%= current_user.name %></span>
-            </li>
-            <li class="list-group-item">
-              <strong><%= User.human_attribute_name(:email) %>:</strong>
-              <span class="ms-2"><%= current_user.email %></span>
-            </li>
-            <li class="list-group-item">
-              <strong><%= t('users.show.registered_at', default: '登録日') %>:</strong>
-              <span class="ms-2"><%= l(current_user.created_at, format: :only_date) %></span>
-            </li>
-          </ul>
-            <div class="d-flex justify-content-left gap-2 mt-3" data-controller="safari-click-fix">
-              <%= link_to '編集', edit_user_registration_path(current_user), class: "btn btn-outline-primary safari-fix-button" %>
-              <%= link_to t('devise.sessions.signed_in.sign_out', default: 'ログアウト'),
-                    destroy_user_session_path,
-                    data: { turbo_method: :delete, turbo_confirm: "本当にログアウトしますか？" },
-                    class: 'btn btn-danger safari-fix-button safari-modal-action-button' %>
-            </div>
+  <div class="container my-5">
+    <div class="card subtle-shadow mb-4">
+      <div class="card-header bg-rhodia-blue text-white">
+      </div>
+      <div class="card-body bg-light-bok">
+        <div class="row align-items-center">
+          <div class="col-md-3 text-center">
+              <%= image_tag user_avatar(current_user, size: :large), alt: current_user.name, class: "avatar-circle mb-3" %>
+          </div>
+          <div class="col-md-9">
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item">
+                <strong><%= User.human_attribute_name(:name) %>:</strong>
+                <span class="ms-2"><%= current_user.name %></span>
+              </li>
+              <li class="list-group-item">
+                <strong><%= User.human_attribute_name(:email) %>:</strong>
+                <span class="ms-2"><%= current_user.email %></span>
+              </li>
+              <li class="list-group-item">
+                <strong><%= t('users.show.registered_at', default: '登録日') %>:</strong>
+                <span class="ms-2"><%= l(current_user.created_at, format: :only_date) %></span>
+              </li>
+            </ul>
+              <div class="d-flex justify-content-left gap-2 mt-3" data-controller="safari-click-fix">
+                <%= link_to '編集', edit_user_registration_path(current_user), class: "btn btn-outline-primary safari-fix-button" %>
+                <%= link_to t('devise.sessions.signed_in.sign_out', default: 'ログアウト'),
+                      destroy_user_session_path,
+                      data: { turbo_method: :delete, turbo_confirm: "本当にログアウトしますか？" },
+                      class: 'btn btn-danger safari-fix-button safari-modal-action-button' %>
+              </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
 <% end %>
 
-<div class="text-center my-2">
-  <% if current_user && current_user.line_user.present? %>
-    <span class="badge bg-success subtle-shadow rounded-pill fs-6 p-3">
-      <i class="bi bi-line"></i>
-      LINE連携済み
-    </span>
-      <div class="mt-3">
-          <%= button_to "LINE連携を解除する",
-                        line_user_path,
-                        method: :delete,
-                        data: { turbo_confirm: "LINE連携を解除してもよろしいですか？\n通知は届かなくなります。" },
-                        class: "btn btn-outline-danger btn-sm shadow-sm rounded-pill px-4 py-2" %>
-      </div>
-    <div class="d-flex justify-content-center my-5">
-      <div class="subtle-shadow bg-light-bok rounded-3 px-4 py-3 d-flex justify-content-between align-items-center gap-3 w-100" style="max-width: 440px;">
-        <label for="notifications_enabled" class="fw-semibold fs-6 mb-0">
-          <i class="bi <%= current_user.line_user.notifications_enabled? ? 'bi-bell-fill text-success' : 'bi-bell-slash-fill text-secondary' %>"></i>
-            通知は今、<%= current_user.line_user.notifications_enabled? ? "オン" : "オフ" %>になっています。</label>
-        <%= form_with model: current_user.line_user, url: toggle_notifications_path, method: :patch, class: "m-0" do |f| %>
-          <div class="form-check form-switch m-0">
-            <%= f.check_box :notifications_enabled,
-                  class: "form-check-input",
-                  id: "notifications_enabled",
-                  role: "switch",
-                  checked: current_user.line_user.notifications_enabled,
-                  value: true,
-                  data: { turbo: false },
-                  onchange: "this.form.submit()" %>
-          </div>
-        <% end %>
-      </div>
-    </div>
-
-
-  <% else %>
-    <p class="text-muted mb-2">
-      LINEと連携すると、あなたの読書メモから<br class="d-sm-none">
-      毎朝9時に、ランダムで1つお届けします。
-    </p>
-
-    <%= link_to "/auth/line", class: "btn btn-success mb-5 d-inline-flex align-items-center gap-2" do %>
-      <i class="bi bi-line" style="font-size: 1.6rem;"></i>
-      <span>LINEと連携する</span>
-    <% end %>
-  <% end %>
-
-  <p class="text-muted mb-2">↓友達追加はこちらから</p>
-  <div class="mb-5 text-center mx-auto" style="max-width: 200px;">
-    <%= image_tag "line_qr_code.png", class: "img-fluid", style: "max-width: 100%; height: auto;" %>
-  </div>
-</div>
+<%= render "shared/line_settings" %>
