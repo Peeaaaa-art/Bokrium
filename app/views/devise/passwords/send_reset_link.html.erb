@@ -1,0 +1,6 @@
+<h2>パスワード変更リンクの送信</h2>
+<p>登録されているメールアドレス宛に、パスワード変更リンクを送信します。</p>
+
+<%= form_with url: trigger_reset_user_password_path, method: :post do %>
+  <%= button_tag "パスワード変更メールを送信", class: "btn btn-primary" %>
+<% end %>
