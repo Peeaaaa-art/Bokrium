@@ -7,6 +7,6 @@
             pagy: pagy,
             current_chunk_index: pagy.page %>
   <% else %>
-    <%= render "bookshelf/simple_card", books: books, card_columns: card_columns %>
+    <%= render "bookshelf/simple_card", books: books, card_columns: card_columns, pagy: pagy %>
   <% end %>
 </turbo-frame>

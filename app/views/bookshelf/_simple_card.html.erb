@@ -37,6 +37,9 @@
 <% end %>
 
 
-<div class="my-5 d-flex justify-content-center">
-  <%== pagy_bootstrap_nav(@pagy) %>
-</div>
+
+<% if pagy && pagy.next %>
+  <div class="my-5 d-flex justify-content-center">
+    <%== pagy_bootstrap_nav(pagy) %>
+  </div>
+<% end %>
