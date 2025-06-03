@@ -68,4 +68,3 @@ Rails.application.routes.draw do
 end
 
 # 公式リファレンス https://guides.rubyonrails.org/routing.html
-Rails.logger.info "[DEBUG ROUTES] OmniAuth Providers: #{Devise.omniauth_configs.keys.inspect}"
