@@ -26,7 +26,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
     # 新規ユーザーとして作成
     user = User.create!(
       name: line_name || "LINE User",
-      email: "line_user_#{SecureRandom.hex(10)}@example.bokrium",
+      email: "line_user_#{SecureRandom.hex(15)}@example.bokrium",
       password: Devise.friendly_token[0, 20],
       confirmed_at: Time.current,
       auth_provider: "line"
