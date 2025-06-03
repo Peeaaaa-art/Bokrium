@@ -17,7 +17,11 @@ module ApplicationHelper
   end
 
   def books_index_path
-    user_signed_in? ? books_path : guest_books_path
+    if user_signed_in?
+      current_user.books.exists? ? books_path : guest_books_path
+    else
+      guest_books_path
+    end
   end
 
   def books_index_active_class
@@ -28,7 +32,11 @@ module ApplicationHelper
   def book_link_path(book)
     return guest_starter_book_path(book) if @starter_book
 
-    user_signed_in? ? book_path(book) : guest_book_path(book)
+    if user_signed_in?
+      current_user.books.exists? ? book_path(book) : guest_book_path(book)
+    else
+      guest_book_path(book)
+    end
   end
 
   def lazy_image_tag(source, options = {})

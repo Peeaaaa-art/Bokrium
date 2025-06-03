@@ -11,7 +11,7 @@
     <div class="d-flex align-items-center justify-content-evenly flex-grow-1" style="max-width: 360px;">
       <% icons = [
         { path: search_books_path, icon: "search", title: "書籍検索", active: current_path.starts_with?('/search') },
-        { path: books_index_path, icon: "library-big", title: (user_signed_in? ? "本棚" : "サンプル本棚"), active: books_index_active_class.present? },
+        { path: books_index_path, icon: "library-big", title: (user_signed_in? && current_user.books.exists? ? "本棚" : "サンプル本棚"), active: books_index_active_class.present? },
         { path: public_bookshelf_index_path, icon: "users", title: "みんなの読書メモ", active: current_path.starts_with?('/public_bookshelf') }
       ] %>
 
