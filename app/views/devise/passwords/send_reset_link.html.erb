@@ -1,6 +1,20 @@
-<h2>パスワード変更リンクの送信</h2>
-<p>登録されているメールアドレス宛に、パスワード変更リンクを送信します。</p>
+<div class="container my-5" style="max-width: 640px;">
+  <div class="card shadow-sm border-0">
+    <div class="card-body px-4 py-5">
+      <h2 class="text-center mb-4 text-primary fw-bold">パスワード変更リンクの送信</h2>
+      <p class="text-center text-muted mb-4">
+        登録されているメールアドレス宛に、パスワード変更リンクを送信します。
+      </p>
 
-<%= form_with url: trigger_reset_user_password_path, method: :post do %>
-  <%= button_tag "パスワード変更メールを送信", class: "btn btn-primary" %>
-<% end %>
+      <%= form_with url: trigger_reset_user_password_path, method: :post, local: true do %>
+        <div class="d-grid">
+          <%= button_tag "パスワード変更メールを送信", class: "btn btn-primary btn-lg shadow-sm" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="mt-4 text-center">
+    <%= link_to "戻る", edit_user_registration_path, class: "btn btn-link text-decoration-none" %>
+  </div>
+</div>
