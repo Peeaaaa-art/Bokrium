@@ -32,7 +32,6 @@ Devise.setup do |config|
                   bot_prompt: "normal",
                   name: :line
 
-  # 明示的に対応づけ（←これを追加）
   config.omniauth_path_prefix = "/users/auth"
 
   config.responder.error_status = :unprocessable_entity
