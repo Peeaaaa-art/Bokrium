@@ -1,0 +1,22 @@
+<div class="container my-5" style="max-width: 720px;">
+  <div class="card shadow-sm border-0">
+    <div class="card-body px-4 py-5">
+      <h2 class="text-center mb-4 text-primary fw-bold">メールアドレスの変更</h2>
+
+      <%= form_with model: current_user, url: update_user_email_path, method: :patch, local: true do |f| %>
+        <div class="mb-4">
+          <%= f.label :email, "新しいメールアドレス", class: "form-label fw-semibold" %>
+          <%= f.email_field :email, value: current_user.unconfirmed_email || "", class: "form-control form-control-lg", placeholder: "例: you@example.com" %>
+        </div>
+
+        <div class="d-grid">
+          <%= f.submit "確認メールを送信", class: "btn btn-primary-bok btn-lg shadow-sm" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="mt-4 text-center">
+    <%= link_to "戻る", edit_user_registration_path, class: "btn btn-link text-decoration-none" %>
+  </div>
+</div>

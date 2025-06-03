@@ -10,6 +10,10 @@ Rails.application.routes.draw do
   devise_scope :user do
     get  "users/password/send_reset_link", to: "users/passwords#send_reset_link", as: :send_reset_link_user_password
     post "users/password/trigger_reset",   to: "users/passwords#trigger_reset",   as: :trigger_reset_user_password
+
+    get "users/email/edit",   to: "users/emails#edit",   as: :edit_user_email
+    patch "users/email/update", to: "users/emails#update", as: :update_user_email
+
     get "users/auth/line/connect", to: "users/omniauth_callbacks#line_connect", as: :user_line_connect
   end
 
