@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 Devise.setup do |config|
   config.mailer_sender = "Bokrium <support@bokrium.com>"
 
@@ -25,18 +26,18 @@ Devise.setup do |config|
   config.sign_out_via = :delete
 
   config.omniauth :line,
-                  ENV['LINE_LOGIN_CHANNEL_ID'],
-                  ENV['LINE_LOGIN_CHANNEL_SECRET'],
-                  scope: 'profile openid',
-                  bot_prompt: 'normal',
+                  ENV["LINE_LOGIN_CHANNEL_ID"],
+                  ENV["LINE_LOGIN_CHANNEL_SECRET"],
+                  scope: "profile openid",
+                  bot_prompt: "normal",
                   name: :line
 
   # 明示的に対応づけ（←これを追加）
-  config.omniauth_path_prefix = '/users/auth'
+  config.omniauth_path_prefix = "/users/auth"
 
   config.responder.error_status = :unprocessable_entity
   config.responder.redirect_status = :see_other
 end
 
-OmniAuth.config.allowed_request_methods = [:get]
+OmniAuth.config.allowed_request_methods = [ :get ]
 OmniAuth.config.silence_get_warning = true

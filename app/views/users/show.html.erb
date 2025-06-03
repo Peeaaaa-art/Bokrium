@@ -45,11 +45,17 @@
       LINE連携済み
     </span>
       <div class="mt-3">
+        <% unless current_user.line_login_only? %>
           <%= button_to "LINE連携を解除する",
                         line_user_path,
                         method: :delete,
                         data: { turbo_confirm: "LINE連携を解除してもよろしいですか？\n通知は届かなくなります。" },
                         class: "btn btn-outline-danger btn-sm shadow-sm rounded-pill px-4 py-2" %>
+        <% else %>
+          <button class="btn btn-outline-danger btn-sm shadow-sm rounded-pill px-4 py-2" disabled>
+            LINE連携は解除できません（LINEログイン専用アカウント）
+          </button>
+        <% end %>
       </div>
     <div class="d-flex justify-content-center my-5">
       <div class="subtle-shadow bg-light-bok rounded-3 px-4 py-3 d-flex justify-content-between align-items-center gap-3 w-100" style="max-width: 440px;">
@@ -78,7 +84,7 @@
       毎朝9時に、ランダムで1つお届けします。
     </p>
 
-    <%= link_to "/auth/line", class: "btn btn-success mb-5 d-inline-flex align-items-center gap-2" do %>
+    <%= link_to user_line_connect_path, class: "btn btn-success d-inline-flex align-items-center gap-2" do %>
       <i class="bi bi-line" style="font-size: 1.6rem;"></i>
       <span>LINEと連携する</span>
     <% end %>
@@ -89,3 +95,5 @@
     <%= image_tag "line_qr_code.png", class: "img-fluid", style: "max-width: 100%; height: auto;" %>
   </div>
 </div>
+
+<%= link_to "パスワードを変更する（メール送信）", new_user_password_path, class: "btn btn-outline-secondary btn-sm" %>

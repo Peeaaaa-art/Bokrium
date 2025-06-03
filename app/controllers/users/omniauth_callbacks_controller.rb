@@ -2,9 +2,7 @@
 
 class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   def line
-    Rails.logger.info "[LINE] callback triggered"
-  Rails.logger.info "[LINE] request.env['omniauth.auth']: #{request.env['omniauth.auth'].inspect}"
-    auth = request.env['omniauth.auth']
+    auth = request.env["omniauth.auth"]
     line_id = auth.uid
     line_name = auth.info.name
 
@@ -16,21 +14,22 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
       return
     end
 
-    # ログイン中のユーザーがLINE連携を試みた場合
-    if user_signed_in?
+    # ログイン中のユーザーがLINE連携を試みた場合（セッションフラグで確実に判断）
+    if user_signed_in? && session.delete(:linking_line_account)
       current_user.create_line_user!(line_id: line_id, line_name: line_name)
-      redirect_to user_path(current_user), notice: "LINE連携が完了しました。"
+      redirect_to mypage_path(current_user), notice: "LINE連携が完了しました。"
       return
     end
 
     # 新規ユーザーとして作成
     user = User.create!(
       name: line_name || "LINE User",
-      email: "#{line_id}@example.com", # 仮のemail
+      email: "line_user_#{SecureRandom.hex(10)}@example.bokrium",
       password: Devise.friendly_token[0, 20],
-      confirmed_at: Time.current
+      confirmed_at: Time.current,
+      auth_provider: "line"
     )
-    user.create_line_user!(line_id: line_id, line_name: line_name)
+    user.create_line_user!(line_id: line_id, line_name: line_name, notifications_enabled: false)
 
     sign_in_and_redirect user, event: :authentication
     flash[:notice] = "LINEアカウントで登録・ログインしました。" if is_navigational_format?
@@ -42,5 +41,10 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   def method_missing(name, *args)
     Rails.logger.info "Called missing method: #{name}"
     super
+  end
+
+  def line_connect
+    session[:linking_line_account] = true
+    redirect_to user_line_omniauth_authorize_path
   end
 end

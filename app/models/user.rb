@@ -10,29 +10,44 @@ class User < ApplicationRecord
   # :lockable, :timeoutable, :trackable
   devise :database_authenticatable, :registerable,
         :recoverable, :rememberable, :validatable, :confirmable,
-        :omniauthable, omniauth_providers: [:line]
-  def self.from_omniauth(auth)
-    line_id = auth["uid"]
-    line_name = auth["info"]["name"]
+        :omniauthable, omniauth_providers: [ :line ]
 
-    line_user = LineUser.find_by(line_id: line_id)
+  after_update :maybe_switch_to_email_login
 
-    if line_user
-      line_user.user
-    else
-      user = User.create!(
-        name: line_name.presence || "LINE User",
-        email: "#{line_id}@example.com",
-        password: Devise.friendly_token[0, 20],
-        confirmed_at: Time.current # メール確認をスキップ
-      )
+  def line_login_only?
+    auth_provider == "line"
+  end
 
-      user.create_line_user!(
-        line_id: line_id,
-        line_name: line_name
-      )
+  def email_login?
+    auth_provider == "email"
+  end
 
-      user
+  private
+
+  def maybe_switch_to_email_login
+    return unless auth_provider == "line"
+
+    email_changed = saved_change_to_email?
+    password_changed = saved_change_to_encrypted_password?
+    return unless email_changed || password_changed
+
+    update_auth_provider_if_email_ready
+    save if changed? # auth_provider が変わった場合のみ再保存
+  end
+
+  def update_auth_provider_if_email_ready
+    return unless auth_provider == "line"
+
+    email_valid = email.present? &&
+                  !email.starts_with?("line_user_") &&
+                  email.match?(URI::MailTo::EMAIL_REGEXP)
+
+    password_valid = encrypted_password.present?
+
+    email_confirmed = !devise_modules.include?(:confirmable) || confirmed?
+
+    if email_valid && password_valid && email_confirmed
+      self.auth_provider = "email"
     end
   end
 end

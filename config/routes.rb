@@ -2,9 +2,14 @@ Rails.application.routes.draw do
   devise_for :users, controllers: {
     registrations: "users/registrations",
     confirmations: "users/confirmations",
+    passwords: "users/passwords",
     omniauth_callbacks: "users/omniauth_callbacks"
     },
-    omniauth_providers: [:line]
+    omniauth_providers: [ :line ]
+
+  devise_scope :user do
+    get "users/auth/line/connect", to: "users/omniauth_callbacks#line_connect", as: :user_line_connect
+  end
 
   get "/up", to: proc { [ 200, {}, [ "OK" ] ] }
   get "explore/index"
@@ -15,6 +20,7 @@ Rails.application.routes.draw do
   get "search/search_google_books", to: "search#search_google_books", as: :search_google_books
   post "/presigned_url", to: "uploads#presigned_url"
   post "/callback", to: "line_webhooks#callback"
+
   patch "/line_notifications/toggle", to: "line_notifications#toggle", as: :toggle_notifications
   post "line_notifications/trigger", to: "line_notifications#trigger"
   resource :line_user, only: [ :destroy ]
