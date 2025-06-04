@@ -54,7 +54,6 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      GUEST_USER_EMAIL: ${{ secrets.GUEST_USER_EMAIL }}
       LINE_CHANNEL_TOKEN: dummy_token_for_test
       APP_HOST: http://localhost:3000
 
@@ -89,12 +88,21 @@ jobs:
           cp config/database.yml.ci config/database.yml
           bin/rails db:create db:schema:load
 
+      - name: Inject secrets into .env.test
+        run: |
+          echo "GUEST_USER_EMAIL=${GUEST_USER_EMAIL}" > .env.test
+        env:
+          GUEST_USER_EMAIL: ${{ secrets.GUEST_USER_EMAIL }}
+
       - name: Run tests
         env:
           RAILS_ENV: test
           DATABASE_URL: postgres://postgres:postgres@localhost:5432/test_db
         run: |
           bundle exec rspec
+
+      - name: Cleanup .env.test
+        run: rm -f .env.test
 
       - name: Collect failed screenshots
         uses: actions/upload-artifact@v4

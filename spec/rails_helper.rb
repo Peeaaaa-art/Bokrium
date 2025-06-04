@@ -9,6 +9,10 @@ abort("The Rails environment is running in production mode!") if Rails.env.produ
 
 require 'rspec/rails'
 
+# github action用
+require 'dotenv'
+Dotenv.load('.env.test') if Rails.env.test?
+
 # 外部HTTPリクエストをすべて遮断
 require 'webmock/rspec'
 WebMock.disable_net_connect!(allow_localhost: true)
