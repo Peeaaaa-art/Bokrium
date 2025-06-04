@@ -1,5 +1,5 @@
 def ensure_guest_user
-  guest_email = ENV["GUEST_USER_EMAIL"] || 'bokrium+guest@gmail.com'
+  guest_email = ENV["GUEST_USER_EMAIL"]
 
   user = User.find_by(email: guest_email)
 
