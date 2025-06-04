@@ -1,24 +1,17 @@
-def ensure_guest_user
-  guest_email = ENV["GUEST_USER_EMAIL"]
+module GuestUserHelper
+  def ensure_guest_user
+    guest_email = ENV["GUEST_USER_EMAIL"]
 
-  user = User.find_by(email: guest_email)
+    user = User.find_or_create_by!(email: guest_email) do |u|
+      u.password = 'password'
+      u.confirmed_at = Time.current
+    end
 
-  unless user
-    user = User.create!(
-      email: guest_email,
-      password: 'password',
-      confirmed_at: Time.current
-    )
+    user.books.find_or_create_by!(isbn: "9781001001001") do |book|
+      book.title = "スターター本"
+      book.author = "ゲスト著者"
+    end
 
+    user
   end
-
-  if user.books.where(isbn: "9781001001001").blank?
-    user.books.create!(
-      title: "スターター本",
-      author: "ゲスト著者",
-      isbn: "9781001001001",
-    )
-  end
-
-  user
 end
