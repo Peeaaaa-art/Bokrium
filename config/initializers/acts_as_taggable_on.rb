@@ -1,5 +1,5 @@
 ActsAsTaggableOn::Tag.class_eval do
-  belongs_to :user, optional: true
+  belongs_to :user, optional: false
 
   scope :owned_by, ->(user) { where(user_id: user.id) }
 end
