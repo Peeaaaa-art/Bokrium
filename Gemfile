@@ -24,7 +24,7 @@ gem "devise-i18n"
 gem "rails-i18n", "~> 8.0"
 gem "dartsass-rails"
 gem "bootstrap", "~> 5.3.5"
-gem "aws-sdk-s3", "~> 1.188", require: false
+gem "aws-sdk-s3", "~> 1.189", require: false
 gem "rakuten_web_service"
 gem "dotenv-rails"
 gem "rexml"
