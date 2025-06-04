@@ -22,7 +22,7 @@ RSpec.describe BooksQuery do
         book2.taggings.update_all(tagger_id: user.id, tagger_type: "User")
       end
 
-      it '哲学タグの本だけ取得する' do
+      it '「哲学」タグが付いた本だけを取得できること' do
         result = described_class.new(Book.all, params: { tags: [ "哲学" ] }, current_user: user).call
         expect(result).to contain_exactly(book1)
       end
@@ -32,7 +32,7 @@ RSpec.describe BooksQuery do
       let!(:book1) { create(:book, user: user, status: :want_to_read) }
       let!(:book2) { create(:book, user: user, status: :finished) }
 
-      it '読みたい本だけ取得する' do
+      it 'ステータスが「読みたい」の本だけを取得できること' do
         result = described_class.new(Book.all, params: { status: "want_to_read" }, current_user: user).call
         expect(result).to contain_exactly(book1)
       end
@@ -42,7 +42,7 @@ RSpec.describe BooksQuery do
       let!(:book1) { create(:book, user: user, created_at: 1.day.ago) }
       let!(:book2) { create(:book, user: user, created_at: Time.current) }
 
-      it do
+      it '作成日の古い順に並ぶこと' do
         result = described_class.new(Book.all, params: { sort: "oldest" }, current_user: user).call
         expect(result).to eq [ book1, book2 ]
       end
@@ -52,9 +52,9 @@ RSpec.describe BooksQuery do
       let!(:book1) { create(:book, user: user, title: "いぬ") }
       let!(:book2) { create(:book, user: user, title: "あか") }
 
-      it do
+      it 'タイトルの昇順（五十音順）で並ぶこと' do
         result = described_class.new(Book.all, params: { sort: "title_asc" }, current_user: user).call
-        expect(result).to eq [ book2, book1 ] # あか → いぬ
+        expect(result).to eq [ book2, book1 ]
       end
     end
 
@@ -62,7 +62,7 @@ RSpec.describe BooksQuery do
       let!(:book1) { create(:book, user: user, author: "田中") }
       let!(:book2) { create(:book, user: user, author: "阿部") }
 
-      it do
+      it '著者名の昇順で並ぶこと' do
         result = described_class.new(Book.all, params: { sort: "author_asc" }, current_user: user).call
         expect(result).to eq [ book2, book1 ]
       end
@@ -77,7 +77,7 @@ RSpec.describe BooksQuery do
         create(:memo, book: book2, updated_at: Time.current)
       end
 
-      it do
+      it '最新のメモがある本から順に並ぶこと' do
         result = described_class.new(Book.all, params: { sort: "latest_memo" }, current_user: user).call
         expect(result).to eq [ book2, book1 ]
       end
@@ -87,7 +87,7 @@ RSpec.describe BooksQuery do
       let!(:book1) { create(:book, user: user, created_at: 1.day.ago) }
       let!(:book2) { create(:book, user: user, created_at: Time.current) }
 
-      it do
+      it 'パラメータが指定されていない場合、新しい順に並ぶこと' do
         result = described_class.new(Book.all, params: {}, current_user: user).call
         expect(result).to eq [ book2, book1 ]
       end
