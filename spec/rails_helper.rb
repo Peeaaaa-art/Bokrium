@@ -3,6 +3,8 @@ require 'spec_helper'
 ENV['RAILS_ENV'] ||= 'test'
 require_relative '../config/environment'
 
+ENV["GUEST_USER_EMAIL"] ||= "bokrium+guest@gmail.com"
+
 abort("The Rails environment is running in production mode!") if Rails.env.production?
 
 require 'rspec/rails'
