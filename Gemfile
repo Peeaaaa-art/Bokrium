@@ -79,6 +79,7 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
   gem "shoulda-matchers", "~> 6.5"
+  gem "webmock"
 end
 
 gem "letter_opener", "~> 1.10"
