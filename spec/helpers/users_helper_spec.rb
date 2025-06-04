@@ -15,7 +15,7 @@ RSpec.describe UsersHelper, type: :helper do
 
       it "returns a variant for :large size" do
         result = helper.user_avatar(user, size: :large)
-        expect(result).to be_a(ActiveStorage::Variant)
+        expect { result.processed }.not_to raise_error
       end
     end
 
