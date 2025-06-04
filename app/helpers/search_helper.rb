@@ -4,7 +4,7 @@ module SearchHelper
       search_books_path(
         type: search_params[:type],
         query: search_params[:query],
-        engine: search_params[:engine], # これも保持するとより安全
+        engine: search_params[:engine],
         page: i
       )
     else

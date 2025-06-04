@@ -36,11 +36,19 @@ RSpec.describe Book, type: :model do
   end
 
   describe "アソシエーション" do
-    it { is_expected.to belong_to(:user) }
-    it { is_expected.to have_many(:memos).dependent(:destroy) }
-    it { is_expected.to have_many(:images).dependent(:destroy) }
+    it "ユーザーに属していること" do
+      is_expected.to belong_to(:user)
+    end
 
-    it "book_cover_s3 がアタッチ可能であること" do
+    it "メモを複数所有し、親が削除されるとメモも削除されること" do
+      is_expected.to have_many(:memos).dependent(:destroy)
+    end
+
+    it "画像を複数所有し、親が削除されると画像も削除されること" do
+      is_expected.to have_many(:images).dependent(:destroy)
+    end
+
+    it "book_cover_s3 が Active Storage のアタッチメントとして使用可能であること" do
       expect(Book.new).to respond_to(:book_cover_s3)
     end
   end

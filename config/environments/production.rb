@@ -12,6 +12,9 @@ Rails.application.configure do
   # Full error reports are disabled.
   config.consider_all_requests_local = false
 
+  # 406 や不意の 500 表示を防ぐため
+  config.action_dispatch.block_unknown_browser_requests = false
+
   # Turn on fragment caching in view templates.
   config.action_controller.perform_caching = true
 
@@ -72,9 +75,8 @@ Rails.application.configure do
 
   # Only use :id for inspections in production.
   config.active_record.attributes_for_inspect = [ :id ]
-  # fly.io対策?
+  # fly.io対策
   config.hosts.clear
-  # config.assets.js_compressor = nil
 
   # リダイレクト: www.bokrium.com → bokrium.com
   config.middleware.insert_before(Rack::Runtime, Rack::Rewrite) do

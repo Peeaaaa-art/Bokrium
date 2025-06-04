@@ -35,7 +35,7 @@ class BooksQuery
     when "title_asc"
       books.order(Arel.sql("title COLLATE \"ja-x-icu\" ASC"))
     when "author_asc"
-      books.order(author: :asc)
+      books.order(Arel.sql("author COLLATE \"ja-x-icu\" ASC"))
     when "latest_memo"
       books.left_joins(:memos).group("books.id").order(Arel.sql("MAX(memos.updated_at) DESC NULLS LAST"))
     else

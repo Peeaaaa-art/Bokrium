@@ -55,8 +55,16 @@ RSpec.describe "Explore", type: :request do
   end
 
   describe "Turbo frame request" do
+    let(:user) { create(:user, email: "test@example.com", password: "password123") }
+
     before do
-      sign_in user
+      post user_session_path, params: {
+        user: {
+          email: user.email,
+          password: "password123"
+        }
+      }
+
       @book = create(:book, title: "Turbo本", user: user)
     end
 
