@@ -1,5 +1,5 @@
 class BooksController < ApplicationController
-  before_action :authenticate_user!, only: [ :create, :show, :edit, :update, :destroy ]
+  before_action :authenticate_user!, only: [ :index, :create, :show, :edit, :update, :destroy ]
   before_action :set_book, only: [ :edit, :update, :destroy, :toggle_tag ]
   before_action :set_book_with_associations, only: [ :show ]
   before_action :set_user_tags, only: [ :show, :tag_filter ]
