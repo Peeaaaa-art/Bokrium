@@ -7,7 +7,7 @@ RSpec.describe 'User email confirmation', type: :system do
     ensure_guest_user
   end
 
-  it 'confirms email from confirmation link sent via Devise' do
+  it 'Deviseから送信された確認リンクでメール認証できること' do
     visit new_user_registration_path
     fill_in 'Eメール', with: 'confirmtest@example.com'
     fill_in 'パスワード', with: 'password123'
@@ -48,7 +48,7 @@ RSpec.describe 'User login after confirmation', type: :system do
     )
   end
 
-  it 'allows confirmed user to log in successfully' do
+  it 'メール確認済みのユーザーが正常にログインできること' do
     visit new_user_session_path
     fill_in 'Eメール', with: email
     fill_in 'パスワード', with: password
