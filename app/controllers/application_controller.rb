@@ -43,6 +43,6 @@ class ApplicationController < ActionController::Base
   end
 
   def default_detail_card_columns
-    mobile? ? 1 : 3
+    mobile? ? 1 : 6
   end
 end
