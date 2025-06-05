@@ -33,7 +33,9 @@ end %>
 <div class="row g-3 px-3 mt-3">
   <% books.each do |book| %>
     <div class="col-<%= col_width %>">
-      <%= link_to book_link_path(book), class: "text-decoration-none text-reset" do %>
+      <%= link_to book_link_path(book),
+          class: "text-decoration-none text-reset",
+          data: { turbo: false } do %>
         <div class="card h-100 shadow-sm p-3 bg-light-bok">
           <div class="row g-3">
             <!-- 書影 -->
