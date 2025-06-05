@@ -1,16 +1,19 @@
 # frozen_string_literal: true
 
 class BooksDisplaySetting
-  VIEW_MODE_KEY      = :view_mode
-  SHELF_PER_KEY      = :shelf_per
-  CARD_COLUMNS_KEY   = :card_columns
+  VIEW_MODE_KEY           = :view_mode
+  SHELF_PER_KEY           = :shelf_per
+  CARD_COLUMNS_KEY        = :card_columns
+  DETAIL_CARD_COLUMNS_KEY = :detail_card_columns
 
-  attr_reader :view_mode, :unit_per_page, :books_per_shelf, :card_columns
+  attr_reader :view_mode, :unit_per_page,
+              :books_per_shelf, :card_columns, :detail_card_columns
 
-  def initialize(session, params, defaults)
+  def initialize(session, params, defaults, mobile: false)
     @session = session
     @params = params
     @defaults = defaults
+    @mobile = mobile
 
     configure_view_mode
     configure_unit_per_page
@@ -33,6 +36,10 @@ class BooksDisplaySetting
       @session[CARD_COLUMNS_KEY] = @params[:column] if @params[:column].present?
       @card_columns = @session[CARD_COLUMNS_KEY]&.to_i || @defaults[:card]
       @unit_per_page = @card_columns
+    when "detail_card"
+      @session[DETAIL_CARD_COLUMNS_KEY] = @params[:column] if @params[:column].present?
+      @detail_card_columns = @session[DETAIL_CARD_COLUMNS_KEY]&.to_i || @defaults[:detail_card]
+      @unit_per_page = @mobile ? @detail_card_columns * 4 : @detail_card_columns
     else
       @unit_per_page = @defaults[:shelf]
     end

@@ -5,19 +5,23 @@
 <div class="d-flex align-items-center justify-content-between mt-4 mb-3 px-3">
 
   <!-- ⬅ 左端：ビュー切り替え -->
-  <div class="flex-shrink-0">
-    <%= link_to (books_path(view: @view_mode == "shelf" ? "card" : "shelf")),
-                class: "btn btn-light border shadow-sm d-flex align-items-center justify-content-center",
-                style: "width: 40px; height: 40px; border-radius: 50%; line-height: 1;",
-                title: (@view_mode == "shelf" ? "カードビューに切り替え" : "棚ビューに切り替え") do %>
-      <% if @view_mode == "shelf" %>
-        <i class="bi bi-card-text fs-5 icon-refined"></i>
-      <% else %>
-        <i class="bi bi-layout-three-columns fs-5 icon-refined"></i>
-      <% end %>
-    <% end %>
-  </div>
+<% next_view, icon_class, title_text = case @view_mode
+  when "shelf"
+    ["card", "bi-card-text", "カードビューに切り替え"]
+  when "card"
+    ["detail_card", "bi-layout-text-sidebar", "詳細カードビューに切り替え"]
+  else
+    ["shelf", "bi-layout-three-columns", "棚ビューに切り替え"]
+  end %>
 
+<div class="flex-shrink-0">
+  <%= link_to books_path(view: next_view),
+              class: "btn btn-light border shadow-sm d-flex align-items-center justify-content-center",
+              style: "width: 40px; height: 40px; border-radius: 50%; line-height: 1;",
+              title: title_text do %>
+    <i class="bi <%= icon_class %> fs-5 icon-refined"></i>
+  <% end %>
+</div>
   <!--  中央：４つのボタンのコントロールバー -->
   <%= render "books/filter_controlls", filtered_tag: @filtered_tag, filtered_tags: @filtered_tags, filtered_status: @filtered_status %>
 
@@ -28,4 +32,3 @@
               pagy: @pagy,
               view_mode: @view_mode,
               card_columns: @card_columns %>
-
