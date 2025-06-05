@@ -33,9 +33,10 @@ RSpec.describe "BooksController", type: :request do
       before { sign_in user }
 
       it "サンプル本棚ページが表示されること" do
-        get books_path
+        get guest_books_path
         expect(response).to have_http_status(:ok)
         expect(response.body).to include("サンプル本棚")
+        expect(response.body).to include("こちらはサンプル表示です")
         expect(response.body).to include("スターター本")
       end
     end

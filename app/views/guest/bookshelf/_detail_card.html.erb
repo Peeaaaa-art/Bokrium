@@ -1,0 +1,72 @@
+<div data-controller="detail-card-column-selector">
+  <% default_value = mobile? ? 1 : 6 %>
+  <% options = mobile? ? [1, 2, 3] : [4, 6, 12] %>
+
+  <div class="d-flex align-items-center mb-4 ms-3" style="gap: 0.5rem;">
+    <%= select_tag :column,
+        options_for_select(options, detail_card_columns || default_value),
+        id: "columnSelect",
+        data: {
+          action: "change->detail-card-column-selector#change",
+          detail_card_column_selector_target: "selector"
+        },
+        class: "form-select form-select-sm text-secondary shadow-sm books-per-shelf"
+    %>
+  </div>
+
+  <%= form_with url: books_index_path, method: :get, local: true, id: "columnForm" do %>
+    <%= hidden_field_tag :view, "detail_card" %>
+    <%= hidden_field_tag :column, detail_card_columns, id: "hiddenColumnInput" %>
+  <% end %>
+</div>
+
+<% col_width = case @detail_card_columns.to_i
+  when 1 then 12
+  when 2 then 6
+  when 3 then 4
+  when 4 then 3
+  when 6 then 2
+  when 12 then 1
+  else 3
+end %>
+
+<div class="row g-3 px-3 mt-3">
+  <% books.each do |book| %>
+    <div class="col-<%= col_width %>">
+      <%= link_to book_link_path(book), class: "text-decoration-none text-reset" do %>
+        <div class="card h-100 shadow-sm p-3 bg-light-bok">
+          <div class="row g-3">
+            <!-- 書影 -->
+            <div class="col-auto">
+              <% if book.book_cover_s3.attached? %>
+                <%= image_tag book.book_cover_s3.variant(resize_to_fill: [100, 150]),
+                      alt: book.title, class: "book-cover", loading: "lazy" %>
+              <% elsif book.book_cover.present? %>
+                <%= image_tag book.book_cover,
+                      class: "img-fluid rounded-2",
+                      style: "width: 100px; height: auto; object-fit: cover;" %>
+              <% else %>
+                <div class="no-cover text-muted rounded-2"
+                      style="width: 100px;">
+                  <span class="small text-center title px-1"><%= book.title %></span>
+                </div>
+              <% end %>
+            </div>
+            <!-- 右側テキスト情報 -->
+            <div class="col d-flex flex-column gap-1" style="word-break: break-all;">
+              <h6 class="mb-1 fw-bold lh-sm"><%= truncate(book.title, length: 40) %></h6>
+              <p class="text-muted mb-1 small lh-sm"><%= truncate(book.author, length: 30) %></p>
+              <p class="text-muted small lh-sm mb-2"><%= truncate(book.publisher, length: 30) %></p>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+</div>
+
+<% if current_user && pagy && pagy.next %>
+  <div class="my-5 d-flex justify-content-center">
+    <%== pagy_bootstrap_nav(pagy) %>
+  </div>
+<% end %>

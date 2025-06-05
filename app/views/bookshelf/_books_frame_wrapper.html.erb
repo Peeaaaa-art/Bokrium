@@ -6,7 +6,13 @@
             books_per_shelf: books_per_shelf,
             pagy: pagy,
             current_chunk_index: pagy.page %>
-  <% else %>
+  <% end %>
+
+  <% if view_mode == "card" %>
     <%= render "bookshelf/simple_card", books: books, card_columns: card_columns, pagy: pagy %>
+  <% end %>
+
+  <% if view_mode == "detail_card" %>
+    <%= render "bookshelf/detail_card", books: books, pagy: pagy, detail_card_columns: @detail_card_columns %>
   <% end %>
 </turbo-frame>

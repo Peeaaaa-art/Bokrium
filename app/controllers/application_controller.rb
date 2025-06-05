@@ -41,4 +41,8 @@ class ApplicationController < ActionController::Base
   def default_card_columns
     mobile? ? 4 : 12
   end
+
+  def default_detail_card_columns
+    mobile? ? 1 : 6
+  end
 end
