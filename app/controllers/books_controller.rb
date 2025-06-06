@@ -1,6 +1,6 @@
 class BooksController < ApplicationController
   before_action :authenticate_user!, only: [ :index, :create, :show, :edit, :update, :destroy ]
-  before_action :set_book, only: [ :edit, :update, :destroy, :toggle_tag ]
+  before_action :set_book, only: [ :edit, :update, :update_row, :destroy, :toggle_tag ]
   before_action :set_book_with_associations, only: [ :show ]
   before_action :set_user_tags, only: [ :show, :tag_filter ]
   rescue_from ActiveRecord::RecordNotFound, with: :handle_record_not_found
@@ -61,7 +61,27 @@ class BooksController < ApplicationController
     end
   end
 
-  def edit; end
+  def edit
+    @book = current_user.books.find(params[:id])
+
+    respond_to do |format|
+      format.turbo_stream do
+        render partial: "bookshelf/b_note_edit_row", locals: { book: @book }
+      end
+
+      format.html
+    end
+  end
+
+  def edit_row
+    @book = current_user.books.find(params[:id])
+    render partial: "bookshelf/b_note_edit_row", locals: { book: @book }
+  end
+
+  def row
+    @book = current_user.books.find(params[:id])
+    render partial: "bookshelf/b_note_row", locals: { book: @book }
+  end
 
   def update
     if @book.update(book_params)
@@ -72,6 +92,17 @@ class BooksController < ApplicationController
     end
   end
 
+  def update_row
+    @book = current_user.books.find(params[:id])
+    index = params[:index].to_i
+
+    if @book.update(book_params)
+      flash.now[:row_update_success] = "『#{@book.title.truncate(20)}』を更新しました"
+      render partial: "bookshelf/b_note_row", formats: :html, locals: { book: @book, index: index }
+    else
+      render partial: "bookshelf/b_note_edit_row", formats: :html, locals: { book: @book, index: index }
+    end
+  end
   def destroy
     @book.destroy
     flash[:info] = "『#{@book.title.truncate(TITLE_TRUNCATE_LIMIT)}』を削除しました"

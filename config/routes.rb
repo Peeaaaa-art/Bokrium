@@ -37,7 +37,11 @@ Rails.application.routes.draw do
     resources :memos, only: [ :create, :new, :edit, :update, :destroy ]
     resources :images, only: [ :create, :destroy ]
 
-    post "toggle_tag", on: :member
+    member do
+      get :row
+      patch :update_row
+      post "toggle_tag"
+    end
 
     collection do
       get :tag_filter
