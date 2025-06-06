@@ -3,7 +3,7 @@ module Guest
     before_action :read_only
     before_action :set_guest_book, only: [ :show ]
     rescue_from ActiveRecord::RecordNotFound, with: :handle_guest_not_found
-    CHUNKS_PER_PAGE = 10
+    CHUNKS_PER_PAGE = 7
     def index
       books = guest_user.books
                   .includes(book_cover_s3_attachment: :blob)

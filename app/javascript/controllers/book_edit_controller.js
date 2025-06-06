@@ -10,13 +10,17 @@ export default class extends Controller {
     this.publisherTarget.innerHTML = `<input class="form-control form-control-sm" name="publisher" value="${this.publisherTarget.textContent.trim()}" />`
 
     this.element.querySelector("td:last-child").innerHTML = `
-      <button class="btn btn-success btn-sm" data-action="click->book-edit#save">保存</button>
-      <button class="btn btn-secondary btn-sm" data-action="click->book-edit#cancel">キャンセル</button>
+      <button class="btn btn-success btn-sm d-flex align-items-center" data-action="click->book-edit#save">
+        <i class="bi bi-check-lg"></i>
+      </button>
+      <button class="btn btn-secondary btn-sm d-flex align-items-center" data-action="click->book-edit#cancel">
+        <i class="bi bi-x-lg"></i>
+      </button>
     `
   }
 
   cancel() {
-    window.location.reload() // 安定性優先：本棚全体をリロード
+    window.location.reload()// 安定性優先：本棚全体をリロード
   }
 
   save() {

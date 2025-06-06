@@ -76484,8 +76484,12 @@ img.ProseMirror-separator {
       this.authorTarget.innerHTML = `<input class="form-control form-control-sm" name="author" value="${this.authorTarget.textContent.trim()}" />`;
       this.publisherTarget.innerHTML = `<input class="form-control form-control-sm" name="publisher" value="${this.publisherTarget.textContent.trim()}" />`;
       this.element.querySelector("td:last-child").innerHTML = `
-      <button class="btn btn-success btn-sm" data-action="click->book-edit#save">\u4FDD\u5B58</button>
-      <button class="btn btn-secondary btn-sm" data-action="click->book-edit#cancel">\u30AD\u30E3\u30F3\u30BB\u30EB</button>
+      <button class="btn btn-success btn-sm d-flex align-items-center" data-action="click->book-edit#save">
+        <i class="bi bi-check-lg"></i>
+      </button>
+      <button class="btn btn-secondary btn-sm d-flex align-items-center" data-action="click->book-edit#cancel">
+        <i class="bi bi-x-lg"></i>
+      </button>
     `;
     }
     cancel() {
