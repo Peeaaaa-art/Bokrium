@@ -1,3 +1,4 @@
+<%= turbo_frame_tag "modal" do %>
 <div class="container mt-5">
   <div class="row justify-content-center">
     <div class="col-md-8">
@@ -6,10 +7,10 @@
           <i data-lucide="book-open-text" style="width: 20px; height: 20px;"></i>
         </div>
         <div class="card-body">
-          <%= render 'books/form' %>
+          <%= render 'books/form', book: @book %>
         </div>
       </div>
     </div>
   </div>
 </div>
-
+<% end %>

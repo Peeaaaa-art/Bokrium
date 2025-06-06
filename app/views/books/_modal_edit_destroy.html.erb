@@ -23,6 +23,7 @@
             <%= form_with url: book_path(book), method: :delete,
                   data: { turbo_confirm: "本のデータとメモが削除されると、もとに戻すことはできません。\n本当に削除してもよろしいでしょうか？" },
                   html: { class: "m-0 p-0" } do %>
+              <%= hidden_field_tag :force_html, true %>
               <button type="submit" class="modal-action-button delete safari-fix-button safari-modal-action-button">
                 <span>
                   <i class="bi bi-trash2 me-2"></i> 削除する

@@ -40,6 +40,8 @@ class BooksDisplaySetting
       @session[DETAIL_CARD_COLUMNS_KEY] = @params[:column] if @params[:column].present?
       @detail_card_columns = @session[DETAIL_CARD_COLUMNS_KEY]&.to_i || @defaults[:detail_card]
       @unit_per_page = @mobile ? @detail_card_columns * 4 : @detail_card_columns
+    when "b_note"
+      @unit_per_page = 7.2
     else
       @unit_per_page = @defaults[:shelf]
     end

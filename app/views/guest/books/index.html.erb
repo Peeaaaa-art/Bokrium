@@ -4,24 +4,26 @@
 
 
 <div class="d-flex align-items-center justify-content-between mt-4 mb-3 px-3">
+  <% views = [
+    { key: "shelf",       icon: "bi-layout-three-columns",   title: "棚ビューに切り替え" },
+    { key: "card",        icon: "bi-card-text",              title: "カードビューに切り替え" },
+    { key: "detail_card", icon: "bi-layout-text-sidebar",    title: "詳細カードビューに切り替え" },
+    { key: "b_note",      icon: "bi-table",                  title: "B-noteビューに切り替え" }
+  ] %>
 
-  <% next_view, icon_class, title_text = case @view_mode
-    when "shelf"
-      ["card", "bi-card-text", "カードビューに切り替え"]
-    when "card"
-      ["detail_card", "bi-layout-text-sidebar", "詳細カードビューに切り替え"]
-    else
-      ["shelf", "bi-layout-three-columns", "棚ビューに切り替え"]
-    end %>
+  <% current_index = views.index { |v| v[:key] == @view_mode } || 0 %>
+  <% next_view = views[(current_index + 1) % views.size] %>
+  <% current_icon = views[current_index][:icon] %>
 
   <div class="flex-shrink-0">
-    <%= link_to guest_books_path(view: next_view),
+    <%= link_to guest_books_path(view: next_view[:key]),
                 class: "btn btn-light border shadow-sm d-flex align-items-center justify-content-center",
                 style: "width: 40px; height: 40px; border-radius: 50%; line-height: 1;",
-                title: title_text do %>
-      <i class="bi <%= icon_class %> fs-5 icon-refined"></i>
+                title: next_view[:title] do %>
+      <i class="bi <%= current_icon %> fs-5 icon-refined"></i>
     <% end %>
   </div>
+
     <div class="mx-auto">
       <div class="filter-controls border rounded-pill shadow-sm px-4 py-md-1 d-flex align-items-center gap-3"
       style="pointer-events: none; opacity: 0.7;">
@@ -51,19 +53,21 @@
   <div class="flex-shrink-0 d-none-sm" style="width: 48px;"></div> <!-- サイズ合わせ用 -->
 </div>
 
-<% if @view_mode == "shelf" %>
+<% case @view_mode %>
+<% when "shelf" %>
   <%= render "guest/bookshelf/kino_select_numbers", books_per_shelf: @books_per_shelf %>
   <%= render "guest/bookshelf/kino_chunk",
           books: @books,
           books_per_shelf: @books_per_shelf,
           pagy: @pagy,
           current_chunk_index: @pagy.page %>
-<% end %>
 
-<% if @view_mode == "card" %>
+<% when "card" %>
   <%= render "guest/bookshelf/simple_card", books: @books, card_columns: @card_columns, pagy: @pagy %>
-<% end %>
 
-<% if @view_mode == "detail_card" %>
+<% when "detail_card" %>
   <%= render "guest/bookshelf/detail_card", books: @books, detail_card_columns: @detail_card_columns, pagy: @pagy %>
+
+<% when "b_note" %>
+  <%= render "guest/bookshelf/b_note", books: @books, detail_card_columns: @detail_card_columns, pagy: @pagy %>
 <% end %>
