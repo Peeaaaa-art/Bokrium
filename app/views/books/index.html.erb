@@ -3,32 +3,57 @@
 <%= empty_bookshelf_notice %>
 
 <div class="d-flex align-items-center justify-content-between mt-4 mb-3 px-3">
-
   <!-- ⬅ 左端：ビュー切り替え -->
-<% next_view, icon_class, title_text = case @view_mode
-  when "shelf"
-    ["card", "bi-card-text", "カードビューに切り替え"]
-  when "card"
-    ["detail_card", "bi-layout-text-sidebar", "詳細カードビューに切り替え"]
-  else
-    ["shelf", "bi-layout-three-columns", "棚ビューに切り替え"]
-  end %>
+  <% next_view, icon_class, title_text = case @view_mode
+    when "shelf"
+      ["card", "bi-card-text", "カードビューに切り替え"]
+    when "card"
+      ["detail_card", "bi-layout-text-sidebar", "詳細カードビューに切り替え"]
+    else
+      ["shelf", "bi-layout-three-columns", "棚ビューに切り替え"]
+    end %>
 
-<div class="flex-shrink-0">
-  <%= link_to books_path(view: next_view),
-              class: "btn btn-light border shadow-sm d-flex align-items-center justify-content-center",
-              style: "width: 40px; height: 40px; border-radius: 50%; line-height: 1;",
-              title: title_text do %>
-    <i class="bi <%= icon_class %> fs-5 icon-refined"></i>
-  <% end %>
-</div>
+  <div class="flex-shrink-0">
+    <%= link_to books_path(view: next_view),
+                class: "btn btn-light border shadow-sm d-flex align-items-center justify-content-center",
+                style: "width: 40px; height: 40px; border-radius: 50%; line-height: 1;",
+                title: title_text do %>
+      <i class="bi <%= icon_class %> fs-5 icon-refined"></i>
+    <% end %>
+  </div>
   <!--  中央：４つのボタンのコントロールバー -->
-  <%= render "books/filter_controlls", filtered_tag: @filtered_tag, filtered_tags: @filtered_tags, filtered_status: @filtered_status %>
+  <%= render "books/filter_controlls",
+              filtered_tag: @filtered_tag,
+              filtered_tags: @filtered_tags,
+              filtered_status: @filtered_status %>
 
 
-  <%= render "bookshelf/books_frame_wrapper",
-              books: @books,
-              books_per_shelf: @books_per_shelf,
-              pagy: @pagy,
-              view_mode: @view_mode,
-              card_columns: @card_columns %>
+<!-- 本棚 -->
+<%# <%= render "bookshelf/books_frame_wrapper",
+            books: @books,
+            books_per_shelf: @books_per_shelf,
+            pagy: @pagy,
+            view_mode: @view_mode,
+            card_columns: @card_columns %> %>
+
+
+<div class="container-lg mt-3">
+  <div class="table-responsive">
+    <table class="table table-striped table-rounded table-auto-sm align-middle mb-0">
+      <thead class="table-light-bok">
+        <tr>
+          <th><i class="bi bi-pin"></i></th>
+          <th>タイトル</th>
+          <th>著者</th>
+          <th>出版社</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody data-controller="book-list">
+        <% @books.each_with_index do |book, index| %>
+          <%= render partial: "bookshelf/b_note_row", locals: { book: book, index: index } %>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

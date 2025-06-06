@@ -1,0 +1,44 @@
+<tr id="book_row_<%= book.id %>"
+    data-controller="book-edit"
+    data-book-edit-id-value="<%= book.id %>"
+    data-book-edit-index-value="<%= index %>"
+>
+  <td>
+    <%= link_to (index + 1), book_path(book), class: "text-decoration-none text-body" %>
+  </td>
+
+  <% title_max_width = mobile? ? "16rem" : "30rem" %>
+  <td data-book-edit-target="title" class="text-truncate" style="max-width: <%= title_max_width %>;">
+    <%= link_to book.title, book_path(book), class: "text-decoration-none text-body" %>
+  </td>
+
+  <% author_max_width = mobile? ? "8rem" : "15rem" %>
+  <td data-book-edit-target="author" class="text-truncate" style="max-width: <%= author_max_width %>;">
+    <%= link_to book.author, book_path(book), class: "text-decoration-none text-body" %>
+  </td>
+  <% publisher_max_width = mobile? ? "5rem" : "10rem" %>
+  <td data-book-edit-target="publisher" class="text-truncate" style="max-width: <%= publisher_max_width %>;">
+    <%= link_to book.publisher, book_path(book), class: "text-decoration-none text-body" %>
+  </td>
+
+  <td class="text-end d-flex justify-content-end gap-2">
+    <!-- 編集アイコン -->
+    <button class="border-0 bg-transparent p-0" data-action="click->book-edit#startEdit" title="編集">
+      <i class="bi bi-pencil fs-5 text-primary-bok"></i>
+    </button>
+
+    <!-- 削除アイコン -->
+    <%= button_to book_path(book), method: :delete,
+          data: { turbo_stream: true, turbo_confirm: "本のデータとメモが削除されると、もとに戻すことはできません。\n本当に削除してもよろしいでしょうか？" },
+          class: "border-0 bg-transparent p-0", title: "削除" do %>
+      <i class="bi bi-trash fs-5 text-danger"></i>
+    <% end %>
+  </td>
+</tr>
+
+
+<% if flash.now[:row_update_success] %>
+  <div class="flash-message alert alert-info fade show" role="alert" id="flash-<%= book.id %>">
+    <%= flash.now[:row_update_success] %>
+  </div>
+<% end %>
