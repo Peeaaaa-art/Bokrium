@@ -15,6 +15,7 @@ import InfiniteScrollController from "./controllers/infinite_scroll_controller.j
 import SafariClickFixController from "./controllers/safari_click_fix_controller.js"
 import DetailCardColumnSelectorController from "./controllers/detail_card_column_selector_controller.js"
 import BookEditController from "./controllers/book_edit_controller.js"
+import SpineBookController from "./controllers/spine_book_controller.js"
 
 const application = Application.start()
 window.Stimulus = application
@@ -35,6 +36,7 @@ application.register("infinite-scroll", InfiniteScrollController)
 application.register("safari-click-fix", SafariClickFixController)
 application.register("detail-card-column-selector", DetailCardColumnSelectorController)
 application.register("book-edit", BookEditController)
+application.register("spine-book", SpineBookController)
 
 import * as bootstrap from "bootstrap"
 window.bootstrap = bootstrap  // グローバルにしたい場合

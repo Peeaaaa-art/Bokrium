@@ -1,0 +1,149 @@
+.spine-on-shelf {
+  width: 36px;
+  height: 150px;
+  background: #f5d75b;
+  margin-right: 4px;
+  writing-mode: vertical-rl;
+  text-align: center;
+  position: relative; /* ここが重要！内部拡大表示の基準 */
+  cursor: pointer;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  border-radius: 0.25rem;
+  transition: all 0.3s ease;
+  z-index: 1;
+}
+
+.spine-title {
+  font-size: 0.75rem;
+  white-space: nowrap;
+  line-height: 1.4;
+  z-index: 2;
+}
+
+/* 拡大中の背表紙 */
+.spine-on-shelf.expanded {
+  z-index: 20;
+}
+
+/* カバー画像 */
+.spine-on-shelf .spine-cover-image {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 120px;
+  height: auto;
+  transform: translate(-50%, -50%) scale(1);
+  object-fit: contain;
+  border-radius: 0.25rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  z-index: 10;
+  pointer-events: none;
+}
+
+/* 拡大時に画像を表示 */
+.spine-on-shelf.expanded .spine-cover-image {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(0.8);
+  pointer-events: auto;
+}
+
+/* 拡大時はタイトル非表示 */
+.spine-on-shelf.expanded .spine-title {
+  display: none;
+}
+
+/* カバー画像がない場合に表示する拡大タイトル */
+.expanded-title {
+  font-size: 1.2rem;
+  writing-mode: horizontal-tb;
+  margin-top: 1rem;
+  z-index: 2;
+}
+
+/* 各行の棚表示 */
+.book-spine-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  max-width: 94%;
+  min-width: 94%;
+  padding: 0 8px;
+  margin-bottom: -0.075rem;
+  z-index: 2;
+
+  @media(max-width: 572px){
+    gap: 4px;
+  }
+}
+
+.spine-on-shelf.expanded.with-cover {
+  width: 105px;
+  height: 150px; /* 元のまま */
+}
+
+.spine-no-cover {
+  width: 94%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  writing-mode: horizontal-tb;
+  align-items: flex-start;
+  padding-top: 8px;
+  font-size: 0.75rem;
+  text-orientation: mixed;
+  background: #f5d75b;
+  border-radius: 0.25rem;
+  text-align: center;
+  font-weight: bold;
+}
+.spine-on-shelf:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  z-index: 5;
+}
+
+.spine-badge {
+  position: absolute;
+  bottom: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.75rem;
+  color: #333;
+  opacity: 0.7;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.spine-brand {
+  position: absolute;
+  bottom: 6px;
+  right: 8px;
+  font-size: 0.35rem;
+  writing-mode: horizontal-tb;
+  font-weight: 700;
+  font-family: "Big Shoulders Inline", sans-serif;
+  color: rgba(0, 0, 0, 0.786);
+  letter-spacing: 0.06em;
+  pointer-events: none;
+  user-select: none;
+}
+
+.spine-top-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 6px;
+  background: #11111176;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  border-top-left-radius: 0.25rem;
+  border-top-right-radius: 0.25rem;
+}

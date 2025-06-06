@@ -31,10 +31,12 @@
 
 
 <!-- 本棚 -->
-<%= render "bookshelf/books_frame_wrapper",
+<%# <%= render "bookshelf/books_frame_wrapper",
             books: @books,
             books_per_shelf: @books_per_shelf,
             pagy: @pagy,
             view_mode: @view_mode,
             card_columns: @card_columns
-%>
+%> %>
+
+<%= render "bookshelf/spine", books: @books, mobile: @moblie %>
