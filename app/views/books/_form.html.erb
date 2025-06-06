@@ -1,4 +1,4 @@
-<%= form_with(model: @book, data: { turbo: false }) do |f| %>
+<%= form_with(model: book, data: { turbo: false }) do |f| %>
 
   <div class="mb-3">
     <%= f.label :title, "タイトル", class: "form-label" %>
@@ -34,9 +34,9 @@
     <div class="col-md-6">
       <%= f.label :book_cover_s3, "表紙画像", class: "form-label" %>
       <%= f.file_field :book_cover_s3, class: "form-control", direct_upload: true %>
-      <% if @book.book_cover_s3.attached? %>
+      <% if book.book_cover_s3.attached? %>
         <div class="mt-2">
-          <%= image_tag @book.book_cover_s3.variant(resize_to_limit: [120, 180]),
+          <%= image_tag book.book_cover_s3.variant(resize_to_limit: [120, 180]),
           alt: "表紙画像",
           class: "img-thumbnail",
           style: "max-height: 120px;" %>
@@ -46,9 +46,9 @@
   </div>
 
   <div class="d-flex justify-content-between mt-4">
-    <%= link_to "戻る", @book.persisted? ? book_path(@book) : search_books_path, class: "btn btn-outline-secondary" %>
+    <%= link_to "戻る", book.persisted? ? book_path(book) : search_books_path, class: "btn btn-outline-secondary" %>
     <% if user_signed_in? %>
-      <%= f.submit @book.persisted? ? "更新する" : "本棚に追加", class: "btn btn-primary-bok px-4" %>
+      <%= f.submit book.persisted? ? "更新する" : "本棚に追加", class: "btn btn-primary-bok px-4" %>
     <% else %>
       <button class="btn btn-primary btn-sm ox-4" disabled title="ログインすると追加できます">
         本棚に追加
