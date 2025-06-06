@@ -12,9 +12,10 @@ ja:
       reading: "読書中"
       finished: "読了"
   memos:
-    published:
-      only_i_can_see: "非公開"
-      you_can_see: "公開"
+    visibility:
+      only_me: 非公開
+      link_only: リンク限定
+      public_site: 公開
   placeholders:
     isbn: "9781234567890"
     author: "村上春樹"

@@ -10,6 +10,7 @@ class BooksQuery
   def call
     books = filter_by_tags(@books)
     books = filter_by_status(books)
+    books = filter_by_memo_visibility(books)
     books = apply_sorting(books)
   end
 
@@ -26,6 +27,19 @@ class BooksQuery
     return books unless @params[:status].present? && Book.statuses.key?(@params[:status])
 
     books.where(status: @params[:status])
+  end
+
+
+  def filter_by_memo_visibility(books)
+    return books unless @params[:memo_visibility].present?
+
+    visibility = Memo::VISIBILITY[@params[:memo_visibility].to_sym]
+    return books unless visibility
+
+    books
+      .joins(:memos)
+      .where(memos: { visibility: visibility })
+      .distinct
   end
 
   def apply_sorting(books)
