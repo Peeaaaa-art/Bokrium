@@ -106,7 +106,24 @@ class BooksController < ApplicationController
   def destroy
     @book.destroy
     flash[:info] = "『#{@book.title.truncate(TITLE_TRUNCATE_LIMIT)}』を削除しました"
-    redirect_to books_path
+
+    if params[:force_html]
+      redirect_to books_path, notice: flash[:info]
+      return
+    end
+
+    respond_to do |format|
+      format.turbo_stream do
+        flash.now[:info] = flash[:info]
+        render turbo_stream: [
+          turbo_stream.remove("book_row_#{@book.id}"),
+          turbo_stream.append("flash", partial: "shared/flash")
+        ]
+      end
+      format.html do
+        redirect_to books_path, notice: flash[:info]
+      end
+    end
   end
 
   def toggle_tag

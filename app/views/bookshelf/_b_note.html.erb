@@ -1,0 +1,27 @@
+<div class="container-lg mt-3">
+  <div class="table-responsive">
+    <table class="table table-striped table-rounded table-auto-sm align-middle mb-0">
+      <thead class="table-light-bok">
+        <tr>
+          <th><i class="bi bi-pin"></i></th>
+          <th>タイトル</th>
+          <th>著者</th>
+          <th>出版社</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody data-controller="book-list">
+        <% start_index = pagy.from - 1 %>
+        <% books.each_with_index do |book, index| %>
+          <%= render partial: "bookshelf/b_note_row", locals: { book: book, index: start_index + index } %>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<% if pagy %>
+  <div class="my-5 d-flex justify-content-center">
+    <%== pagy_bootstrap_nav(pagy) %>
+  </div>
+<% end %>
