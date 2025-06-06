@@ -7,7 +7,8 @@
     { key: "shelf",       icon: "bi-layout-three-columns",   title: "棚ビューに切り替え" },
     { key: "card",        icon: "bi-card-text",              title: "カードビューに切り替え" },
     { key: "detail_card", icon: "bi-layout-text-sidebar",    title: "詳細カードビューに切り替え" },
-    { key: "b_note",      icon: "bi-table",                  title: "B-noteビューに切り替え" }
+    { key: "b_note",      icon: "bi-table",                  title: "B-noteビューに切り替え" },
+    { key: "spine",       icon: "bi-book-half",              title: "背表紙ビューに切り替え" }
   ] %>
 
   <% current_index = views.index { |v| v[:key] == @view_mode } || 0 %>
@@ -31,12 +32,11 @@
 
 
 <!-- 本棚 -->
-<%# <%= render "bookshelf/books_frame_wrapper",
+<%= render "bookshelf/books_frame_wrapper",
             books: @books,
             books_per_shelf: @books_per_shelf,
             pagy: @pagy,
             view_mode: @view_mode,
-            card_columns: @card_columns
-%> %>
-
-<%= render "bookshelf/spine", books: @books, mobile: @moblie %>
+            card_columns: @card_columns,
+            spine_per_shelf: @spine_per_shelf
+%>

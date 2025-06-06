@@ -1,5 +1,5 @@
 
-<% books.each_slice(7) do |row_books| %>
+<% books.each_slice(spine_per_shelf) do |row_books| %>
   <div class="shelf-row position-relative">
     <div class="book-spine-row d-flex">
       <% row_books.each do |book| %>
@@ -34,5 +34,11 @@
     </div>
     <div class="shelf-bar"></div>
     <div class="shelf-depth"></div>
+  </div>
+<% end %>
+
+<% if pagy %>
+  <div class="my-5 d-flex justify-content-center">
+    <%== pagy_bootstrap_nav(pagy) %>
   </div>
 <% end %>
