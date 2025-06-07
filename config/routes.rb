@@ -62,8 +62,12 @@ Rails.application.routes.draw do
 
   namespace :guest do
     resources :books, only: [ :index, :show ]
-    resources :starter_books, only: [ :index, :show ]
-  end
+    resources :starter_books, only: [ :index, :show ] do
+      collection do
+        get :animation_lazy
+      end
+    end
+end
 
   get "faq", to: "pages#faq"
   get "terms", to: "pages#terms"

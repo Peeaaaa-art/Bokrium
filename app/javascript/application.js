@@ -16,6 +16,7 @@ import SafariClickFixController from "./controllers/safari_click_fix_controller.
 import DetailCardColumnSelectorController from "./controllers/detail_card_column_selector_controller.js"
 import BookEditController from "./controllers/book_edit_controller.js"
 import SpineBookController from "./controllers/spine_book_controller.js"
+import LazyLoadController from "./controllers/lazy_load_controller.js"
 
 const application = Application.start()
 window.Stimulus = application
@@ -37,6 +38,7 @@ application.register("safari-click-fix", SafariClickFixController)
 application.register("detail-card-column-selector", DetailCardColumnSelectorController)
 application.register("book-edit", BookEditController)
 application.register("spine-book", SpineBookController)
+application.register("lazy-load", LazyLoadController)
 
 import * as bootstrap from "bootstrap"
 window.bootstrap = bootstrap  // グローバルにしたい場合

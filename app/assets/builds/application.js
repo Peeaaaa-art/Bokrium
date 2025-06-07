@@ -76588,6 +76588,32 @@ img.ProseMirror-separator {
   __publicField(spine_book_controller_default, "targets", ["title", "cover"]);
   __publicField(spine_book_controller_default, "values", { linkUrl: String });
 
+  // app/javascript/controllers/lazy_load_controller.js
+  var lazy_load_controller_default = class extends Controller {
+    connect() {
+      if (!("IntersectionObserver" in window)) return;
+      this.observer = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting) {
+          this.loadContent();
+          this.observer.disconnect();
+        }
+      }, { threshold: 0.3 });
+      this.observer.observe(this.element);
+    }
+    loadContent() {
+      Turbo.visit(this.urlValue, {
+        frame: this.frameValue
+      });
+    }
+    disconnect() {
+      if (this.observer) this.observer.disconnect();
+    }
+  };
+  __publicField(lazy_load_controller_default, "values", {
+    url: String,
+    frame: String
+  });
+
   // node_modules/bootstrap/dist/js/bootstrap.esm.js
   var bootstrap_esm_exports = {};
   __export(bootstrap_esm_exports, {
@@ -102782,6 +102808,7 @@ img.ProseMirror-separator {
   application.register("detail-card-column-selector", detail_card_column_selector_controller_default);
   application.register("book-edit", book_edit_controller_default);
   application.register("spine-book", spine_book_controller_default);
+  application.register("lazy-load", lazy_load_controller_default);
   window.bootstrap = bootstrap_esm_exports;
   window.Turbo = turbo_es2017_esm_exports;
   document.addEventListener("turbo:load", () => {

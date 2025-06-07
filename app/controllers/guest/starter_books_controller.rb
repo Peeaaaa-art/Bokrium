@@ -16,6 +16,10 @@ module Guest
       render "books/show"
     end
 
+    def animation_lazy
+      render partial: "guest/starter_books/animation_lazy"
+    end
+
     private
 
     def set_starter_books
