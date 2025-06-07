@@ -1,0 +1,42 @@
+<div class="container py-5 px-3 px-md-5 px-md-0">
+  <h2 class="text-center border-bottom fw-normal pb-2 mb-4">
+    <span class="fs-1">🗽</span> <%= link_to books_index_path, title: (user_signed_in? ? "本棚" : "サンプル本棚") do %><i data-lucide="library-big"></i><% end %>
+    <strong>本棚には自由を。</strong>
+  </h2>
+
+  <p class="<%= description %>">
+    棚ビュー／カードビューの切り替えや表示冊数の調整に対応しています。タイトル・著者・メモでの検索や並び替え、タグ・読書ステータスによる絞り込みもできます。
+  </p>
+
+  <div class="row align-items-center mb-5">
+    <!-- 画像：PCでは左、スマホでは上 -->
+    <div class="col-md-8 mb-4 mb-md-0 text-center">
+      <%= lazy_image_tag "responsive_bookshelf.png", alt: "Bokriumのレスポンシブ表示例", class: "img-fluid" %>
+    </div>
+
+    <!-- テキスト：PCでは右、スマホでは下 -->
+    <div class="col-md-4">
+      <p class="lead text-md-start text-center">
+        手のひらでも、大きな画面でも。<br>
+        スマホ・タブレット・PC<br>
+        すべてに最適化。
+      </p>
+    </div>
+  </div>
+
+  <div
+    data-controller="lazy-load"
+    data-lazy-load-url-value="<%= animation_lazy_guest_starter_books_path%>"
+    data-lazy-load-frame-value="animation_sample_lazy"
+  >
+    <!-- スクロールでここに達したら読み込み開始 -->
+    <div style="height: 1x;"></div>
+  </div>
+
+  <%= turbo_frame_tag "animation_sample_lazy" do %>
+    <div class="d-flex justify-content-center align-items-center" style="min-height: 200px;">
+      <div class="spinner-border text-secondary" role="status">
+        <span class="visually-hidden">読み込み中...</span>
+      </div>
+    </div>
+  <% end %>

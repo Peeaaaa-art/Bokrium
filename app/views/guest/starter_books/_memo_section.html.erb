@@ -1,0 +1,31 @@
+  <section class="mb-5">
+    <h2 class="text-center border-bottom fw-normal pb-2 mb-4">
+      <span class="fs-1">✍️</span> <%= link_to book_link_path(books.first), data: { turbo_frame: "_top" } do %><i data-lucide="book-open"></i><% end %>
+      <strong>メモで読書体験を深める</strong>
+    </h2>
+    <p class="<%= description %>">
+    メモには引用、要約、感想などを自由に書き込めます。画像の保存にも対応しています。
+    また、LINEと連携すると、過去のメモがランダムに届き、日々の読書体験をそっと振り返るきっかけになります。
+    </p>
+  </section>
+
+  <!-- メモ作成動画 -->
+  <%= render "guest/starter_books/memo_video" %>
+
+  <p class="<%= description %> mt-5">
+    Bokriumでは、作成した読書メモの公開範囲を設定できます。デフォルトでは
+    <span class="badge bg-dark">非公開</span> になっており、
+    あなた以外は見ることができません。
+  </p>
+
+  <!-- 公開範囲の説明カード -->
+  <%= render "guest/starter_books/visibility_cards" %>
+
+  <p class="mt-5">
+    メモには見出しや太字、リストなどを使って、読みやすく整理できます（Markdown対応）。
+    実際の使い方は、下のサンプルメモをご覧ください。
+  </p>
+</div>
+
+<!-- 使い方本 -->
+<%= render "bookshelf/kino_books_grid", books: books, books_per_shelf: 5, pagy: nil %>

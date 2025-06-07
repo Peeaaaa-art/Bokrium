@@ -76614,6 +76614,25 @@ img.ProseMirror-separator {
     frame: String
   });
 
+  // app/javascript/controllers/animation_controller.js
+  var animation_controller_default = class extends Controller {
+    connect() {
+      const animated = this.element.querySelectorAll(".fade-in, .slide-in");
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.style.animationPlayState = "running";
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.2 });
+      animated.forEach((el) => {
+        el.style.animationPlayState = "paused";
+        observer.observe(el);
+      });
+    }
+  };
+
   // node_modules/bootstrap/dist/js/bootstrap.esm.js
   var bootstrap_esm_exports = {};
   __export(bootstrap_esm_exports, {
@@ -102809,6 +102828,7 @@ img.ProseMirror-separator {
   application.register("book-edit", book_edit_controller_default);
   application.register("spine-book", spine_book_controller_default);
   application.register("lazy-load", lazy_load_controller_default);
+  application.register("animation", animation_controller_default);
   window.bootstrap = bootstrap_esm_exports;
   window.Turbo = turbo_es2017_esm_exports;
   document.addEventListener("turbo:load", () => {

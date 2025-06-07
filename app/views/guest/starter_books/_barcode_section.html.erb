@@ -1,0 +1,18 @@
+  <section>
+    <h2 class="text-center border-bottom fw-normal pb-2 mb-4">
+    <span class="fs-1">🤳</span> <%= link_to search_barcode_path, title: "バーコードスキャン" do %><i class="bi bi-upc-scan"></i><% end %>
+      <strong>スマホでピッと。</strong>
+    </h2>
+    <p class="<%= description %> mb-5">
+      お手持ちの書籍のバーコードにスマホをかざすだけで、本棚へ簡単に追加できます。また、カメラ性能の高いタブレットやPCでもご利用いただけます。ただし、環境によって正しく読み取れないことがあります。その際は、
+      <%= link_to search_books_path, title: "書籍検索" do %><i data-lucide="search"></i> 検索<% end %>や
+      <%= link_to new_book_path, title: "書籍検索" do %><i class="bi bi-pencil"></i> 手動入力<% end %>
+      をご利用ください。
+    </p>
+  </section>
+</div>
+
+<!-- バーコードスキャン動画 -->
+<div class="mb-5">
+  <%= render "guest/starter_books/barcode_scan_video" %>
+</div>

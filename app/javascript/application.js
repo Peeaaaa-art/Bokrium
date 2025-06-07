@@ -17,6 +17,7 @@ import DetailCardColumnSelectorController from "./controllers/detail_card_column
 import BookEditController from "./controllers/book_edit_controller.js"
 import SpineBookController from "./controllers/spine_book_controller.js"
 import LazyLoadController from "./controllers/lazy_load_controller.js"
+import AnimationController from "./controllers/animation_controller.js"
 
 const application = Application.start()
 window.Stimulus = application
@@ -39,6 +40,7 @@ application.register("detail-card-column-selector", DetailCardColumnSelectorCont
 application.register("book-edit", BookEditController)
 application.register("spine-book", SpineBookController)
 application.register("lazy-load", LazyLoadController)
+application.register("animation", AnimationController)
 
 import * as bootstrap from "bootstrap"
 window.bootstrap = bootstrap  // グローバルにしたい場合
