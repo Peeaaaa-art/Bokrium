@@ -76530,6 +76530,64 @@ img.ProseMirror-separator {
   __publicField(book_edit_controller_default, "targets", ["title", "author", "publisher"]);
   __publicField(book_edit_controller_default, "values", { id: Number, index: Number });
 
+  // app/javascript/controllers/spine_book_controller.js
+  var spine_book_controller_default = class extends Controller {
+    connect() {
+      this.expanded = false;
+      this.handleDocumentClick = this.handleDocumentClick.bind(this);
+      this.handleEscape = this.handleEscape.bind(this);
+    }
+    handleClick(event) {
+      if (!this.expanded) {
+        this.expand();
+      } else {
+        window.location.href = this.linkUrlValue;
+      }
+    }
+    expand() {
+      this.expanded = true;
+      this.element.classList.add("expanded");
+      if (this.hasCoverTarget) {
+        this.element.classList.add("with-cover");
+        this.coverTarget.classList.remove("d-none");
+        this.titleTarget.classList.add("d-none");
+      } else {
+        this.titleTarget.classList.add("expanded-title");
+      }
+      document.addEventListener("click", this.handleDocumentClick);
+      document.addEventListener("keydown", this.handleEscape);
+    }
+    collapse() {
+      this.expanded = false;
+      this.element.classList.remove("expanded", "with-cover");
+      this.element.classList.remove("expanded");
+      if (this.hasCoverTarget) {
+        this.coverTarget.classList.add("d-none");
+        this.titleTarget.classList.remove("d-none");
+      } else {
+        this.titleTarget.classList.remove("expanded-title");
+      }
+      document.removeEventListener("click", this.handleDocumentClick);
+      document.removeEventListener("keydown", this.handleEscape);
+    }
+    handleDocumentClick(event) {
+      if (!this.element.contains(event.target)) {
+        this.collapse();
+      }
+    }
+    handleEscape(event) {
+      if (event.key === "Escape") {
+        this.collapse();
+      }
+    }
+    disconnect() {
+      document.removeEventListener("click", this.handleDocumentClick);
+      document.removeEventListener("keydown", this.handleEscape);
+    }
+  };
+  __publicField(spine_book_controller_default, "targets", ["title", "cover"]);
+  __publicField(spine_book_controller_default, "values", { linkUrl: String });
+
   // node_modules/bootstrap/dist/js/bootstrap.esm.js
   var bootstrap_esm_exports = {};
   __export(bootstrap_esm_exports, {
@@ -102723,6 +102781,7 @@ img.ProseMirror-separator {
   application.register("safari-click-fix", safari_click_fix_controller_default);
   application.register("detail-card-column-selector", detail_card_column_selector_controller_default);
   application.register("book-edit", book_edit_controller_default);
+  application.register("spine-book", spine_book_controller_default);
   window.bootstrap = bootstrap_esm_exports;
   window.Turbo = turbo_es2017_esm_exports;
   document.addEventListener("turbo:load", () => {

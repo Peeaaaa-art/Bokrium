@@ -17,25 +17,38 @@ class BooksController < ApplicationController
     display = BooksDisplaySetting.new(session, params, {
       shelf: default_books_per_shelf,
       card: default_card_columns,
-      detail_card: default_detail_card_columns
+      detail_card: default_detail_card_columns,
+      spine: default_spine_per_shelf
     }, mobile: mobile?)
 
     @view_mode = display.view_mode
     @books_per_shelf = display.books_per_shelf
     @card_columns = display.card_columns
     @detail_card_columns = display.detail_card_columns
+    @spine_per_shelf = display.spine_per_shelf
 
     books = BooksQuery.new(books, params: params, current_user: current_user).call
 
     books_per_page = display.unit_per_page * CHUNKS_PER_PAGE
     @pagy, @books = pagy(books, limit: books_per_page)
 
-    if @view_mode == "shelf" && turbo_frame_request?
-      render partial: "bookshelf/kino_chunk", locals: {
-        books: @books,
-        books_per_shelf: @books_per_shelf,
-        pagy: @pagy
-      }, layout: false
+    if turbo_frame_request?
+      case @view_mode
+      when "shelf"
+        render partial: "bookshelf/kino_chunk", locals: {
+          books: @books,
+          books_per_shelf: @books_per_shelf,
+          pagy: @pagy
+        }, layout: false
+      when "spine"
+        render partial: "bookshelf/spine_chunk", locals: {
+          books: @books,
+          spine_per_shelf: @spine_per_shelf,
+          pagy: @pagy
+        }, layout: false
+      else
+        render :index
+      end
     else
       render :index
     end

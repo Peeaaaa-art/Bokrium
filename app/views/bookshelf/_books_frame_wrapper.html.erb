@@ -16,5 +16,9 @@
 
   <% when "b_note" %>
     <%= render "bookshelf/b_note", books: books, pagy: pagy %>
+
+  <% when "spine" %>
+    <%= render "bookshelf/spine_select_numbers", spine_per_shelf: spine_per_shelf %>
+    <%= render "bookshelf/spine", books: books, pagy: pagy, spine_per_shelf: spine_per_shelf %>
   <% end %>
 </turbo-frame>

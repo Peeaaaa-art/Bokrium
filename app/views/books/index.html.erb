@@ -4,10 +4,11 @@
 
 <div class="d-flex align-items-center justify-content-between mt-4 mb-3 px-3">
   <% views = [
-    { key: "shelf",       icon: "bi-layout-three-columns",   title: "棚ビューに切り替え" },
-    { key: "card",        icon: "bi-card-text",              title: "カードビューに切り替え" },
-    { key: "detail_card", icon: "bi-layout-text-sidebar",    title: "詳細カードビューに切り替え" },
-    { key: "b_note",      icon: "bi-table",                  title: "B-noteビューに切り替え" }
+    { key: "shelf",       icon: "bi-bookshelf",               title: "棚ビューに切り替え" },
+    { key: "spine",       icon: "bi-layout-three-columns",    title: "背表紙ビューに切り替え" },
+    { key: "card",        icon: "bi-file",                    title: "カードビューに切り替え" },
+    { key: "detail_card", icon: "bi bi-layout-sidebar-inset", title: "詳細カードビューに切り替え" },
+    { key: "b_note",      icon: "bi-table",                   title: "B-noteビューに切り替え" }
   ] %>
 
   <% current_index = views.index { |v| v[:key] == @view_mode } || 0 %>
@@ -16,8 +17,7 @@
 
   <div class="flex-shrink-0">
     <%= link_to books_path(view: next_view[:key]),
-                class: "btn btn-light border shadow-sm d-flex align-items-center justify-content-center",
-                style: "width: 40px; height: 40px; border-radius: 50%; line-height: 1;",
+                class: "btn btn-light border shadow-sm d-flex align-items-center justify-content-center bookshelf-icon",
                 title: next_view[:title] do %>
       <i class="bi <%= current_icon %> fs-5 icon-refined"></i>
     <% end %>
@@ -27,7 +27,8 @@
   <%= render "books/filter_controlls",
               filtered_tag: @filtered_tag,
               filtered_tags: @filtered_tags,
-              filtered_status: @filtered_status %>
+              filtered_status: @filtered_status
+  %>
 
 
 <!-- 本棚 -->
@@ -36,5 +37,6 @@
             books_per_shelf: @books_per_shelf,
             pagy: @pagy,
             view_mode: @view_mode,
-            card_columns: @card_columns
+            card_columns: @card_columns,
+            spine_per_shelf: @spine_per_shelf
 %>

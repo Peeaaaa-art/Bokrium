@@ -5,9 +5,10 @@ class BooksDisplaySetting
   SHELF_PER_KEY           = :shelf_per
   CARD_COLUMNS_KEY        = :card_columns
   DETAIL_CARD_COLUMNS_KEY = :detail_card_columns
+  SPINE_PER_KEY           = :spine_per
 
-  attr_reader :view_mode, :unit_per_page,
-              :books_per_shelf, :card_columns, :detail_card_columns
+  attr_reader :view_mode, :unit_per_page, :books_per_shelf,
+              :card_columns, :detail_card_columns, :spine_per_shelf
 
   def initialize(session, params, defaults, mobile: false)
     @session = session
@@ -42,8 +43,14 @@ class BooksDisplaySetting
       @unit_per_page = @mobile ? @detail_card_columns * 4 : @detail_card_columns
     when "b_note"
       @unit_per_page = 7.2
+    when "spine"
+      @session[SPINE_PER_KEY] = @params[:per_spine] if @params[:per_spine].present?
+      @spine_per_shelf = @session[SPINE_PER_KEY]&.to_i || @defaults[:spine]
+      @unit_per_page = @spine_per_shelf
+
     else
       @unit_per_page = @defaults[:shelf]
+
     end
   end
 end

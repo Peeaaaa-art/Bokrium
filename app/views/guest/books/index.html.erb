@@ -5,9 +5,10 @@
 
 <div class="d-flex align-items-center justify-content-between mt-4 mb-3 px-3">
   <% views = [
-    { key: "shelf",       icon: "bi-layout-three-columns",   title: "棚ビューに切り替え" },
-    { key: "card",        icon: "bi-card-text",              title: "カードビューに切り替え" },
-    { key: "detail_card", icon: "bi-layout-text-sidebar",    title: "詳細カードビューに切り替え" },
+    { key: "shelf",       icon: "bi-bookshelf",   title: "棚ビューに切り替え" },
+    { key: "spine",       icon: "bi-layout-three-columns",              title: "背表紙ビューに切り替え" },
+    { key: "card",        icon: "bi-file",              title: "カードビューに切り替え" },
+    { key: "detail_card", icon: "bi bi-layout-sidebar-inset",    title: "詳細カードビューに切り替え" },
     { key: "b_note",      icon: "bi-table",                  title: "B-noteビューに切り替え" }
   ] %>
 
@@ -70,4 +71,7 @@
 
 <% when "b_note" %>
   <%= render "guest/bookshelf/b_note", books: @books, detail_card_columns: @detail_card_columns, pagy: @pagy %>
+
+<% when "spine" %>
+  <%= render "guest/bookshelf/spine", books: @books, pagy: @pagy, spine_per_shelf: @spine_per_shelf %>
 <% end %>
