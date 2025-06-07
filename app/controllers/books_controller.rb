@@ -32,12 +32,23 @@ class BooksController < ApplicationController
     books_per_page = display.unit_per_page * CHUNKS_PER_PAGE
     @pagy, @books = pagy(books, limit: books_per_page)
 
-    if @view_mode == "shelf" && turbo_frame_request?
-      render partial: "bookshelf/kino_chunk", locals: {
-        books: @books,
-        books_per_shelf: @books_per_shelf,
-        pagy: @pagy
-      }, layout: false
+    if turbo_frame_request?
+      case @view_mode
+      when "shelf"
+        render partial: "bookshelf/kino_chunk", locals: {
+          books: @books,
+          books_per_shelf: @books_per_shelf,
+          pagy: @pagy
+        }, layout: false
+      when "spine"
+        render partial: "bookshelf/spine_chunk", locals: {
+          books: @books,
+          spine_per_shelf: @spine_per_shelf,
+          pagy: @pagy
+        }, layout: false
+      else
+        render :index
+      end
     else
       render :index
     end

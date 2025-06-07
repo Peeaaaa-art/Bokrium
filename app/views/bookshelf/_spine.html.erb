@@ -37,8 +37,14 @@
   </div>
 <% end %>
 
-<% if pagy %>
-  <div class="my-5 d-flex justify-content-center">
-    <%== pagy_bootstrap_nav(pagy) %>
-  </div>
+<% if pagy && pagy.next %>
+  <turbo-frame id="next_books"
+                src="<%= books_path(view: 'spine', page: pagy.next) %>"
+                loading="lazy"
+                data-controller="lazy-load"
+                data-lazy-load-url-value="<%= books_path(view: 'spine', page: pagy.next) %>">
+    <div class="text-center my-4">
+      <div class="spinner-border text-secondary" role="status"></div>
+    </div>
+  </turbo-frame>
 <% end %>
