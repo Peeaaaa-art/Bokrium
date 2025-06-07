@@ -176,10 +176,8 @@
   letter-spacing: 0.06em;
   pointer-events: none;
   user-select: none;
-
-  @media(min-width: 1200px) {
-    right: 9px;
-  }
+  @media(min-width: 700px) { right: 8.5px; }
+  @media(min-width: 1200px) { right: 9px;}
 }
 
 /* === 棚の並び === */

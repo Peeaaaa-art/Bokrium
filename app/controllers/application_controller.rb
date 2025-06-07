@@ -42,7 +42,7 @@ class ApplicationController < ActionController::Base
     case
     when browser.device.mobile? then 7
     when browser.device.tablet? then 14
-    else 20
+    else 21
     end
   end
 
