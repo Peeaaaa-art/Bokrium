@@ -8,7 +8,8 @@
     { key: "shelf",       icon: "bi-layout-three-columns",   title: "棚ビューに切り替え" },
     { key: "card",        icon: "bi-card-text",              title: "カードビューに切り替え" },
     { key: "detail_card", icon: "bi-layout-text-sidebar",    title: "詳細カードビューに切り替え" },
-    { key: "b_note",      icon: "bi-table",                  title: "B-noteビューに切り替え" }
+    { key: "b_note",      icon: "bi-table",                  title: "B-noteビューに切り替え" },
+    { key: "spine",       icon: "bi-book-half",              title: "背表紙ビューに切り替え" }
   ] %>
 
   <% current_index = views.index { |v| v[:key] == @view_mode } || 0 %>
@@ -70,4 +71,7 @@
 
 <% when "b_note" %>
   <%= render "guest/bookshelf/b_note", books: @books, detail_card_columns: @detail_card_columns, pagy: @pagy %>
+
+<% when "spine" %>
+  <%= render "guest/bookshelf/spine", books: @books, pagy: @pagy, spine_per_shelf: @spine_per_shelf %>
 <% end %>

@@ -1,0 +1,38 @@
+
+<% books.each_slice(spine_per_shelf) do |row_books| %>
+  <div class="shelf-row position-relative">
+    <div class="book-spine-row d-flex">
+      <% row_books.each do |book| %>
+        <div class="spine-on-shelf"
+            data-controller="spine-book"
+            data-action="click->spine-book#handleClick"
+            data-spine-book-link-url-value="<%= book_link_path(book) %>">
+          <div class="spine-top-bar"></div>
+          <% if book.book_cover_s3.attached? %>
+            <%= image_tag book.book_cover_s3.variant(resize_to_limit: [240, 320]),
+                  alt: book.title,
+                  class: "spine-cover-image d-none",
+                  loading: "lazy",
+                  data: { spine_book_target: "cover" } %>
+          <% elsif book.book_cover.present? %>
+            <img src="<%= book.book_cover %>" alt="表紙画像"
+                class="spine-cover-image d-none"
+                data-spine-book-target="cover">
+          <% else %>
+            <div class="no-cover spine-no-cover shadow-lg d-none"
+                  data-spine-book-target="cover">
+              <%= book.title.truncate(10) %>
+            </div>
+          <% end %>
+
+            <div class="spine-title" data-spine-book-target="title">
+              <%= book.title.truncate(11) %>
+            </div>
+            <div class="spine-brand">Bokrium</div>
+          </div>
+      <% end %>
+    </div>
+    <div class="shelf-bar"></div>
+    <div class="shelf-depth"></div>
+  </div>
+<% end %>

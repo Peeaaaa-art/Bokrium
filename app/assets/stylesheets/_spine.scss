@@ -1,11 +1,12 @@
+/* === Base 背表紙ブロック === */
 .spine-on-shelf {
   width: 36px;
   height: 150px;
-  background: #f5d75b;
+  background: linear-gradient(to right, #f5d75b 0%, #f5d75b 60%, #eacb42 100%);
   margin-right: 4px;
   writing-mode: vertical-rl;
   text-align: center;
-  position: relative; /* ここが重要！内部拡大表示の基準 */
+  position: relative;
   cursor: pointer;
   overflow: hidden;
   display: flex;
@@ -15,16 +16,79 @@
   padding-bottom: 8px;
   border-radius: 0.25rem;
   transition: all 0.3s ease;
+  box-shadow:
+    inset -1px 0 1px rgba(0, 0, 0, 0.04),
+    1px 2px 4px rgba(0, 0, 0, 0.1);
   z-index: 1;
 
-  @media(min-width: 1200px) {
-    width: 48px;
+  @media(min-width: 1200px) { width: 48px; }
+  @media(min-width: 700px) { width: 40px; }
+
+  /* 光沢ハイライト */
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      120deg,
+      rgba(255, 255, 255, 0.06) 0%,
+      rgba(255, 255, 255, 0.03) 40%,
+      transparent 80%
+    );
+    pointer-events: none;
+    z-index: 1;
   }
-  @media(min-width: 700px) {
-  width: 40px;
+
+  /* 側面の厚み表現 */
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: -4px;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(
+      to bottom,
+      #e3c23e,
+      #d6b63a
+    );
+    transform: skewY(-4deg);
+    filter: blur(0.2px);
+    z-index: 0;
+    border-top-right-radius: 0.25rem;
+    border-bottom-right-radius: 0.25rem;
+  }
+
+  &:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    z-index: 5;
+  }
+
+  &.expanded {
+    z-index: 20;
+
+    &.with-cover {
+      width: 105px;
+      height: 150px;
+    }
+
+    .spine-cover-image {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(0.8);
+      pointer-events: auto;
+    }
+
+    .spine-title {
+      display: none;
+    }
   }
 }
 
+/* === テキスト表示 === */
 .spine-title {
   font-size: 0.75rem;
   white-space: nowrap;
@@ -33,13 +97,15 @@
   font-weight: 600;
 }
 
-/* 拡大中の背表紙 */
-.spine-on-shelf.expanded {
-  z-index: 20;
+.expanded-title {
+  font-size: 1.2rem;
+  writing-mode: horizontal-tb;
+  margin-top: 1rem;
+  z-index: 2;
 }
 
 /* カバー画像 */
-.spine-on-shelf .spine-cover-image {
+.spine-cover-image {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -55,48 +121,7 @@
   pointer-events: none;
 }
 
-/* 拡大時に画像を表示 */
-.spine-on-shelf.expanded .spine-cover-image {
-  opacity: 1;
-  transform: translate(-50%, -50%) scale(0.8);
-  pointer-events: auto;
-}
-
-/* 拡大時はタイトル非表示 */
-.spine-on-shelf.expanded .spine-title {
-  display: none;
-}
-
-/* カバー画像がない場合に表示する拡大タイトル */
-.expanded-title {
-  font-size: 1.2rem;
-  writing-mode: horizontal-tb;
-  margin-top: 1rem;
-  z-index: 2;
-}
-
-/* 各行の棚表示 */
-.book-spine-row {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 12px;
-  max-width: 94%;
-  min-width: 94%;
-  padding: 0 8px;
-  margin-bottom: -0.075rem;
-  z-index: 2;
-
-  @media(max-width: 572px){
-    gap: 0px;
-  }
-}
-
-.spine-on-shelf.expanded.with-cover {
-  width: 105px;
-  height: 150px; /* 元のまま */
-}
-
+/* カバーなし用の中身 */
 .spine-no-cover {
   width: 94%;
   height: 100%;
@@ -112,12 +137,21 @@
   text-align: center;
   font-weight: bold;
 }
-.spine-on-shelf:hover {
-  transform: translateY(-4px) scale(1.02);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-  z-index: 5;
+
+/* 上部バー装飾 */
+.spine-top-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 6px;
+  background: #11111176;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  border-top-left-radius: 0.25rem;
+  border-top-right-radius: 0.25rem;
 }
 
+/* 下部バッジ・ロゴ */
 .spine-badge {
   position: absolute;
   bottom: 4px;
@@ -132,7 +166,7 @@
 
 .spine-brand {
   position: absolute;
-  bottom: 6px;
+  bottom: 1px;
   right: 7px;
   font-size: 0.35rem;
   writing-mode: horizontal-tb;
@@ -144,18 +178,23 @@
   user-select: none;
 
   @media(min-width: 1200px) {
-    right: 12px;
+    right: 9px;
   }
 }
 
-.spine-top-bar {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 6px;
-  background: #11111176;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-  border-top-left-radius: 0.25rem;
-  border-top-right-radius: 0.25rem;
+/* === 棚の並び === */
+.book-spine-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2px;
+  max-width: 94%;
+  min-width: 94%;
+  padding: 0 8px;
+  margin-bottom: -0.2px;
+  z-index: 2;
+
+  @media(max-width: 572px) {
+    gap: 0px;
+  }
 }
