@@ -1,3 +1,8 @@
 <turbo-frame id="next_books">
   <%= render "bookshelf/spine", books: books, pagy: pagy, spine_per_shelf: spine_per_shelf %>
 </turbo-frame>
+
+<!-- タグ・フィルター用 -->
+<turbo-frame id="books_frame">
+  <%= render "bookshelf/spine", books: books, spine_per_shelf: spine_per_shelf, pagy: pagy %>
+</turbo-frame>
