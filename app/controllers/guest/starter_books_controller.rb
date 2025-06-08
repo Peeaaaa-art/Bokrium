@@ -16,6 +16,23 @@ module Guest
       render "books/show"
     end
 
+    def five_layouts
+      render partial: "guest/starter_books/five_layouts"
+    end
+
+    def barcode_section
+      render partial: "guest/starter_books/barcode_section"
+    end
+
+    def bookshelf_section
+      render partial: "guest/starter_books/bookshelf_section"
+    end
+
+    def memo_section
+      set_starter_books
+      render partial: "guest/starter_books/memo_section", locals: { books: @books }
+    end
+
     private
 
     def set_starter_books

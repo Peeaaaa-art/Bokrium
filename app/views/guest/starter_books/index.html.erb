@@ -1,76 +1,61 @@
-<div class="container py-3 px-3 px-md-5 px-md-0" style="max-width: 720px;">
+<% content_for :title, "使い方ガイド - Bokrium" %>
+
+<div class="container py-3 px-3 px-md-5 px-md-0">
   <section class="mb-5 text-center">
     <h1 class="fw-bold mb-2 big-shoulders-inline-bold">
       <span class="logo-welcome" title="ボクリウム">Bokrium</span><br>
-      <span class="fs-2">使い方ガイド</span>
     </h1>
-    <p class="lead text-muted" style="font-style: italic;">
-      読書体験を、記録し、共有する新しい棚へようこそ。
+    <p class="lead text-muted">
+      新しい本棚へようこそ。
     </p>
   </section>
 
-  <section>
-    <h2 class="text-center border-bottom fw-normal pb-2 mb-4 fs-5">
-      <%= link_to search_barcode_path, title: "バーコードスキャン" do %><i class="bi bi-upc-scan"></i><% end %>
-      <strong>スマホでパッと読み取り、本棚に追加</strong>
-    </h2>
-    <p class="text-muted small">
-      カメラ性能が高いタブレット・PCでもご利用いただけます。ただし、環境によって正しく読み取れないことがあります。その場合は、
-      <%= link_to search_books_path, title: "書籍検索" do %><i data-lucide="search"></i> 検索<% end %>や
-      <%= link_to new_book_path, title: "書籍検索" do %><i class="bi bi-pencil"></i> 手動入力<% end %>
-      をご利用ください。
-    </p>
-  </section>
+  <!-- スマホでピッと。-->
+  <div
+    data-controller="lazy-load"
+    data-lazy-load-url-value="<%= barcode_section_guest_starter_books_path %>"
+    data-lazy-load-frame-value="barcode_section_lazy"
+  >
+    <div style="height: 1px;"></div>
+  </div>
+  <%= turbo_frame_tag "barcode_section_lazy" do %>
+    <%= render "shared/loading_spinner" %>
+  <% end %>
+
+  <!-- 本棚に自由を。-->
+  <div
+    data-controller="lazy-load"
+    data-lazy-load-url-value="<%= bookshelf_section_guest_starter_books_path %>"
+    data-lazy-load-frame-value="bookshelf_section_frame"
+  >
+    <div style="height: 1px;"></div>
+  </div>
+  <%= turbo_frame_tag "bookshelf_section_frame" do %>
+    <%= render "shared/loading_spinner" %>
+  <% end %>
+
+  <!-- 選べる5つの本棚レイアウト -->
+  <div
+    data-controller="lazy-load"
+    data-lazy-load-url-value="<%= five_layouts_guest_starter_books_path%>"
+    data-lazy-load-frame-value="five_layouts"
+  >
+
+    <div style="height: 1x;"></div>
+  </div>
+
+  <%= turbo_frame_tag "five_layouts" do %>
+    <%= render "shared/loading_spinner" %>
+  <% end %>
+
+<!-- メモで読書体験を深める -->
+<div
+  data-controller="lazy-load"
+  data-lazy-load-url-value="<%= memo_section_guest_starter_books_path %>"
+  data-lazy-load-frame-value="memo_section_frame"
+>
+  <div style="height: 1px;"></div>
 </div>
-
-<!-- バーコードスキャン動画 -->
-<%= render "guest/starter_books/barcode_scan_video" %>
-
-<div class="container py-5 px-3 px-md-5 px-md-0" style="max-width: 720px;">
-  <h2 class="text-center border-bottom fw-normal pb-2 mb-4 fs-5">
-    <%= link_to books_index_path, title: (user_signed_in? ? "本棚" : "サンプル本棚") do %><i data-lucide="library-big"></i><% end %>
-    <strong>本棚をもっと自由にカスタマイズ</strong>
-  </h2>
-
-  <p class="text-muted small">
-    棚ビュー／カードビューの切り替えや表示冊数の調整に対応。
-    タイトル・著者・メモでの検索や並び替え、タグ・読書ステータスによる絞り込みもできます。
-  </p>
-
-  <p class="lead text-muted text-center mb-5">
-    <%= lazy_image_tag "responsive_bookshelf.png", alt: "Bokriumのレスポンシブ表示例", class: "img-fluid mb-5" %>
-    手のひらでも、大きな画面でも。<br>
-    スマホ・タブレット・PCすべてに最適化。
-  </p>
-
-  <section class="mb-5">
-    <h2 class="text-center border-bottom fw-normal pb-2 mb-4 fs-5">
-    <%= link_to book_link_path(@books.first), data: { turbo_frame: "_top" } do %><i data-lucide="book-open"></i><% end %>
-    <strong>メモで読書体験を深める</strong>
-    </h2>
-    <p class="small text-muted">
-    メモには引用、要約、感想などを自由に書き込めます。画像の保存にも対応しています。
-    また、LINEと連携すると、過去のメモがランダムに届き、日々の読書体験をそっと振り返るきっかけになります。
-    </p>
-  </section>
-
-  <!-- メモ作成動画 -->
-  <%= render "guest/starter_books/memo_video" %>
-
-  <p class="small text-muted">
-    Bokriumでは、作成した読書メモの公開範囲を設定できます。デフォルトでは
-    <span class="badge bg-dark">非公開</span> になっており、
-    あなた以外は見ることができません。
-  </p>
-
-  <!-- 公開範囲の説明カード -->
-  <%= render "guest/starter_books/visibility_cards" %>
-
-  <p class="mt-5">
-    メモには見出しや太字、リストなどを使って、読みやすく整理できます（Markdown対応）。
-    実際の使い方は、下のサンプルメモをご覧ください。
-  </p>
-</div>
-
-<!-- 使い方本 -->
-<%= render "bookshelf/kino_books_grid", books: @books, books_per_shelf: 5, pagy: nil %>
+<%= turbo_frame_tag "memo_section_frame" do %>
+  <%= render "shared/loading_spinner" %>
+<% end %>

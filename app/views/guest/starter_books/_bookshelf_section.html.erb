@@ -1,0 +1,28 @@
+<turbo-frame id="bookshelf_section_frame">
+  <section data-controller="animation" class="container pt-5 px-3 px-md-5 px-md-0">
+    <h2 class="fade-in delay-1 text-center border-bottom fw-normal pb-2 mb-4">
+      <span class="fs-1">🗽</span> <%= link_to books_index_path, title: (user_signed_in? ? "本棚" : "サンプル本棚"), data: { turbo_frame: "_top" } do %><i class="bi bi-bookshelf"></i><% end %>
+      <strong>本棚に自由を。</strong>
+    </h2>
+
+    <p class="slide-in delay-2 text-muted px-2 px-md-5">
+      ビューモードの切り替えや表示冊数の調整に対応しています。タイトル・著者・メモでの<strong>検索</strong>や<strong>並び替え</strong>、タグ・読書ステータス・公開設定による<strong>絞り込み</strong>もできます。
+    </p>
+
+    <div class="row align-items-center">
+      <!-- 画像：PCでは左、スマホでは上 -->
+      <div class="slide-in delay-3 col-md-8 mb-4 mb-md-0 text-center">
+        <%= lazy_image_tag "responsive_bookshelf.png", alt: "Bokriumのレスポンシブ表示例", class: "img-fluid" %>
+      </div>
+
+      <!-- テキスト：PCでは右、スマホでは下 -->
+      <div class="slide-in delay-4 col-md-4">
+        <p class="lead text-md-start text-center">
+          手のひらでも、大きな画面でも。<br>
+          スマホ・タブレット・PC<br>
+          すべてに最適化。
+        </p>
+      </div>
+    </div>
+  </section>
+</turbo-frame>

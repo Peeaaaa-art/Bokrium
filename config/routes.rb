@@ -62,7 +62,14 @@ Rails.application.routes.draw do
 
   namespace :guest do
     resources :books, only: [ :index, :show ]
-    resources :starter_books, only: [ :index, :show ]
+    resources :starter_books, only: [ :index, :show ] do
+      collection do
+        get :five_layouts
+        get :barcode_section
+        get :bookshelf_section
+        get :memo_section
+      end
+    end
   end
 
   get "faq", to: "pages#faq"
