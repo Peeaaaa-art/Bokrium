@@ -28,7 +28,7 @@
 <% if current_user && pagy && pagy.next %>
   <turbo-frame id="next_books" src="<%= books_path(view: @view_mode, page: pagy.next) %>" loading="lazy">
     <div class="text-center my-4">
-      <div class="spinner-border text-secondary" role="status"></div>
+      <div class="spinner-border text-primary-bok opacity-25" role="status"></div>
     </div>
   </turbo-frame>
 <% end %>

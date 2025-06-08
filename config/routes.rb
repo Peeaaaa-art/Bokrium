@@ -68,6 +68,8 @@ Rails.application.routes.draw do
         get :barcode_section
         get :bookshelf_section
         get :memo_section
+        get :public_section
+        get :guidebook_section
       end
     end
   end

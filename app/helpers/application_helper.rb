@@ -43,4 +43,19 @@ module ApplicationHelper
     options[:loading] ||= "lazy"
     image_tag(source, options)
   end
+
+  def lazy_section(frame_id, url)
+    tag.div(
+      data: {
+        controller: "lazy-load",
+        lazy_load_url_value: url,
+        lazy_load_frame_value: frame_id
+      }
+    ) do
+      tag.div(style: "height: 1px;")
+    end +
+      turbo_frame_tag(frame_id) do
+        render "shared/loading_spinner"
+      end
+  end
 end

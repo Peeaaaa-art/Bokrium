@@ -16,21 +16,28 @@ module Guest
       render "books/show"
     end
 
-    def five_layouts
-      render partial: "guest/starter_books/five_layouts"
-    end
-
     def barcode_section
-      render partial: "guest/starter_books/barcode_section"
+      lazy_render("barcode_section")
     end
 
     def bookshelf_section
-      render partial: "guest/starter_books/bookshelf_section"
+      lazy_render("bookshelf_section")
+    end
+
+    def five_layouts
+      lazy_render("five_layouts", extra: { mobile: mobile? })
     end
 
     def memo_section
-      set_starter_books
-      render partial: "guest/starter_books/memo_section", locals: { books: @books }
+      lazy_render("memo_section", with_books: true)
+    end
+
+    def public_section
+      lazy_render("public_section")
+    end
+
+    def guidebook_section
+      lazy_render("guidebook_section", with_books: true)
     end
 
     private
@@ -40,6 +47,11 @@ module Guest
       @books = guest_user.books.where(isbn: isbn_list)
 
       @starter_book = true
+    end
+
+    def lazy_render(name, with_books: false, extra: {})
+      set_starter_books if with_books
+      render partial: "guest/starter_books/#{name}", locals: extra.merge(with_books ? { books: @books } : {})
     end
 
     def handle_guest_not_found
