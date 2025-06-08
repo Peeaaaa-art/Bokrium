@@ -1,10 +1,7 @@
 <turbo-frame id="bookshelf_section_frame">
   <section data-controller="animation" class="container pt-5 px-3 px-md-5 px-md-0">
     <h2 class="fade-in delay-1 text-center border-bottom fw-normal pb-2 mb-4">
-      <span class="fs-1">🗽</span>
-      <%= link_to books_index_path, title: (user_signed_in? ? "本棚" : "サンプル本棚") do %>
-        <i data-lucide="library-big"></i>
-      <% end %>
+      <span class="fs-1">🗽</span> <%= link_to books_index_path, title: (user_signed_in? ? "本棚" : "サンプル本棚"), data: { turbo_frame: "_top" } do %><i class="bi bi-bookshelf"></i><% end %>
       <strong>本棚に自由を。</strong>
     </h2>
 

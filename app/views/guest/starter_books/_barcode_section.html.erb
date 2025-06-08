@@ -1,13 +1,13 @@
 <turbo-frame id="barcode_section_lazy">
     <section data-controller="animation">
       <h2 class="fade-in delay-1 text-center border-bottom fw-normal pb-2 mb-4">
-      <span class="fs-1">🤳</span> <%= link_to search_barcode_path, title: "バーコードスキャン" do %><i class="bi bi-upc-scan"></i><% end %>
+      <span class="fs-1">🤳</span> <%= link_to search_barcode_path, title: "バーコードスキャン", data: { turbo_frame: "_top" } do %><i class="bi bi-upc-scan"></i><% end %>
         <strong>スマホでピッと。</strong>
       </h2>
       <p class="slide-in delay-2 text-muted mt-5 px-2 px-md-5 mb-5">
         お手持ちの書籍のバーコードにスマートフォンをかざすだけで、本棚に簡単に追加できます。カメラ性能の高いタブレットやPCからもご利用いただけます。ただし、環境によっては正しく読み取れないことがあります。その場合は、
-        <%= link_to search_books_path, title: "書籍検索" do %><i data-lucide="search"></i> 検索<% end %>や
-        <%= link_to new_book_path, title: "書籍検索" do %><i class="bi bi-pencil"></i> 手動入力<% end %>
+        <%= link_to search_books_path, title: "書籍検索", data: { turbo_frame: "_top" } do %><i data-lucide="search"></i> 検索<% end %>や
+        <%= link_to new_book_path, title: "書籍検索", data: { turbo_frame: "_top" } do %><i class="bi bi-pencil"></i> 手動入力<% end %>
         をご利用ください。
       </p>
     </section>

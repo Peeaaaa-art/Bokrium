@@ -10,8 +10,7 @@
     </p>
   </section>
 
-
-  <!-- barcode_section -->
+  <!-- スマホでピッと。-->
   <div
     data-controller="lazy-load"
     data-lazy-load-url-value="<%= barcode_section_guest_starter_books_path %>"
@@ -23,7 +22,7 @@
     <%= render "shared/loading_spinner" %>
   <% end %>
 
-  <!-- bookshelf_section -->
+  <!-- 本棚に自由を。-->
   <div
     data-controller="lazy-load"
     data-lazy-load-url-value="<%= bookshelf_section_guest_starter_books_path %>"
@@ -35,8 +34,7 @@
     <%= render "shared/loading_spinner" %>
   <% end %>
 
-
-  <!-- ５つのレイアウト -->
+  <!-- 選べる5つの本棚レイアウト -->
   <div
     data-controller="lazy-load"
     data-lazy-load-url-value="<%= animation_lazy_guest_starter_books_path%>"
@@ -50,9 +48,7 @@
     <%= render "shared/loading_spinner" %>
   <% end %>
 
-
-
-<!-- memo_section -->
+<!-- メモで読書体験を深める -->
 <div
   data-controller="lazy-load"
   data-lazy-load-url-value="<%= memo_section_guest_starter_books_path %>"
@@ -63,4 +59,3 @@
 <%= turbo_frame_tag "memo_section_frame" do %>
   <%= render "shared/loading_spinner" %>
 <% end %>
-

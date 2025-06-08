@@ -1,11 +1,8 @@
 <turbo-frame id="memo_section_frame">
   <section class="mb-5" data-controller="animation">
     <h2 class="fade-in delay-1 text-center border-bottom fw-normal pb-2 mb-4">
-      <span class="fs-1">✍️</span>
-      <%= link_to book_link_path(books.first), data: { turbo_frame: "_top" } do %>
-        <i data-lucide="book-open"></i>
-      <% end %>
-      <strong>メモで読書体験を深める</strong>
+      <span class="fs-1">✍️</span> <%= link_to book_link_path(books.first), data: { turbo_frame: "_top" } do %><i class="bi bi-book"></i><% end %>
+      <strong>メモで深まる</strong>
     </h2>
 
     <p class="slide-in delay-2 text-muted px-2 px-md-5">
@@ -19,24 +16,24 @@
     <%= render "guest/starter_books/memo_video" %>
   </div>
 
-  <p class="slide-in delay-4 text-muted px-2 px-md-5 mt-5" data-controller="animation">
+  <p class="slide-in delay-7 text-muted px-2 px-md-5 mt-5" data-controller="animation">
     Bokriumでは、作成した読書メモの公開範囲を設定できます。デフォルトでは
     <span class="badge bg-dark">非公開</span> になっており、
     あなた以外は見ることができません。
   </p>
 
   <!-- 公開範囲の説明カード -->
-  <div class="slide-in delay-5" data-controller="animation">
+  <div class="slide-in delay-8" data-controller="animation">
     <%= render "guest/starter_books/visibility_cards" %>
   </div>
 
-  <p class="slide-in delay-6 text-muted px-2 px-md-5 mt-5" data-controller="animation">
+  <p class="slide-in delay-9 text-muted px-2 px-md-5 mt-5" data-controller="animation">
     メモには見出しや太字、リストなどを使って、読みやすく整理できます（Markdown対応）。
     実際の使い方は、下のサンプルメモをご覧ください。
   </p>
 
   <!-- 使い方本 -->
-  <div class="slide-in delay-7" data-controller="animation">
+  <div class="slide-in delay-10" data-controller="animation">
     <%= render "bookshelf/kino_books_grid", books: books, books_per_shelf: 5, pagy: nil %>
   </div>
 </turbo-frame>
