@@ -64,7 +64,7 @@ Rails.application.routes.draw do
     resources :books, only: [ :index, :show ]
     resources :starter_books, only: [ :index, :show ] do
       collection do
-        get :animation_lazy
+        get :five_layouts
         get :barcode_section
         get :bookshelf_section
         get :memo_section

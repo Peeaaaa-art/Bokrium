@@ -16,8 +16,8 @@ module Guest
       render "books/show"
     end
 
-    def animation_lazy
-      render partial: "guest/starter_books/animation_lazy"
+    def five_layouts
+      render partial: "guest/starter_books/five_layouts"
     end
 
     def barcode_section

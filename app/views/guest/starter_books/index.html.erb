@@ -37,14 +37,14 @@
   <!-- 選べる5つの本棚レイアウト -->
   <div
     data-controller="lazy-load"
-    data-lazy-load-url-value="<%= animation_lazy_guest_starter_books_path%>"
-    data-lazy-load-frame-value="animation_sample_lazy"
+    data-lazy-load-url-value="<%= five_layouts_guest_starter_books_path%>"
+    data-lazy-load-frame-value="five_layouts"
   >
 
     <div style="height: 1x;"></div>
   </div>
 
-  <%= turbo_frame_tag "animation_sample_lazy" do %>
+  <%= turbo_frame_tag "five_layouts" do %>
     <%= render "shared/loading_spinner" %>
   <% end %>
 
