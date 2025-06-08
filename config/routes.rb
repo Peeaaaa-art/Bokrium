@@ -65,9 +65,12 @@ Rails.application.routes.draw do
     resources :starter_books, only: [ :index, :show ] do
       collection do
         get :animation_lazy
+        get :barcode_section
+        get :bookshelf_section
+        get :memo_section
       end
     end
-end
+  end
 
   get "faq", to: "pages#faq"
   get "terms", to: "pages#terms"

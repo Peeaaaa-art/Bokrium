@@ -10,10 +10,57 @@
     </p>
   </section>
 
-<% description = "text-muted px-2 px-md-5" %>
 
-<%= render "guest/starter_books/barcode_section", description: description %>
+  <!-- barcode_section -->
+  <div
+    data-controller="lazy-load"
+    data-lazy-load-url-value="<%= barcode_section_guest_starter_books_path %>"
+    data-lazy-load-frame-value="barcode_section_lazy"
+  >
+    <div style="height: 1px;"></div>
+  </div>
+  <%= turbo_frame_tag "barcode_section_lazy" do %>
+    <%= render "shared/loading_spinner" %>
+  <% end %>
 
-<%= render "guest/starter_books/bookshelf_section", description: description %>
+  <!-- bookshelf_section -->
+  <div
+    data-controller="lazy-load"
+    data-lazy-load-url-value="<%= bookshelf_section_guest_starter_books_path %>"
+    data-lazy-load-frame-value="bookshelf_section_frame"
+  >
+    <div style="height: 1px;"></div>
+  </div>
+  <%= turbo_frame_tag "bookshelf_section_frame" do %>
+    <%= render "shared/loading_spinner" %>
+  <% end %>
 
-<%= render "guest/starter_books/memo_section", description: description, books: @books %>
+
+  <!-- ５つのレイアウト -->
+  <div
+    data-controller="lazy-load"
+    data-lazy-load-url-value="<%= animation_lazy_guest_starter_books_path%>"
+    data-lazy-load-frame-value="animation_sample_lazy"
+  >
+
+    <div style="height: 1x;"></div>
+  </div>
+
+  <%= turbo_frame_tag "animation_sample_lazy" do %>
+    <%= render "shared/loading_spinner" %>
+  <% end %>
+
+
+
+<!-- memo_section -->
+<div
+  data-controller="lazy-load"
+  data-lazy-load-url-value="<%= memo_section_guest_starter_books_path %>"
+  data-lazy-load-frame-value="memo_section_frame"
+>
+  <div style="height: 1px;"></div>
+</div>
+<%= turbo_frame_tag "memo_section_frame" do %>
+  <%= render "shared/loading_spinner" %>
+<% end %>
+

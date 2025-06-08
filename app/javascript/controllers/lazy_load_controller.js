@@ -1,4 +1,3 @@
-// app/javascript/controllers/lazy_load_controller.js
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
@@ -8,22 +7,22 @@ export default class extends Controller {
   }
 
   connect() {
-    if (!("IntersectionObserver" in window)) return
+    if ("IntersectionObserver" in window) {
+      this.observer = new IntersectionObserver(entries => {
+        if (entries[0].isIntersecting) {
+          this.load()
+        }
+      }, { threshold: 0.4 })
 
-    this.observer = new IntersectionObserver(entries => {
-      if (entries[0].isIntersecting) {
-        this.loadContent()
-        this.observer.disconnect()
-      }
-    }, { threshold: 0.3 })
-
-    this.observer.observe(this.element)
+      this.observer.observe(this.element)
+    }
   }
 
-  loadContent() {
-    Turbo.visit(this.urlValue, {
-      frame: this.frameValue
-    })
+  load() {
+    if (this.urlValue && this.frameValue) {
+      Turbo.visit(this.urlValue, { frame: this.frameValue })
+      this.observer.disconnect()
+    }
   }
 
   disconnect() {
