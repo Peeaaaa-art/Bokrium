@@ -1,16 +1,29 @@
 <turbo-frame id="animation_sample_lazy">
-  <section class="layout-intro mt-5" data-controller="animation">
+  <section class="layout-intro my-5 rounded-4" data-controller="animation">
     <h2 class="fade-in delay-1">選べる5つの本棚レイアウト</h2>
-    <div class="layouts">
-      <div class="card shelf_icon slide-in delay-2"><i class="bi bi-bookshelf fs-5 icon-refined"></i><span class="text-muted">本棚</span></div>
-      <div class="card shelf_icon slide-in delay-3"><i class="bi bi-layout-three-columns fs-5 icon-refined"></i> <span class="text-muted">背表紙</span></div>
-      <div class="card shelf_icon slide-in delay-4"><i class="bi bi-file fs-5 icon-refined"></i> <span class="text-muted">カード</span></div>
-      <div class="card shelf_icon slide-in delay-5"><i class="bi bi-layout-sidebar-inset fs-5 icon-refined"></i> <span class="text-muted">リスト</span></div>
-      <div class="card shelf_icon slide-in delay-6"><i class="bi bi-table fs-5 icon-refined"></i><span class="text-muted"> 表形式</span></div>
+
+    <div class="container mt-4">
+      <div class="row row-cols-1 row-cols-md-3 g-4 justify-content-center">
+
+        <% layouts = [
+          { icon: "bookshelf", label: "棚ビュー", img: "shef.png", delay: 2 },
+          { icon: "layout-three-columns", label: "背表紙ビュー", img: "spine.png", delay: 3 },
+          { icon: "file", label: "カードビュー", img: "card.png", delay: 4 },
+          { icon: "layout-sidebar-inset", label: "リストビュー", img: "detail_card.png", delay: 5 },
+          { icon: "table", label: "表形式ビュー", img: "b_note.png", delay: 6 }
+        ] %>
+
+        <% layouts.each do |layout| %>
+          <div class="col fade-in delay-<%= layout[:delay] %>">
+            <div class="text-center p-3 shadow rounded-4 h-100">
+              <div class="text-muted small mb-1"><%= layout[:label] %></div>
+              <i class="bi bi-<%= layout[:icon] %> fs-2 d-block mb-2 text-secondary"></i>
+              <%= lazy_image_tag "bookshelf/#{layout[:img]}", alt: layout[:label], class: "img-fluid mb-2 rounded" %>
+            </div>
+          </div>
+        <% end %>
+
+      </div>
     </div>
   </section>
-
-  <div class="mb-5"  data-controller="animation">
-    <%= lazy_image_tag "bookshelfs_views.png", alt: "Bokriumの本棚レイアウト", class: "img-fluid mb-5 mx-auto d-block fade-in delay-4" %>
-  </div>
 </turbo-frame>
