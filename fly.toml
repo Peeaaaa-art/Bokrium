@@ -19,10 +19,6 @@ console_command = '/rails/bin/rails console'
 [deploy]
 release_command = "./bin/rails db:migrate"
 
-[[services]]
-  internal_port = 8080
-  processes = ["app"]
-
 [http_service]
   internal_port = 8080
   force_https = true
