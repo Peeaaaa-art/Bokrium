@@ -101,6 +101,8 @@ class BooksController < ApplicationController
       flash[:info] = "『#{@book.title.truncate(TITLE_TRUNCATE_LIMIT)}』を更新しました"
       redirect_to @book
     else
+      error_messages = @book.errors.full_messages.join("、")
+      flash.now[:danger] = "画像の保存に失敗しました：#{error_messages}"
       render :edit
     end
   end
