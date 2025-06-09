@@ -34,14 +34,17 @@
     <div class="col-md-6">
       <%= f.label :book_cover_s3, "表紙画像", class: "form-label" %>
       <%= f.file_field :book_cover_s3, class: "form-control", direct_upload: true %>
-      <% if book.book_cover_s3.attached? %>
-        <div class="mt-2">
-          <%= image_tag book.book_cover_s3.variant(resize_to_limit: [120, 180]),
-          alt: "表紙画像",
-          class: "img-thumbnail",
+
+      <div class="mt-2">
+          <%= display_book_cover book,
+          resize_to: [120, 120],
+          s3_class: "img-fluid img-thumbnail",
+          url_class: "img-fluid",
+          no_cover_class: "book-cover-show",
+          no_cover_title: "",
           style: "max-height: 120px;" %>
-        </div>
-      <% end %>
+      </div>
+
     </div>
   </div>
 
