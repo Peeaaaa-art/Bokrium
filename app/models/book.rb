@@ -29,9 +29,17 @@ class Book < ApplicationRecord
                     trigram: { threshold: 0.03 }
                   }
 
+  after_commit :enqueue_cover_download, on: :create
+
   private
 
   def normalize_isbn
     self.isbn = nil if isbn.blank?
+  end
+
+  def enqueue_cover_download
+    return if book_cover.blank? || book_cover_s3.attached?
+
+    DownloadCoverImageJob.perform_later(id, book_cover)
   end
 end

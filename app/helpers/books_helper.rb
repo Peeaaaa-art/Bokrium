@@ -41,7 +41,8 @@ module BooksHelper
 
     if book.book_cover_s3.attached? && book.book_cover_s3.persisted? && book.book_cover_s3.variable?
       image_tag book.book_cover_s3.variant(resize_to_limit: resize_to),
-                { alt: alt, loading: "lazy", class: "img-fluid #{s3_class}" }.merge(options)
+                { alt: alt, loading: "lazy", class: "img-fluid #{s3_class}",
+                  style: "#{transform_style}" }.merge(options)
 
     elsif book.book_cover.present?
       image_tag book.book_cover,

@@ -80,6 +80,9 @@ Rails.application.routes.draw do
   get "terms", to: "pages#terms"
   get "privacy", to: "pages#privacy"
   get "/manifest.json", to: "pwa#manifest", defaults: { format: :json }
+
+  require "sidekiq/web"
+  mount Sidekiq::Web => "/sidekiq" if Rails.env.development?
 end
 
 # 公式リファレンス https://guides.rubyonrails.org/routing.html
