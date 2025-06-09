@@ -51,7 +51,7 @@ module BooksHelper
 
     else
       content_tag(:div, { class: "no-cover #{no_cover_class}" }.merge(options)) do
-        content_tag(:span, book.title.truncate(40), class: "title #{ no_cover_title}")
+        content_tag(:span, book.title&.truncate(40), class: "title #{ no_cover_title}")
       end
     end
   end
