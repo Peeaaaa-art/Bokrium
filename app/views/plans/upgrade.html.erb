@@ -1,0 +1,33 @@
+<div class="container py-5 text-center">
+  <h1 class="mb-4 fw-bold">Bokriumプレミアムへようこそ</h1>
+  <p class="lead text-muted mb-5">
+    もっと自由に、もっと深く。本棚の可能性を広げるなら今。
+  </p>
+
+  <div class="row justify-content-center mb-5">
+    <div class="col-md-8">
+      <div class="card shadow-lg border-0">
+        <div class="card-body px-4 py-5">
+          <h2 class="fw-bold mb-3 text-success">プレミアムでできること</h2>
+          <ul class="list-group list-group-flush text-start mb-4">
+            <li class="list-group-item">📚 <strong>書籍数：無制限</strong></li>
+            <li class="list-group-item">🖼 <strong>画像アップロード：無制限</strong></li>
+            <li class="list-group-item">🏷 <strong>タグ：無制限</strong></li>
+            <li class="list-group-item">📝 <strong>読書メモ：無制限</strong></li>
+            <li class="list-group-item">📩 <strong>ランダム通知：毎日受け取れる</strong></li>
+          </ul>
+
+          <div class="my-4">
+            <%= link_to "月額プランに申し込む（¥480/月）", "#", class: "btn btn-lg btn-success shadow px-4 py-2" %>
+          </div>
+          <small class="text-muted">※キャンセルはいつでも可能です</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <p class="text-muted small mb-1">無料プランをご利用中ですか？</p>
+    <%= link_to "プラン比較に戻る", plans_path, class: "btn btn-outline-secondary btn-sm" %>
+  </div>
+</div>

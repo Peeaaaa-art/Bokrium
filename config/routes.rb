@@ -18,6 +18,8 @@ Rails.application.routes.draw do
   end
 
   get "/up", to: proc { [ 200, {}, [ "OK" ] ] }
+  get "plans", to: "plans#index"
+  get "plans/upgrade", to: "plans#upgrade"
   get "explore/index"
   get "explore/suggestions"
   get "search", to: "search#index", as: :search_books
