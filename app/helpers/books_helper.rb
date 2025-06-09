@@ -30,14 +30,20 @@ module BooksHelper
     end
   end
 
+
   def display_book_cover(book, resize_to: [ 200, 200 ], alt: nil,
                         s3_class: "", url_class: "", no_cover_class: "", no_cover_title: nil,
-                        **options)
+                        nocover_img: false, **options)
     alt ||= book.title.presence || "表紙画像"
     no_cover_title ||= book.title.truncate(40)
 
-    scale_value = mobile? ? 1.3 : 1.4
-    transform_style = "transform: scale(#{scale_value}); transform-origin: center;"
+    transform_style =
+      if action_name == "show" && [ "books", "guest/books" ].include?(controller_path)
+        scale_value = mobile? ? 1.15 : 1.4
+        "transform: scale(#{scale_value}); transform-origin: center;"
+      else
+        "" # show以外ではスケールスタイルを無効に
+      end
 
     if book.book_cover_s3.attached? && book.book_cover_s3.persisted? && book.book_cover_s3.variable?
       image_tag book.book_cover_s3.variant(resize_to_limit: resize_to),
@@ -49,12 +55,20 @@ module BooksHelper
                 { alt: alt, loading: "lazy", class: "img-fluid #{url_class}",
                   style: "#{transform_style}" }.merge(options)
 
+    elsif nocover_img
+      content_tag(:div, class: "cover-placeholder-wrapper") do
+        image_tag("no_cover.png", class: "img-fluid rounded-sm placeholder-cover") +
+          content_tag(:div, truncate_for_device(book.title, mobile_limit: 10, desktop_limit: 12),
+                      class: "cover-title-overlay brake-word") +
+          content_tag(:div, "Bokrium", class: "logo-overlay")
+      end
     else
       content_tag(:div, { class: "no-cover #{no_cover_class}" }.merge(options)) do
         content_tag(:span, book.title&.truncate(40), class: "title #{ no_cover_title}")
       end
     end
   end
+
 
   def render_book_info_list(book, list_class: "list-unstyled fs-info text-secondary mb-0 lh-show")
     content_tag(:ul, class: list_class) do

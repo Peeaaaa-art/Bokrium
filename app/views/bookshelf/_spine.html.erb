@@ -1,4 +1,3 @@
-
 <% books.each_slice(spine_per_shelf) do |row_books| %>
   <div class="shelf-row position-relative">
     <div class="book-spine-row d-flex">
@@ -9,10 +8,9 @@
             data-spine-book-link-url-value="<%= book_link_path(book) %>">
           <div class="spine-top-bar"></div>
           <% if book.book_cover_s3.attached? %>
-            <%= image_tag book.book_cover_s3.variant(resize_to_limit: [240, 320]),
+            <%= image_tag book.book_cover_s3.variant(resize_to_limit: [200, 200]),
                   alt: book.title,
                   class: "spine-cover-image d-none",
-                  loading: "lazy",
                   data: { spine_book_target: "cover" } %>
           <% elsif book.book_cover.present? %>
             <img src="<%= book.book_cover %>" alt="表紙画像"
@@ -26,7 +24,7 @@
           <% end %>
 
             <div class="spine-title" data-spine-book-target="title">
-              <%= book.title.truncate(11) %>
+              <%= truncate_for_device(book.title, mobile_limit: 11, desktop_limit: 13) %>
             </div>
             <div class="spine-brand">Bokrium</div>
           </div>
@@ -43,8 +41,6 @@
                 loading="lazy"
                 data-controller="lazy-load"
                 data-lazy-load-url-value="<%= books_path(view: 'spine', page: pagy.next) %>">
-    <div class="text-center my-4">
-      <div class="spinner-border text-primary-bok opacity-25" role="status"></div>
-    </div>
+    <%= render "shared/loading_spinner" %>
   </turbo-frame>
 <% end %>

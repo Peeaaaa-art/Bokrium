@@ -58,4 +58,9 @@ module ApplicationHelper
         render "shared/loading_spinner"
       end
   end
+
+  def truncate_for_device(text, mobile_limit:, desktop_limit:)
+    limit = mobile? ? mobile_limit : desktop_limit
+    text.to_s.truncate(limit)
+  end
 end
