@@ -1,8 +1,7 @@
-# app/models/concerns/upload_validations.rb
 module UploadValidations
   extend ActiveSupport::Concern
 
-  MAX_UPLOAD_SIZE = 1.megabytes
+  MAX_UPLOAD_SIZE = 10.megabytes
 
   def validate_upload_format(attachment, attribute_name)
     return unless attachment.attached?
