@@ -1,4 +1,4 @@
 web: bin/rails server -p 3000
 css: bin/rails dartsass:watch
 js: npm run build:watch
-worker: bundle exec sidekiq
+worker: dotenv -f .env -- bundle exec sidekiq
