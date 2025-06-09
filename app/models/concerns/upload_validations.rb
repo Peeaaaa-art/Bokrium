@@ -1,41 +1,24 @@
+# app/models/concerns/upload_validations.rb
 module UploadValidations
   extend ActiveSupport::Concern
 
-  included do
-    validate :validate_upload_file_type
-  end
+  MAX_UPLOAD_SIZE = 1.megabytes
 
-  ALLOWED_EXTENSIONS = %w[jpg jpeg png gif webp svg].freeze
-  ALLOWED_CONTENT_TYPES = %w[
-    image/jpeg
-    image/png
-    image/gif
-    image/webp
-    image/svg+xml
-  ].freeze
+  def validate_upload_format(attachment, attribute_name)
+    return unless attachment.attached?
 
-  private
+    allowed_extensions = %w[jpg jpeg png gif webp svg]
+    allowed_content_types = %w[image/jpeg image/png image/gif image/webp image/svg+xml]
 
-  def validate_upload_file_type
-    attached_attributes = self.class.upload_validation_targets
+    extension = attachment.filename.extension_without_delimiter&.downcase
+    content_type = attachment.content_type
 
-    attached_attributes.each do |attribute|
-      file = send(attribute)
-      next unless file.attached?
-
-      extension = file.filename.extension_without_delimiter&.downcase
-      content_type = file.content_type
-
-      unless ALLOWED_EXTENSIONS.include?(extension) && ALLOWED_CONTENT_TYPES.include?(content_type)
-        errors.add(attribute, "は許可されていない形式です（jpg, png, gif, webp, svg）")
-      end
+    unless allowed_extensions.include?(extension) && allowed_content_types.include?(content_type)
+      errors.add(attribute_name, " : 許可されていない形式です（jpg, png, gif, webp, svg）")
     end
-  end
 
-  module ClassMethods
-    def validate_uploads_for(*attributes)
-      class_attribute :upload_validation_targets
-      self.upload_validation_targets = attributes
+    if attachment.blob.byte_size > MAX_UPLOAD_SIZE
+      errors.add(attribute_name, " : 10MB以下のファイルにしてください")
     end
   end
 end

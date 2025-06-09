@@ -1,5 +1,6 @@
 class Book < ApplicationRecord
   include PgSearch::Model
+  include UploadValidations
   before_validation :normalize_isbn
 
   belongs_to :user
@@ -15,7 +16,11 @@ class Book < ApplicationRecord
   }
   validates :title, presence: { message: ": タイトルは必須です" }
   validates :isbn, uniqueness: { scope: :user_id, message: ": この書籍は本棚に登録済みです" }, allow_blank: true
-  validate_uploads_for :book_cover_s3
+  validate :validate_book_cover_format
+
+  def validate_book_cover_format
+    validate_upload_format(book_cover_s3, :book_cover_s3)
+  end
 
   pg_search_scope :search_by_title_and_author,
                   against: [ :title, :author ],
