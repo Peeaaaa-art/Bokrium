@@ -1,5 +1,5 @@
-<% books.each_slice(spine_per_shelf) do |row_books| %>
-  <div class="shelf-row position-relative">
+<% books.each_slice(spine_per_shelf).with_index do |row_books, idx| %>
+  <div class="shelf-row position-relative fade-in delay-<%= idx %>">
     <div class="book-spine-row d-flex">
       <% row_books.each do |book| %>
         <div class="spine-on-shelf"
@@ -24,7 +24,7 @@
           <% end %>
 
             <div class="spine-title" data-spine-book-target="title">
-              <%= truncate_for_device(book.title, mobile_limit: 11, desktop_limit: 13) %>
+              <%= truncate_for_device(book.title, mobile_limit: 10, desktop_limit: 13) %>
             </div>
             <div class="spine-brand">Bokrium</div>
           </div>

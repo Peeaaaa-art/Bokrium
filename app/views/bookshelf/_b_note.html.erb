@@ -13,15 +13,11 @@
       <tbody data-controller="book-list">
         <% start_index = pagy.from - 1 %>
         <% books.each_with_index do |book, index| %>
-          <%= render partial: "bookshelf/b_note_row", locals: { book: book, index: start_index + index } %>
+          <%= render partial: "bookshelf/b_note_row", locals: { book: book, index: start_index + index, idx: index } %>
         <% end %>
       </tbody>
     </table>
   </div>
 </div>
 
-<% if pagy %>
-  <div class="my-5 d-flex justify-content-center">
-    <%== pagy_bootstrap_nav(pagy) %>
-  </div>
-<% end %>
+<%= render "shared/pagy", pagy: pagy %>
