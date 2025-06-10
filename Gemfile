@@ -18,6 +18,10 @@ gem "stimulus-rails"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jbuilder"
 
+gem "sidekiq", "~> 7.2"
+
+gem "sidekiq-unique-jobs"
+
 # 私が追加したGem
 gem "devise"
 gem "devise-i18n"

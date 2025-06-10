@@ -1,5 +1,4 @@
 <% content_for :title, "本棚 - Bokrium" %>
-
 <%= empty_bookshelf_notice %>
 
 <div class="d-flex align-items-center justify-content-between mt-4 mb-3 px-3">
@@ -29,7 +28,6 @@
               filtered_tags: @filtered_tags,
               filtered_status: @filtered_status
   %>
-
 
 <!-- 本棚 -->
 <%= render "bookshelf/books_frame_wrapper",

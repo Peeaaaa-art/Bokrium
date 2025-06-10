@@ -33,7 +33,7 @@ module ApplicationHelper
     return guest_starter_book_path(book) if @starter_book
 
     if user_signed_in?
-      current_user.books.exists? ? book_path(book) : guest_book_path(book)
+      @has_books ? book_path(book) : guest_book_path(book)
     else
       guest_book_path(book)
     end
@@ -42,5 +42,25 @@ module ApplicationHelper
   def lazy_image_tag(source, options = {})
     options[:loading] ||= "lazy"
     image_tag(source, options)
+  end
+
+  def lazy_section(frame_id, url)
+    tag.div(
+      data: {
+        controller: "lazy-load",
+        lazy_load_url_value: url,
+        lazy_load_frame_value: frame_id
+      }
+    ) do
+      tag.div(style: "height: 1px;")
+    end +
+      turbo_frame_tag(frame_id) do
+        render "shared/loading_spinner"
+      end
+  end
+
+  def truncate_for_device(text, mobile_limit:, desktop_limit:)
+    limit = mobile? ? mobile_limit : desktop_limit
+    text.to_s.truncate(limit)
   end
 end

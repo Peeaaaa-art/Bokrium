@@ -18,6 +18,8 @@ Rails.application.routes.draw do
   end
 
   get "/up", to: proc { [ 200, {}, [ "OK" ] ] }
+  get "plans", to: "plans#index"
+  get "plans/upgrade", to: "plans#upgrade"
   get "explore/index"
   get "explore/suggestions"
   get "search", to: "search#index", as: :search_books
@@ -68,6 +70,8 @@ Rails.application.routes.draw do
         get :barcode_section
         get :bookshelf_section
         get :memo_section
+        get :public_section
+        get :guidebook_section
       end
     end
   end
@@ -76,6 +80,9 @@ Rails.application.routes.draw do
   get "terms", to: "pages#terms"
   get "privacy", to: "pages#privacy"
   get "/manifest.json", to: "pwa#manifest", defaults: { format: :json }
+
+  require "sidekiq/web"
+  mount Sidekiq::Web => "/sidekiq" if Rails.env.development?
 end
 
 # 公式リファレンス https://guides.rubyonrails.org/routing.html

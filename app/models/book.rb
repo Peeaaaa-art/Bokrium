@@ -1,5 +1,6 @@
 class Book < ApplicationRecord
   include PgSearch::Model
+  include UploadValidations
   before_validation :normalize_isbn
 
   belongs_to :user
@@ -15,6 +16,17 @@ class Book < ApplicationRecord
   }
   validates :title, presence: { message: ": タイトルは必須です" }
   validates :isbn, uniqueness: { scope: :user_id, message: ": この書籍は本棚に登録済みです" }, allow_blank: true
+  validate :validate_book_cover_format
+
+  def validate_book_cover_format
+    validate_upload_format(book_cover_s3, :book_cover_s3)
+  end
+
+  def cloudfront_url
+    return nil unless book_cover_s3.attached? && book_cover_s3.key.present?
+
+    "https://img.bokrium.com/#{book_cover_s3.key}"
+  end
 
   pg_search_scope :search_by_title_and_author,
                   against: [ :title, :author ],
@@ -23,9 +35,17 @@ class Book < ApplicationRecord
                     trigram: { threshold: 0.03 }
                   }
 
+  after_commit :enqueue_cover_download, on: :create
+
   private
 
   def normalize_isbn
     self.isbn = nil if isbn.blank?
+  end
+
+  def enqueue_cover_download
+    return if book_cover.blank? || book_cover_s3.attached?
+
+    DownloadCoverImageWorker.perform_async(id, book_cover)
   end
 end

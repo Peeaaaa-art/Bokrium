@@ -7,6 +7,7 @@ class BooksController < ApplicationController
   CHUNKS_PER_PAGE = 7
 
   def index
+    @has_books = Book.exists?(user_id: current_user.id)
     books = current_user.books.includes(book_cover_s3_attachment: :blob)
 
     unless books&.exists?
@@ -101,6 +102,8 @@ class BooksController < ApplicationController
       flash[:info] = "『#{@book.title.truncate(TITLE_TRUNCATE_LIMIT)}』を更新しました"
       redirect_to @book
     else
+      error_messages = @book.errors.full_messages.join("、")
+      flash.now[:danger] = "画像の保存に失敗しました：#{error_messages}"
       render :edit
     end
   end

@@ -1,0 +1,5 @@
+# config/sidekiq.yml
+:concurrency: <%= ENV.fetch("SIDEKIQ_CONCURRENCY", 2) %>
+
+:queues:
+  - default

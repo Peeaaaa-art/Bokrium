@@ -21,3 +21,6 @@ port ENV.fetch("PORT")
 plugin :tmp_restart
 plugin :solid_queue if ENV["SOLID_QUEUE_IN_PUMA"]
 pidfile ENV["PIDFILE"] if ENV["PIDFILE"]
+
+# Procfile.dev用
+# worker: dotenv -f .env -- bundle exec sidekiq

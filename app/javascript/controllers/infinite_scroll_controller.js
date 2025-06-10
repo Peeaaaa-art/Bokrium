@@ -20,7 +20,7 @@ export default class extends Controller {
     if (this.urlValue) {
       this.element.innerHTML = `
         <div class="text-center my-4">
-          <div class="spinner-border text-secondary" role="status"></div>
+          <div class="spinner-border text-primary-bok opacity-25" role="status"></div>
         </div>
       `
       Turbo.visit(this.urlValue, { frame: "books_frame" })

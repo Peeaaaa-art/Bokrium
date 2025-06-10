@@ -1,21 +1,14 @@
-<% books.each_slice(books_per_shelf) do |row_books| %>
-  <div class="shelf-row" data-controller="book-shelf">
+<% books.each_slice(books_per_shelf).with_index do |row_books, idx| %>
+  <div class="shelf-row fade-in kino-fade-in delay-<%= idx %>" data-controller="book-shelf">
     <div class="book-row">
       <% row_books.each do |book| %>
         <div class="book-on-shelf">
           <%= link_to book_link_path(book), data: { turbo_frame: "_top" } do %>
-            <% if book.book_cover_s3.attached? %>
-              <%= image_tag book.book_cover_s3.variant(resize_to_limit: [200, 200]),
-                    alt: book.title, class: "book-cover", loading: "lazy" %>
-            <% elsif book.book_cover.present? %>
-              <img src="<%= book.book_cover %>" alt="表紙画像" class="book-cover" loading="lazy">
-            <% else %>
-              <div class="no-cover">
-                <span class="title">
-                  <%= book.title.truncate(24, omission: "").ljust(10).gsub(" ", "&nbsp;").html_safe %>
-                </span>
-              </div>
-            <% end %>
+            <%= display_book_cover book,
+                s3_class: "book-cover kino-rounded",
+                url_class: "book-cover kino-rounded",
+                nocover_img: true
+            %>
           <% end %>
         </div>
       <% end %>
@@ -27,8 +20,6 @@
 
 <% if pagy && pagy.next %>
   <turbo-frame id="next_books" src="<%= books_path(view: @view_mode, page: pagy.next) %>" loading="lazy">
-    <div class="text-center my-4">
-      <div class="spinner-border text-secondary" role="status"></div>
-    </div>
+    <%= render "shared/loading_spinner" %>
   </turbo-frame>
 <% end %>

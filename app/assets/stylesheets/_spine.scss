@@ -21,7 +21,7 @@
     1px 2px 4px rgba(0, 0, 0, 0.1);
   z-index: 1;
 
-  @media(min-width: 1200px) { width: 48px; }
+  @media(min-width: 1200px) { width: 48px; height: 200px }
   @media(min-width: 700px) { width: 40px; }
 
   /* 光沢ハイライト */
@@ -74,12 +74,34 @@
     &.with-cover {
       width: 105px;
       height: 150px;
+
+      @media(min-width: 700px) {
+        width: 120px;
+        height: 180px;
+      }
+
+      @media(min-width: 1200px) {
+        width: 135px;
+        height: 200px;
+      }
     }
 
     .spine-cover-image {
       opacity: 1;
-      transform: translate(-50%, -50%) scale(0.8);
       pointer-events: auto;
+
+      width: 100px;
+      transform: translate(-50%, -50%) scale(0.95);
+
+      @media (min-width: 700px) {
+        width: 110px;
+        transform: translate(-50%, -50%) scale(1.0);
+      }
+
+      @media (min-width: 1200px) {
+        width: 115px;
+        transform: translate(-50%, -50%) scale(1.1);
+      }
     }
 
     .spine-title {
@@ -90,11 +112,14 @@
 
 /* === テキスト表示 === */
 .spine-title {
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   white-space: nowrap;
   line-height: 1.4;
   z-index: 2;
   font-weight: 600;
+
+  @media(min-width: 1200px) { font-size: 1rem; }
+  @media(min-width: 700px) { font-size: 0.88rem; }
 }
 
 .expanded-title {

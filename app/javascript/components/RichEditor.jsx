@@ -89,7 +89,7 @@ const RichEditor = ({ element }) => {
             className="btn btn-sm btn-outline-secondary"
             title="元に戻す"
           >
-            <i class="bi bi-arrow-left"></i>
+            <i className="bi bi-arrow-left"></i>
           </button>
 
           <button
@@ -98,7 +98,7 @@ const RichEditor = ({ element }) => {
             className="btn btn-sm btn-outline-secondary"
             title="やり直す"
           >
-            <i class="bi bi-arrow-right"></i>
+            <i className="bi bi-arrow-right"></i>
           </button>
           <button
             type="button"

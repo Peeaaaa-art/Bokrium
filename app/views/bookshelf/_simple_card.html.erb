@@ -16,19 +16,18 @@
   </div>
 
   <div data-column-selector-target="grid" class="books-grid-iphone mt-3">
-    <% books.each do |book| %>
-      <%= link_to book_link_path(book), data: { turbo_frame: "_top" } do %>
-        <% if book.book_cover_s3.attached? %>
-          <%= lazy_image_tag book.book_cover_s3.variant(resize_to_limit: [200, 200]), alt: book.title, class: "book-cover-iphone img-fluid rounded" %>
-        <% elsif book.book_cover.present? %>
-          <img src="<%= book.book_cover %>" style="border-radius: 12px;" alt="表紙画像" class="book-cover-iphone rounded" loading="lazy">
-        <% else %>
-          <div class="no-cover-iphone book-cover-iphone"><%= book.title.truncate(10, omission: "").ljust(10).gsub(" ", "&nbsp;").html_safe %></div>
+    <% books.each_with_index do |book, index| %>
+      <div class="fade-in-right" style="--delay: <%= index * 0.01 %>s;">
+        <%= link_to book_link_path(book), data: { turbo_frame: "_top" }, class: "text-decoration-none" do %>
+          <%= display_book_cover book,
+              s3_class: "book-cover-iphone",
+              url_class: "book-cover-iphone",
+              nocover_img: true
+          %>
         <% end %>
-      <% end %>
+      </div>
     <% end %>
   </div>
-
 </div>
 
 <%= form_with url: books_index_path, method: :get, local: true, id: "columnForm" do %>
@@ -36,8 +35,4 @@
   <%= hidden_field_tag :column, card_columns, id: "hiddenColumnInput" %>
 <% end %>
 
-<% if pagy %>
-  <div class="my-5 d-flex justify-content-center">
-    <%== pagy_bootstrap_nav(pagy) %>
-  </div>
-<% end %>
+<%= render "shared/pagy", pagy: pagy %>

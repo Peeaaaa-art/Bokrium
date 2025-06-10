@@ -1,60 +1,31 @@
 <% content_for :title, "読書メモ - Bokrium" %>
-
-
 <%= bookshelf_sample_notice %>
-
 <%= empty_bookshelf_notice %>
 
 <div class="container my-5" style="max-width: 1200px;">
   <div class="row justify-content-center">
     <div class="col-lg-10">
       <!-- 横並びのレイアウト：書影＋情報 -->
-      <div class="row g-4 align-items-start">
+      <div class="row g-4 align-items-center mt-md-1">
         <!-- 書影：左半分 -->
         <div class="col-6 d-flex justify-content-center">
-          <% if @book.book_cover_s3.attached? %>
-            <%= lazy_image_tag @book.book_cover_s3, alt: @book.title, class: "img-fluid rounded shadow-sm book-cover-show" %>
-
-          <% elsif @book.book_cover.present? %>
-            <img src="<%= @book.book_cover %>" alt="表紙画像"
-                class="img-fluid book-cover-show" loading="lazy">
-
-          <% else %>
-            <div class="no-cover book-cover-show">
-              <span class="title text-muted fs-5 mt-5">
-                <%= @book.title.truncate(40) %>
-              </span>
-            </div>
-          <% end %>
+          <%= display_book_cover @book,
+            s3_class: "book-cover-show",
+            url_class: "book-cover-show",
+            no_cover_class: "no-cover-show",
+            no_cover_title: " fs-5 mt-5"
+          %>
         </div>
-
         <!-- 情報：右半分 -->
         <div class="col-6">
           <div class="card border-0 shadow-none bg-transparent h-100">
-            <div class="fw-bold fs-6 mb-2"><%= @book.title %></div>
-              <ul class="list-unstyled small text-secondary mb-0 lh-2">
-                <% if @book.author.present? %>
-                  <li><i class="bi bi-person"></i> <%= @book.author %></li>
-                <% end %>
-                <% if @book.publisher.present? %>
-                  <li><i class="bi bi-building"></i> <%= @book.publisher %></li>
-                <% end %>
-                <% if @book.isbn.present? %>
-                  <li><i class="bi bi-upc"></i> <%= @book.isbn %></li>
-                <% end %>
-                <% if @book.page.present? %>
-                  <li><i class="bi bi-file-earmark-text"></i> <%= @book.page %> ページ</li>
-                <% end %>
-                <% if @book.price.present? %>
-                  <li><i class="bi bi-currency-yen"></i> <%= @book.price %></li>
-                <% end %>
-              </ul>
+            <div class="fw-bold fs-title mb-2"><%= @book.title %></div>
+            <%= render_book_info_list(@book) %>
           </div>
         </div>
       </div>
 
-
-      <div class="d-flex flex-row align-items-center justify-content-between  filter-controls border rounded-pill shadow-sm px-3 mt-3"
+      <div class="d-flex flex-row align-items-center justify-content-between  filter-controls border rounded-pill shadow-sm px-3 mt-5"
             style="<%= 'pointer-events: none; opacity: 0.6;' if @readonly %>">
         <!-- タグ -->
         <button class="btn btn-sm text-white" data-bs-toggle="modal" data-bs-target="#tagSelectModal">
@@ -66,22 +37,12 @@
         <!-- 画像アップロード -->
         <div data-controller="image-upload">
           <%= form_with model: [@book, Image.new], local: false,
-                html: {
-                  multipart: true,
-                  class: "d-inline",
-                  data: { image_upload_target: "form" }
-                } do |f| %>
-            <%= f.file_field :image_path,
-                  direct_upload: true,
-                  class: "d-none",
-                  data: {
-                    image_upload_target: "fileInput",
-                    action: "change->image-upload#triggerUpload"
-                  },
+                html: { multipart: true, class: "d-inline", data: { image_upload_target: "form" } } do |f| %>
+            <%= f.file_field :image_path, direct_upload: true, class: "d-none",
+                  data: { image_upload_target: "fileInput",
+                          action: "change->image-upload#triggerUpload" },
                   id: "customFileInputSm" %>
-            <label for="customFileInputSm" class="btn btn-sm text-white mb-0">
-              <i class="bi bi-camera icon-refined fs-5"></i>
-            </label>
+            <label for="customFileInputSm" class="btn btn-sm text-white mb-0"><i class="bi bi-camera icon-refined fs-5"></i></label>
           <% end %>
         </div>
         <!-- アクション：ギアボタン -->

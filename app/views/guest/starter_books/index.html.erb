@@ -2,7 +2,7 @@
 
 <div class="container py-3 px-3 px-md-5 px-md-0">
   <section class="mb-5 text-center">
-    <h1 class="fw-bold mb-2 big-shoulders-inline-bold">
+    <h1 class="fw-bold my-2 big-shoulders-inline-bold">
       <span class="logo-welcome" title="ボクリウム">Bokrium</span><br>
     </h1>
     <p class="lead text-muted">
@@ -10,52 +10,22 @@
     </p>
   </section>
 
-  <!-- スマホでピッと。-->
-  <div
-    data-controller="lazy-load"
-    data-lazy-load-url-value="<%= barcode_section_guest_starter_books_path %>"
-    data-lazy-load-frame-value="barcode_section_lazy"
-  >
-    <div style="height: 1px;"></div>
-  </div>
-  <%= turbo_frame_tag "barcode_section_lazy" do %>
-    <%= render "shared/loading_spinner" %>
-  <% end %>
+<!-- スマホでピッと。-->
+<%= lazy_section(:barcode_section_frame, barcode_section_guest_starter_books_path) %>
 
-  <!-- 本棚に自由を。-->
-  <div
-    data-controller="lazy-load"
-    data-lazy-load-url-value="<%= bookshelf_section_guest_starter_books_path %>"
-    data-lazy-load-frame-value="bookshelf_section_frame"
-  >
-    <div style="height: 1px;"></div>
-  </div>
-  <%= turbo_frame_tag "bookshelf_section_frame" do %>
-    <%= render "shared/loading_spinner" %>
-  <% end %>
+<!-- 本棚に自由を。-->
+<%= lazy_section(:bookshelf_section_frame, bookshelf_section_guest_starter_books_path) %>
 
-  <!-- 選べる5つの本棚レイアウト -->
-  <div
-    data-controller="lazy-load"
-    data-lazy-load-url-value="<%= five_layouts_guest_starter_books_path%>"
-    data-lazy-load-frame-value="five_layouts"
-  >
+<!-- 選べる5つの本棚レイアウト -->
+<%= lazy_section(:five_layouts, five_layouts_guest_starter_books_path) %>
 
-    <div style="height: 1x;"></div>
-  </div>
+<!-- メモで深める。 -->
+<%= lazy_section(:memo_section_frame, memo_section_guest_starter_books_path) %>
 
-  <%= turbo_frame_tag "five_layouts" do %>
-    <%= render "shared/loading_spinner" %>
-  <% end %>
+<!-- 閉じつつひらく。 -->
+<%= lazy_section(:public_section_frame, public_section_guest_starter_books_path) %>
 
-<!-- メモで読書体験を深める -->
-<div
-  data-controller="lazy-load"
-  data-lazy-load-url-value="<%= memo_section_guest_starter_books_path %>"
-  data-lazy-load-frame-value="memo_section_frame"
->
-  <div style="height: 1px;"></div>
-</div>
-<%= turbo_frame_tag "memo_section_frame" do %>
-  <%= render "shared/loading_spinner" %>
-<% end %>
+<!-- 使い方本 -->
+<%= lazy_section(:guidebook_section_frame, guidebook_section_guest_starter_books_path) %>
+
+<%= link_to "プラン比較", plans_path %>

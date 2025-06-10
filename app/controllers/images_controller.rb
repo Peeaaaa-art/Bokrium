@@ -10,7 +10,8 @@ class ImagesController < ApplicationController
         format.html { redirect_to @book }
       end
     else
-      flash[:danger] = "画像のアップロードに失敗しました。"
+      error_messages = @image.errors.full_messages.join("、")
+      flash[:danger] = "画像の保存に失敗しました：#{error_messages}"
       redirect_to @book
     end
   end
