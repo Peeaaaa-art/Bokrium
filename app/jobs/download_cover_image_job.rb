@@ -4,6 +4,8 @@ require "open-uri"
 class DownloadCoverImageJob < ApplicationJob
   queue_as :default
 
+  sidekiq_options lock: :until_executed, lock_timeout: 5
+
   def perform(book_id, image_url)
     book = Book.find_by(id: book_id)
     return unless book.present?
