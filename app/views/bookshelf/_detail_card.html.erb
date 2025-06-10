@@ -40,9 +40,10 @@ end %>
           <div class="row g-3">
             <div class="col-auto">
               <%= display_book_cover book,
+                  resize_to: [100],
                   s3_class: "book-cover rounded-2 detail-src",
                   url_class: "rounded-2 detail-src",
-                  no_cover_class: "no-cover detail-nocover",
+                  no_cover_class: "detail-nocover",
                   no_cover_title: "small text-center px-1"
               %>
             </div>

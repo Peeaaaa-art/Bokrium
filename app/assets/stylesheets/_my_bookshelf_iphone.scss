@@ -29,38 +29,3 @@
   box-sizing: border-box;
   margin: 8px auto;
 }
-.no-cover-iphone {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 4 / 5;
-  background: #f5d75b;
-  color: #2a1e00;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 4px;
-  font-size: clamp(0.5rem, 1.2vw, 0.75rem); /* 柔軟に縮む文字 */
-  font-weight: bold;
-  text-align: center;
-  padding: 4%;
-  box-sizing: border-box;
-  overflow: hidden;
-  margin: 8px auto;
-  line-height: 1.2;
-}
-
-.no-cover-iphone::before {
-  content: "Bokrium";
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  background: rgb(79, 78, 78);
-  color: white;
-  font-size: clamp(0.4rem, 1vw, 0.66rem); /* 自動スケール */
-  font-weight: 700;
-  text-align: right;
-  padding: 2px 6px;
-  font-family: "Big Shoulders Inline", sans-serif;
-  box-sizing: border-box;
-}

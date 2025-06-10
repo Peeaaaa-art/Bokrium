@@ -31,7 +31,7 @@ module BooksHelper
   end
 
 
-  def display_book_cover(book, resize_to: [ 200, 200 ], alt: nil,
+  def display_book_cover(book, resize_to: [ 200 ], alt: nil,
                         s3_class: "", url_class: "", no_cover_class: "", no_cover_title: nil,
                         nocover_img: false, **options)
     alt ||= book.title.presence || "表紙画像"
@@ -45,10 +45,15 @@ module BooksHelper
         "" # show以外ではスケールスタイルを無効に
       end
 
-    if book.book_cover_s3.attached? && book.book_cover_s3.persisted? && book.book_cover_s3.variable?
-      image_tag book.book_cover_s3.variant(resize_to_limit: resize_to),
-                { alt: alt, loading: "lazy", class: "img-fluid #{s3_class}",
-                  style: "#{transform_style}" }.merge(options)
+    if book.book_cover_s3.attached?
+        cloudfront_url = "https://img.bokrium.com/#{book.book_cover_s3.key}"
+        image_tag cloudfront_url, {
+          alt: book.title || "表紙画像",
+          loading: "lazy",
+          class: "img-fluid",
+          width: resize_to[0],
+          height: "auto"
+        }.merge(options)
 
     elsif book.book_cover.present?
       image_tag book.book_cover,

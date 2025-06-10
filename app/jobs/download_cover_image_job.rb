@@ -16,7 +16,10 @@ class DownloadCoverImageJob < ApplicationJob
       book.book_cover_s3.attach(
         io: file,
         filename: filename.presence || "cover.jpg",
-        content_type: file.content_type.presence || "image/jpeg"
+        content_type: file.content_type.presence || "image/jpeg",
+        metadata: {
+          cache_control: "public, max-age=31536000"
+        }
       )
 
       Rails.logger.info "[DownloadCoverImageJob] 画像を保存しました：#{filename}"
