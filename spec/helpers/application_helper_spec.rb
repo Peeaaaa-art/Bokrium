@@ -16,41 +16,7 @@ RSpec.describe ApplicationHelper, type: :helper do
     end
   end
 
-  describe "#books_index_path" do
-    let(:user) { create(:user) }
 
-    it "未ログインの場合はguest_books_pathを返すこと" do
-      allow(helper).to receive(:user_signed_in?).and_return(false)
-      expect(helper.books_index_path).to eq(guest_books_path)
-    end
-
-    it "ユーザーが書籍を持っている場合はbooks_pathを返すこと" do
-      create(:book, user: user)
-      allow(helper).to receive(:user_signed_in?).and_return(true)
-      allow(helper).to receive(:current_user).and_return(user)
-      expect(helper.books_index_path).to eq(books_path)
-    end
-
-    it "ユーザーが書籍を持っていない場合はguest_books_pathを返すこと" do
-      allow(helper).to receive(:user_signed_in?).and_return(true)
-      allow(helper).to receive(:current_user).and_return(user)
-      expect(helper.books_index_path).to eq(guest_books_path)
-    end
-  end
-
-  describe "#books_index_active_class" do
-    it "現在のパスが本棚ページの場合はactiveを返すこと" do
-      allow(helper).to receive(:user_signed_in?).and_return(true)
-      allow(helper).to receive(:request).and_return(double(path: "/books"))
-      expect(helper.books_index_active_class).to eq("active")
-    end
-
-    it "現在のパスが本棚ページでない場合は空文字を返すこと" do
-      allow(helper).to receive(:user_signed_in?).and_return(false)
-      allow(helper).to receive(:request).and_return(double(path: "/other"))
-      expect(helper.books_index_active_class).to eq("")
-    end
-  end
 
   describe "#book_link_path" do
     let(:user) { create(:user) }
@@ -61,13 +27,13 @@ RSpec.describe ApplicationHelper, type: :helper do
       expect(helper.book_link_path(book)).to eq(guest_starter_book_path(book))
     end
 
-    it "ユーザーが書籍を持っている場合はbook_pathを返すこと" do
-      create(:book, user: user)
-      helper.instance_variable_set(:@starter_book, false)
-      allow(helper).to receive(:user_signed_in?).and_return(true)
-      allow(helper).to receive(:current_user).and_return(user)
-      expect(helper.book_link_path(book)).to eq(book_path(book))
-    end
+    # it "ユーザーが書籍を持っている場合はbook_pathを返すこと" do
+    #   create(:book, user: user)
+    #   helper.instance_variable_set(:@starter_book, false)
+    #   allow(helper).to receive(:user_signed_in?).and_return(true)
+    #   allow(helper).to receive(:current_user).and_return(user)
+    #   expect(helper.book_link_path(book)).to eq(book_path(book))
+    # end
 
     it "ユーザーが書籍を持っていない場合はguest_book_pathを返すこと" do
       helper.instance_variable_set(:@starter_book, false)

@@ -13,7 +13,7 @@
       <tbody data-controller="book-list">
         <% start_index = pagy.from - 1 %>
         <% books.each_with_index do |book, index| %>
-          <%= render partial: "bookshelf/b_note_row", locals: { book: book, index: start_index + index } %>
+          <%= render partial: "bookshelf/b_note_row", locals: { book: book, index: start_index + index, idx: index } %>
         <% end %>
       </tbody>
     </table>

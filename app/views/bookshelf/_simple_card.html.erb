@@ -16,16 +16,16 @@
   </div>
 
   <div data-column-selector-target="grid" class="books-grid-iphone mt-3">
-    <% books.each do |book| %>
-      <%= link_to book_link_path(book), data: { turbo_frame: "_top" }, class: "text-decoration-none" do %>
-        <%= display_book_cover book,
-            s3_class: "book-cover-iphone",
-            url_class: "book-cover-iphone",
-            # no_cover_class: "no-cover-iphone",
-            # no_cover_title: ""
-            nocover_img: true
-        %>
-      <% end %>
+    <% books.each_with_index do |book, index| %>
+      <div class="fade-in-right" style="--delay: <%= index * 0.01 %>s;">
+        <%= link_to book_link_path(book), data: { turbo_frame: "_top" }, class: "text-decoration-none" do %>
+          <%= display_book_cover book,
+              s3_class: "book-cover-iphone",
+              url_class: "book-cover-iphone",
+              nocover_img: true
+          %>
+        <% end %>
+      </div>
     <% end %>
   </div>
 </div>

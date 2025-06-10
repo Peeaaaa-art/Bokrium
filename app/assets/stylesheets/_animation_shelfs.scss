@@ -90,7 +90,7 @@
 
 @media (max-width: 768px) {
   .fade-in-right {
-    animation-delay: calc(var(--delay) * 0.5);
+    animation-delay: calc(var(--delay) * 6 );
   }
 }
 
@@ -110,4 +110,6 @@
   animation: fadeInRow 0.5s ease-out forwards;
   animation-delay: var(--delay);
 }
+
+
 
