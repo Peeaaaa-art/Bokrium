@@ -1,10 +1,9 @@
-# app/jobs/download_cover_image_job.rb
+# app/workers/download_cover_image_job.rb
 require "open-uri"
 
-class DownloadCoverImageJob < ApplicationJob
-  queue_as :default
-
-  sidekiq_options lock: :until_executed, lock_timeout: 5
+class DownloadCoverImageJob
+  include Sidekiq::Worker
+  sidekiq_options queue: :default, lock: :until_executed, lock_timeout: 5
 
   def perform(book_id, image_url)
     book = Book.find_by(id: book_id)
