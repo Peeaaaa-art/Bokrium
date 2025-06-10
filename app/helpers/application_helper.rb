@@ -33,7 +33,7 @@ module ApplicationHelper
     return guest_starter_book_path(book) if @starter_book
 
     if user_signed_in?
-      current_user.books.exists? ? book_path(book) : guest_book_path(book)
+      @has_books ? book_path(book) : guest_book_path(book)
     else
       guest_book_path(book)
     end
