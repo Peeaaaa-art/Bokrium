@@ -46,6 +46,6 @@ class Book < ApplicationRecord
   def enqueue_cover_download
     return if book_cover.blank? || book_cover_s3.attached?
 
-    DownloadCoverImageJob.perform_async(id, book_cover)
+    DownloadCoverImageWorker.perform_async(id, book_cover)
   end
 end
