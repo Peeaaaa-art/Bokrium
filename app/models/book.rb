@@ -22,6 +22,12 @@ class Book < ApplicationRecord
     validate_upload_format(book_cover_s3, :book_cover_s3)
   end
 
+  def cloudfront_url
+    return nil unless book_cover_s3.attached? && book_cover_s3.key.present?
+
+    "https://img.bokrium.com/#{book_cover_s3.key}"
+  end
+
   pg_search_scope :search_by_title_and_author,
                   against: [ :title, :author ],
                   using: {
