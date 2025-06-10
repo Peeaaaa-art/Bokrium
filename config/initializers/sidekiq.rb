@@ -1,23 +1,14 @@
+require "sidekiq"
 require "sidekiq-unique-jobs"
 
 Sidekiq.configure_server do |config|
   config.redis = { url: ENV["REDIS_URL"], ssl: true } if ENV["REDIS_URL"].present?
 
-  config.server_middleware do |chain|
-    chain.add SidekiqUniqueJobs::Server::Middleware
+  SidekiqUniqueJobs.configure do |uniq_config|
+    uniq_config.enabled = true
   end
-
-  config.client_middleware do |chain|
-    chain.add SidekiqUniqueJobs::Client::Middleware
-  end
-
-  SidekiqUniqueJobs::Server.configure(config)
 end
 
 Sidekiq.configure_client do |config|
   config.redis = { url: ENV["REDIS_URL"], ssl: true } if ENV["REDIS_URL"].present?
-
-  config.client_middleware do |chain|
-    chain.add SidekiqUniqueJobs::Client::Middleware
-  end
 end
