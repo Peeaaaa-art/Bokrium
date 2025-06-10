@@ -14,7 +14,7 @@ console_command = '/rails/bin/rails console'
 
 [processes]
   app = './bin/rails server -b 0.0.0.0 -p 8080'
-  worker = "bundle exec sidekiq"
+  worker = "bundle exec sidekiq -C config/sidekiq.yml"
 
 [deploy]
 release_command = "./bin/rails db:migrate"
