@@ -20,36 +20,30 @@
 
           <table class="table table-bordered text-center align-middle mb-4 bg-white">
             <thead class="table-light">
-              <tr>
-                <th class="text-start">機能</th>
-                <th>無料プラン</th>
-                <th class="text-primary">Bokrium+</th>
-              </tr>
-            </thead>
             <tbody>
               <tr>
                 <td class="text-start">画像アップロード</td>
-                <td>最大10枚</td>
+                <td>最大<%= BokriumLimit::FREE[:images] %>枚</td>
                 <td class="text-success">無制限</td>
               </tr>
               <tr>
                 <td class="text-start">書籍登録数</td>
-                <td>最大100冊</td>
+                <td>最大<%= BokriumLimit::FREE[:books] %>冊</td>
                 <td class="text-success">無制限</td>
               </tr>
               <tr>
                 <td class="text-start">タグ作成</td>
-                <td>最大10個</td>
+                <td>最大<%= BokriumLimit::FREE[:tags] %>個</td>
                 <td class="text-success">無制限</td>
               </tr>
               <tr>
                 <td class="text-start">メモ数</td>
-                <td>最大50件</td>
+                <td>最大<%= BokriumLimit::FREE[:memos] %>件</td>
                 <td class="text-success">無制限</td>
               </tr>
               <tr>
                 <td class="text-start">ランダム通知（メール）</td>
-                <td>月5回</td>
+                <td>月<%= BokriumLimit::FREE[:random_notifications] %>回</td>
                 <td class="text-success">毎日受信可能</td>
               </tr>
             </tbody>
