@@ -28,4 +28,14 @@ RSpec.describe User, type: :model do
       expect(user.errors[:name]).to include(": 名前は50文字以内で入力してください")
     end
   end
+
+    describe "#lock_access!" do
+    let(:user) { create(:user) }
+
+    it "ロック状態になる" do
+      expect {
+        user.lock_access!
+      }.to change { user.locked_at }.from(nil)
+    end
+  end
 end

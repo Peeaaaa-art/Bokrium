@@ -7,8 +7,8 @@ class User < ApplicationRecord
   has_many :like_memos, dependent: :destroy
   has_many :liked_memos, through: :like_memos, source: :memo
   # Include default devise modules. Others available are:
-  # :lockable, :timeoutable, :trackable
-  devise :database_authenticatable, :registerable,
+  #  :timeoutable, :trackable
+  devise :database_authenticatable, :registerable, :lockable,
         :recoverable, :rememberable, :validatable, :confirmable,
         :omniauthable, omniauth_providers: [ :line ]
 
