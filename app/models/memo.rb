@@ -4,7 +4,6 @@ class Memo < ApplicationRecord
 
   belongs_to :user
   belongs_to :book
-
   has_many :like_memos, dependent: :destroy
   has_many :liked_users, through: :like_memos, source: :user
 
@@ -17,7 +16,13 @@ class Memo < ApplicationRecord
   before_save :ensure_public_token_if_shared
 
   validates :content, length: { maximum: 10_000, message: ": メモは10,000文字以内で入力してください" }
+  validate :within_limit_for_free_plan, on: :create
 
+
+  scope :published_to_others, -> { where(visibility: %i[link_only public_site]) }
+  scope :publicly_listed, -> { where(visibility: VISIBILITY[:public_site]) }
+  scope :exclude_user, ->(user) { user.present? ? where.not(user_id: user.id) : all }
+  scope :with_book_and_user_avatar, -> { includes(:book, user: { avatar_s3_attachment: :blob }) }
 
   pg_search_scope :search_by_content,
   against: :content,
@@ -32,7 +37,6 @@ class Memo < ApplicationRecord
       threshold: 0.03
     }
   }
-
 
   def ensure_public_token_if_shared
     if shared? && public_token.blank?
@@ -65,13 +69,6 @@ class Memo < ApplicationRecord
     Rails.application.routes.default_url_options[:host] || "localhost:3000"
   end
 
-  scope :published_to_others, -> { where(visibility: %i[link_only public_site]) }
-  scope :publicly_listed, -> { where(visibility: VISIBILITY[:public_site]) }
-  scope :exclude_user, ->(user) { user.present? ? where.not(user_id: user.id) : all }
-  scope :with_book_and_user_avatar, -> {
-    includes(:book, user: { avatar_s3_attachment: :blob })
-  }
-
   def self.random_public_memo
     publicly_listed
       .with_book_and_user_avatar
@@ -83,5 +80,15 @@ class Memo < ApplicationRecord
       .exclude_user(exclude_user)
       .with_book_and_user_avatar
       .random_9
+  end
+
+  private
+
+  def within_limit_for_free_plan
+    return if  user.nil? || user.bokrium_premium?
+
+    if user.memos.count >= BokriumLimit::FREE[:memos]
+      errors.add(:base, :limit_exceeded, message: "無料プランのメモ上限#{BokriumLimit::FREE[:memos]}件に達しました。")
+    end
   end
 end

@@ -31,6 +31,7 @@ class Book < ApplicationRecord
             message: ": ISBNは数字とXのみで13文字以内で入力してください"
             }, allow_blank: true
   validate :validate_book_cover_format
+  validate :within_limit_for_free_plan, on: :create
 
   def validate_book_cover_format
     validate_upload_format(book_cover_s3, :book_cover_s3)
@@ -61,5 +62,13 @@ class Book < ApplicationRecord
     return if book_cover.blank? || book_cover_s3.attached?
 
     DownloadCoverImageWorker.perform_async(id, book_cover)
+  end
+
+  def within_limit_for_free_plan
+    return if user.nil? || user.bokrium_premium?
+
+    if user.books.count >= BokriumLimit::FREE[:books]
+      errors.add(:base, :limit_exceeded, message: "無料プランの書籍登録上限#{ BokriumLimit::FREE[:books]}冊に達しました。")
+    end
   end
 end

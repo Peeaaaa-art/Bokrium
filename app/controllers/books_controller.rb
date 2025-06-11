@@ -71,7 +71,13 @@ class BooksController < ApplicationController
     if @book.save
       respond_success("本棚に『#{@book.title.truncate(TITLE_TRUNCATE_LIMIT)}』を追加しました")
     else
-      respond_failure(@book.errors.full_messages.to_sentence.presence || "追加に失敗しました")
+      error_msg = @book.errors.full_messages.to_sentence
+
+      if @book.errors.details[:base].any? { |e| e[:error] == :limit_exceeded }
+        render turbo_stream: limit_error_stream(id: "book_limit_error", message: error_msg)
+      else
+        respond_failure(@book.errors.full_messages.to_sentence.presence || "追加に失敗しました")
+      end
     end
   end
 

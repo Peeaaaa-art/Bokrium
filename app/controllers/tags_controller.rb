@@ -7,10 +7,17 @@ class TagsController < ApplicationController
       flash[:info] = "タグ「#{@tag.name}」を作成しました"
       redirect_back fallback_location: root_path
     else
-      flash[:danger] = "タグの作成に失敗しました: " + @tag.errors.full_messages.join(", ")
-      redirect_back fallback_location: root_path
+      error_msg = @tag.errors.full_messages.to_sentence
+
+      if @tag.errors.details[:base].any? { |e| e[:error] == :limit_exceeded }
+        render turbo_stream: limit_error_stream(id: "tag_limit_error", message: error_msg)
+      else
+        flash[:danger] = "タグの作成に失敗しました: " + @tag.errors.full_messages.join(", ")
+        redirect_back fallback_location: root_path
+      end
     end
   end
+
   def update
     if @tag.update(tag_params)
       flash[:info] = "タグ「#{@tag.name}」を更新しました"

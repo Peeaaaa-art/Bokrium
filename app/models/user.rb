@@ -24,6 +24,22 @@ class User < ApplicationRecord
 
   validates :name, length: { maximum: 50, message: ": 名前は50文字以内で入力してください" }
 
+  # 例：Stripeの顧客IDとサブスクリプションIDを持っている前提
+  # customer_id: string
+  # subscription_id: string
+
+  def bokrium_premium?
+    false
+    # return false if subscription_id.blank?
+
+    # begin
+    #   subscription = Stripe::Subscription.retrieve(subscription_id)
+    #   subscription.status == "active"
+    # rescue Stripe::InvalidRequestError
+    #   false
+    # end
+  end
+
   private
 
   def maybe_switch_to_email_login
