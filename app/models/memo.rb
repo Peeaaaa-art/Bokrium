@@ -16,6 +16,9 @@ class Memo < ApplicationRecord
 
   before_save :ensure_public_token_if_shared
 
+  validates :content, length: { maximum: 10_000, message: ": メモは10,000文字以内で入力してください" }
+
+
   pg_search_scope :search_by_content,
   against: :content,
   using: {

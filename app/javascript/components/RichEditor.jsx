@@ -25,7 +25,7 @@ const RichEditor = ({ element }) => {
       StarterKit,
       BubbleMenuExtension,
       CharacterCount.configure({
-        limit: 100000,
+        limit: 10000,
       }),
     ],
     content: decodeHTML(initialContent),
