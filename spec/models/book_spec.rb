@@ -8,9 +8,77 @@ RSpec.describe Book, type: :model do
   end
 
   describe "バリデーション" do
+    it "タイトルのみ入力されていれば保存できる（他は空）" do
+      book = build(:book,
+        title: "タイトルだけの本",
+        author: nil,
+        publisher: nil,
+        page: nil,
+        price: nil,
+        isbn: nil
+      )
+
+      expect(book).to be_valid
+    end
     it "タイトルが空だと無効" do
       book = FactoryBot.build(:book, title: nil)
       expect(book).not_to be_valid
+    end
+
+    it "タイトルが100文字を超えると無効" do
+      book = build(:book, title: "あ" * 101)
+      expect(book).not_to be_valid
+      expect(book.errors[:title]).to include(": タイトルは100文字以内で入力してください")
+    end
+
+    it "著者が50文字を超えると無効" do
+      book = build(:book, author: "作" * 51)
+      expect(book).not_to be_valid
+      expect(book.errors[:author]).to include(": 著者は50文字以内で入力してください")
+    end
+
+    it "出版社が50文字を超えると無効" do
+      book = build(:book, publisher: "出版社" * 17)
+      expect(book).not_to be_valid
+      expect(book.errors[:publisher]).to include(": 出版社は50文字以内で入力してください")
+    end
+
+    it "ページ数が負の数だと無効" do
+      book = build(:book, page: -10)
+      expect(book).not_to be_valid
+      expect(book.errors[:page]).to include(": ページ数は50560ページ以下で入力してください")
+    end
+
+    it "ページ数が50561以上だと無効" do
+      book = build(:book, page: 50561)
+      expect(book).not_to be_valid
+    end
+
+    it "金額が0円以下だと無効" do
+      book = build(:book, price: 0)
+      expect(book).not_to be_valid
+      expect(book.errors[:price]).to include(": 金額は1円以上100万円以下で指定してください")
+    end
+
+    it "金額が100万円を超えると無効" do
+      book = build(:book, price: 1_000_001)
+      expect(book).not_to be_valid
+    end
+
+    it "ISBNが14桁だと無効（13文字以内）" do
+      book = build(:book, isbn: "12345678901234")
+      expect(book).not_to be_valid
+      expect(book.errors[:isbn]).to include(": ISBNは数字とXのみで13文字以内で入力してください")
+    end
+
+    it "ISBNに英字や記号が含まれると無効（X以外）" do
+      book = build(:book, isbn: "9781234abc$")
+      expect(book).not_to be_valid
+    end
+
+    it "ISBNがXを含み13文字以内なら有効" do
+      book = build(:book, isbn: "123456789X")
+      expect(book).to be_valid
     end
     it "ISBNが重複する場合は無効（同じユーザー内）" do
       user = create(:user)
