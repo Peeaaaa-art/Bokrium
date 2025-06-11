@@ -7,7 +7,7 @@ class TagsController < ApplicationController
       flash[:info] = "タグ「#{@tag.name}」を作成しました"
       redirect_back fallback_location: root_path
     else
-      flash[:danger] = "タグの作成に失敗しました"
+      flash[:danger] = "タグの作成に失敗しました: " + @tag.errors.full_messages.join(", ")
       redirect_back fallback_location: root_path
     end
   end
@@ -16,7 +16,7 @@ class TagsController < ApplicationController
       flash[:info] = "タグ「#{@tag.name}」を更新しました"
       redirect_back fallback_location: root_path
     else
-      flash[:danger] = "タグの更新に失敗しました"
+      flash[:danger] = "タグの更新に失敗しました: " + @tag.errors.full_messages.join(", ")
       redirect_back fallback_location: root_path
     end
   end
@@ -25,10 +25,12 @@ class TagsController < ApplicationController
   end
 
   def destroy
-      @tag.destroy
-      flash[:info] = "タグ「#{@tag.name}」を削除しました"
-      redirect_back fallback_location: root_path
+    tag_name = @tag.name
+    @tag.destroy
+    flash[:info] = "タグ「#{tag_name}」を削除しました"
+    redirect_back fallback_location: root_path
   end
+
 
   private
 

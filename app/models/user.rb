@@ -22,6 +22,8 @@ class User < ApplicationRecord
     auth_provider == "email"
   end
 
+  validates :name, length: { maximum: 50, message: ": 名前は50文字以内で入力してください" }
+
   private
 
   def maybe_switch_to_email_login
