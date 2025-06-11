@@ -29,7 +29,7 @@ class User < ApplicationRecord
   # subscription_id: string
 
   def bokrium_premium?
-    false
+    true
     # return false if subscription_id.blank?
 
     # begin
