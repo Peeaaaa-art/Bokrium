@@ -78,11 +78,15 @@ module BooksHelper
 
   def render_book_info_list(book, list_class: "list-unstyled fs-info text-secondary mb-0 lh-show")
     content_tag(:ul, class: list_class) do
-      book_info_items(book).map do |item|
-        content_tag(:li) do
-          content_tag(:i, "", class: "bi #{item[:icon]} me-1") + item[:value]
+      safe_join(
+        book_info_items(book).map do |item|
+          content_tag(:li) do
+            icon_tag = content_tag(:i, "", class: "bi #{item[:icon]} me-1")
+            value = sanitize(item[:value].to_s, tags: [], attributes: [])
+            icon_tag + value
+          end
         end
-      end.join.html_safe
+      )
     end
   end
 

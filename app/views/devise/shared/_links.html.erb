@@ -23,19 +23,19 @@
 <% if devise_mapping.omniauthable? %>
   <% Devise.omniauth_configs.keys.each do |provider| %>
     <% provider_class = "btn btn-block d-flex align-items-center justify-content-center gap-2 mb-2" %>
+
     <% icon = case provider.to_s
               when "line"
-                "<i class='bi bi-line' style='font-size: 1.5rem;'></i>".html_safe
+                content_tag(:i, nil, class: "bi bi-line", style: "font-size: 1.5rem;")
               else
-                "<i class='bi bi-person-circle'></i>".html_safe
+                content_tag(:i, nil, class: "bi bi-person-circle")
               end %>
 
     <%= link_to send("user_#{provider}_omniauth_authorize_path"),
                 method: :get,
                 class: "#{provider_class} btn-success mt-3",
                 data: { turbo: false } do %>
-      <%= icon %>
-      <%= t(".sign_in_with_provider", provider: OmniAuth::Utils.camelize(provider)) %>
+      <%= safe_join([icon, t(".sign_in_with_provider", provider: OmniAuth::Utils.camelize(provider))], " ") %>
     <% end %>
   <% end %>
 <% end %>
