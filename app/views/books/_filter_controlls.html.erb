@@ -33,7 +33,7 @@
 <!-- 📦 下の行：トグルで展開される内容 -->
   <!-- 検索フォーム -->
   <div class="collapse mb-2" id="searchCollapse">
-    <%= render "shared/search_bar", scope: "mine", placeholder: "自分の本やメモを検索" %>
+    <%= render "shared/search_bar", scope: "mine", placeholder: "自分の本やメモを検索", view_mode: @view_mode %>
   </div>
 
   <!-- ソート -->

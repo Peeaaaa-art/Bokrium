@@ -3,6 +3,7 @@
               class: local_assigns[:form_class] || "d-flex justify-content-center" do %>
 
   <%= hidden_field_tag :scope, scope %>
+  <%= hidden_field_tag :view, local_assigns[:view_mode] || "" %>
   <%= hidden_field_tag :slice, "", data: { responsive_slice_target: "input" } %>
 
   <div class="input-group search-box shadow-sm bg-light-bok border rounded-pill overflow-hidden" style="max-width: 550px; width: 90%;">
