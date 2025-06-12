@@ -39,7 +39,7 @@ class BooksQuery
     books
       .joins(:memos)
       .where(memos: { visibility: visibility })
-      .distinct
+      .group("books.id")
   end
 
   def apply_sorting(books)

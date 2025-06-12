@@ -38,7 +38,7 @@
 
   <!-- ソート -->
   <div class="collapse mb-2" id="sortCollapse">
-    <%= render "sort_controls", filtered_tag: filtered_tag, current_sort: params[:sort] %>
+    <%= render "sort_controls", filtered_tag: filtered_tag, current_sort: params[:sort], view_mode: @view_mode %>
   </div>
 
   <!-- タグ -->
@@ -52,5 +52,5 @@
 
   <!-- ステータス -->
   <div class="collapse mb-2" id="statusCollapse">
-    <%= render "status_filter", current_status: filtered_status %>
+    <%= render "status_filter", current_status: filtered_status, view_mode: @view_mode %>
   </div>

@@ -5,15 +5,14 @@
   <div class="d-flex flex-wrap gap-2 px-3 py-2 bg-light-bok border rounded-pill shadow-sm align-items-center">
     <% Book.statuses.each do |key, _| %>
       <%= link_to t("books.status.#{key}"),
-                  books_path(status: key, tags: params[:tags], sort: params[:sort], memo_visibility: current_visibility),
+                  books_path(status: key, tags: params[:tags], sort: params[:sort], memo_visibility: current_visibility, view: view_mode),
                   class: "btn btn-sm rounded-pill #{'btn-primary-bok' if current_status == key.to_s} btn-outline-secondary",
                   aria: (current_status == key.to_s ? { current: "true" } : {}) %>
     <% end %>
 
     <%= link_to "すべて",
-                books_path(tags: params[:tags], sort: params[:sort], memo_visibility: current_visibility),
-                class: "btn btn-sm btn-outline-dark rounded-pill",
-                aria: (current_status.nil? ? { current: "true" } : {}) %>
+                books_path(tags: params[:tags], sort: params[:sort], memo_visibility: current_visibility, view: view_mode),
+                class: "btn btn-sm btn-outline-dark rounded-pill", aria: (current_status.nil? ? { current: "true" } : {}) %>
   </div>
 </div>
 
@@ -22,13 +21,13 @@
     <% Memo::VISIBILITY.each do |key, _| %>
       <% label = t("memos.visibility.#{key}", default: key.to_s.humanize) %>
       <%= link_to label,
-                  books_path(memo_visibility: key, status: current_status, tags: params[:tags], sort: params[:sort]),
+                  books_path(memo_visibility: key, status: current_status, tags: params[:tags], sort: params[:sort], view: view_mode),
                   class: "btn btn-sm rounded-pill #{'btn-success text-white' if current_visibility == key.to_s} btn-outline-secondary",
                   aria: (current_visibility == key.to_s ? { current: "true" } : {}) %>
     <% end %>
 
     <%= link_to "すべて",
-                books_path(status: current_status, tags: params[:tags], sort: params[:sort]),
+                books_path(status: current_status, tags: params[:tags], sort: params[:sort], view: view_mode),
                 class: "btn btn-sm btn-outline-dark rounded-pill",
                 aria: (current_visibility.nil? ? { current: "true" } : {}) %>
   </div>
