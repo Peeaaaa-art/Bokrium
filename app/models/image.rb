@@ -13,7 +13,7 @@ class Image < ApplicationRecord
   end
 
   def within_limit_for_free_plan
-    return if user.nil? || book.user.bokrium_premium?
+    return if book.user.nil? || book.user.bokrium_premium?
 
     user_images_count = Image.joins(:book).where(books: { user_id: book.user.id }).count
     if user_images_count >= BokriumLimit::FREE[:images]

@@ -5,6 +5,7 @@ class DownloadCoverImageWorker
   sidekiq_options queue: :default, lock: :until_executed, lock_timeout: 5
 
   def perform(book_id, image_url)
+    Rails.logger.info "🐛 Worker triggered with book_id=#{book_id}, url=#{image_url}"
     book = Book.find_by(id: book_id)
     return unless book.present?
     return if book.book_cover_s3.attached?
