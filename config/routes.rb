@@ -47,6 +47,8 @@ Rails.application.routes.draw do
 
     collection do
       get :tag_filter
+      delete :clear_filters
+      delete :clear_tag_filter
     end
   end
 

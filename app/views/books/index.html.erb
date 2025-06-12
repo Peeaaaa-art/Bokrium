@@ -1,7 +1,6 @@
 <% content_for :title, "本棚 - Bokrium" %>
 <%= empty_bookshelf_notice %>
 
-
 <div class="d-flex align-items-center justify-content-between mt-4 mb-3 px-3">
   <% views = [
     { key: "shelf",       icon: "bi-bookshelf",               title: "棚ビューに切り替え" },
@@ -23,7 +22,6 @@
     <% end %>
   </div>
 
-  <!--  中央：４つのボタンのコントロールバー -->
   <%= render "books/filter_controlls",
               filtered_tag: @filtered_tag,
               filtered_tags: @filtered_tags,
@@ -31,7 +29,6 @@
               view_mode: @view_mode
   %>
 
-<!-- 本棚 -->
 <%= render "bookshelf/books_frame_wrapper",
             books: @books,
             books_per_shelf: @books_per_shelf,
@@ -40,3 +37,4 @@
             card_columns: @card_columns,
             spine_per_shelf: @spine_per_shelf
 %>
+

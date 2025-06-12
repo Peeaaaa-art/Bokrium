@@ -11,7 +11,7 @@
     <% end %>
 
     <%= link_to "すべて",
-                books_path(tags: params[:tags], sort: params[:sort], memo_visibility: current_visibility, view: view_mode),
+                books_path(status: "", tags: params[:tags], sort: params[:sort], memo_visibility: current_visibility, view: view_mode),
                 class: "btn btn-sm btn-outline-dark rounded-pill", aria: (current_status.nil? ? { current: "true" } : {}) %>
   </div>
 </div>
@@ -27,7 +27,7 @@
     <% end %>
 
     <%= link_to "すべて",
-                books_path(status: current_status, tags: params[:tags], sort: params[:sort], view: view_mode),
+                books_path(memo_visibility: "",status: current_status, tags: params[:tags], sort: params[:sort], view: view_mode),
                 class: "btn btn-sm btn-outline-dark rounded-pill",
                 aria: (current_visibility.nil? ? { current: "true" } : {}) %>
   </div>
