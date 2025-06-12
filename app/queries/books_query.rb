@@ -11,7 +11,7 @@ class BooksQuery
     books = filter_by_tags(@books)
     books = filter_by_status(books)
     books = filter_by_memo_visibility(books)
-    books = apply_sorting(books)
+    apply_sorting(books)
   end
 
   private
