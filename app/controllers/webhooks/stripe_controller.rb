@@ -12,9 +12,9 @@ class Webhooks::StripeController < ApplicationController
         payload, sig_header, ENV["STRIPE_WEBHOOK_SECRET"]
       )
     rescue JSON::ParserError => e
-      render json: { error: "Invalid payload #{e}" }, status: 400 and return
+      render json: { error: "Invalid payload #{e.message}" }, status: 400 and return
     rescue Stripe::SignatureVerificationError => e
-      render json: { error: "Invalid signature #{e}" }, status: 400 and return
+      render json: { error: "Invalid signature #{e.message}" }, status: 400 and return
     end
 
     # イベント種別ごとの処理

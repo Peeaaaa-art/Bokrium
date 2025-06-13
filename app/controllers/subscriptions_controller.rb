@@ -17,6 +17,20 @@ class SubscriptionsController < ApplicationController
     redirect_to session.url, allow_other_host: true
   end
 
+  def cancel
+    subscription_id = current_user.stripe_subscription_id
+    return redirect_to root_path, alert: "サブスクリプションが見つかりません。" if subscription_id.blank?
+
+    Stripe::Subscription.update(
+      subscription_id,
+      { cancel_at_period_end: true }
+    )
+
+    redirect_to root_path, notice: "サブスクリプションを解約しました。現在の請求期間終了後にキャンセルされます。"
+  rescue Stripe::StripeError => e
+    redirect_to root_path, alert: "エラーが発生しました: #{e.message}"
+  end
+
   private
 
   def set_stripe_customer

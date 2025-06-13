@@ -1,7 +1,4 @@
 Rails.application.routes.draw do
-  get "subscriptions/create"
-  post "/webhook/stripe", to: "webhooks/stripe#create"
-
   devise_for :users, controllers: {
     registrations: "users/registrations",
     confirmations: "users/confirmations",
@@ -88,7 +85,12 @@ Rails.application.routes.draw do
   get "contact", to: "pages#contact"
   get "/manifest.json", to: "pwa#manifest", defaults: { format: :json }
 
-  post "/webhook", to: "webhooks#stripe"
+
+  namespace :webhooks do
+    post :stripe, to: "stripe#create"
+  end
+  get "subscriptions/create"
+  post "subscription/cancel", to: "subscriptions#cancel", as: :cancel_subscription
 
   require "sidekiq/web"
   mount Sidekiq::Web => "/sidekiq" if Rails.env.development?
