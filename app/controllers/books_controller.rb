@@ -28,6 +28,18 @@ class BooksController < ApplicationController
     @detail_card_columns = display.detail_card_columns
     @spine_per_shelf = display.spine_per_shelf
 
+    %w[sort status memo_visibility].each do |key|
+      if params.key?(key)
+        if params[key].present?
+          session[key] = params[key]
+        else
+          session.delete(key)
+        end
+      elsif session[key].present?
+        params[key] = session[key]
+      end
+    end
+
     books = BooksQuery.new(books, params: params, current_user: current_user).call
 
     books_per_page = display.unit_per_page * CHUNKS_PER_PAGE
@@ -71,7 +83,13 @@ class BooksController < ApplicationController
     if @book.save
       respond_success("本棚に『#{@book.title.truncate(TITLE_TRUNCATE_LIMIT)}』を追加しました")
     else
-      respond_failure(@book.errors.full_messages.to_sentence.presence || "追加に失敗しました")
+      error_msg = @book.errors.full_messages.to_sentence
+
+      if @book.errors.details[:base].any? { |e| e[:error] == :limit_exceeded }
+        render turbo_stream: limit_error_stream(id: "book_limit_error", message: error_msg)
+      else
+        respond_failure(@book.errors.full_messages.to_sentence.presence || "追加に失敗しました")
+      end
     end
   end
 
@@ -156,6 +174,11 @@ class BooksController < ApplicationController
   def tag_filter
     render partial: "books/tag_filter", locals: { filtered_tags: [] }
   end
+
+def clear_filters
+  %i[sort status memo_visibility tags].each { |key| session.delete(key) }
+  redirect_to books_path
+end
 
   private
 

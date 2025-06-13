@@ -22,8 +22,13 @@ class MemosController < ApplicationController
       flash[:info] = "メモを保存しました"
       redirect_to book_path(@memo.book)
     else
-      flash[:danger] = "メモの保存に失敗しました"
-      render "books/show", status: :unprocessable_entity
+      error_msg = @memo.errors.full_messages.to_sentence
+      if @memo.errors.details[:base].any? { |e| e[:error] == :limit_exceeded }
+        render turbo_stream: limit_error_stream(id: "memo_limit_error", message: error_msg)
+      else
+        flash[:danger] = "メモの保存に失敗しました"
+        render "books/show", status: :unprocessable_entity
+      end
     end
   end
 

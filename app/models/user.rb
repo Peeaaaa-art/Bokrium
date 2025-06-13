@@ -7,8 +7,8 @@ class User < ApplicationRecord
   has_many :like_memos, dependent: :destroy
   has_many :liked_memos, through: :like_memos, source: :memo
   # Include default devise modules. Others available are:
-  # :lockable, :timeoutable, :trackable
-  devise :database_authenticatable, :registerable,
+  #  :timeoutable, :trackable
+  devise :database_authenticatable, :registerable, :lockable,
         :recoverable, :rememberable, :validatable, :confirmable,
         :omniauthable, omniauth_providers: [ :line ]
 
@@ -20,6 +20,16 @@ class User < ApplicationRecord
 
   def email_login?
     auth_provider == "email"
+  end
+
+  validates :name, length: { maximum: 50, message: ": 名前は50文字以内で入力してください" }
+
+  def subscribed_user?
+    subscription_status == "active"
+  end
+
+  def free_plan_user?
+    subscription_status.nil? || subscription_status.in?(%w[canceled unpaid incomplete])
   end
 
   private

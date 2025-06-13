@@ -47,6 +47,8 @@ Rails.application.routes.draw do
 
     collection do
       get :tag_filter
+      delete :clear_filters
+      delete :clear_tag_filter
     end
   end
 
@@ -79,7 +81,16 @@ Rails.application.routes.draw do
   get "faq", to: "pages#faq"
   get "terms", to: "pages#terms"
   get "privacy", to: "pages#privacy"
+  get "legal", to: "pages#legal"
+  get "contact", to: "pages#contact"
   get "/manifest.json", to: "pwa#manifest", defaults: { format: :json }
+
+
+  namespace :webhooks do
+    post :stripe, to: "stripe#create"
+  end
+  get "subscriptions/create", as: :create_subscrption
+  post "subscription/cancel", to: "subscriptions#cancel", as: :cancel_subscription
 
   require "sidekiq/web"
   mount Sidekiq::Web => "/sidekiq" if Rails.env.development?

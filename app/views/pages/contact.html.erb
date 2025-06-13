@@ -1,0 +1,20 @@
+<div class="container py-5 px-3 px-md-5 my-5 bg-apple-light" style="max-width: 720px;">
+  <h2 class="mb-4 text-center">お問い合わせ</h2>
+  <p class="text-muted text-center">ご不明な点やご質問がございましたら、以下のメールアドレスまでご連絡ください。</p>
+
+  <div class="my-4 text-center">
+    <h5>メールアドレス</h5>
+    <p>
+      <%= mail_to "support@bokrium.com", "support@bokrium.com", class: "fw-bold text-primary" %>
+    </p>
+  </div>
+
+  <div class="my-4">
+    <p>現在、お問い合わせはメールでのみ承っております。ご返信には通常1〜2営業日をいただいております。</p>
+    <p>内容によってはお時間をいただく場合や、お答えできかねる場合もございますので、あらかじめご了承ください。</p>
+  </div>
+
+  <div class="my-4">
+    <p>ご契約内容については、<%= link_to "利用規約", terms_path %>や<%= link_to "特定商取引法に基づく表記", legal_path %>もご参照ください。</p>
+  </div>
+</div>

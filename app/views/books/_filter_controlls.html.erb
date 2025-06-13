@@ -25,20 +25,33 @@
     </div>
   </div>
 
-  <!-- ➡ 右側スペース（空でOK）-->
-  <div class="flex-shrink-0 d-none-sm" style="width: 48px;"></div> <!-- サイズ合わせ用 -->
+  <!-- クリアボタン -->
+  <div class="flex-shrink-0">
+    <% if session.to_h.slice("sort", "status", "memo_visibility", "tags", "view").values.any?(&:present?) %>
+      <%= button_to clear_filters_books_path,
+                    method: :delete,
+                    class: "btn btn-light border shadow-sm d-flex align-items-center justify-content-center bookshelf-icon",
+                    title: "クリア" do %>
+        <i class="bi bi-x-circle fs-5 icon-refined"></i>
+      <% end %>
+    <% else %>
+      <div class="btn btn-light border shadow-sm d-flex align-items-center justify-content-center bookshelf-icon invisible">
+        <i class="bi bi-x-circle fs-5 icon-refined"></i>
+      </div>
+    <% end %>
+  </div>
 </div>
 
 
 <!-- 📦 下の行：トグルで展開される内容 -->
   <!-- 検索フォーム -->
   <div class="collapse mb-2" id="searchCollapse">
-    <%= render "shared/search_bar", scope: "mine", placeholder: "自分の本やメモを検索" %>
+    <%= render "shared/search_bar", scope: "mine", placeholder: "自分の本やメモを検索", view_mode: @view_mode %>
   </div>
 
   <!-- ソート -->
   <div class="collapse mb-2" id="sortCollapse">
-    <%= render "sort_controls", filtered_tag: filtered_tag, current_sort: params[:sort] %>
+    <%= render "sort_controls", filtered_tag: filtered_tag, current_sort: params[:sort], view_mode: @view_mode %>
   </div>
 
   <!-- タグ -->
@@ -52,5 +65,5 @@
 
   <!-- ステータス -->
   <div class="collapse mb-2" id="statusCollapse">
-    <%= render "status_filter", current_status: filtered_status %>
+    <%= render "status_filter", current_status: filtered_status, view_mode: @view_mode %>
   </div>

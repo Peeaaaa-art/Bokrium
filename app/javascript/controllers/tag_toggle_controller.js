@@ -21,17 +21,16 @@ export default class extends Controller {
     this.redirect()
   }
 
-  redirect() {
-    const url = new URL(window.location.href)
-    url.searchParams.delete("tags[]")
+    redirect() {
+      const url = new URL(window.location.href)
+      url.searchParams.delete("tags")
 
-    // クエリに tags[]=◯◯ を複数追加
-    this.selectedSet.forEach(tag => {
-      url.searchParams.append("tags[]", tag)
-    })
+      this.selectedSet.forEach(tag => {
+        url.searchParams.append("tags", tag)
+      })
 
-    Turbo.visit(url.toString(), { frame: "books_frame" })
-  }
+      Turbo.visit(url.toString(), { frame: "books_frame" })
+    }
 
   updateUI() {
     this.element.querySelectorAll(".tag-btn").forEach((btn) => {

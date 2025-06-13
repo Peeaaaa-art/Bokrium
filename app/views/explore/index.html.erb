@@ -1,17 +1,29 @@
 <div class="container text-center my-4">
-  <% if @results.any? %>
-    <h2 class="mb-3 ">検索結果（<%= @results.size %>件）</h2>
+  <% if @scope == "mine" && @books.present? %>
+    <h2 class="mb-3">
+      検索結果（<%= @pagy.count %>冊中 <%= @pagy.from %>〜<%= @pagy.to %>冊を表示）
+    </h2>
 
-    <% case params[:scope] %>
-    <% when "public" %>
-      <div id="memo-grid" class="row row-cols-1 row-cols-md-3 g-4">
-        <%= render partial: "public_bookshelf/public_card", collection: @results, as: :memo, pagy: @pagy %>
-      </div>
-    <% when "mine" %>
-      <%= render partial: "bookshelf/kino_books_grid", locals: { books: @results, books_per_shelf: @books_per_shelf, pagy: @pagy } %>
+    <% case @view_mode %>
+    <% when "shelf" %>
+      <%= render partial: "bookshelf/kino_books_grid", locals: { books: @books, books_per_shelf: @books_per_shelf, pagy: @pagy } %>
+    <% when "card" %>
+      <%= render partial: "bookshelf/simple_card", locals: { books: @books, card_columns: @card_columns, pagy: @pagy } %>
+    <% when "detail_card" %>
+      <%= render partial: "bookshelf/detail_card_grid", locals: { books: @books, detail_card_columns: @detail_card_columns, pagy: @pagy } %>
+    <% when "spine" %>
+      <%= render partial: "bookshelf/spine_books_grid", locals: { books: @books, spine_per_shelf: @spine_per_shelf, pagy: @pagy } %>
+    <% when "b_note" %>
+      <%= render partial: "bookshelf/b_note_grid", locals: { books: @books, b_note_per_page: @b_note_per_page, pagy: @pagy } %>
     <% else %>
-      <p class="text-center text-warning">スコープが不正です</p>
+      <p class="text-warning">ビューが不正です</p>
     <% end %>
+
+  <% elsif @scope == "public" && @memos.present? %>
+    <h2 class="mb-3">検索結果（<%= @memos.size %>件）</h2>
+    <div id="memo-grid" class="row row-cols-1 row-cols-md-3 g-4">
+      <%= render partial: "public_bookshelf/public_card", collection: @memos, as: :memo %>
+    </div>
 
   <% else %>
     <p class="text-muted mt-4">該当する書籍が見つかりませんでした。</p>

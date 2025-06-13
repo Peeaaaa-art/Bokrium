@@ -2,6 +2,7 @@ class PublicBookshelfController < ApplicationController
   def index
     @others_random_memo = Memo.random_public_memo
     @random_memos = Memo.random_nine_public(exclude_user: current_user)
+    @view_mode = ""
   end
 
   def show

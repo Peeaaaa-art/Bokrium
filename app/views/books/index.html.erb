@@ -22,14 +22,13 @@
     <% end %>
   </div>
 
-  <!--  中央：４つのボタンのコントロールバー -->
   <%= render "books/filter_controlls",
               filtered_tag: @filtered_tag,
               filtered_tags: @filtered_tags,
-              filtered_status: @filtered_status
+              filtered_status: @filtered_status,
+              view_mode: @view_mode
   %>
 
-<!-- 本棚 -->
 <%= render "bookshelf/books_frame_wrapper",
             books: @books,
             books_per_shelf: @books_per_shelf,
@@ -38,3 +37,4 @@
             card_columns: @card_columns,
             spine_per_shelf: @spine_per_shelf
 %>
+

@@ -2,11 +2,23 @@ require 'rails_helper'
 
 RSpec.describe Memo, type: :model do
   describe "バリデーション" do
+    let(:user) { create(:user) }
+    let(:book) { create(:book, user: user) }
+
     it "ユーザー、書籍、コンテンツがあれば有効" do
-      user = FactoryBot.create(:user)
-      book = FactoryBot.create(:book, user: user)
-      memo = FactoryBot.build(:memo, user: user, book: book, content: "テストメモ")
+      memo = build(:memo, user: user, book: book, content: "テストメモ")
       expect(memo).to be_valid
+    end
+
+    it "content が 10,000 文字なら有効" do
+      memo = build(:memo, user: user, book: book, content: "あ" * 10_000)
+      expect(memo).to be_valid
+    end
+
+    it "content が 10,001 文字だと無効" do
+      memo = build(:memo, user: user, book: book, content: "あ" * 10_001)
+      expect(memo).not_to be_valid
+      expect(memo.errors[:content]).to include(": メモは10,000文字以内で入力してください")
     end
   end
 

@@ -1,7 +1,7 @@
 module UploadValidations
   extend ActiveSupport::Concern
 
-  MAX_UPLOAD_SIZE = 10.megabytes
+  MAX_UPLOAD_SIZE = 5.megabytes
 
   def validate_upload_format(attachment, attribute_name)
     return unless attachment.attached?
@@ -17,7 +17,7 @@ module UploadValidations
     end
 
     if attachment.blob.byte_size > MAX_UPLOAD_SIZE
-      errors.add(attribute_name, " : 10MB以下のファイルにしてください")
+      errors.add(attribute_name, " : 5MB以下のファイルにしてください")
     end
   end
 end
