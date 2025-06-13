@@ -7,7 +7,7 @@ class WelcomeController < ApplicationController
     end
 
     if params[:session_id].present?
-      flash.now[:notice] = "Bokrium+にご登録いただき、ありがとうございます！"
+      flash.now[:notice] = "Bokrium+にご登録ありがとうございます！"
       # 将来的にはここで session_id を使ってStripeから情報取得もできる
     elsif params[:canceled]
       flash.now[:alert] = "決済はキャンセルされました。"
