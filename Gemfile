@@ -20,7 +20,7 @@ gem "jbuilder"
 
 gem "redis"
 
-gem "sidekiq", "~> 7.2"
+gem "sidekiq", "~> 8.0"
 
 gem "sidekiq-unique-jobs"
 
