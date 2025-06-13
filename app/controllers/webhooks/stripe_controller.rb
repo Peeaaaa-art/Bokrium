@@ -1,5 +1,6 @@
 class Webhooks::StripeController < ApplicationController
-  protect_from_forgery except: :create # WebhookはCSRF検証しない
+  # Webhookは外部からのリクエストなのでCSRF保護を除外する
+  protect_from_forgery except: :create
 
   def create
     payload = request.body.read
@@ -16,6 +17,7 @@ class Webhooks::StripeController < ApplicationController
       render json: { error: "Invalid signature #{e}" }, status: 400 and return
     end
 
+    # イベント種別ごとの処理
     case event.type
     when "customer.subscription.created"
       handle_subscription_created(event.data.object)
@@ -34,20 +36,35 @@ class Webhooks::StripeController < ApplicationController
     user = User.find_by(stripe_customer_id: subscription.customer)
     return unless user
 
-    user.update(stripe_subscription_id: subscription.id)
-    Rails.logger.info "🔔 Subscription created for user ##{user.id}"
+    user.update(
+      stripe_subscription_id: subscription.id,
+      subscription_status: subscription.status
+    )
+
+    Rails.logger.info "🔔 Subscription created for user ##{user.id} | Status: #{subscription.status}"
   end
 
   def handle_subscription_updated(subscription)
-    # 必要に応じて追加更新ロジックを書く
-    Rails.logger.info "🔁 Subscription updated: #{subscription.id}"
+    user = User.find_by(stripe_customer_id: subscription.customer)
+    return unless user
+
+    user.update(
+      stripe_subscription_id: subscription.id,
+      subscription_status: subscription.status
+    )
+
+    Rails.logger.info "🔁 Subscription updated for user ##{user.id} | Status: #{subscription.status}"
   end
 
   def handle_subscription_deleted(subscription)
     user = User.find_by(stripe_subscription_id: subscription.id)
     return unless user
 
-    user.update(stripe_subscription_id: nil)
-    Rails.logger.info "❌ Subscription deleted for user ##{user.id}"
+    user.update(
+      stripe_subscription_id: nil,
+      subscription_status: subscription.status
+    )
+
+    Rails.logger.info "❌ Subscription deleted for user ##{user.id} | Status: #{subscription.status}"
   end
 end

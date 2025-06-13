@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   get "subscriptions/create"
-  post "/webhooks/stripe", to: "webhooks/stripe#create"
+  post "/webhook/stripe", to: "webhooks/stripe#create"
+
   devise_for :users, controllers: {
     registrations: "users/registrations",
     confirmations: "users/confirmations",

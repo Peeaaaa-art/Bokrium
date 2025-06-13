@@ -11,7 +11,7 @@ ActsAsTaggableOn::Tag.class_eval do
   private
 
   def within_limit_for_free_plan
-    return if user.nil? || user&.bokrium_premium?
+    return if user.nil? || user&.subscribed_user?
 
     if user.tags.count >=  BokriumLimit::FREE[:tags]
       errors.add(:base, :limit_exceeded, message: "無料プランのタグ作成上限#{BokriumLimit::FREE[:tags]}個に達しました。")

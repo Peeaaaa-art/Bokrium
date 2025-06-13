@@ -85,7 +85,7 @@ class Memo < ApplicationRecord
   private
 
   def within_limit_for_free_plan
-    return if  user.nil? || user.bokrium_premium?
+    return if  user.nil? || user.subscribed_user?
 
     if user.memos.count >= BokriumLimit::FREE[:memos]
       errors.add(:base, :limit_exceeded, message: "無料プランのメモ上限#{BokriumLimit::FREE[:memos]}件に達しました。")

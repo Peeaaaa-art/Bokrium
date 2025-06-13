@@ -65,7 +65,7 @@ class Book < ApplicationRecord
   end
 
   def within_limit_for_free_plan
-    return if user.nil? || user.bokrium_premium?
+    return if user.nil? || user.subscribed_user?
 
     if user.books.count >= BokriumLimit::FREE[:books]
       errors.add(:base, :limit_exceeded, message: "無料プランの書籍登録上限#{ BokriumLimit::FREE[:books]}冊に達しました。")

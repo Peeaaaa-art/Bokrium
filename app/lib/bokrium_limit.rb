@@ -16,6 +16,6 @@ module BokriumLimit
   }.freeze
 
   def self.for(user)
-    user.bokrium_premium? ? PREMIUM : FREE
+    user.subscribed_user? ? PREMIUM : FREE
   end
 end
