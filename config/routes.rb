@@ -81,6 +81,7 @@ Rails.application.routes.draw do
   get "faq", to: "pages#faq"
   get "terms", to: "pages#terms"
   get "privacy", to: "pages#privacy"
+  get "legal", to: "pages#legal"
   get "/manifest.json", to: "pwa#manifest", defaults: { format: :json }
 
   require "sidekiq/web"
