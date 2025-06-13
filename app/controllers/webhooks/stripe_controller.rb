@@ -25,6 +25,8 @@ class Webhooks::StripeController < ApplicationController
       handle_subscription_updated(event.data.object)
     when "customer.subscription.deleted"
       handle_subscription_deleted(event.data.object)
+    when "invoice.paid"
+      handle_invoice_paid(event.data.object)
     end
 
     render json: { status: "success" }
@@ -66,5 +68,19 @@ class Webhooks::StripeController < ApplicationController
     )
 
     Rails.logger.info "❌ Subscription deleted for user ##{user.id} | Status: #{subscription.status}"
+  end
+
+  def handle_invoice_paid(invoice)
+    subscription_id = invoice.subscription
+    return unless subscription_id
+
+    user = User.find_by(stripe_subscription_id: subscription_id)
+    return unless user
+
+    # 念のため subscription 情報を再取得してステータスを同期
+    subscription = Stripe::Subscription.retrieve(subscription_id)
+    user.update(subscription_status: subscription.status)
+
+    Rails.logger.info "💰 Invoice paid for user ##{user.id} | Status: #{subscription.status}"
   end
 end
