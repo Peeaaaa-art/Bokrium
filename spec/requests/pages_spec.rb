@@ -14,6 +14,10 @@ RSpec.describe "Pages", type: :request do
       get "/legal"
       expect(response).to have_http_status(:ok)
     end
+    it "Contact" do
+      get "/contact"
+      expect(response).to have_http_status(:ok)
+    end
     it "FAQ" do
       get "/faq"
       expect(response).to have_http_status(:ok)
