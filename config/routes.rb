@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get "webhooks/stripe"
   devise_for :users, controllers: {
     registrations: "users/registrations",
     confirmations: "users/confirmations",
@@ -84,6 +85,8 @@ Rails.application.routes.draw do
   get "legal", to: "pages#legal"
   get "contact", to: "pages#contact"
   get "/manifest.json", to: "pwa#manifest", defaults: { format: :json }
+
+  post "/webhook", to: "webhooks#stripe"
 
   require "sidekiq/web"
   mount Sidekiq::Web => "/sidekiq" if Rails.env.development?

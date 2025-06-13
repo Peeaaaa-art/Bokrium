@@ -46,6 +46,7 @@ gem "omniauth-rails_csrf_protection"
 gem "whenever", require: false
 gem "browser"
 gem "pagy"
+gem "stripe"
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: [ :mingw, :mswin, :x64_mingw, :jruby ]
