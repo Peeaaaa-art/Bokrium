@@ -89,7 +89,7 @@ Rails.application.routes.draw do
   namespace :webhooks do
     post :stripe, to: "stripe#create"
   end
-  get "subscriptions/create"
+  get "subscriptions/create", as: :create_subscrption
   post "subscription/cancel", to: "subscriptions#cancel", as: :cancel_subscription
 
   require "sidekiq/web"

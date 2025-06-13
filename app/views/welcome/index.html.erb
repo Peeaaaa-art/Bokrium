@@ -39,9 +39,13 @@
     <h3 class="fade-in delay-1 mb-3">あなたの読書体験をもっと豊かに</h3>
     <h5 class="fade-in delay-2 text-muted">Bokriumで読書メモを管理し、知識を整理しましょう</h5>
     <div class="fade-in delay-3">
-        <%= link_to new_user_registration_path, class: "btn btn-success btn-lg mt-4 mb-5 shadow-sm px-4 py-2 fs-5 rounded-pill" do %>
+        <%= link_to new_user_registration_path, class: "btn btn-success btn-lg mt-4  shadow-sm px-4 py-2 fs-5 rounded-pill" do %>
           今すぐはじめる<br class="d-sm-none">（あなたの本棚をつくる）
         <% end %>
+        <div class="fade-in delay-8 mt-2 mb-5 mx-auto text-muted text-center small">
+          ※ 無料プランでは、一部機能に上限があります。
+          <%= link_to "詳細はこちら", plans_path, class: "ms-2 text-decoration-underline text-muted" %>
+        </div>
       </div>
     </div>
     <p class="text-center fade-in delay-4">↓↓↓ とりあえず試してみる</p>
@@ -94,7 +98,7 @@
     <% end %>
   <% end %>
 
-  <% if @others_random_memo && @others_random_memo.book && @others_random_memo.user %>
+  <% if @others_random_memo && @others_random_memo.book %>
   <%= link_to book_path(@others_random_memo.book), class: "text-decoration-none text-reset" do %>
     <div class="container my-4">
       <h3 class="mb-3 mb-md-5">ランダム公開メモ</h3>
@@ -123,7 +127,6 @@
               <span class="text-muted small"><%= @others_random_memo.user.name %></span>
             </div>
           </div>
-
         </div>
       </div>
     </div>
@@ -138,3 +141,16 @@
     <span class="fw-semibold" style="letter-spacing: 0.03em;">使い方ガイド</span>
   <% end %>
 </div>
+
+
+
+<% if user_signed_in? && current_user.created_at < 3.days.ago %>
+  <% unless current_user.subscribed_user? %>
+    <div class="text-center my-5">
+      <%= link_to plans_path, class: "btn btn-warning shadow-sm d-inline-flex align-items-center gap-2 px-4 py-1 rounded-pill" do %>
+        <i class="bi bi-gem fs-5"></i>
+        <span class="fw-semibold big-shoulders-inline-bold fs-4" style="letter-spacing: 0.03em;">Bokrium+</span>
+      <% end %>
+    </div>
+  <% end %>
+<% end %>

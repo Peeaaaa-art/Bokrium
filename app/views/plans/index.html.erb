@@ -4,7 +4,7 @@
   <div class="text-center mb-5">
     <h1 class="fw-bold fade-in delay-1">もっと広がる、あなたの本棚。</h1>
     <p class="lead text-muted slide-in delay-2">
-      無料プランでは物足りないあなたへ。<br class="d-none d-md-inline">Bokrium+で、読書の記録をもっと自由に。
+      無料プランでは物足りないあなたへ。<br class="d-none d-md-inline"><span class="big-shoulders-inline-bold">Bokrium+</span>で、読書の記録をもっと自由に。
     </p>
   </div>
 
@@ -14,7 +14,7 @@
       <div class="card shadow-lg border-0">
         <div class="card-body px-4 px-md-5 py-5">
           <div class="text-center mb-4">
-            <h2 class="fw-bold text-success">Bokrium+ ができること</h2>
+            <h2 class="fw-bold text-success"><span class="big-shoulders-inline-bold logo-plans">Bokrium+</span> ができること</h2>
             <p class="text-muted">無料プランとの違いを一目でチェック</p>
           </div>
 
@@ -32,25 +32,20 @@
                 <td class="text-success">無制限</td>
               </tr>
               <tr>
-                <td class="text-start">タグ作成</td>
-                <td>最大<%= BokriumLimit::FREE[:tags] %>個</td>
-                <td class="text-success">無制限</td>
-              </tr>
-              <tr>
                 <td class="text-start">メモ数</td>
                 <td>最大<%= BokriumLimit::FREE[:memos] %>件</td>
                 <td class="text-success">無制限</td>
               </tr>
               <tr>
-                <td class="text-start">ランダム通知（メール）</td>
-                <td>月<%= BokriumLimit::FREE[:random_notifications] %>回</td>
-                <td class="text-success">毎日受信可能</td>
+                <td class="text-start">タグ作成</td>
+                <td>最大<%= BokriumLimit::FREE[:tags] %>個</td>
+                <td class="text-success">無制限</td>
               </tr>
             </tbody>
           </table>
 
           <div class="text-center my-4">
-            <%= link_to "月額 ¥300 ですべての制限を解放", subscriptions_create_path, class: "btn btn-lg btn-primary px-5 py-3 shadow rounded-pill fs-5" %>
+            <%= link_to "月額 ¥300 ですべての制限を解除", create_subscrption_path, class: "btn btn-lg btn-primary px-5 py-3 shadow rounded-pill fs-5" %>
           </div>
           <p class="text-center text-muted small">※いつでもキャンセルOK・安心の月額制</p>
         </div>
