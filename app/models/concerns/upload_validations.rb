@@ -12,8 +12,11 @@ module UploadValidations
     extension = attachment.filename.extension_without_delimiter&.downcase
     content_type = attachment.content_type
 
-    unless allowed_extensions.include?(extension) && allowed_content_types.include?(content_type)
+    # content_type が許可されていれば、拡張子が無くても許可する
+    if !allowed_content_types.include?(content_type)
       errors.add(attribute_name, " : 許可されていない形式です（jpg, png, gif, webp, svg）")
+    elsif extension.present? && !allowed_extensions.include?(extension)
+      errors.add(attribute_name, " : ファイル拡張子が不正です（jpg, png, gif, webp, svg）")
     end
 
     if attachment.blob.byte_size > MAX_UPLOAD_SIZE

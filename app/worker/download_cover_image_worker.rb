@@ -17,7 +17,9 @@ class DownloadCoverImageWorker
     $redis.set(redis_key, "working", ex: 300)
 
     begin
-      file = URI.open(image_url)
+      file = URI.open(image_url, "User-Agent" => "Mozilla/5.0")
+      Rails.logger.info "📦 Content-Type: #{file.content_type}"
+      Rails.logger.info "📏 File Size: #{file.size}"
       parsed = URI.parse(image_url)
       filename = File.basename(parsed.path).presence || "cover.jpg"
       content_type = file.content_type.presence || "image/jpeg"
