@@ -12,7 +12,8 @@ class SubscriptionsController < ApplicationController
       } ],
       success_url: root_url + "?session_id={CHECKOUT_SESSION_ID}",
       cancel_url: root_url + "?canceled=true",
-      customer: @stripe_customer_id
+      customer: @stripe_customer_id,
+      client_reference_id: current_user.id
     })
     redirect_to session.url, allow_other_host: true
   end
@@ -24,6 +25,16 @@ class SubscriptionsController < ApplicationController
     Stripe::Subscription.update(
       subscription_id,
       { cancel_at_period_end: true }
+    )
+
+    subscription = Stripe::Subscription.retrieve(subscription_id)
+
+    cancel_at_period_end = subscription.cancel_at_period_end
+    cancel_at = subscription.cancel_at ? Time.zone.at(subscription.cancel_at) : nil
+
+    current_user.update!(
+      cancel_at_period_end: cancel_at_period_end,
+      current_period_end: cancel_at
     )
 
     redirect_to root_path, notice: "サブスクリプションを解約しました。現在の請求期間終了後にキャンセルされます。"

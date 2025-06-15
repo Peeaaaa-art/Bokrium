@@ -24,12 +24,15 @@ class User < ApplicationRecord
 
   validates :name, length: { maximum: 50, message: ": 名前は50文字以内で入力してください" }
 
+  SUBSCRIBED_STATUSES = %w[active trialing]
+  FREE_PLAN_STATUSES = %w[canceled unpaid incomplete].freeze
+
   def subscribed_user?
-    subscription_status == "active"
+    SUBSCRIBED_STATUSES.include?(subscription_status)
   end
 
   def free_plan_user?
-    subscription_status.nil? || subscription_status.in?(%w[canceled unpaid incomplete])
+    subscription_status.nil? || FREE_PLAN_STATUSES.include?(subscription_status)
   end
 
   private
