@@ -48,5 +48,3 @@
 /elasticsearch/*
 
 **/.DS_Store
-
-Procfile.dev

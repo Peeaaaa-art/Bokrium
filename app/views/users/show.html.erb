@@ -1,5 +1,15 @@
 <% content_for :title, "ユーザー - Bokrium" %>
 
+<% if current_user.cancel_at_period_end? && current_user.current_period_end.present? %>
+  <div class="alert alert-warning text-center">
+    <span class="fw-semibold big-shoulders-inline-bold fs-5" style="letter-spacing: 0.03em;">Bokrium+</span> は <%= current_user.current_period_end.strftime("%Y年%m月%d日") %> に終了予定です。
+  </div>
+<% elsif current_user.cancel_at_period_end? %>
+  <div class="alert alert-warning text-center">
+    <span class="fw-semibold big-shoulders-inline-bold fs-5" style="letter-spacing: 0.03em;">Bokrium+</span> は現在の請求期間終了後にキャンセルされます。
+  </div>
+<% end %>
+
 <% if current_user %>
   <div class="container my-5">
     <div class="card subtle-shadow mb-4">
@@ -10,7 +20,6 @@
               <span class="fw-semibold big-shoulders-inline-bold fs-4" style="letter-spacing: 0.03em;">Bokrium+</span>
             <% end %>
       </div>
-
 
       <div class="card-body bg-light-bok">
         <div class="row align-items-center">
