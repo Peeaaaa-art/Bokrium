@@ -496,6 +496,9 @@ GEM
       logger
       rack (>= 2.2.4)
       redis-client (>= 0.22.2)
+    sidekiq-cron (1.9.1)
+      fugit (~> 1.8)
+      sidekiq (>= 4.2.1)
     sidekiq-unique-jobs (8.0.11)
       concurrent-ruby (~> 1.0, >= 1.0.5)
       sidekiq (>= 7.0.0, < 9.0.0)
@@ -625,6 +628,7 @@ DEPENDENCIES
   selenium-webdriver
   shoulda-matchers (~> 6.5)
   sidekiq (~> 7.2)
+  sidekiq-cron (~> 1.9.1)
   sidekiq-unique-jobs
   solid_cable
   solid_cache

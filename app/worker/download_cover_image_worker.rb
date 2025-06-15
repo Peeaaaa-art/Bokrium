@@ -2,7 +2,7 @@ require "open-uri"
 
 class DownloadCoverImageWorker
   include Sidekiq::Worker
-  sidekiq_options queue: :default, lock: :until_executed, lock_timeout: 5
+  sidekiq_options queue: :default
 
   def perform(book_id, image_url)
     Rails.logger.info "🐛 Worker triggered with book_id=#{book_id}, url=#{image_url}"
