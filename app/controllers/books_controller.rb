@@ -193,13 +193,14 @@ class BooksController < ApplicationController
 
     results = current_user.books
                           .where("title ILIKE :term OR author ILIKE :term", term: "%#{term}%")
-                          .select(:title, :author)
+                          .select(:id, :title, :author)
                           .distinct
                           .limit(10)
                           .map do |book|
                             {
                               value: book.title,
-                              label: "#{book.title}（#{book.author.presence || '著者不明'}）"
+                              label: "#{book.title}（#{book.author.presence || ''}）",
+                              url: book_path(book) # 👈 書籍詳細ページへのURLを追加
                             }
                           end
 
