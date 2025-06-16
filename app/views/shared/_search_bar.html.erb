@@ -1,15 +1,33 @@
 <%= form_with url: explore_path, method: :get,
               data: { controller: "responsive-slice", turbo_frame: "books_frame" },
-              class: local_assigns[:form_class] || "d-flex justify-content-center" do %>
+              class: local_assigns[:form_class] || "d-flex justify-content-center position-relative" do %>
 
   <%= hidden_field_tag :scope, scope %>
   <%= hidden_field_tag :view, local_assigns[:view_mode] || "" %>
   <%= hidden_field_tag :slice, "", data: { responsive_slice_target: "input" } %>
 
-  <div class="input-group search-box shadow-sm bg-light-bok border rounded-pill overflow-hidden" style="max-width: 550px; width: 90%;">
-    <%= text_field_tag :q, params[:q], placeholder: placeholder || "検索", class: "form-control border-0 bg-light-bok py-2" %>
+  <div class="input-group search-box shadow-sm bg-light-bok border rounded-pill position-relative"
+       data-controller="autocomplete"
+       data-autocomplete-url-value="<%= autocomplete_books_path %>"
+       style="max-width: 550px; width: 90%;">
+
+    <%= text_field_tag :q, params[:q],
+        placeholder: placeholder || "検索",
+        class: "form-control border-0 bg-light-bok py-2",
+        data: {
+          autocomplete_target: "input",
+          action: "input->autocomplete#fetchSuggestions blur->autocomplete#clearSuggestions"
+        },
+        autocomplete: "off" %>
+
     <button type="submit" class="btn btn-primary-bok border-0 px-4 rounded-pill-right">
       検索
     </button>
+
+    <!-- ✅ ここが suggestionsTarget -->
+      <div data-autocomplete-target="suggestions"
+       class="autocomplete-suggestions-container position-absolute w-100 z-3"
+       style="top: 100%; left: 0;">
+  </div>
   </div>
 <% end %>

@@ -180,10 +180,31 @@ class BooksController < ApplicationController
     render partial: "books/tag_filter", locals: { filtered_tags: [] }
   end
 
-def clear_filters
-  %i[sort status memo_visibility tags].each { |key| session.delete(key) }
-  redirect_to books_path
-end
+  def clear_filters
+    %i[sort status memo_visibility tags].each { |key| session.delete(key) }
+    redirect_to books_path
+  end
+
+  def autocomplete
+    return render json: [] unless user_signed_in?
+
+    term = params[:term].to_s.strip
+    return render json: [] if term.blank?
+
+    results = current_user.books
+                          .where("title ILIKE :term OR author ILIKE :term", term: "%#{term}%")
+                          .select(:title, :author)
+                          .distinct
+                          .limit(10)
+                          .map do |book|
+                            {
+                              value: book.title,
+                              label: "#{book.title}（#{book.author.presence || '著者不明'}）"
+                            }
+                          end
+
+    render json: results
+  end
 
   private
 

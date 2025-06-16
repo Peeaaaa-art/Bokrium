@@ -46,6 +46,7 @@ Rails.application.routes.draw do
     end
 
     collection do
+      get :autocomplete
       get :tag_filter
       delete :clear_filters
       delete :clear_tag_filter

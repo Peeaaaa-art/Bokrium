@@ -43,6 +43,12 @@ class Book < ApplicationRecord
     "https://img.bokrium.com/#{book_cover_s3.key}"
   end
 
+  scope :autocomplete_title_or_author, ->(term) {
+    where("title ILIKE ? OR author ILIKE ?", "#{term}%", "#{term}%")
+      .select(:id, :title, :author)
+      .limit(10)
+  }
+
   pg_search_scope :search_by_title_and_author,
                   against: [ :title, :author ],
                   using: {
