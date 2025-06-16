@@ -11,11 +11,11 @@ Sidekiq.configure_server do |config|
     uniq_config.enabled = true
   end
 
-  schedule_file = Rails.root.join("config/sidekiq.yml")
-  if File.exist?(schedule_file)
-    schedule_data = YAML.load_file(schedule_file).deep_symbolize_keys
-    Sidekiq::Cron::Job.load_from_hash(schedule_data[:schedule]) if schedule_data[:schedule]
-  end
+  # schedule_file = Rails.root.join("config/sidekiq.yml")
+  # if File.exist?(schedule_file)
+  #   schedule_data = YAML.load_file(schedule_file).deep_symbolize_keys
+  #   Sidekiq::Cron::Job.load_from_hash(schedule_data[:schedule]) if schedule_data[:schedule]
+  # end
 end
 
 Sidekiq.configure_client do |config|

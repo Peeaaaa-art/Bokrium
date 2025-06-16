@@ -1,7 +1,7 @@
 :queues:
   - default
-:schedule:
-  db_ping:
-    cron: "*/5 * * * *"
-    class: "DbPingWorker"
-    queue: default
+# :schedule:
+#   db_ping:
+#     cron: "*/5 * * * *"
+#     class: "DbPingWorker"
+#     queue: default
