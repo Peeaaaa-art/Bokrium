@@ -11,7 +11,12 @@ class BooksController < ApplicationController
     books = current_user.books.includes(book_cover_s3_attachment: :blob)
 
     unless books&.exists?
-      @books = guest_user.books.includes(book_cover_s3_attachment: :blob).order(created_at: :desc)
+        @books = Rails.cache.fetch("guest_sample_books", expires_in: nil) do
+        guest_user.books
+          .includes(book_cover_s3_attachment: :blob)
+          .order(created_at: :desc)
+          .to_a
+      end
       return
     end
 

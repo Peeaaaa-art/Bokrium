@@ -5,9 +5,12 @@ module Guest
     rescue_from ActiveRecord::RecordNotFound, with: :handle_guest_not_found
     CHUNKS_PER_PAGE = 7
     def index
-      books = guest_user.books
-                  .includes(book_cover_s3_attachment: :blob)
-                  .order(created_at: :desc)
+      books = Rails.cache.fetch("guest_sample_books", expires_in: nil) do
+        guest_user.books
+          .includes(book_cover_s3_attachment: :blob)
+          .order(created_at: :desc)
+          .to_a
+      end
       @no_books = true
 
       @filtered_tags = []
@@ -27,7 +30,7 @@ module Guest
       @spine_per_shelf = display.spine_per_shelf
 
       books_per_page = display.unit_per_page * CHUNKS_PER_PAGE
-      @pagy, @books = pagy(books, limit: books_per_page)
+      @pagy, @books = pagy_array(books, limit: books_per_page)
     end
 
     def show
