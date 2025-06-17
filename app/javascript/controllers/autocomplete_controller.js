@@ -17,7 +17,10 @@ export default class extends Controller {
 
     clearTimeout(this.debounceTimer)
     this.debounceTimer = setTimeout(() => {
-      fetch(`${this.urlValue}?term=${encodeURIComponent(query)}`)
+      // フォーム内の scope hidden field から値を取得
+      const scope = this.element.closest('form').querySelector('input[name="scope"]').value
+
+      fetch(`${this.urlValue}?term=${encodeURIComponent(query)}&scope=${encodeURIComponent(scope)}`)
         .then((res) => res.json())
         .then((data) => {
           this.showSuggestions(data)

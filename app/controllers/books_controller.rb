@@ -186,22 +186,40 @@ class BooksController < ApplicationController
   end
 
   def autocomplete
-    return render json: [] unless user_signed_in?
+    return render json: [] unless user_signed_in? || params[:scope] == "public"
 
     term = params[:term].to_s.strip
     return render json: [] if term.blank?
 
-    results = current_user.books
-                          .where("title ILIKE :term OR author ILIKE :term", term: "%#{term}%")
-                          .select(:id, :title, :author)
-                          .distinct
-                          .limit(10)
-                          .map do |book|
-                            {
-                              value: book.title,
-                              label: "#{book.title}（#{book.author.presence || '著者なし'}）"
-                            }
-                          end
+    case params[:scope]
+    when "mine"
+      books = current_user.books
+              .where("title ILIKE :t OR author ILIKE :t", t: "%#{term}%")
+              .distinct.limit(10)
+      results = books.map do |book|
+        {
+          value: book.title,
+          label: "#{book.title}（#{book.author.presence || ''}）"
+        }
+      end
+
+    when "public"
+      public_book_ids = Memo.where(visibility: Memo::VISIBILITY[:public_site]).distinct.pluck(:book_id)
+
+      books = Book.where(id: public_book_ids)
+                  .where("title ILIKE :t OR author ILIKE :t", t: "%#{term}%")
+                  .limit(10)
+
+      results = books.map do |book|
+        {
+          value: book.title,
+          label: "#{book.title}（#{book.author.presence || ''}）"
+        }
+      end
+
+    else
+      results = []
+    end
 
     render json: results
   end
