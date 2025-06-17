@@ -24,7 +24,7 @@ gem "sidekiq", "~> 7.2"
 
 gem "sidekiq-unique-jobs"
 
-gem "sidekiq-cron", "~> 1.9.1"
+gem "sidekiq-cron", "~> 2.3.0"
 
 # 私が追加したGem
 gem "devise"
