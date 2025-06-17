@@ -38,13 +38,13 @@ module BooksHelper
     alt ||= book.title.presence || "表紙画像"
     no_cover_title ||= book.title.truncate(40)
 
-    transform_style =
-      if action_name == "show" && [ "books", "guest/books" ].include?(controller_path)
-        scale_value = mobile? ? 1.15 : 1.4
-        "transform: scale(#{scale_value}); transform-origin: center;"
-      else
-        "" # show以外ではスケールスタイルを無効に
-      end
+    transform_style = ""
+    #   if action_name == "show" && [ "books", "guest/books" ].include?(controller_path)
+    #     scale_value = mobile? ? 1.15 : 1.4
+    #     "transform: scale(#{scale_value}); transform-origin: center;"
+    #   else
+    #     ""
+    #   end
 
     if book.book_cover_s3.attached? && book.book_cover_s3.key.present?
       image_tag book.cloudfront_url, {
@@ -59,7 +59,7 @@ module BooksHelper
     elsif book.book_cover.present?
       image_tag book.book_cover,
                 { alt: alt, loading: "lazy", class: "img-fluid #{url_class}",
-                  style: "#{transform_style}" }.merge(options)
+                  style: "" }.merge(options)
 
     elsif nocover_img
       content_tag(:div, class: "cover-placeholder-wrapper") do
@@ -98,5 +98,21 @@ module BooksHelper
       { icon: "bi-file-earmark-text", value: (book.page.present? ? "#{book.page} ページ" : nil) },
       { icon: "bi-currency-yen",      value: (book.price.present? ? "#{book.price}円" : nil) }
     ].compact.select { |item| item[:value].present? }
+  end
+
+  def book_cover_credit(book_cover_url)
+    return nil if book_cover_url.blank?
+
+    source =
+      case book_cover_url
+      when /openbd|hanmoto/     then "OpenBD"
+      when /rakuten/            then "Rakuten"
+      when /books\.google/      then "Google"
+      when /ndl/                then "NDL"
+      else nil
+      end
+
+    return nil if source.nil?
+    "image from #{source}"
   end
 end
