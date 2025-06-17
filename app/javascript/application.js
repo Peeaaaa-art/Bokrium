@@ -1,5 +1,6 @@
 import { Application } from "@hotwired/stimulus"
 import AnimationController from "./controllers/animation_controller.js"
+import AutoCompleteController from "./controllers/autocomplete_controller.js"
 import AutoRemoveController from "./controllers/auto_remove_controller.js"
 import AutoSubmitController from "./controllers/auto_submit_controller.js"
 import BarcodeController from "./controllers/barcode_controller"
@@ -24,6 +25,7 @@ const application = Application.start()
 window.Stimulus = application
 
 application.register("animation", AnimationController)
+application.register("autocomplete", AutoCompleteController)
 application.register("auto-remove", AutoRemoveController)
 application.register("auto-submit", AutoSubmitController)
 application.register("barcode", BarcodeController)

@@ -2,7 +2,7 @@ require "open-uri"
 
 class DownloadCoverImageWorker
   include Sidekiq::Worker
-  sidekiq_options queue: :default, lock: :until_executed, lock_timeout: 5
+  sidekiq_options queue: :default
 
   def perform(book_id, image_url)
     Rails.logger.info "🐛 Worker triggered with book_id=#{book_id}, url=#{image_url}"
@@ -17,7 +17,9 @@ class DownloadCoverImageWorker
     $redis.set(redis_key, "working", ex: 300)
 
     begin
-      file = URI.open(image_url)
+      file = URI.open(image_url, "User-Agent" => "Mozilla/5.0")
+      Rails.logger.info "📦 Content-Type: #{file.content_type}"
+      Rails.logger.info "📏 File Size: #{file.size}"
       parsed = URI.parse(image_url)
       filename = File.basename(parsed.path).presence || "cover.jpg"
       content_type = file.content_type.presence || "image/jpeg"

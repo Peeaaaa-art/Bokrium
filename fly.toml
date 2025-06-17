@@ -17,7 +17,7 @@ console_command = '/rails/bin/rails console'
   worker = "bundle exec sidekiq -C config/sidekiq.yml"
 
 [deploy]
-release_command = "./bin/rails db:migrate"
+  release_command = "bash -c 'DATABASE_URL=$DIRECT_DATABASE_URL bundle exec rails db:migrate'"
 
 [http_service]
   internal_port = 8080
@@ -38,8 +38,3 @@ release_command = "./bin/rails db:migrate"
 
     [http_service.checks.headers]
     X-Forwarded-Proto = 'https'
-
-[[vm]]
-  memory = '1gb'
-  cpu_kind = 'shared'
-  cpus = 1

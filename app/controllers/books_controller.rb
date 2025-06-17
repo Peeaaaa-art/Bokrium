@@ -11,7 +11,12 @@ class BooksController < ApplicationController
     books = current_user.books.includes(book_cover_s3_attachment: :blob)
 
     unless books&.exists?
-      @books = guest_user.books.includes(book_cover_s3_attachment: :blob).order(created_at: :desc)
+        @books = Rails.cache.fetch("guest_sample_books", expires_in: nil) do
+        guest_user.books
+          .includes(book_cover_s3_attachment: :blob)
+          .order(created_at: :desc)
+          .to_a
+      end
       return
     end
 
@@ -175,10 +180,49 @@ class BooksController < ApplicationController
     render partial: "books/tag_filter", locals: { filtered_tags: [] }
   end
 
-def clear_filters
-  %i[sort status memo_visibility tags].each { |key| session.delete(key) }
-  redirect_to books_path
-end
+  def clear_filters
+    %i[sort status memo_visibility tags].each { |key| session.delete(key) }
+    redirect_to books_path
+  end
+
+  def autocomplete
+    return render json: [] unless user_signed_in? || params[:scope] == "public"
+
+    term = params[:term].to_s.strip
+    return render json: [] if term.blank?
+
+    case params[:scope]
+    when "mine"
+      books = current_user.books
+              .where("title ILIKE :t OR author ILIKE :t", t: "%#{term}%")
+              .distinct.limit(10)
+      results = books.map do |book|
+        {
+          value: book.title,
+          label: "#{book.title}（#{book.author.presence || ''}）"
+        }
+      end
+
+    when "public"
+      public_book_ids = Memo.where(visibility: Memo::VISIBILITY[:public_site]).distinct.pluck(:book_id)
+
+      books = Book.where(id: public_book_ids)
+                  .where("title ILIKE :t OR author ILIKE :t", t: "%#{term}%")
+                  .limit(10)
+
+      results = books.map do |book|
+        {
+          value: book.title,
+          label: "#{book.title}（#{book.author.presence || ''}）"
+        }
+      end
+
+    else
+      results = []
+    end
+
+    render json: results
+  end
 
   private
 
