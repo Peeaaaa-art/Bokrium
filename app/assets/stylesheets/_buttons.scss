@@ -35,3 +35,23 @@
   border-radius: 50%;
   line-height: 1;
 }
+
+.affiliate-link-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.affiliate-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none; /* ボタンではなくリンク全体をクリック可能に */
+  white-space: nowrap;
+}
+
+.affiliate-link-wrapper:hover .affiliate-overlay {
+  opacity: 1;
+}

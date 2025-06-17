@@ -9,12 +9,28 @@
       <div class="row g-4 align-items-center mt-md-1">
         <!-- 書影：左半分 -->
         <div class="col-6 d-flex justify-content-center">
-          <%= display_book_cover @book,
-            s3_class: "book-cover-show",
-            url_class: "book-cover-show",
-            no_cover_class: "no-cover-show",
-            no_cover_title: " fs-5 mt-5"
-          %>
+        <% if @book.affiliate_url.present? %>
+          <div class="affiliate-link-wrapper position-relative">
+            <%= link_to @book.affiliate_url, target: "_blank", rel: "noopener" do %>
+              <%= display_book_cover @book,
+                s3_class: "book-cover-show",
+                url_class: "book-cover-show",
+                no_cover_class: "no-cover-show",
+                no_cover_title: " fs-5 mt-5"
+              %>
+              <div class="affiliate-overlay btn btn-danger rounded-pill">楽天で見る</div>
+            <% end %>
+          </div>
+        <% else %>
+          <div>
+            <%= display_book_cover @book,
+              s3_class: "book-cover-show",
+              url_class: "book-cover-show",
+              no_cover_class: "no-cover-show",
+              no_cover_title: " fs-5 mt-5"
+            %>
+          </div>
+        <% end %>
         </div>
         <!-- 情報：右半分 -->
         <div class="col-6">

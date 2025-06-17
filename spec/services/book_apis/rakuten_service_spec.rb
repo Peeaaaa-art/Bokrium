@@ -12,7 +12,8 @@ RSpec.describe BookApis::RakutenService do
           publisher_name: "楽天出版社",
           isbn: isbn,
           item_price: 1980,
-          large_image_url: "http://example.com/book.jpg"
+          large_image_url: "http://example.com/book.jpg",
+          item_url: "https://books.rakuten.co.jp/rb/12345678/"
         })
       end
 
@@ -28,7 +29,8 @@ RSpec.describe BookApis::RakutenService do
           isbn: isbn,
           price: 1980,
           book_cover: "http://example.com/book.jpg",
-          page: nil
+          page: nil,
+          affiliate_url: "https://books.rakuten.co.jp/rb/12345678/"
         })
       end
     end
@@ -41,7 +43,8 @@ RSpec.describe BookApis::RakutenService do
           publisher_name: "出版社",
           isbn: isbn,
           item_price: 1200,
-          large_image_url: "http://example.com/noimage.jpg"
+          large_image_url: "http://example.com/noimage.jpg",
+          item_url: "https://books.rakuten.co.jp/rb/12345678/"
         )
 
         allow(RakutenWebService::Books::Book).to receive(:search).with(isbn: isbn).and_return([ mock_item ])
