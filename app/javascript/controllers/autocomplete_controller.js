@@ -38,16 +38,11 @@ export default class extends Controller {
       a.innerHTML = item.label || item.value || "（無題）"
       a.href = item.url || "#"
 
-      // blur前に発火させるために mousedown を使う
-      li.addEventListener("mousedown", (e) => {
-        if (item.url) {
-          window.location.href = item.url
-        } else {
-          e.preventDefault()
-          this.inputTarget.value = item.value
-          this.clearSuggestions()
-        }
-      })
+    li.addEventListener("mousedown", (e) => {
+      e.preventDefault()
+      this.inputTarget.value = item.value
+      this.clearSuggestions()
+    })
 
       li.appendChild(a)
       this.suggestionsTarget.appendChild(li)

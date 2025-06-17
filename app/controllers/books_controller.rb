@@ -199,8 +199,7 @@ class BooksController < ApplicationController
                           .map do |book|
                             {
                               value: book.title,
-                              label: "#{book.title}（#{book.author.presence || ''}）",
-                              url: book_path(book) # 👈 書籍詳細ページへのURLを追加
+                              label: "#{book.title}（#{book.author.presence || '著者なし'}）"
                             }
                           end
 
