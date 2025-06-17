@@ -15,10 +15,6 @@ Dotenv.load('.env.test') if Rails.env.test?
 require 'webmock/rspec'
 WebMock.disable_net_connect!(allow_localhost: true)
 
-
-require 'sidekiq/testing'
-Sidekiq::Testing.inline!  # テスト中は非同期ジョブを即時実行
-
 begin
   ActiveRecord::Migration.maintain_test_schema!
 rescue ActiveRecord::PendingMigrationError => e
