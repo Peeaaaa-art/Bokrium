@@ -9,18 +9,34 @@
       <div class="row g-4 align-items-center mt-md-1">
         <!-- 書影：左半分 -->
         <div class="col-6 d-flex justify-content-center">
+          <div>
           <%= display_book_cover @book,
             s3_class: "book-cover-show",
             url_class: "book-cover-show",
-            no_cover_class: "no-cover-show",
-            no_cover_title: " fs-5 mt-5"
+            no_cover_title: " fs-5 mt-5",
+            nocover_img: true
           %>
+
+
+              <!-- 書影情報クレジット表記 -->
+              <% if (credit = book_cover_credit(@book.book_cover)) %>
+                <div class="text-secondary text-center small footer-font" style="font-size: 0.7rem;"><%= credit %></div>
+              <% end %>
+          </div>
         </div>
+
         <!-- 情報：右半分 -->
         <div class="col-6">
           <div class="card border-0 shadow-none bg-transparent h-100">
             <div class="fw-bold fs-title mb-2"><%= @book.title %></div>
             <%= render_book_info_list(@book) %>
+
+
+            <% if @book.affiliate_url.present? %>
+              <%= link_to "楽天で見る", @book.affiliate_url,
+                  target: "_blank", rel: "noopener", style: "max-width: 120px;",
+                  class: "btn btn-sm btn-outline-danger rounded-pill mt-1 px-3" %>
+            <% end %>
           </div>
         </div>
       </div>

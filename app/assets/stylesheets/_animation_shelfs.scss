@@ -88,11 +88,6 @@
   animation-delay: var(--delay);
 }
 
-@media (max-width: 768px) {
-  .fade-in-right {
-    animation-delay: calc(var(--delay) * 6 );
-  }
-}
 
 
 /* b_note */

@@ -14,7 +14,6 @@ console_command = '/rails/bin/rails console'
 
 [processes]
   app = './bin/rails server -b 0.0.0.0 -p 8080'
-  worker = "bundle exec sidekiq -C config/sidekiq.yml"
 
 [deploy]
   release_command = "bash -c 'DATABASE_URL=$DIRECT_DATABASE_URL bundle exec rails db:migrate'"
@@ -22,7 +21,7 @@ console_command = '/rails/bin/rails console'
 [http_service]
   internal_port = 8080
   force_https = true
-  auto_stop_machines = false
+  auto_stop_machines = true
   auto_start_machines = true
   min_machines_running = 1
   processes = ['app']

@@ -18,7 +18,5 @@ module Bokrium
       Rails.root.join("config/locales/**/*.{yml}")
     ]
     config.time_zone = "Tokyo"
-
-    config.active_job.queue_adapter = :sidekiq
   end
 end

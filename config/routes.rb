@@ -92,9 +92,6 @@ Rails.application.routes.draw do
   end
   get "subscriptions/create", as: :create_subscrption
   post "subscription/cancel", to: "subscriptions#cancel", as: :cancel_subscription
-
-  require "sidekiq/web"
-  mount Sidekiq::Web => "/sidekiq" if Rails.env.development?
 end
 
 # 公式リファレンス https://guides.rubyonrails.org/routing.html
