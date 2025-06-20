@@ -33,6 +33,8 @@ Rails.application.routes.draw do
   post "line_notifications/trigger", to: "line_notifications#trigger"
   resource :line_user, only: [ :destroy ]
 
+  patch "toggle_email_notifications", to: "users#toggle_email_notifications", as: :toggle_email_notifications
+
   get "mypage", to: "users#show", as: :mypage
 
   resources :books do
@@ -89,6 +91,7 @@ Rails.application.routes.draw do
 
   namespace :webhooks do
     post :stripe, to: "stripe#create"
+    post :email_notifications, to: "email_notifications#create"
   end
   get "subscriptions/create", as: :create_subscrption
   post "subscription/cancel", to: "subscriptions#cancel", as: :cancel_subscription
