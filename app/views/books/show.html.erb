@@ -14,14 +14,13 @@
             s3_class: "book-cover-show",
             url_class: "book-cover-show",
             no_cover_title: " fs-5 mt-5",
-            nocover_img: true
+            nocover_img: true,
+            truncate_options: { mobile_limit: 80, desktop_limit: 100 }
           %>
-
-
-              <!-- 書影情報クレジット表記 -->
-              <% if (credit = book_cover_credit(@book.book_cover)) %>
-                <div class="text-secondary text-center small footer-font" style="font-size: 0.7rem; opacity: 0.66;"><%= credit %></div>
-              <% end %>
+          <!-- 書影情報クレジット表記 -->
+          <% if (credit = book_cover_credit(@book.book_cover)) %>
+            <div class="text-secondary text-center small footer-font" style="font-size: 0.7rem; opacity: 0.66;"><%= credit %></div>
+          <% end %>
           </div>
         </div>
 

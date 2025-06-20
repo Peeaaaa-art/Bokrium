@@ -33,18 +33,10 @@ module BooksHelper
 
   def display_book_cover(book, resize_to: [ 200 ], alt: nil,
                         s3_class: "", url_class: "", no_cover_class: "", no_cover_title: nil,
-                        nocover_img: false, **options)
+                        nocover_img: false, truncate_options: {}, **options)
     return unless book.present?
     alt ||= book.title.presence || "表紙画像"
     no_cover_title ||= book.title.truncate(40)
-
-    transform_style = ""
-    #   if action_name == "show" && [ "books", "guest/books" ].include?(controller_path)
-    #     scale_value = mobile? ? 1.15 : 1.4
-    #     "transform: scale(#{scale_value}); transform-origin: center;"
-    #   else
-    #     ""
-    #   end
 
     if book.book_cover_s3.attached? && book.book_cover_s3.key.present?
       image_tag book.cloudfront_url, {
@@ -52,8 +44,7 @@ module BooksHelper
         loading: "lazy",
         class: "img-fluid #{s3_class}".strip,
         width: resize_to[0],
-        height: "auto",
-        style: transform_style
+        height: "auto"
       }.merge(options)
 
     elsif book.book_cover.present?
@@ -64,8 +55,8 @@ module BooksHelper
     elsif nocover_img
       content_tag(:div, class: "cover-placeholder-wrapper") do
         image_tag("no_cover.png", class: "img-fluid rounded-sm placeholder-cover") +
-          content_tag(:div, truncate_for_device(book.title, mobile_limit: 10, desktop_limit: 12),
-                      class: "cover-title-overlay brake-word") +
+          content_tag(:div, truncate_for_device(book.title, **truncate_options),
+                      class: "cover-title-overlay brake-word #{no_cover_class}") +
           content_tag(:div, "Bokrium", class: "logo-overlay")
       end
     else
@@ -108,7 +99,6 @@ module BooksHelper
       when /openbd|hanmoto/     then "OpenBD"
       when /rakuten/            then "Rakuten"
       when /books\.google/      then "Google"
-      when /ndl/                then "NDL"
       else nil
       end
 

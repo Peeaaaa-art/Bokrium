@@ -30,9 +30,6 @@ RSpec.describe BookApis::NdlService do
       allow(Net::HTTP).to receive(:new).and_return(http)
       allow(http).to receive(:request).and_return(response)
 
-      thumbnail_response = Net::HTTPSuccess.new('1.1', '200', 'OK')
-      allow(Net::HTTP).to receive(:get_response).with(URI("https://ndlsearch.ndl.go.jp/thumbnail/#{isbn}.jpg"))
-        .and_return(thumbnail_response)
 
       result = described_class.fetch(isbn)
 
@@ -42,8 +39,7 @@ RSpec.describe BookApis::NdlService do
         publisher: "NDL出版社",
         isbn: isbn,
         price: nil,
-        page: nil,
-        book_cover: "https://ndlsearch.ndl.go.jp/thumbnail/#{isbn}.jpg"
+        page: nil
       )
     end
   end
