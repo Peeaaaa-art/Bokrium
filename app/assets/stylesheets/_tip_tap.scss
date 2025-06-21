@@ -49,6 +49,11 @@
   line-height: 1.5;
 }
 
+.card-body p {
+  margin-bottom: 0.2em;
+  line-height: 1.5;
+}
+
 .ProseMirror p:empty::before {
   content: "\00a0"; /* &nbsp; を挿入 */
 }
@@ -69,12 +74,20 @@
 }
 
 
-.ProseMirror blockquote {
+// .ProseMirror blockquote {
+//   border-left: 4px solid #ccc;
+//   margin: 1em 0;
+//   padding-left: 1rem;
+//   background-color: #f9f9f9;
+//   color: #555;
+// }
+
+blockquote {
   border-left: 4px solid #ccc;
-  margin: 0.5em 0;
-  padding-left: 1rem;
+    margin: 1em 0;
+    padding: 0.8em 1em;
+  background-color: #f9f9f9;
   color: #555;
-  font-style: italic;
 }
 
 .ProseMirror:focus {

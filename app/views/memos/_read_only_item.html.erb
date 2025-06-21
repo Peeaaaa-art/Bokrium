@@ -12,7 +12,7 @@
   data-memo-modal-updated-date-value="<%= memo.updated_at&.strftime('%F') %>"
   style="overflow: visible; z-index: 1;"
 >
-  <!-- ✅ トグルボタン -->
+  <!-- トグルボタン -->
   <button
     class="btn btn-sm bg-trasperant position-absolute top-0 start-0 m-2"
     data-action="click->memo-modal#toggle click->memo-modal#stop"
@@ -21,14 +21,14 @@
     <i class="bi bi-arrows-angle-expand" data-memo-modal-target="icon"></i>
   </button>
 
-  <!-- ✅ ドロップダウン（右上） -->
+  <!-- ドロップダウン（右上） -->
   <% unless memo.new_record? %>
     <div class="dropdown position-absolute top-0 end-0 m-2" data-action="click->memo-modal#stop">
       <button class="btn btn-sm bg-transperent" data-bs-toggle="dropdown" aria-expanded="false">
         <i class="bi bi-three-dots"></i>
       </button>
       <ul class="dropdown-menu dropdown-menu-end">
-        <!-- 🔁 公開/非公開トグル -->
+        <!-- 公開/非公開トグル -->
         <li>
           <%= form_with model: [book, memo], method: :patch do |f| %>
             <%= f.hidden_field :content, value: memo.content %>
@@ -43,7 +43,7 @@
           <% end %>
         </li>
 
-        <!-- ✅ 公開リンクのコピー（link_only or public_site の場合） -->
+        <!-- 公開リンクのコピー（link_only or public_site の場合） -->
         <% if memo.shared? && memo.public_token.present? %>
           <li>
             <button
@@ -55,7 +55,7 @@
           </li>
         <% end %>
 
-        <!-- 🗑️ 削除 -->
+        <!-- 削除 -->
         <li>
           <%= button_to book_memo_path(book, memo),
                         method: :delete,
@@ -72,14 +72,14 @@
     </div>
   <% end %>
 
-  <!-- ✅ ヘッダー -->
+  <!-- ヘッダー -->
   <div class="card-header bg-rhodia-orange d-flex justify-content-center py-2">
     <i class="bi bi-cloud-fog2-fill"></i>
     <i class="bi bi-cloud-haze2"></i>
     <i class="bi bi-cloud-fog2-fill"></i>
   </div>
 
-  <!-- ✅ 本文 -->
+  <!-- 本文 -->
   <div class="memo-body" data-memo-modal-target="body">
     <div class="card-body rhodia-grid-bg">
       <%= sanitize(memo.content,
@@ -88,7 +88,7 @@
     </div>
   </div>
 
-  <!-- ✅ ステータスアイコン -->
+  <!-- ステータスアイコン -->
   <% if current_user == memo.user && memo.like_memos.present? %>
     <span class="small d-inline-flex align-items-center ms-2">
       <i class="bi bi-heart-fill text-danger me-1"></i>

@@ -59,8 +59,31 @@ module ApplicationHelper
       end
   end
 
-  def truncate_for_device(text, mobile_limit:, desktop_limit:)
+  def truncate_for_device(text, mobile_limit: 10, desktop_limit: 13)
     limit = mobile? ? mobile_limit : desktop_limit
-    text.to_s.truncate(limit)
+    truncate_mixed_width(text, limit: limit)
+  end
+
+  private
+
+  def truncate_mixed_width(text, limit: 10)
+    return "" if text.blank?
+
+    display_width = 0
+    result = ""
+
+    text.each_char do |char|
+      char_width = char.ascii_only? ? 0.6 : 1
+
+      if display_width + char_width > limit
+        result << "…"
+        break
+      end
+
+      result << char
+      display_width += char_width
+    end
+
+    result
   end
 end

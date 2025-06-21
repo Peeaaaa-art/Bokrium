@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_06_17_081404) do
+ActiveRecord::Schema[8.0].define(version: 2025_06_20_122156) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -343,6 +343,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_17_081404) do
     t.string "subscription_status"
     t.boolean "cancel_at_period_end"
     t.datetime "current_period_end"
+    t.boolean "email_notification_enabled", default: false, null: false
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
