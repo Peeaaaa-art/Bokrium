@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_06_21_123709) do
+ActiveRecord::Schema[8.0].define(version: 2025_06_21_130548) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -56,6 +56,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_21_123709) do
     t.integer "price"
     t.integer "status", default: 0, null: false
     t.string "affiliate_url"
+    t.index ["author"], name: "index_books_on_author"
     t.index ["user_id", "isbn"], name: "index_books_on_user_id_and_isbn_unique_if_isbn", unique: true, where: "(isbn IS NOT NULL)"
     t.index ["user_id"], name: "index_books_on_user_id"
   end
@@ -85,6 +86,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_21_123709) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "notifications_enabled", default: true, null: false
+    t.index ["line_id"], name: "index_line_users_on_line_id", unique: true
     t.index ["user_id"], name: "index_line_users_on_user_id"
   end
 
@@ -101,6 +103,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_21_123709) do
     t.index ["content"], name: "index_memos_on_content_trgm", opclass: :gin_trgm_ops, using: :gin
     t.index ["public_token"], name: "index_memos_on_public_token", unique: true
     t.index ["user_id"], name: "index_memos_on_user_id"
+    t.index ["visibility"], name: "index_memos_on_visibility"
   end
 
   create_table "solid_cache_entries", force: :cascade do |t|
@@ -144,7 +147,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_21_123709) do
     t.integer "taggings_count", default: 0
     t.string "color"
     t.bigint "user_id", null: false
-    t.index ["name"], name: "index_tags_on_name", unique: true
+    t.index ["user_id", "name"], name: "index_tags_on_user_id_and_name", unique: true
     t.index ["user_id"], name: "index_tags_on_user_id"
   end
 
