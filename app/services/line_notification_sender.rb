@@ -31,7 +31,7 @@ class LineNotificationSender
       📚 今日のあなたのメモ
 
       『#{book.title.presence || "無題の本"}』より：
-      #{ActionView::Base.full_sanitizer.sanitize(memo.content.to_s).truncate(280)}
+      #{ActionView::Base.full_sanitizer.sanitize(memo.content.to_s).truncate(400)}
 
       ▼ メモの詳細を見る
       #{book_url}
