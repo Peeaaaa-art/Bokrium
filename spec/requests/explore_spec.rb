@@ -13,18 +13,18 @@ RSpec.describe "Explore", type: :request do
     end
 
     it "自分の本をタイトルで検索できる" do
-      get explore_index_path(q: "Ruby", scope: "mine")
+      get explore_path(q: "Ruby", scope: "mine")
       expect(response).to have_http_status(:ok)
       expect(response.body).to include("Ruby入門")
     end
 
     # it "自分のメモを内容で検索できる" do
-    #   get explore_index_path(q: "この本は最高", scope: "mine")
+    #   get explore_path(q: "この本は最高", scope: "mine")
     #   expect(response.body).to include("Ruby入門")
     # end
 
     it "クエリが空でも自分の本一覧が返る" do
-      get explore_index_path(scope: "mine")
+      get explore_path(scope: "mine")
       expect(response.body).to include("Ruby入門")
     end
   end
@@ -38,18 +38,18 @@ RSpec.describe "Explore", type: :request do
     end
 
     # it "公開メモの内容で検索できる" do
-    #   get explore_index_path(q: "吾輩", scope: "public")
+    #   get explore_path(q: "吾輩", scope: "public")
     #   expect(response).to have_http_status(:ok)
     #   expect(response.body).to include("青空")
     # end
 
     it "公開メモの本のタイトルで検索できる" do
-      get explore_index_path(q: "青空文庫", scope: "public")
+      get explore_path(q: "青空文庫", scope: "public")
       expect(response.body).to include("吾輩は猫である") # メモが含まれるか確認
     end
 
     it "クエリが空でも公開メモ一覧が返る" do
-      get explore_index_path(scope: "public")
+      get explore_path(scope: "public")
       expect(response.body).to include("吾輩は猫である")
     end
   end
@@ -69,7 +69,7 @@ RSpec.describe "Explore", type: :request do
     end
 
     it "turbo-frameリクエストに対してTurbo Streamを返す" do
-      get explore_index_path(q: "Turbo", scope: "mine"), headers: { "Turbo-Frame" => "books_frame" }
+      get explore_path(q: "Turbo", scope: "mine"), headers: { "Turbo-Frame" => "books_frame" }
       expect(response.media_type).to eq("text/vnd.turbo-stream.html")
       expect(response.body).to include("Turbo本")
     end
