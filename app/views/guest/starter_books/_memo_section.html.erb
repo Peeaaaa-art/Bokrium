@@ -6,12 +6,37 @@
     </h2>
 
     <p class="slide-in delay-2 text-muted px-2 px-md-5">
-      メモには自由に引用・要約・感想を書き込めます。<strong>画像の保存</strong>も可能です。LINEと連携すると、過去のメモがランダムに届き、読書体験を振り返るきっかけになります。
+      メモには自由に引用・要約・感想を書き込めます。<strong>画像の保存</strong>も可能です。LINEと連携すると、あなた自身が書いたメモが、毎月1日と15日の朝9時にランダムで届き、読書体験を振り返るきっかけになります。メール通知では、毎朝9時にお届けします。
     </p>
   </section>
 
-  <!-- メモ作成動画 -->
   <div class="fade-in delay-4 mb-5" data-controller="animation">
     <%= render "guest/starter_books/memo_video" %>
   </div>
+
+<section class="layout-intro my-5 rounded-4" data-controller="animation">
+  <h2 class="fade-in delay-1">ランダムにメモ通知</h2>
+
+  <div class="container mt-4">
+    <div class="row g-4 justify-content-center">
+
+      <div class="col-12 col-md-8 fade-in delay-2">
+        <div class="text-center p-3 shadow rounded-4 h-100">
+          <div class="text-muted small mb-1">メール通知（毎朝9時に配信）</div>
+          <i class="bi bi-envelope fs-2 d-block mb-2 text-secondary"></i>
+          <%= image_tag "random_access_email.png", alt: "メール通知", class: "img-fluid mb-2" %>
+        </div>
+      </div>
+
+      <div class="col-12 col-md-4 fade-in delay-3">
+        <div class="text-center p-3 shadow rounded-4 h-100">
+          <div class="text-muted small mb-1">LINE通知（毎月1・15日に配信）</div>
+          <i class="bi bi-line fs-2 d-block mb-2 text-secondary"></i>
+          <%= image_tag "random_access_line.jpg", alt: "LINE通知", class: "img-fluid mb-2" %>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
 </turbo-frame>
