@@ -16,7 +16,6 @@ class Memo < ApplicationRecord
   before_save :ensure_public_token_if_shared
 
   validates :content, length: { maximum: 10_000, message: ": メモは10,000文字以内で入力してください" }
-  validate :within_limit_for_free_plan, on: :create
 
 
   scope :published_to_others, -> { where(visibility: %i[link_only public_site]) }
@@ -80,15 +79,5 @@ class Memo < ApplicationRecord
       .exclude_user(exclude_user)
       .with_book_and_user_avatar
       .random_9
-  end
-
-  private
-
-  def within_limit_for_free_plan
-    return if  user.nil? || user.subscribed_user?
-
-    if user.memos.count >= BokriumLimit::FREE[:memos]
-      errors.add(:base, :limit_exceeded, message: "無料プランのメモ上限#{BokriumLimit::FREE[:memos]}件に達しました。")
-    end
   end
 end

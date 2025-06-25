@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_06_21_130548) do
+ActiveRecord::Schema[8.0].define(version: 2025_06_25_063400) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -61,6 +61,19 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_21_130548) do
     t.index ["user_id"], name: "index_books_on_user_id"
   end
 
+  create_table "donations", force: :cascade do |t|
+    t.bigint "user_id"
+    t.integer "amount", null: false
+    t.string "currency", default: "jpy", null: false
+    t.string "stripe_payment_intent_id"
+    t.string "stripe_checkout_session_id"
+    t.string "status", default: "pending", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "customer_id"
+    t.index ["user_id"], name: "index_donations_on_user_id"
+  end
+
   create_table "images", force: :cascade do |t|
     t.bigint "memo_id"
     t.datetime "created_at", null: false
@@ -104,6 +117,18 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_21_130548) do
     t.index ["public_token"], name: "index_memos_on_public_token", unique: true
     t.index ["user_id"], name: "index_memos_on_user_id"
     t.index ["visibility"], name: "index_memos_on_visibility"
+  end
+
+  create_table "monthly_supports", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "stripe_customer_id"
+    t.string "stripe_subscription_id"
+    t.string "subscription_status"
+    t.boolean "cancel_at_period_end"
+    t.datetime "current_period_end"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_monthly_supports_on_user_id"
   end
 
   create_table "solid_cache_entries", force: :cascade do |t|
@@ -170,11 +195,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_21_130548) do
     t.integer "failed_attempts"
     t.string "unlock_token"
     t.datetime "locked_at"
-    t.string "stripe_customer_id"
-    t.string "stripe_subscription_id"
-    t.string "subscription_status"
-    t.boolean "cancel_at_period_end"
-    t.datetime "current_period_end"
     t.boolean "email_notification_enabled", default: false, null: false
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
@@ -184,12 +204,14 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_21_130548) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "books", "users"
+  add_foreign_key "donations", "users"
   add_foreign_key "images", "books"
   add_foreign_key "images", "memos"
   add_foreign_key "like_memos", "memos"
   add_foreign_key "like_memos", "users"
   add_foreign_key "memos", "books"
   add_foreign_key "memos", "users"
+  add_foreign_key "monthly_supports", "users"
   add_foreign_key "taggings", "tags"
   add_foreign_key "tags", "users", on_delete: :cascade
 end

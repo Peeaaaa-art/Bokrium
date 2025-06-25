@@ -1,6 +1,8 @@
 class User < ApplicationRecord
   has_one :line_user, dependent: :destroy
+  has_one :monthly_support, dependent: :destroy
   has_one_attached :avatar_s3, dependent: :purge_later
+  has_many :donations, dependent: :nullify
   has_many :books, dependent: :destroy
   has_many :memos, dependent: :destroy
   has_many :tags, class_name: "ActsAsTaggableOn::Tag", dependent: :destroy
@@ -23,17 +25,6 @@ class User < ApplicationRecord
   end
 
   validates :name, length: { maximum: 50, message: ": 名前は50文字以内で入力してください" }
-
-  SUBSCRIBED_STATUSES = %w[active trialing]
-  FREE_PLAN_STATUSES = %w[canceled unpaid incomplete].freeze
-
-  def subscribed_user?
-    SUBSCRIBED_STATUSES.include?(subscription_status)
-  end
-
-  def free_plan_user?
-    subscription_status.nil? || FREE_PLAN_STATUSES.include?(subscription_status)
-  end
 
   private
 
