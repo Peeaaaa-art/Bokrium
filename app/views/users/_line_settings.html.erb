@@ -1,0 +1,80 @@
+<div class="text-center my-2">
+  <% line_user = current_user&.line_user %>
+
+  <% if line_user.blank? %>
+    <!-- LINE未連携 -->
+    <p class="text-muted mb-2">
+      LINEと連携すると、あなたの読書メモから<br class="d-sm-none">
+      毎月1日・15日の9時に、ランダムで1つLINEでお届けします。
+    </p>
+
+    <%= link_to user_line_connect_path, class: "btn btn-success d-inline-flex align-items-center gap-2" do %>
+      <i class="bi bi-line" style="font-size: 1.6rem;"></i>
+      <span>LINEと連携する</span>
+    <% end %>
+  <% end %>
+
+  <% if line_user.present? && current_user.line_login_only? %>
+    <!-- LINEログイン専用アカウント（解除不可） -->
+    <span class="badge bg-success subtle-shadow rounded-pill fs-6 p-3">
+      <i class="bi bi-line"></i>
+      LINE連携済み
+    </span>
+
+    <div class="my-3">
+      <button class="btn btn-outline-danger btn-sm shadow-sm rounded-pill px-4 py-2" disabled>
+        LINE連携は解除できません<br class="d-sm-none">（LINEログイン専用アカウント）
+      </button>
+    </div>
+  <% end %>
+
+  <% if line_user.present? && !current_user.line_login_only? %>
+    <!-- LINE連携済みで、解除可能 -->
+    <span class="badge bg-success subtle-shadow rounded-pill fs-6 p-3">
+      <i class="bi bi-line"></i>
+      LINE連携済み
+    </span>
+
+    <div class="my-3">
+      <%= button_to "LINE連携を解除する",
+                    line_user_path,
+                    method: :delete,
+                    data: { turbo_confirm: "LINE連携を解除してもよろしいですか？\n通知は届かなくなります。" },
+                    class: "btn btn-outline-danger btn-sm shadow-sm rounded-pill px-4 py-2" %>
+    </div>
+  <% end %>
+
+  <% if line_user.present? %>
+    <!-- 通知トグル（LINE連携済みの場合） -->
+    <p class="text-muted mt-5">
+      通知をONにすると、あなたの読書メモから<br class="d-sm-none">
+      毎月1日・15日の9時に、ランダムで1つLINEでお届けします。
+    </p>
+
+    <div class="d-flex justify-content-center mb-5">
+      <div class="subtle-shadow bg-light-bok rounded-3 px-4 py-3 d-flex justify-content-between align-items-center gap-3 w-100" style="max-width: 440px;">
+        <label for="notifications_enabled" class="fw-semibold fs-6 mb-0">
+          <i class="bi <%= line_user.notifications_enabled? ? 'bi-bell-fill text-success' : 'bi-bell-slash-fill text-secondary' %>"></i>
+          通知は今、<%= line_user.notifications_enabled? ? "オン" : "オフ" %>になっています。
+        </label>
+        <%= form_with model: line_user, url: toggle_notifications_path, method: :patch, class: "m-0" do |f| %>
+          <div class="form-check form-switch m-0">
+            <%= f.check_box :notifications_enabled,
+                            class: "form-check-input",
+                            id: "notifications_enabled",
+                            role: "switch",
+                            checked: line_user.notifications_enabled,
+                            value: true,
+                            data: { turbo: false },
+                            onchange: "this.form.submit()" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+
+  <p class="mb-2 mt-5">\ 友達追加はこちらから /</p>
+  <div class="mb-5 text-center mx-auto" style="max-width: 200px;">
+    <%= image_tag "line_qr_code.png", class: "img-fluid", style: "max-width: 100%; height: auto;" %>
+  </div>
+</div>
