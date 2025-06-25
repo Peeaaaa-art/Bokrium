@@ -33,21 +33,6 @@
     </div>
   </div>
 
-  <% if  current_user.subscribed_user? %>
-  <!-- サブスクリプション解除 -->
-  <div class="card mt-4 border-0  px-5">
-    <div class="card-body text-center">
-      <h5 class="text-danger fw-bold mb-2">サブスクリプション解除</h5>
-      <p class="text-muted small mb-3">これまで登録された本やメモ・画像などのデータはそのまま保持されます。ただし、無料プランの上限を超えている場合は、新たに追加・アップロードはできません。</p>
-        <%= button_to "Bokrium+を解約する", cancel_subscription_path,
-            method: :post,
-            data: { turbo_confirm: "本当に解約しますか？現在の請求期間終了後に適用されます。" },
-            class: "btn btn-outline-danger" %>
-    </div>
-  </div>
-
-  <% end %>
-
 
   <!-- アカウント削除 -->
   <div class="card mt-4 border-0  px-5">
