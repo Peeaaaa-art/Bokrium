@@ -27,7 +27,6 @@ class Memo < ApplicationRecord
   against: :content,
   using: {
     tsearch: {
-      tsvector_column: "text_index",
       dictionary: "simple",
       prefix: true,
       any_word: true
