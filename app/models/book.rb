@@ -7,7 +7,8 @@ class Book < ApplicationRecord
   has_one_attached :book_cover_s3, dependent: :purge_later
   has_many :memos, dependent: :destroy
   has_many :images, dependent: :destroy
-  acts_as_taggable_on :tags
+  has_many :book_tag_assignments, dependent: :destroy
+  has_many :user_tags, through: :book_tag_assignments
 
   enum :status, {
     want_to_read: 0, # 読みたい

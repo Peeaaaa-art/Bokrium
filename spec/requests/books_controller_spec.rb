@@ -4,6 +4,8 @@ require 'rails_helper'
 RSpec.describe "BooksController", type: :request do
   let(:user) { create(:user) }
   let(:book) { create(:book, user: user) }
+  let!(:user_tag) { create(:user_tag, user: user, name: "Ruby") }
+
 
   before { ensure_guest_user }
 
@@ -100,14 +102,13 @@ RSpec.describe "BooksController", type: :request do
       follow_redirect!
       expect(response.body).to include("削除しました")
     end
-  end
-
+    end
   describe "POST /books/:id/toggle_tag" do
     before { sign_in user }
 
     it "タグ切り替えサービスが呼び出され、元のページにリダイレクトされること" do
-      expect(Tagging::BookTagToggleService).to receive(:new).and_call_original
-      post toggle_tag_book_path(book), params: { tag_name: "Ruby" }
+      expect(BookTagToggleService).to receive(:new).and_call_original
+      post toggle_tag_book_path(book), params: { tag_id: user_tag.id }
       expect(response).to redirect_to(book_path(book))
     end
   end

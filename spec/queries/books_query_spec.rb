@@ -6,20 +6,15 @@ RSpec.describe BooksQuery do
 
   describe '#call' do
     context 'タグでフィルターできる' do
-      let(:book1) { create(:book, user: user, title: "アルケミスト") }
-      let(:book2) { create(:book, user: user, title: "存在と時間") }
+      let!(:book1) { create(:book, user: user, title: "アルケミスト") }
+      let!(:book2) { create(:book, user: user, title: "存在と時間") }
 
       before do
-        ActsAsTaggableOn::Tag.create!(name: "哲学", user: user)
-        ActsAsTaggableOn::Tag.create!(name: "宗教", user: user)
+        tag_philosophy = create(:user_tag, name: "哲学", user: user)
+        tag_religion = create(:user_tag, name: "宗教", user: user)
 
-        book1.tag_list.add("哲学")
-        book1.save!
-        book1.taggings.update_all(tagger_id: user.id, tagger_type: "User")
-
-        book2.tag_list.add("宗教")
-        book2.save!
-        book2.taggings.update_all(tagger_id: user.id, tagger_type: "User")
+        create(:book_tag_assignment, book: book1, user_tag: tag_philosophy, user: user)
+        create(:book_tag_assignment, book: book2, user_tag: tag_religion, user: user)
       end
 
       it '「哲学」タグが付いた本だけを取得できること' do
