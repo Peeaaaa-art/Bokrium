@@ -40,6 +40,7 @@ module ApplicationHelper
   end
 
   def lazy_image_tag(source, options = {})
+    return "" if source.blank?
     options[:loading] ||= "lazy"
     image_tag(source, options)
   end

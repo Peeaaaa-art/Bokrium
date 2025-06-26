@@ -15,7 +15,7 @@ class ImagesController < ApplicationController
       if @image.errors.details[:base].any? { |e| e[:error] == :limit_exceeded }
         render turbo_stream: limit_error_stream(id: "image_limit_error", message: error_msg)
       else
-        flash[:danger] = "画像の保存に失敗しました：#{error_messages}"
+        flash[:danger] = "画像の保存に失敗しました：#{error_msg}"
         redirect_to @book
       end
     end
@@ -38,6 +38,6 @@ class ImagesController < ApplicationController
   end
 
   def image_params
-    params.require(:image).permit(:image_path)
+    params.require(:image).permit(:image_s3)
   end
 end
