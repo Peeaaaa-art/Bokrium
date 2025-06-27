@@ -4,9 +4,11 @@
 
 
 
+| スキャン準備画面 | スキャン実行中画面 |
+|------------------|---------------------|
+| <p align="center"><img src="https://github.com/user-attachments/assets/093fca08-b120-4762-8f2a-a7f75de558d2" width="250" alt="スキャン準備"></p> | <p align="center"><img src="https://github.com/user-attachments/assets/c08fc27c-0d02-4553-b4db-b8fe40b75b3e" width="250" alt="スキャン実行中"></p> |
+| <p align="center">スキャン前の画面。バーコードを中央に合わせます。</p> | <p align="center">スキャン中の様子。リアルタイムで反応します。</p> |
 
-<img src="https://github.com/user-attachments/assets/093fca08-b120-4762-8f2a-a7f75de558d2" alt="Image" width="250" />
-<img src="https://github.com/user-attachments/assets/7cea4113-4d88-4d74-a804-01097b22cc41" alt="Image" width="250" />
 ■サービス概要
 
 自分の手持ちの本から最大限の学びを得るための書籍管理アプリです。
