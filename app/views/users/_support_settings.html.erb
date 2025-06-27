@@ -23,7 +23,7 @@
             class: "btn btn-outline-secondary btn-sm mt-2" %>
     <% end %>
 
-    <% if support&.cancel_at_period_end? && suppor&t.current_period_end&.present? %>
+    <% if support&.cancel_at_period_end? && support&.current_period_end&.present? %>
       <div class="alert alert-warning text-center my-3">
         ご支援期間は<strong><%= l support&.current_period_end&.to_date, format: :long %></strong>までとなっております。
       </div>
