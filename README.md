@@ -1,3 +1,13 @@
+# Bokrium
+
+<img src="https://assets.bokrium.com/monkey.png" alt="サンプル画像" width="200" />
+
+
+
+
+  <img src="https://assets.bokrium.com/barcode_scan.webm" type="video/webm">
+
+
 ■サービス概要
 
 自分の手持ちの本から最大限の学びを得るための書籍管理アプリです。
