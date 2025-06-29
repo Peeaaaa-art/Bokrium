@@ -5,7 +5,7 @@ class User < ApplicationRecord
   has_many :donations, dependent: :nullify
   has_many :books, dependent: :destroy
   has_many :memos, dependent: :destroy
-  has_many :tags, class_name: "ActsAsTaggableOn::Tag", dependent: :destroy
+  has_many :user_tags, dependent: :destroy
   has_many :like_memos, dependent: :destroy
   has_many :liked_memos, through: :like_memos, source: :memo
   # Include default devise modules. Others available are:

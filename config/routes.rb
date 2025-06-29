@@ -57,7 +57,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :tags, only: [ :create, :update, :destroy ]
+  resources :user_tags, only: [ :create, :update, :destroy ]
 
   resources :shared_memos, only: [ :show ], param: :token do
     resource :like_memo, only: [ :create, :destroy ]

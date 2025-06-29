@@ -126,15 +126,17 @@ RSpec.describe Book, type: :model do
       user = create(:user)
       book = create(:book, user: user)
 
-      ActsAsTaggableOn::Tag.class_eval do
-        before_validation do
-          self.user_id ||= user.id
-        end
-      end
+      tag1 = create(:user_tag, name: "哲学", user: user)
+      tag2 = create(:user_tag, name: "小説", user: user)
 
-      book.tag_list.add("哲学", "小説")
-      book.save!
-      expect(book.reload.tag_list).to include("哲学", "小説")
+      # Bookにタグを付与（BookTagAssignment作成）
+      book.book_tag_assignments.create!(user_tag: tag1, user: user)
+      book.book_tag_assignments.create!(user_tag: tag2, user: user)
+
+      # 検証：bookがそのタグを持っているか
+      tag_names = book.book_tag_assignments.includes(:user_tag).map { |a| a.user_tag.name }
+
+      expect(tag_names).to include("哲学", "小説")
     end
   end
 

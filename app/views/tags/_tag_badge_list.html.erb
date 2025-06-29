@@ -1,5 +1,5 @@
 <div class="d-flex flex-wrap gap-2 mt-2">
-  <% book.tags.each do |tag| %>
+  <% book.user_tags.each do |tag| %>
     <span class="badge rounded-pill" style="background-color: <%= tag.color.presence || '#6c757d' %>;">
       <%= tag.name %>
     </span>

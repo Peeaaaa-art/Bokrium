@@ -7,7 +7,7 @@
     <i class="bi bi-trash2"></i>
   <% end %>
 
-  <% image_src = thumb ? image.image_path.variant(resize_to_fill: [200, 200]) : image.image_path %>
+  <% image_src = thumb ? image.image_s3.variant(resize_to_fill: [200, 200]) : image.image_s3 %>
   <% img_data = thumb ? { bs_toggle: "modal", bs_target: "#imageModal#{identifier}" } : {} %>
 
   <div class="card">

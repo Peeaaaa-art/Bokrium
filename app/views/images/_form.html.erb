@@ -6,7 +6,7 @@
           data: { image_upload_target: "form" }
         } do |f| %>
 
-    <%= f.file_field :image_path,
+    <%= f.file_field :image_s3,
           direct_upload: true,
           class: "d-none",
           data: {

@@ -20,7 +20,12 @@ class BooksQuery
     return books unless @params[:tags].present?
 
     tag_names = Array(@params[:tags])
-    books.tagged_with(tag_names, owned_by: @current_user)
+
+    user_tag_ids = UserTag.where(user: @current_user, name: tag_names).pluck(:id)
+
+    books.joins(:book_tag_assignments)
+        .where(book_tag_assignments: { user_tag_id: user_tag_ids })
+        .distinct
   end
 
   def filter_by_status(books)

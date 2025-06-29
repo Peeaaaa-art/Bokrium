@@ -75,7 +75,7 @@ class BooksController < ApplicationController
   def show
     @memos = @book.memos.order(created_at: :desc)
     @new_memo = @book.memos.new(user_id: current_user.id)
-    @tag = ActsAsTaggableOn::Tag.new
+    @user_tag = UserTag.new
   end
 
   def new
@@ -166,10 +166,10 @@ class BooksController < ApplicationController
   end
 
   def toggle_tag
-    Tagging::BookTagToggleService.new(
+    BookTagToggleService.new(
       book: @book,
       user: current_user,
-      tag_name: params[:tag_name],
+      tag_id: params[:tag_id],
       flash: flash
     ).call
 
@@ -232,12 +232,12 @@ class BooksController < ApplicationController
 
   def set_book_with_associations
     @book = current_user.books
-              .includes(:tags, :memos, :images, book_cover_s3_attachment: :blob)
+              .includes(:user_tags, :memos, :images, book_cover_s3_attachment: :blob)
               .find(params[:id])
   end
 
   def set_user_tags
-    @user_tags = ActsAsTaggableOn::Tag.owned_by(current_user).order(:id)
+    @user_tags = current_user.user_tags.order(:id)
   end
 
   def book_params

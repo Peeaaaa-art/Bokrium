@@ -4,7 +4,7 @@
 
   <% if support.present? || donation.present? %>
     <div class="mb-2">
-      <% if support.subscription_status == "canceled" %>
+      <% if support&.subscription_status == "canceled" %>
         <div class="btn btn-outline-secondary shadow-sm d-inline-flex align-items-center gap-2 px-4 py-1 rounded-pill">
           <i class="bi bi-heart-fill fs-5" style="color: red;"></i>
           <span>ご支援ありがとうございました！</span>
@@ -17,15 +17,15 @@
       <% end %>
     </div>
 
-    <% if support.subscription_status == "active" && !support.cancel_at_period_end? %>
+    <% if support&.subscription_status == "active" && !support&.cancel_at_period_end? %>
       <%= button_to "サポートを停止する", cancel_subscription_path, method: :post,
             data: { turbo_confirm: "マンスリーサポートは停止します。本当によろしいですか？" },
             class: "btn btn-outline-secondary btn-sm mt-2" %>
     <% end %>
 
-    <% if support.cancel_at_period_end? && support.current_period_end.present? %>
+    <% if support&.cancel_at_period_end? && support&.current_period_end&.present? %>
       <div class="alert alert-warning text-center my-3">
-        ご支援期間は<strong><%= l support.current_period_end.to_date, format: :long %></strong>までとなっております。
+        ご支援期間は<strong><%= l support&.current_period_end&.to_date, format: :long %></strong>までとなっております。
       </div>
     <% end %>
 

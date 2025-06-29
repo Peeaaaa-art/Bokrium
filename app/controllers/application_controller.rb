@@ -5,7 +5,6 @@ class ApplicationController < ActionController::Base
   before_action :configure_permitted_parameters, if: :devise_controller?
   helper_method :guest_user, :mobile?, :default_books_per_shelf, :default_card_columns, :default_spine_per_shelf
 
-
   def guest_user
     guest_email = ENV["GUEST_USER_EMAIL"]
     @guest_user ||= User.find_by(email: guest_email)
