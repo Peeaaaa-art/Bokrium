@@ -44,7 +44,7 @@ Bokriumは、そのための場です。知識を、思い出しやすく、取�
 
 |  メールログイン | LINEログイン |
 |:--:|:--:|
-| [<img src="https://i.gyazo.com/5e18a488462bc89b0cd65dee2d628bcd.png" alt="アカウント登録画面" width="100%">](https://gyazo.com/5e18a488462bc89b0cd65dee2d628bcd) | [<img src="https://i.gyazo.com/e35992b842ae24c8149e96275682ff9b.png" alt="LINEログイン画面" width="95%">](https://gyazo.com/e35992b842ae24c8149e96275682ff9b) |
+| [<img src="https://i.gyazo.com/6d197a7c7065f88081a28347c04106e2.png" alt="メールログイン画面" width="590">](https://gyazo.com/6d197a7c7065f88081a28347c04106e2) | [<img src="https://i.gyazo.com/e35992b842ae24c8149e96275682ff9b.png" alt="LINEログイン画面" width="600">](https://gyazo.com/e35992b842ae24c8149e96275682ff9b) |
 
 アカウント登録にはDeviseによるメール認証を採用しており、安全性を確保しつつ、確認メールのリンクをクリックするだけで、そのままログイン状態になります。登録後のパスワード再設定も、メール送信によるリンク経由で安心して実施可能です。また、LINEログインにも対応しており、メールアドレスやパスワードの入力なしで、ワンタップで簡単に登録・ログインができます。
 
