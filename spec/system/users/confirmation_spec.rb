@@ -9,7 +9,7 @@ RSpec.describe 'User email confirmation', type: :system do
 
   it 'Deviseから送信された確認リンクでメール認証できること' do
     visit new_user_registration_path
-    fill_in 'Eメール', with: 'confirmtest@example.com'
+    fill_in 'メールアドレス', with: 'confirmtest@example.com'
     fill_in 'パスワード', with: 'password123'
     fill_in 'パスワード（確認用）', with: 'password123'
     click_button 'アカウント登録'
