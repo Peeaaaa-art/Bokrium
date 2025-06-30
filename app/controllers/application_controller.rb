@@ -15,8 +15,8 @@ class ApplicationController < ActionController::Base
   protected
 
   def configure_permitted_parameters
-    devise_parameter_sanitizer.permit(:sign_up, keys: [ :name, :introduction, :avatar_s3 ])
-    devise_parameter_sanitizer.permit(:account_update, keys: [ :name, :introduction, :avatar_s3 ])
+    devise_parameter_sanitizer.permit(:sign_up, keys: [ :name, :avatar_s3 ])
+    devise_parameter_sanitizer.permit(:account_update, keys: [ :name, :avatar_s3 ])
   end
 
   private
@@ -51,14 +51,5 @@ class ApplicationController < ActionController::Base
 
   def default_detail_card_columns
     mobile? ? 1 : 6
-  end
-
-
-  def limit_error_stream(id:, message:)
-    turbo_stream.replace(
-      id,
-      partial: "shared/limit_reached_message",
-      locals: { dom_id: id, message: message }
-    )
   end
 end

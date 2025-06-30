@@ -3,21 +3,33 @@
     <div class="col-md-6 col-lg-5">
       <div class="card shadow-sm">
         <div class="card-body">
-          <h2 class="mb-4 text-center"><%= t('.sign_in') %></h2>
+          <h1 class="fw-bold big-shoulders-inline-bold mb-4 text-center">
+            <span class="logo-welcome" title="ボクリウム">Bokrium</span><br>
+          </h1>
 
           <%= form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: "needs-validation", novalidate: true }) do |f| %>
-            <div class="mb-3">
-              <%= f.label :email, class: "form-label" %>
-              <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control", required: true %>
+            <div class="form-floating mb-3">
+              <%= f.email_field :email,
+                    autofocus: true,
+                    autocomplete: "email",
+                    class: "form-control",
+                    id: "floatingEmail",
+                    placeholder: "メールアドレス",
+                    required: true %>
+              <%= f.label :email, "メールアドレス", for: "floatingEmail" %>
             </div>
 
-            <div class="mb-3">
-              <%= f.label :password, class: "form-label" %>
-              <%= f.password_field :password, autocomplete: "current-password", class: "form-control", required: true %>
+            <div class="form-floating mb-3">
+              <%= f.password_field :password,
+                    autocomplete: "current-password",
+                    class: "form-control",
+                    id: "floatingPassword",
+                    placeholder: "パスワード",
+                    required: true %>
+              <%= f.label :password, "パスワード", for: "floatingPassword" %>
             </div>
-
             <% if devise_mapping.rememberable? %>
-              <div class="form-check mb-3 text-start">
+              <div class="form-check mb-3 text-start text-muted">
                 <%= f.check_box :remember_me, class: "form-check-input", id: "remember_me" %>
                 <%= f.label :remember_me, class: "form-check-label", for: "remember_me" %>
               </div>

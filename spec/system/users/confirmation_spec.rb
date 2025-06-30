@@ -9,9 +9,9 @@ RSpec.describe 'User email confirmation', type: :system do
 
   it 'Deviseから送信された確認リンクでメール認証できること' do
     visit new_user_registration_path
-    fill_in 'Eメール', with: 'confirmtest@example.com'
-    fill_in 'パスワード', with: 'password123'
-    fill_in 'パスワード（確認用）', with: 'password123'
+    fill_in 'floatingEmail', with: 'confirmtest@example.com'
+    fill_in 'floatingPassword', with: 'password123'
+    fill_in 'floatingPasswordConfirmation', with: 'password123'
     click_button 'アカウント登録'
 
     expect(page).to have_content '確認用のメールを送信しました'
@@ -50,7 +50,7 @@ RSpec.describe 'User login after confirmation', type: :system do
 
   it 'メール確認済みのユーザーが正常にログインできること' do
     visit new_user_session_path
-    fill_in 'Eメール', with: email
+    fill_in 'メールアドレス', with: email
     fill_in 'パスワード', with: password
     click_button 'ログイン'
 
