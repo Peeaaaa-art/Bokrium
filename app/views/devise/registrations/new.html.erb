@@ -3,29 +3,58 @@
     <div class="col-md-6 col-lg-5">
       <div class="card shadow-sm">
         <div class="card-body">
-          <h2 class="mb-4 text-center"><%= t('.sign_up') %></h2>
+          <h1 class="fw-bold big-shoulders-inline-bold mb-4 text-center">
+            <span class="logo-welcome" title="ボクリウム">Bokrium</span>
+          </h1>
 
           <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { class: "needs-validation", novalidate: true }) do |f| %>
             <%= render "devise/shared/error_messages", resource: resource %>
 
-            <div class="mb-3">
-              <%= f.label :email, class: "form-label" %>
-              <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control", required: true %>
+            <div class="form-floating mb-3">
+              <%= f.text_field :name,
+                    class: "form-control",
+                    id: "floatingName",
+                    placeholder: "name" %>
+              <%= f.label :name, for: "floatingName" %>
             </div>
 
-            <div class="mb-3">
-              <%= f.label :password, class: "form-label" %>
-              <% if @minimum_password_length %>
-                <div class="form-text mb-1">
-                  <%= t('devise.shared.minimum_password_length', count: @minimum_password_length) %>
-                </div>
+            <div class="form-floating mb-3">
+              <%= f.email_field :email,
+                    autofocus: true,
+                    autocomplete: "email",
+                    class: "form-control",
+                    id: "floatingEmail",
+                    placeholder: "メールアドレス",
+                    required: true %>
+              <%= f.label :email, for: "floatingEmail" do %>
+                メールアドレス <span class="text-danger">*</span>
               <% end %>
-              <%= f.password_field :password, autocomplete: "new-password", class: "form-control", required: true %>
             </div>
 
-            <div class="mb-3">
-              <%= f.label :password_confirmation, class: "form-label" %>
-              <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "form-control", required: true %>
+            <% if @minimum_password_length %>
+              <div class="form-floating mb-3">
+                <%= f.password_field :password,
+                      autocomplete: "new-password",
+                      class: "form-control",
+                      id: "floatingPassword",
+                      placeholder: "password",
+                      required: true %>
+                <%= f.label :password, for: "floatingPassword" do %>
+                  パスワード（<%= @minimum_password_length %>文字以上） <span class="text-danger">*</span>
+                <% end %>
+              </div>
+            <% end %>
+
+            <div class="form-floating mb-3">
+              <%= f.password_field :password_confirmation,
+                    autocomplete: "new-password",
+                    class: "form-control",
+                    id: "floatingPasswordConfirmation",
+                    placeholder: "password_confirmation",
+                    required: true %>
+              <%= f.label :password_confirmation, for: "floatingPasswordConfirmation" do %>
+                パスワード確認 <span class="text-danger">*</span>
+              <% end %>
             </div>
 
             <div class="d-grid mb-3">

@@ -50,7 +50,7 @@ RSpec.describe 'User login after confirmation', type: :system do
 
   it 'メール確認済みのユーザーが正常にログインできること' do
     visit new_user_session_path
-    fill_in 'Eメール', with: email
+    fill_in 'メールアドレス', with: email
     fill_in 'パスワード', with: password
     click_button 'ログイン'
 
