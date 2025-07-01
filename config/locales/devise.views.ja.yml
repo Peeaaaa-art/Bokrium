@@ -113,8 +113,8 @@ ja:
       signed_up: アカウント登録が完了しました。
       signed_up_but_inactive: ログインするためには、アカウントを有効化してください。
       signed_up_but_locked: アカウントがロックされているためログインできません。
-      signed_up_but_unconfirmed: 本人確認用のメールを送信しました。メール内のリンクからアカウントを有効化させてください。
-      update_needs_confirmation: アカウント情報を変更しました。変更されたメールアドレスの本人確認のため、本人確認用メールより確認処理をおこなってください。
+      signed_up_but_unconfirmed: 本人確認メールを送信しました。メール内のリンクからアカウントを有効化させてください。
+      update_needs_confirmation: アカウント情報を変更しました。変更されたメールアドレスの本人確認のため、本人確認用メールより確認してください。
       updated: アカウント情報を変更しました。
       updated_but_not_signed_in: あなたのアカウントは正常に更新されましたが、パスワードが変更されたため、再度ログインしてください。
     sessions:
@@ -126,8 +126,8 @@ ja:
     shared:
       links:
         back: 戻る
-        didn_t_receive_confirmation_instructions: アカウント確認のメールを受け取っていませんか？
-        didn_t_receive_unlock_instructions: アカウントのロック解除方法のメールを受け取っていませんか？
+        didn_t_receive_confirmation_instructions: アカウント確認メールが届いていませんか？
+        didn_t_receive_unlock_instructions: ロック解除用のメールが届いていませんか？
         forgot_your_password: パスワードを忘れましたか？
         sign_in: ログイン
         sign_in_with_provider: "%{provider}でログイン"
@@ -136,9 +136,9 @@ ja:
         other: "（%{count}字以上）"
     unlocks:
       new:
-        resend_unlock_instructions: アカウントのロック解除方法を再送する
-      send_instructions: アカウントのロック解除方法を数分以内にメールでご連絡します。
-      send_paranoid_instructions: アカウントが見つかった場合、アカウントのロック解除方法を数分以内にメールでご連絡します。
+        resend_unlock_instructions: ロック解除方法を再送する
+      send_instructions: ロック解除方法を数分以内にメールでご連絡します。
+      send_paranoid_instructions: アカウントが見つかった場合、ロック解除方法を数分以内にメールでご連絡します。
       unlocked: アカウントをロック解除しました。
   errors:
     messages:
