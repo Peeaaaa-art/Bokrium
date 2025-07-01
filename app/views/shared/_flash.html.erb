@@ -1,14 +1,18 @@
 <% flash.each do |type, message| %>
-  <% bootstrap_class = case type.to_sym
-      when :success then "info"
-      when :notice then "info"
-      when :alert then "danger"
-      when :error then "danger"
-      when :danger then "danger"
-      else "info"
-    end %>
+  <% icon = case type.to_sym
+    when :success, :notice, :info then "bi bi-patch-check-fill"
+    when :alert, :error, :danger then "bi bi-exclamation-triangle-fill"
+    else "bi bi-patch-check-fill text-info"
+  end %>
 
-  <div id="flash-message" class="flash-message alert alert-<%= bootstrap_class %> alert-dismissible fade show" role="alert">
-    <%= message %>
+  <% status = case type.to_sym
+    when :success, :notice, :info then "success"
+    when :alert, :error, :danger then "error"
+    else "info"
+  end %>
+
+  <div class="flash-message d-flex align-items-center gap-2 shadow" data-status="<%= status %>">
+    <i class="<%= icon %>" style="font-size: 1.25rem;"></i>
+    <div><%= message %></div>
   </div>
 <% end %>
