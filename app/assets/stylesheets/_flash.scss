@@ -40,6 +40,7 @@
   }
 }
 
+
 .alert-bokrium-info {
   background-color: #fdf8ef;
   color: #4a4740;
@@ -53,4 +54,8 @@
     margin-right: 0.5rem;
     color: #b89c5b;
   }
+}
+
+.field_with_errors {
+  display: contents;
 }

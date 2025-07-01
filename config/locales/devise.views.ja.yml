@@ -17,7 +17,7 @@ ja:
         last_sign_in_ip: 最終ログインIPアドレス
         locked_at: ロック時刻
         password: パスワード
-        password_confirmation: パスワード（確認用）
+        password_confirmation: パスワード（確認）
         remember_created_at: ログイン記憶時刻
         remember_me: ログイン状態を保持する
         reset_password_sent_at: パスワードリセット送信時刻
@@ -84,7 +84,7 @@ ja:
       edit:
         change_my_password: パスワードを変更する
         change_your_password: パスワードを変更
-        confirm_new_password: 確認用新しいパスワード
+        confirm_new_password: 新しいパスワード（確認）
         new_password: 新しいパスワード
       new:
         forgot_your_password: パスワードを忘れましたか？
@@ -108,7 +108,7 @@ ja:
       new:
         email: メールアドレス
         password: パスワード
-        password_confirmation: パスワード確認
+        password_confirmation: パスワード（確認）
         sign_up: アカウント登録
       signed_up: アカウント登録が完了しました。
       signed_up_but_inactive: ログインするためには、アカウントを有効化してください。
@@ -148,4 +148,4 @@ ja:
       not_found: は見つかりませんでした。
       not_locked: はロックされていません。
       not_saved:
-        other: "%{count} 件のエラーが発生したため %{resource} は保存されませんでした。"
+        other: "%{count} 件のエラーがあるため、%{resource} を保存できませんでした。"
