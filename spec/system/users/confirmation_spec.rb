@@ -14,7 +14,7 @@ RSpec.describe 'User email confirmation', type: :system do
     fill_in 'floatingPasswordConfirmation', with: 'password123'
     click_button 'アカウント登録'
 
-    expect(page).to have_content '確認用のメールを送信しました'
+    expect(page).to have_content '確認メールを送信しました'
 
     mail = ActionMailer::Base.deliveries.last
     expect(mail).not_to be_nil
