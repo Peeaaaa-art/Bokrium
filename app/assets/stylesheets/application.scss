@@ -1,26 +1,25 @@
 @import "bootstrap";
-@import "kino";
-@import "my_bookshelf_iphone";
-@import "tags";
-@import "header";
-@import "footer";
+@import "animation";
 @import "avatar";
-@import "color";
-@import "font";
-@import "tip_tap";
-@import "like_button";
-@import "filter_controls";
-@import "shadows";
 @import "buttons";
+@import "color";
+@import "detail_card";
+@import "filter_controls";
+@import "flash";
+@import "font";
+@import "footer";
+@import "header";
+@import "kino";
+@import "like_button";
 @import "modals";
+@import "my_bookshelf_iphone";
 @import "pagination";
+@import "shadows";
+@import "spine";
 @import "starters";
 @import "table";
-@import "spine";
-@import "animation_shelfs";
-@import "detail_card";
-
-
+@import "tags";
+@import "tip_tap";
 
 body {
   min-height: 100vh;
@@ -31,72 +30,6 @@ body {
 
 .modal {
   font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", "Noto Sans JP", sans-serif;
-}
-
-.flash-message {
-  position: fixed;
-  left: 50%;
-  bottom: 2rem;
-  transform: translateX(-50%);
-  z-index: 2000;
-  min-width: 320px;
-  max-width: 90vw;
-  text-align: center;
-  opacity: 0.97;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
-  animation: appear-then-fade 5s both;
-  border-radius: 0.75rem;
-  margin: 0 auto;
-  padding: 1rem 1.5rem;
-  font-weight: 500;
-  font-size: 1rem;
-}
-
-@keyframes appear-then-fade {
-  0%   { opacity: 0; }
-  10%  { opacity: 0.97; }
-  90%  { opacity: 0.97; }
-  100% { opacity: 0; }
-}
-
-@media (min-width: 1440px) {
-  .flash-message {
-    bottom: 4rem;
-  }
-}
-
-.limit-message {
-  position: fixed;
-  left: 50%;
-  bottom: 2rem;
-  transform: translateX(-50%);
-  z-index: 2000;
-  min-width: 400px;
-  max-width: 90vw;
-  text-align: center;
-  opacity: 0.97;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
-  border-radius: 0.75rem;
-  margin: 0 auto;
-  padding: 0.9rem;
-  font-weight: 500;
-  font-size: 1rem;
-}
-
-
-.alert-bokrium-info {
-  background-color: #fdf8ef; // 薄いクリーム色
-  color: #4a4740; // 落ち着いた黒茶系
-  border: 1px solid #e0dccc;
-  border-left: 6px solid #c1b497;
-  border-right: 6px solid #c1b497;
-  border-radius: 0.5rem;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-
-  i {
-    margin-right: 0.5rem;
-    color: #b89c5b;
-  }
 }
 
 .text-sample {
