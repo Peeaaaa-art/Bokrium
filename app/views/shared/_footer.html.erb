@@ -2,8 +2,14 @@
   <div class="container-fluid position-relative">
     <!-- 右上ヘルプ -->
     <div class="position-absolute" style="top: 0.7rem; right: 1rem;">
-      <%= link_to guest_starter_books_path, title: "はじめてガイド", class: "howto_use" do %>
-        <i class="bi bi-question-circle-fill fs-5"></i>
+      <%= link_to guest_starter_books_path, title: "はじめてガイド" do %>
+        <i class="bi bi-question-circle fs-4 text-dark"></i>
+      <% end %>
+    </div>
+    <!-- 左上GitHub -->
+    <div class="position-absolute" style="top: 0.7rem; left: 1rem;">
+      <%= link_to "https://github.com/Peeaaaa-art/Bokrium", title: "GitHub", class: "github-link", target: "_blank", rel: "noopener" do %>
+        <i class="bi bi-github fs-4 text-dark"></i>
       <% end %>
     </div>
 
@@ -16,7 +22,7 @@
       <div class="d-flex flex-wrap justify-content-center gap-4 small text-secondary">
         <%= link_to "Terms", terms_path, class: "text-decoration-none footer-link", title: "利用規約" %>
         <%= link_to "Privacy", privacy_path, class: "text-decoration-none footer-link", title: "プライバシーポリシー" %>
-        <%= link_to "Legal", legal_path, class: "text-decoration-none footer-link", title: "特定商取引法に基づく表記" %>
+        <%= link_to "Legal", legal_path, class: "text-decoration-none footer-link", title: "マンスリーサポートに関するご案内" %>
         <%= link_to "Contact", contact_path, class: "text-decoration-none footer-link", title: "お問い合わせ" %>
         <%= link_to "FAQ", faq_path, class: "text-decoration-none footer-link", title: "よくある質問" %>
         <%= link_to "Donation", donations_path	, class: "text-decoration-none footer-link", title: "寄付" %>
@@ -26,18 +32,19 @@
         &copy; <%= Time.current.year %> Bokrium. All rights reserved.
       </div>
 
-  <div class="d-flex flex-column flex-md-row justify-content-center align-items-center flex-wrap gap-3 mt-3 small text-secondary text-center">
+  <div class="d-flex flex-column flex-md-row justify-content-center align-items-center flex-wrap gap-3 mt-3">
     <!-- Rakutenバナーはそのまま -->
     <a href="https://webservice.rakuten.co.jp/" target="_blank" rel="noopener">
       <img src="https://webservice.rakuten.co.jp/img/credit/200709/credit_22121.gif"
           alt="Rakuten Web Service Center"
           width="221" height="21" />
     </a>
-
-<!-- その他APIの一括表記 -->
-<div class="d-inline-block text-nowrap text-secondary text-center" style="font-size: 0.75rem;">
-  Supported by
-  <a href="https://openbd.jp/" target="_blank" rel="noopener">OpenBD</a>,
-  <a href="https://developers.google.com/books" target="_blank" rel="noopener">Google Books API</a>,
-  <a href="https://www.ndl.go.jp/" target="_blank" rel="noopener">国立国会図書館</a>
-</div>
+    <!-- その他APIの一括表記 -->
+    <div class="d-inline-block text-nowrap text-secondary text-center fw-semibold " style="font-family: Nunito; font-size: 0.75rem; letter-spacing: -0.04em;">
+        <span style="font-size: 0.5rem; ">Supported by</span>
+      <a href="https://openbd.jp/" class="text-decoration-none text-danger-bok" target="_blank" rel="noopener">OpenBD</a>,
+      <a href="https://developers.google.com/books" class="text-decoration-none text-danger-bok" target="_blank" rel="noopener">Google Books</a>,
+      <a href="https://www.ndl.go.jp/" class="text-decoration-none text-danger-bok" target="_blank" rel="noopener">NDL</a>
+    </div>
+  </div>
+</footer>
