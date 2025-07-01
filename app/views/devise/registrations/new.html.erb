@@ -24,36 +24,34 @@
                     autocomplete: "email",
                     class: "form-control",
                     id: "floatingEmail",
-                    placeholder: "メールアドレス",
+                    placeholder: t('.email'),
                     required: true %>
               <%= f.label :email, for: "floatingEmail" do %>
-                メールアドレス <span class="text-danger">*</span>
+                <%= t('.email') %> <span class="text-danger">*</span>
               <% end %>
             </div>
 
-            <% if @minimum_password_length %>
-              <div class="form-floating mb-3">
-                <%= f.password_field :password,
-                      autocomplete: "new-password",
-                      class: "form-control",
-                      id: "floatingPassword",
-                      placeholder: "password",
-                      required: true %>
-                <%= f.label :password, for: "floatingPassword" do %>
-                  パスワード（<%= @minimum_password_length %>文字以上） <span class="text-danger">*</span>
-                <% end %>
-              </div>
-            <% end %>
+            <div class="form-floating mb-3">
+              <%= f.password_field :password,
+                    autocomplete: "new-password",
+                    class: "form-control",
+                    id: "floatingPassword",
+                    placeholder: t('.password'),
+                    required: true %>
+              <%= f.label :password, for: "floatingPassword" do %>
+                <%= t('.password') %> <span class="text-danger">*</span>
+              <% end %>
+            </div>
 
             <div class="form-floating mb-3">
               <%= f.password_field :password_confirmation,
                     autocomplete: "new-password",
                     class: "form-control",
                     id: "floatingPasswordConfirmation",
-                    placeholder: "password_confirmation",
+                    placeholder: t('.password_confirmation'),
                     required: true %>
               <%= f.label :password_confirmation, for: "floatingPasswordConfirmation" do %>
-                パスワード確認 <span class="text-danger">*</span>
+                <%= t('.password_confirmation') %> <span class="text-danger">*</span>
               <% end %>
             </div>
 
