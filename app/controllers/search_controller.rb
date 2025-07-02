@@ -47,7 +47,7 @@ class SearchController < ApplicationController
   def search_google_books
     query = params[:query]
     page = (params[:page] || 1).to_i
-    return redirect_to search_books_path, alert: "検索キーワードがありません" if query.blank?
+    return redirect_to search_books_path, alert: "検索キーワードがありません。" if query.blank?
     @query = query
     @page = page
 
@@ -56,11 +56,11 @@ class SearchController < ApplicationController
 
     if @google_book_results.blank?
       if page == 1
-        flash.now[:warning] = "Google Booksで該当する書籍が見つかりませんでした（#{query}）"
+        flash.now[:warning] = "Google Booksで該当する書籍が見つかりませんでした：（#{query}）"
         @google_total_count = 0
         @google_total_pages = 0
       else
-        flash.now[:warning] = "Google Booksでこれ以上の結果が見つかりませんでした（#{query}）"
+        flash.now[:warning] = "Google Booksでこれ以上の結果が見つかりませんでした：（#{query}）"
         @google_total_count = (page - 1) * 30
         @google_total_pages = page - 1
       end
@@ -94,14 +94,14 @@ class SearchController < ApplicationController
         render turbo_stream: turbo_stream.prepend(
           "scanned-books",
           partial: "search/isbn_flash",
-          locals: { message: "#{isbn} の書籍が見つかりません" }
+          locals: { message: "#{isbn} の書籍が見つかりません。" }
         )
       end
     rescue => e
       Rails.logger.error(e)
       render turbo_stream: turbo_stream.prepend(
         "scanned-books",
-        html: "システムエラーが発生しました"
+        html: "システムエラーが発生しました。"
       )
     end
   end
@@ -122,7 +122,7 @@ class SearchController < ApplicationController
       @rakuten_total_pages = (@rakuten_total_count / 30.0).ceil
 
       if books.blank?
-        flash.now[:warning] = "楽天ブックスで該当する書籍が見つかりませんでした（#{query}）"
+        flash.now[:warning] = "楽天ブックスで該当する書籍が見つかりませんでした：（#{query}）"
       end
     rescue RakutenWebService::Error => e
       flash[:error] = "楽天APIでエラーが発生しました: #{e.message}"

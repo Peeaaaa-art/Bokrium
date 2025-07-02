@@ -55,7 +55,7 @@ module Guest
     end
 
     def handle_guest_not_found
-      flash[:danger] = "この本はゲスト表示できません"
+      flash[:danger] = "この本はゲスト表示できません。"
       redirect_to root_path
     end
   end

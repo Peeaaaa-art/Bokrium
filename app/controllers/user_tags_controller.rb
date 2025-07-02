@@ -6,7 +6,7 @@ class UserTagsController < ApplicationController
     @user_tag.color = user_tag_params[:color] if user_tag_params[:color].present?
 
     if @user_tag.save
-      flash[:info] = "タグ「#{@user_tag.name}」を作成しました"
+      flash[:info] = "タグ「#{@user_tag.name}」を作成しました。"
     else
       flash[:danger] = "タグの作成に失敗しました: " + @user_tag.errors.full_messages.join(", ")
     end
@@ -15,7 +15,7 @@ class UserTagsController < ApplicationController
 
   def update
     if @user_tag.update(user_tag_params)
-      flash[:info] = "タグ「#{@user_tag.name}」を更新しました"
+      flash[:info] = "タグ「#{@user_tag.name}」を更新しました。"
     else
       flash[:danger] = "タグの更新に失敗しました: " + @user_tag.errors.full_messages.join(", ")
     end
@@ -28,7 +28,7 @@ class UserTagsController < ApplicationController
   def destroy
     tag_name = @user_tag.name
     @user_tag.destroy
-    flash[:info] = "タグ「#{tag_name}」を削除しました"
+    flash[:info] = "タグ「#{tag_name}」を削除しました。"
     redirect_back fallback_location: root_path
   end
 

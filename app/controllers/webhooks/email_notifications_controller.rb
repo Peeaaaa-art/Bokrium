@@ -4,7 +4,7 @@ class Webhooks::EmailNotificationsController < ApplicationController
 
   def create
     EmailNotificationSender.send_all
-    render json: { status: "ok", message: "通知を送信しました" }, status: :ok
+    render json: { status: "ok", message: "通知を送信しました。" }, status: :ok
   rescue => e
     Rails.logger.error("メール通知のWebhook失敗: #{e.class} - #{e.message}")
     render json: { status: "error", message: e.message }, status: :internal_server_error
@@ -15,7 +15,7 @@ class Webhooks::EmailNotificationsController < ApplicationController
   def verify_cron_token!
     token = request.headers["X-EMAIL-CRON-TOKEN"]
     unless ActiveSupport::SecurityUtils.secure_compare(token.to_s, ENV["EMAIL_CRON_TOKEN"].to_s)
-      render json: { status: "unauthorized", message: "無効なトークンです" }, status: :unauthorized
+      render json: { status: "unauthorized", message: "無効なトークンです。" }, status: :unauthorized
     end
   end
 end
