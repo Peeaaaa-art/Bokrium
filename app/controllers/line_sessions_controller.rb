@@ -16,7 +16,7 @@ class LineSessionsController < ApplicationController
       flash[:info] = "LINE連携が完了しました！"
       redirect_to mypage_path(current_user)
     else
-      flash[:danger] = "ログインしてからLINE連携してください"
+      flash[:danger] = "ログインしてからLINE連携してください。"
       redirect_to root_path
     end
   end

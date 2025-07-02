@@ -16,19 +16,13 @@ class MemosController < ApplicationController
     @memo = current_user.memos.new(memo_params)
     @memo.book_id = params[:book_id]
     @book = @memo.book
-    # @memos = @book.memos.order(created_at: :asc)
 
     if @memo.save
-      flash[:info] = "メモを保存しました"
+      flash[:info] = "メモを保存しました。"
       redirect_to book_path(@memo.book)
     else
-      error_msg = @memo.errors.full_messages.to_sentence
-      if @memo.errors.details[:base].any? { |e| e[:error] == :limit_exceeded }
-        render turbo_stream: limit_error_stream(id: "memo_limit_error", message: error_msg)
-      else
-        flash[:danger] = "メモの保存に失敗しました"
-        render "books/show", status: :unprocessable_entity
-      end
+      flash[:danger] = "メモの保存に失敗しました。"
+      render "books/show", status: :unprocessable_entity
     end
   end
 
@@ -39,17 +33,17 @@ class MemosController < ApplicationController
     @memos = @book.memos.order(created_at: :asc)
     @memo = Memo.find(params[:id])
     if @memo.update(memo_params)
-      flash[:info] = "メモを保存しました"
+      flash[:info] = "メモを保存しました。"
       redirect_to book_path(@memo.book)
     else
-      flash[:danger] = "メモの保存に失敗しました"
+      flash[:danger] = "メモの保存に失敗しました。"
       render status: :unprocessable_entity
     end
   end
 
   def destroy
     @memo.destroy
-    flash.now[:info] = "メモを削除しました"
+    flash.now[:info] = "メモを削除しました。"
     respond_to do |format|
       format.turbo_stream do
         render turbo_stream: [
@@ -70,7 +64,7 @@ class MemosController < ApplicationController
   def set_memo
     @memo = Memo.find(params[:id])
     unless @memo.user_id == current_user.id || @memo.shared?
-      flash[:danger] = "アクセス権限がありません"
+      flash[:danger] = "アクセス権限がありません。"
       redirect_to book_memo_path(@book)
     end
   end
