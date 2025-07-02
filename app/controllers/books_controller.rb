@@ -87,9 +87,9 @@ class BooksController < ApplicationController
     @book = current_user.books.build(book_params)
 
     if @book.save
-      respond_success("本棚に『#{@book.title.truncate(TITLE_TRUNCATE_LIMIT)}』を追加しました")
+      respond_success("本棚に『#{@book.title.truncate(TITLE_TRUNCATE_LIMIT)}』を追加しました。")
     else
-      respond_failure(@book.errors.full_messages.to_sentence.presence || "追加に失敗しました")
+      respond_failure(@book.errors.full_messages.to_sentence.presence || "追加に失敗しました。")
     end
   end
 
@@ -121,7 +121,7 @@ class BooksController < ApplicationController
       redirect_to @book
     else
       error_messages = @book.errors.full_messages.join("、")
-      flash.now[:danger] = "画像の保存に失敗しました。：#{error_messages}"
+      flash.now[:danger] = "画像の保存に失敗しました：#{error_messages}"
       render :edit
     end
   end
