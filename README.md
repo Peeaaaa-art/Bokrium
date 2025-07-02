@@ -108,5 +108,4 @@ Bokriumは、そのための場です。知識を、思い出しやすく、取�
 
 
 # ER図
-
-<img src="https://assets.bokrium.com/bokrium_erd.png" alt="ER図" width="100%" />
+[![Image from Gyazo](https://i.gyazo.com/66a2ea1cc26450ad736d119bfaa77f6d.png)](https://gyazo.com/66a2ea1cc26450ad736d119bfaa77f6d)
