@@ -10,14 +10,8 @@ class ImagesController < ApplicationController
         format.html { redirect_to @book }
       end
     else
-        error_msg = @image.errors.full_messages.to_sentence
-
-      if @image.errors.details[:base].any? { |e| e[:error] == :limit_exceeded }
-        render turbo_stream: limit_error_stream(id: "image_limit_error", message: error_msg)
-      else
-        flash[:danger] = "画像の保存に失敗しました：#{error_msg}"
-        redirect_to @book
-      end
+      flash[:danger] = "画像の保存に失敗しました：#{@image.errors.full_messages.to_sentence}"
+      redirect_to @book
     end
   end
 
