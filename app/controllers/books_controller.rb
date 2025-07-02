@@ -16,6 +16,7 @@ class BooksController < ApplicationController
           .includes(book_cover_s3_attachment: :blob)
           .order(created_at: :desc)
           .to_a
+        @read_only = true
       end
       return
     end
@@ -86,15 +87,9 @@ class BooksController < ApplicationController
     @book = current_user.books.build(book_params)
 
     if @book.save
-      respond_success("本棚に『#{@book.title.truncate(TITLE_TRUNCATE_LIMIT)}』を追加しました")
+      respond_success("本棚に『#{@book.title.truncate(TITLE_TRUNCATE_LIMIT)}』を追加しました。")
     else
-      error_msg = @book.errors.full_messages.to_sentence
-
-      if @book.errors.details[:base].any? { |e| e[:error] == :limit_exceeded }
-        render turbo_stream: limit_error_stream(id: "book_limit_error", message: error_msg)
-      else
-        respond_failure(@book.errors.full_messages.to_sentence.presence || "追加に失敗しました")
-      end
+      respond_failure(@book.errors.full_messages.to_sentence.presence || "追加に失敗しました。")
     end
   end
 
@@ -122,7 +117,7 @@ class BooksController < ApplicationController
 
   def update
     if @book.update(book_params)
-      flash[:info] = "『#{@book.title.truncate(TITLE_TRUNCATE_LIMIT)}』を更新しました"
+      flash[:info] = "『#{@book.title.truncate(TITLE_TRUNCATE_LIMIT)}』を更新しました。"
       redirect_to @book
     else
       error_messages = @book.errors.full_messages.join("、")
@@ -136,7 +131,7 @@ class BooksController < ApplicationController
     index = params[:index].to_i
 
     if @book.update(book_params)
-      flash.now[:row_update_success] = "『#{@book.title.truncate(20)}』を更新しました"
+      flash.now[:row_update_success] = "『#{@book.title.truncate(20)}』を更新しました。"
       render partial: "bookshelf/b_note_row", formats: :html, locals: { book: @book, index: index }
     else
       render partial: "bookshelf/b_note_edit_row", formats: :html, locals: { book: @book, index: index }
@@ -144,7 +139,7 @@ class BooksController < ApplicationController
   end
   def destroy
     @book.destroy
-    flash[:info] = "『#{@book.title.truncate(TITLE_TRUNCATE_LIMIT)}』を削除しました"
+    flash[:info] = "『#{@book.title.truncate(TITLE_TRUNCATE_LIMIT)}』を削除しました。"
 
     if params[:force_html]
       redirect_to books_path, notice: flash[:info]

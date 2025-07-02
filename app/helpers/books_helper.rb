@@ -31,7 +31,7 @@ module BooksHelper
   end
 
 
-  def display_book_cover(book, resize_to: [ 200 ], alt: nil,
+  def display_book_cover(book, alt: nil,
                         s3_class: "", url_class: "", no_cover_class: "", no_cover_title: nil,
                         nocover_img: false, truncate_options: {}, **options)
     return unless book.present?
@@ -43,7 +43,6 @@ module BooksHelper
         alt: alt,
         loading: "lazy",
         class: "img-fluid #{s3_class}".strip,
-        width: resize_to[0],
         height: "auto"
       }.merge(options)
 
