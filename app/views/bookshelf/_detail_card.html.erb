@@ -42,8 +42,8 @@ end %>
               <%= display_book_cover book,
                   s3_class: "book-cover rounded-2 detail-src",
                   url_class: "rounded-2 detail-src",
-                  no_cover_class: "detail-nocover",
-                  no_cover_title: "small text-center px-1"
+                  nocover_img: true,
+                  no_cover_class: "detail-nocover"
               %>
             </div>
             <div class="col d-flex flex-column gap-1" style="word-break: break-all;">
@@ -57,5 +57,7 @@ end %>
     </div>
   <% end %>
 </div>
+
+
 
 <%= render "shared/pagy", pagy: pagy %>

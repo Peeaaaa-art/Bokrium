@@ -1,18 +1,18 @@
 <% flash.each do |type, message| %>
   <% icon = case type.to_sym
     when :success, :notice, :info then "bi bi-patch-check-fill"
-    when :alert, :error, :danger then "bi bi-exclamation-triangle-fill"
-    else "bi bi-patch-check-fill text-info"
+    when :alert, :error, :danger  then "bi bi-exclamation-triangle-fill"
+    else "bi bi-info-circle-fill"
   end %>
 
   <% status = case type.to_sym
     when :success, :notice, :info then "success"
-    when :alert, :error, :danger then "error"
+    when :alert, :error, :danger  then "error"
     else "info"
   end %>
 
-  <div class="flash-message d-flex align-items-center gap-2 shadow" data-status="<%= status %>">
-    <i class="<%= icon %>" style="font-size: 1.25rem;"></i>
-    <div><%= message %></div>
+  <div class="flash-message shadow" data-status="<%= status %>">
+    <i class="<%= icon %>"></i>
+    <span class="flash-message-text"><%= message %></span>
   </div>
 <% end %>

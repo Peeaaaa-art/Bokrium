@@ -52,10 +52,10 @@ module BooksHelper
                   style: "" }.merge(options)
 
     elsif nocover_img
-      content_tag(:div, class: "cover-placeholder-wrapper") do
+      content_tag(:div, class: "cover-placeholder-wrapper #{no_cover_class}") do
         image_tag("no_cover.png", class: "img-fluid rounded-sm placeholder-cover") +
           content_tag(:div, truncate_for_device(book.title, **truncate_options),
-                      class: "cover-title-overlay brake-word #{no_cover_class}") +
+                      class: "cover-title-overlay brake-word") +
           content_tag(:div, "Bokrium", class: "logo-overlay")
       end
     else

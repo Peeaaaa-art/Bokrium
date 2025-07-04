@@ -7,8 +7,8 @@
   display: inline-flex;
   align-items: center;
   gap: 0.75rem;
-  min-width: 9vw;
   max-width: 90vw;
+  width: max-content;
   padding: 0.75rem 1.25rem;
   font-size: 1rem;
   font-weight: 500;
@@ -17,6 +17,7 @@
   border-radius: 0.75rem;
   animation: appear-then-fade 5s both;
   opacity: 0;
+  box-sizing: border-box;
 }
 
 .flash-message[data-status="success"] {
@@ -25,6 +26,18 @@
 
 .flash-message[data-status="error"] {
   background-color: #e34c4c;
+}
+
+.flash-message .flash-message-text {
+  display: inline-block;
+  white-space: normal;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  min-width: 0;
+}
+
+.flash-message i {
+  flex-shrink: 0;
 }
 
 @keyframes appear-then-fade {
