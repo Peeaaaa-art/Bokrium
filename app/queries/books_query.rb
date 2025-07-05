@@ -20,12 +20,11 @@ class BooksQuery
     return books unless @params[:tags].present?
 
     tag_names = Array(@params[:tags])
-
     user_tag_ids = UserTag.where(user: @current_user, name: tag_names).pluck(:id)
 
     books.joins(:book_tag_assignments)
         .where(book_tag_assignments: { user_tag_id: user_tag_ids })
-        .distinct
+        .group("books.id")
   end
 
   def filter_by_status(books)
@@ -56,7 +55,11 @@ class BooksQuery
     when "author_asc"
       books.order(Arel.sql("author COLLATE \"ja-x-icu\" ASC"))
     when "latest_memo"
-      books.left_joins(:memos).group("books.id").order(Arel.sql("MAX(memos.updated_at) DESC NULLS LAST"))
+      books
+      .left_joins(:memos)
+      .select("books.*, MAX(memos.updated_at) AS latest_memo_updated_at")
+      .group("books.id")
+      .order("latest_memo_updated_at DESC NULLS LAST")
     else
       books.order(created_at: :desc)
     end
