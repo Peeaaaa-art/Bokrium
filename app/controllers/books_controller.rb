@@ -1,8 +1,8 @@
 class BooksController < ApplicationController
-  before_action :authenticate_user!, only: %i[index create show edit update destroy]
-  before_action :set_book, only: %i[edit edit_row row update update_row destroy toggle_tag]
+  before_action :authenticate_user!, only: %i[ index create show edit update destroy ]
+  before_action :set_book, only: %i[ edit update destroy toggle_tag ]
   before_action :set_book_with_associations, only: [ :show ]
-  before_action :set_user_tags, only: %i[show tag_filter]
+  before_action :set_user_tags, only: %i[ show tag_filter ]
   rescue_from ActiveRecord::RecordNotFound, with: :handle_record_not_found
 
   CHUNKS_PER_PAGE = 7
@@ -19,7 +19,7 @@ class BooksController < ApplicationController
       return
     end
 
-    initialize_display_settings
+    initialize_bookshelf_display
     sync_filter_params_with_session(%w[sort status memo_visibility])
 
     books = BooksQuery.new(books, params: params, current_user: current_user).call
@@ -50,14 +50,6 @@ class BooksController < ApplicationController
     end
   end
 
-  def edit_row
-    render partial: "bookshelf/b_note_edit_row", locals: { book: @book }
-  end
-
-  def row
-    render partial: "bookshelf/b_note_row", locals: { book: @book }
-  end
-
   def update
     if @book.update(book_params)
       flash[:info] = "『#{@book.title.truncate(TITLE_TRUNCATE_LIMIT)}』を更新しました。"
@@ -65,16 +57,6 @@ class BooksController < ApplicationController
     else
       flash.now[:danger] = "画像の保存に失敗しました：#{@book.errors.full_messages.join('、')}"
       render :edit
-    end
-  end
-
-  def update_row
-    index = params[:index].to_i
-    if @book.update(book_params)
-      flash.now[:row_update_success] = "『#{@book.title.truncate(20)}』を更新しました。"
-      render partial: "bookshelf/b_note_row", formats: :html, locals: { book: @book, index: index }
-    else
-      render partial: "bookshelf/b_note_edit_row", formats: :html, locals: { book: @book, index: index }
     end
   end
 
@@ -115,17 +97,19 @@ class BooksController < ApplicationController
   def autocomplete
     return render json: [] unless user_signed_in? || params[:scope] == "public"
 
-    term = params[:term].to_s.strip
-    return render json: [] if term.blank?
+    results = BookAutocompleteService.new(
+      term: params[:term],
+      scope: params[:scope],
+      user: current_user
+    ).call
 
-    results = autocomplete_results(term, params[:scope])
     render json: results
   end
 
   private
 
-  def initialize_display_settings
-    @display = BooksDisplaySetting.new(session, params, {
+  def initialize_bookshelf_display
+    @display = BookshelfDisplay.new(session, params, {
       shelf: default_books_per_shelf,
       card: default_card_columns,
       detail_card: default_detail_card_columns,
@@ -157,23 +141,6 @@ class BooksController < ApplicationController
       render partial: "bookshelf/spine_chunk", locals: { books: @books, spine_per_shelf: @spine_per_shelf, pagy: @pagy }
     else
       render :index
-    end
-  end
-
-  def autocomplete_results(term, scope)
-    case scope
-    when "mine"
-      current_user.books.where("title ILIKE :t OR author ILIKE :t", t: "%#{term}%")
-      .distinct.limit(10)
-      .map { |b| { value: b.title, label: "#{b.title}（#{b.author.presence || ''}）" } }
-    when "public"
-      public_book_ids = Memo.where(visibility: Memo::VISIBILITY[:public_site]).distinct.pluck(:book_id)
-      Book.where(id: public_book_ids)
-          .where("title ILIKE :t OR author ILIKE :t", t: "%#{term}%")
-          .limit(10)
-          .map { |b| { value: b.title, label: "#{b.title}（#{b.author.presence || ''}）" } }
-    else
-      []
     end
   end
 
