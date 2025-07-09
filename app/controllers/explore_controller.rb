@@ -4,7 +4,7 @@ class ExploreController < ApplicationController
     @query = params[:q].to_s.strip
     @scope = params[:scope].presence_in(%w[mine public]) || "public"
 
-    display = BooksDisplaySetting.new(session, params, {
+    display = BookshelfDisplay.new(session, params, {
       shelf:       default_books_per_shelf,
       card:        default_card_columns,
       detail_card: default_detail_card_columns,
