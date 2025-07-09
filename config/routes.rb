@@ -42,10 +42,9 @@ Rails.application.routes.draw do
   resources :books do
     resources :memos, only: [ :create, :new, :edit, :update, :destroy ]
     resources :images, only: [ :create, :destroy ]
+    resource :row, only: %i[ show edit update ], controller: "books/rows"
 
     member do
-      get :row
-      patch :update_row
       post "toggle_tag"
     end
 
