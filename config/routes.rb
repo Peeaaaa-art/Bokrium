@@ -43,6 +43,11 @@ Rails.application.routes.draw do
     resources :memos, only: [ :create, :new, :edit, :update, :destroy ]
     resources :images, only: [ :create, :destroy ]
     resource :row, only: %i[ show edit update ], controller: "books/rows"
+    resource :tags, only: [], controller: "books/tags" do
+      post :toggle
+      get :filter
+      delete :clear
+    end
 
     member do
       post "toggle_tag"

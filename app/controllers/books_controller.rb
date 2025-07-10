@@ -1,8 +1,8 @@
 class BooksController < ApplicationController
   before_action :authenticate_user!, only: %i[ index create show edit update destroy ]
-  before_action :set_book, only: %i[ edit update destroy toggle_tag ]
+  before_action :set_book, only: %i[ edit update destroy ]
   before_action :set_book_with_associations, only: [ :show ]
-  before_action :set_user_tags, only: %i[ show tag_filter ]
+  before_action :set_user_tags, only: %i[ show ]
   rescue_from ActiveRecord::RecordNotFound, with: :handle_record_not_found
 
   CHUNKS_PER_PAGE = 7
@@ -78,20 +78,6 @@ class BooksController < ApplicationController
         format.html { redirect_to books_path, notice: flash[:info] }
       end
     end
-  end
-
-  def toggle_tag
-    BookTagToggleService.new(book: @book, user: current_user, tag_id: params[:tag_id], flash: flash).call
-    redirect_back fallback_location: @book
-  end
-
-  def tag_filter
-    render partial: "books/tag_filter", locals: { filtered_tags: [] }
-  end
-
-  def clear_filters
-    %i[sort status memo_visibility tags].each { |key| session.delete(key) }
-    redirect_to books_path
   end
 
   def autocomplete
