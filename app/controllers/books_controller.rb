@@ -80,6 +80,11 @@ class BooksController < ApplicationController
     end
   end
 
+  def clear_filters
+    %i[sort status memo_visibility tags view].each { |key| session.delete(key) }
+    redirect_to books_path
+  end
+
   private
 
   def initialize_bookshelf_display

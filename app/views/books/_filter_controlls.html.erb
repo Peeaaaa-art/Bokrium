@@ -28,7 +28,7 @@
   <!-- クリアボタン -->
   <div class="flex-shrink-0">
     <% if session.to_h.slice("sort", "status", "memo_visibility", "tags", "view").values.any?(&:present?) %>
-      <%= button_to clear_books_filters_path,
+      <%= button_to clear_filters_books_path,
                     method: :delete,
                     class: "btn btn-light border shadow-sm d-flex align-items-center justify-content-center bookshelf-icon",
                     title: "クリア" do %>

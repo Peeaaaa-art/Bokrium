@@ -14,11 +14,6 @@ class Books::TagsController < ApplicationController
     }
   end
 
-  def clear
-    %i[sort status memo_visibility tags].each { |key| session.delete(key) }
-    redirect_to books_path
-  end
-
   private
 
   def set_book

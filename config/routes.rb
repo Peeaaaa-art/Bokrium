@@ -49,11 +49,12 @@ Rails.application.routes.draw do
 
     collection do
       get :autocomplete, to: "books/autocompletes#index"
+      delete :clear_filters
     end
   end
 
   get "books/filters/filter", to: "books/tags#filter", as: :filter_books_tags
-  delete "books/filters/clear", to: "books/tags#clear", as: :clear_books_filters
+
 
   resources :user_tags, only: [ :create, :update, :destroy ]
 
