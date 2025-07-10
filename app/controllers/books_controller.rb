@@ -80,18 +80,6 @@ class BooksController < ApplicationController
     end
   end
 
-  def autocomplete
-    return render json: [] unless user_signed_in? || params[:scope] == "public"
-
-    results = BookAutocompleteService.new(
-      term: params[:term],
-      scope: params[:scope],
-      user: current_user
-    ).call
-
-    render json: results
-  end
-
   private
 
   def initialize_bookshelf_display
