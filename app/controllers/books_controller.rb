@@ -5,25 +5,23 @@ class BooksController < ApplicationController
   before_action :set_user_tags, only: %i[ show ]
   rescue_from ActiveRecord::RecordNotFound, with: :handle_record_not_found
 
-  CHUNKS_PER_PAGE = 7
-
   def index
-    @has_books = current_user.books.exists?
-    books = current_user.books.includes(book_cover_s3_attachment: :blob)
+    presenter = BooksIndexPresenter.new(
+      user: current_user,
+      params: params,
+      session: session,
+      mobile: mobile?,
+      user_agent: request.user_agent
+    ).call
 
-    if books.empty?
-      @books = Rails.cache.fetch("guest_sample_books") do
-        guest_user.books.includes(book_cover_s3_attachment: :blob).order(created_at: :desc).to_a
-      end
-      @read_only = true
-      return
-    end
-
-    initialize_bookshelf_display
-    sync_filter_params_with_session(%w[sort status memo_visibility])
-
-    books = BooksQuery.new(books, params: params, current_user: current_user).call
-    @pagy, @books = pagy(books, limit: @display.unit_per_page * CHUNKS_PER_PAGE)
+    @books               = presenter.books
+    @pagy                = presenter.pagy
+    @read_only           = presenter.read_only
+    @view_mode           = presenter.view_mode
+    @books_per_shelf     = presenter.books_per_shelf
+    @card_columns        = presenter.card_columns
+    @detail_card_columns = presenter.detail_card_columns
+    @spine_per_shelf     = presenter.spine_per_shelf
 
     turbo_frame_request? ? render_chunk_for(@view_mode) : render(:index)
   end
@@ -86,31 +84,6 @@ class BooksController < ApplicationController
   end
 
   private
-
-  def initialize_bookshelf_display
-    @display = BookshelfDisplay.new(session, params, {
-      shelf: default_books_per_shelf,
-      card: default_card_columns,
-      detail_card: default_detail_card_columns,
-      spine: default_spine_per_shelf
-    }, mobile: mobile?)
-
-    @view_mode = @display.view_mode
-    @books_per_shelf = @display.books_per_shelf
-    @card_columns = @display.card_columns
-    @detail_card_columns = @display.detail_card_columns
-    @spine_per_shelf = @display.spine_per_shelf
-  end
-
-  def sync_filter_params_with_session(keys)
-    keys.each do |key|
-      if params.key?(key)
-        params[key].present? ? session[key] = params[key] : session.delete(key)
-      elsif session[key].present?
-        params[key] = session[key]
-      end
-    end
-  end
 
   def render_chunk_for(view_mode)
     case view_mode

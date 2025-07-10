@@ -56,10 +56,9 @@ class BooksQuery
       books.order(Arel.sql("author COLLATE \"ja-x-icu\" ASC"))
     when "latest_memo"
       books
-      .left_joins(:memos)
-      .select("books.*, MAX(memos.updated_at) AS latest_memo_updated_at")
-      .group("books.id")
-      .order("latest_memo_updated_at DESC NULLS LAST")
+        .left_joins(:memos)
+        .group("books.id")
+        .order(Arel.sql("MAX(memos.updated_at) DESC NULLS LAST"))
     else
       books.order(created_at: :desc)
     end
