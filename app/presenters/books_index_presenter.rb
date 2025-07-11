@@ -12,54 +12,38 @@ class BooksIndexPresenter
               :detail_card_columns, :spine_per_shelf,
               :view_mode
 
-  def initialize(user:, params:, session:, mobile:, user_agent:)
+  def initialize(user:, params:, session:, mobile:, user_agent:, pagy_context: nil)
     @user        = user
     @params      = params
     @session     = session
     @mobile      = mobile
     @user_agent  = user_agent
+    @pagy_context = pagy_context
   end
 
   def call
     user_books = @user.books.includes(book_cover_s3_attachment: :blob)
-
-    if user_books.empty?
-      load_guest_books
-    else
-      load_user_books(user_books)
-    end
-
+    load_user_books(user_books)
     self
   end
 
   private
-
-  def load_guest_books
-    @books = Rails.cache.fetch("guest_sample_books") do
-      guest_user.books.includes(book_cover_s3_attachment: :blob).order(created_at: :desc).to_a
-    end
-
-    @read_only = true
-    @pagy = nil
-    setup_display
-  end
 
   def load_user_books(user_books)
     setup_display
     sync_filter_params(%w[sort status memo_visibility])
 
     filtered_books = BooksQuery.new(user_books, params: @params, current_user: @user).call
-    per_page = @display.unit_per_page * CHUNKS_PER_PAGE
 
-    total_count = filtered_books.unscope(:select, :group, :order).count(:all)
+    per_page = (@display.unit_per_page * CHUNKS_PER_PAGE).to_i
 
-    @pagy = Pagy.new(
-      count: total_count,
-      page:  @params[:page],
-      items: per_page
-    )
+    if @pagy_context.present?
+      @pagy, @books = @pagy_context.send(:pagy, filtered_books, limit: per_page)
+    else
+      @books = filtered_books.limit(per_page)
+      @pagy  = nil
+    end
 
-    @books = filtered_books.offset(@pagy.offset).limit(@pagy.vars[:items])
     @read_only = false
   end
 
