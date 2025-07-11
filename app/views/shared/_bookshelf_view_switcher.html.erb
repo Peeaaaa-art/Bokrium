@@ -1,0 +1,18 @@
+<% views = [
+  { key: "shelf", icon: "bi-bookshelf", title: "棚ビューに切り替え" },
+  { key: "spine", icon: "bi-layout-three-columns", title: "背表紙ビューに切り替え" },
+  { key: "card", icon: "bi-file", title: "カードビューに切り替え" },
+  { key: "detail_card", icon: "bi bi-layout-sidebar-inset", title: "詳細カードビューに切り替え" },
+  { key: "b_note", icon: "bi-table", title: "B-noteビューに切り替え" }
+] %>
+
+<% current_index = views.index { |v| v[:key] == view_mode } || 0 %>
+<% next_view = views[(current_index + 1) % views.size] %>
+<% current_icon = views[current_index][:icon] %>
+
+<%= link_to switch_path.call(view: next_view[:key]),
+            class: "btn btn-light border shadow-sm d-flex align-items-center justify-content-center",
+            style: "width: 40px; height: 40px; border-radius: 50%; line-height: 1;",
+            title: next_view[:title] do %>
+  <i class="bi <%= current_icon %> fs-5 icon-refined"></i>
+<% end %>
