@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class BooksDisplaySetting
+class BookshelfLayoutConfig
   VIEW_MODE_KEY           = :view_mode
   SHELF_PER_KEY           = :shelf_per
   CARD_COLUMNS_KEY        = :card_columns

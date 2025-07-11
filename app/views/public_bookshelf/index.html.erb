@@ -2,21 +2,19 @@
 
 <div class="container text-center my-4">
   <% if @others_random_memo && @others_random_memo.book && @others_random_memo.user %>
-  <div class="container">
-    <!-- 検索窓 -->
-    <%= render "shared/search_bar", scope: "public", placeholder: "タイトル・著者",
-                              form_class: "mb-md-5 mb-2 d-flex justify-content-center" %>
 
-    <div id="memo-grid" class="row row-cols-1 row-cols-md-3 g-4">
-      <%= render partial: "public_bookshelf/public_card", collection: @random_memos, as: :memo %>
-    </div>
+      <%= render "shared/search_bar", scope: "public", placeholder: "タイトル・著者",
+                                form_class: "mb-md-5 mb-2 d-flex justify-content-center" %>
 
-    <div class="text-center mt-4">
-      <%= button_to "もっと見る", public_bookshelf_index_path, method: :get, remote: true, class: "btn btn-outline-secondary", id: "load-more-memos" %>
-    </div>
-  </div>
-<% end %>
+      <turbo-frame id="public_books_frame">
+        <div id="memo-grid" class="row row-cols-1 row-cols-md-3 g-4">
+          <%= render partial: "public_bookshelf/public_card", collection: @memos, as: :memo %>
+        </div>
+
+        <div class="text-center mt-4">
+          <%= render "shared/pagy", pagy: @pagy %>
+        </div>
+      </turbo-frame>
+
+  <% end %>
 </div>
-
-
-<%= render "shared/pagy", pagy: @pagy %>

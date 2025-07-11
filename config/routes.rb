@@ -42,20 +42,19 @@ Rails.application.routes.draw do
   resources :books do
     resources :memos, only: [ :create, :new, :edit, :update, :destroy ]
     resources :images, only: [ :create, :destroy ]
-
-    member do
-      get :row
-      patch :update_row
-      post "toggle_tag"
+    resource :row, only: [ :show, :edit, :update ], controller: "books/rows"
+    resource :tags, only: [], controller: "books/tags" do
+      post :toggle
     end
 
     collection do
-      get :autocomplete
-      get :tag_filter
+      get :autocomplete, to: "books/autocompletes#index"
       delete :clear_filters
-      delete :clear_tag_filter
     end
   end
+
+  get "books/filters/filter", to: "books/tags#filter", as: :filter_books_tags
+
 
   resources :user_tags, only: [ :create, :update, :destroy ]
 

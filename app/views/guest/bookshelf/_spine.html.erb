@@ -1,21 +1,3 @@
-<%= form_with url: books_index_path, method: :get,
-              data: { controller: "auto-submit", turbo: false },
-              local: true,
-              class: "ms-3" do %>
-
-  <%= hidden_field_tag :view, "spine" %>
-
-  <% options = mobile? ? [7, 14] : [14, 21, 28, 35] %>
-
-  <%= select_tag :per_spine,
-      options_for_select(options, spine_per_shelf),
-      class: "form-select form-select-sm text-secondary shadow-sm books-per-shelf",
-      data: {
-        auto_submit_target: "select",
-        action: "change->auto-submit#change"
-      } %>
-<% end %>
-
 <% books.each_slice(spine_per_shelf).with_index do |row_books, idx| %>
   <div class="shelf-row position-relative fade-in delay-<%= idx %>">
     <div class="book-spine-row d-flex">
@@ -52,4 +34,15 @@
     <div class="shelf-bar"></div>
     <div class="shelf-depth"></div>
   </div>
+<% end %>
+
+
+<% if pagy && pagy.next %>
+  <turbo-frame id="next_books"
+                src="<%= guest_books_path(view: 'spine', page: pagy.next) %>"
+                loading="lazy"
+                data-controller="lazy-load"
+                data-lazy-load-url-value="<%= guest_books_path(view: 'spine', page: pagy.next) %>">
+    <%= render "shared/loading_spinner" %>
+  </turbo-frame>
 <% end %>

@@ -30,10 +30,9 @@ export default class extends Controller {
     const title = row.querySelector("input[name='title']").value
     const author = row.querySelector("input[name='author']").value
     const publisher = row.querySelector("input[name='publisher']").value
-
     const csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 
-    fetch(`/books/${id}/update_row`, {
+    fetch(`/books/${id}/row`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -44,16 +43,17 @@ export default class extends Controller {
         book: { title, author, publisher },
         index: index
       })
-    }).then(response => {
-      if (response.ok) {
-        return response.text()
-      } else {
-        throw new Error("更新に失敗しました")
-      }
-    }).then(html => {
-      this.element.outerHTML = html
-    }).catch(error => {
-      alert(error.message)
     })
+      .then(response => {
+        if (!response.ok) throw new Error("更新に失敗しました")
+        return response.text()
+      })
+      .then(html => {
+        this.element.insertAdjacentHTML("afterend", html)
+        this.element.remove()
+      })
+      .catch(error => {
+        alert(error.message)
+      })
   }
 }

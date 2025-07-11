@@ -4,25 +4,11 @@
 
 
 <div class="d-flex align-items-center justify-content-between mt-4 mb-3 px-3">
-  <% views = [
-    { key: "shelf",       icon: "bi-bookshelf",   title: "棚ビューに切り替え" },
-    { key: "spine",       icon: "bi-layout-three-columns",              title: "背表紙ビューに切り替え" },
-    { key: "card",        icon: "bi-file",              title: "カードビューに切り替え" },
-    { key: "detail_card", icon: "bi bi-layout-sidebar-inset",    title: "詳細カードビューに切り替え" },
-    { key: "b_note",      icon: "bi-table",                  title: "B-noteビューに切り替え" }
-  ] %>
-
-  <% current_index = views.index { |v| v[:key] == @view_mode } || 0 %>
-  <% next_view = views[(current_index + 1) % views.size] %>
-  <% current_icon = views[current_index][:icon] %>
 
   <div class="flex-shrink-0">
-    <%= link_to guest_books_path(view: next_view[:key]),
-                class: "btn btn-light border shadow-sm d-flex align-items-center justify-content-center",
-                style: "width: 40px; height: 40px; border-radius: 50%; line-height: 1;",
-                title: next_view[:title] do %>
-      <i class="bi <%= current_icon %> fs-5 icon-refined"></i>
-    <% end %>
+<%= render "shared/bookshelf_view_switcher",
+            view_mode: @view_mode,
+            switch_path: ->(params) { guest_books_path(params) } %>
   </div>
 
     <div class="mx-auto">
@@ -54,24 +40,12 @@
   <div class="flex-shrink-0 d-none-sm" style="width: 48px;"></div> <!-- サイズ合わせ用 -->
 </div>
 
-<% case @view_mode %>
-<% when "shelf" %>
-  <%= render "guest/bookshelf/kino_select_numbers", books_per_shelf: @books_per_shelf %>
-  <%= render "guest/bookshelf/kino_chunk",
-          books: @books,
-          books_per_shelf: @books_per_shelf,
-          pagy: @pagy,
-          current_chunk_index: @pagy.page %>
-
-<% when "card" %>
-  <%= render "guest/bookshelf/simple_card", books: @books, card_columns: @card_columns, pagy: @pagy %>
-
-<% when "detail_card" %>
-  <%= render "guest/bookshelf/detail_card", books: @books, detail_card_columns: @detail_card_columns, pagy: @pagy %>
-
-<% when "b_note" %>
-  <%= render "guest/bookshelf/b_note", books: @books, detail_card_columns: @detail_card_columns, pagy: @pagy %>
-
-<% when "spine" %>
-  <%= render "guest/bookshelf/spine", books: @books, pagy: @pagy, spine_per_shelf: @spine_per_shelf %>
-<% end %>
+<%= render "guest/bookshelf/books_frame_wrapper",
+            books: @books,
+            books_per_shelf: @books_per_shelf,
+            pagy: @pagy,
+            view_mode: @view_mode,
+            card_columns: @card_columns,
+            detail_card_columns: @detail_card_columns,
+            spine_per_shelf: @spine_per_shelf
+%>

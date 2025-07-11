@@ -17,3 +17,9 @@
     <div class="shelf-depth"></div>
   </div>
 <% end %>
+
+<% if pagy && pagy.next %>
+  <turbo-frame id="next_books" src="<%= guest_books_path(view: @view_mode, page: pagy.next) %>" loading="lazy">
+    <%= render "shared/loading_spinner" %>
+  </turbo-frame>
+<% end %>

@@ -4,7 +4,7 @@ module RandomSelectable
 
   class_methods do
     def random_1
-      order(Arel.sql("RANDOM()")).first
+      order(Arel.sql("RANDOM()")).limit(1).first
     end
 
     def random_9

@@ -51,19 +51,19 @@
 
   <!-- ソート -->
   <div class="collapse mb-2" id="sortCollapse">
-    <%= render "sort_controls", filtered_tag: filtered_tag, current_sort: params[:sort], view_mode: @view_mode %>
+    <%= render "books/sort_controls", filtered_tag: filtered_tag, current_sort: params[:sort], view_mode: @view_mode %>
   </div>
 
   <!-- タグ -->
   <div class="collapse mb-2" id="tagCollapse"
       data-controller="tag-toggle"
       data-tag-toggle-selected-tags-value="<%= filtered_tags&.join(',') %>">
-    <turbo-frame id="tag_filter_frame" src="<%= tag_filter_books_path %>">
+    <turbo-frame id="tag_filter_frame" src="<%= filter_books_tags_path %>">
       読み込み中…
     </turbo-frame>
   </div>
 
   <!-- ステータス -->
   <div class="collapse mb-2" id="statusCollapse">
-    <%= render "status_filter", current_status: filtered_status, view_mode: @view_mode %>
+    <%= render "books/status_filter", current_status: filtered_status, view_mode: @view_mode %>
   </div>
