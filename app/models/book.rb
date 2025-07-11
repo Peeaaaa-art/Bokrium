@@ -56,6 +56,10 @@ class Book < ApplicationRecord
                     trigram: { threshold: 0.03 }
                   }
 
+  scope :fuzzy_title_or_author, ->(query) {
+    where("title ILIKE :q OR author ILIKE :q", q: "%#{sanitize_sql_like(query)}%")
+  }
+
   private
 
   def normalize_isbn

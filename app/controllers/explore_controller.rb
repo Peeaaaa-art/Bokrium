@@ -4,21 +4,24 @@ class ExploreController < ApplicationController
     @query = params[:q].to_s.strip
     @scope = params[:scope].presence_in(%w[mine public]) || "public"
 
-    display = BookshelfDisplay.new(session, params, {
-      shelf:       default_books_per_shelf,
-      card:        default_card_columns,
-      detail_card: default_detail_card_columns,
-      spine:       default_spine_per_shelf
-    }, mobile: mobile?)
-
-    @view_mode           = display.view_mode
-    @books_per_shelf     = display.books_per_shelf
-    @card_columns        = display.card_columns
-    @detail_card_columns = display.detail_card_columns
-    @spine_per_shelf     = display.spine_per_shelf
 
     if @scope == "mine"
       return redirect_to new_user_session_path unless user_signed_in?
+
+      presenter = BooksIndexPresenter.new(
+        user: current_user,
+        params: params,
+        session: session,
+        mobile: mobile?,
+        user_agent: request.user_agent
+      ).call
+
+      @view_mode           = presenter.view_mode
+      @books_per_shelf     = presenter.books_per_shelf
+      @card_columns        = presenter.card_columns
+      @detail_card_columns = presenter.detail_card_columns
+      @spine_per_shelf     = presenter.spine_per_shelf
+      @read_only           = presenter.read_only
 
       books = current_user.books.includes(:memos, book_cover_s3_attachment: :blob)
       books = BooksQuery.new(books, params: params, current_user: current_user).call
@@ -29,8 +32,10 @@ class ExploreController < ApplicationController
         books = books.where(id: (title_author_ids + memo_book_ids).uniq)
       end
 
-      books_per_page = (display.unit_per_page * 3).to_i
+      books_per_page = (presenter.display.unit_per_page * 3).to_i
       @pagy, @books = pagy(books, items: books_per_page)
+
+
     else
       @results = search_public_memos(@query)
       @pagy, @memos = pagy(@results, items: 20)
@@ -62,8 +67,8 @@ class ExploreController < ApplicationController
       )
     else
       render turbo_stream: turbo_stream.update(
-        "books_frame",
-        partial: "public_bookshelf/public_card",
+        "public_books_frame",
+        partial: "public_bookshelf/public_frame_wrapper",
         locals: { memos: @memos, pagy: @pagy }
       )
     end

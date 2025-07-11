@@ -32,7 +32,7 @@ class Memo < ApplicationRecord
       any_word: true
     },
     trigram: {
-      threshold: 0.03
+      threshold: 0.1
     }
   }
 
@@ -67,16 +67,16 @@ class Memo < ApplicationRecord
     Rails.application.routes.default_url_options[:host] || "localhost:3000"
   end
 
+  def self.publicly_listed_with_book_and_user(exclude_user: nil)
+    publicly_listed
+      .exclude_user(exclude_user)
+      .with_book_and_user_avatar
+      .order(created_at: :desc)
+  end
+
   def self.random_public_memo
     publicly_listed
       .with_book_and_user_avatar
       .random_1
-  end
-
-  def self.random_nine_public(exclude_user: nil)
-    publicly_listed
-      .exclude_user(exclude_user)
-      .with_book_and_user_avatar
-      .random_9
   end
 end
