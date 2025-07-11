@@ -1,0 +1,24 @@
+<turbo-frame id="books_frame">
+  <% case view_mode %>
+  <% when "shelf" %>
+    <%= render "guest/bookshelf/kino_select_numbers", books_per_shelf: books_per_shelf %>
+    <%= render "guest/bookshelf/kino_chunk",
+                books: books,
+                books_per_shelf: books_per_shelf,
+                pagy: pagy,
+                current_chunk_index: pagy.page %>
+
+  <% when "card" %>
+    <%= render "guest/bookshelf/simple_card", books: books, card_columns: card_columns, pagy: pagy %>
+
+  <% when "detail_card" %>
+    <%= render "guest/bookshelf/detail_card", books: books, detail_card_columns: detail_card_columns, pagy: pagy %>
+
+  <% when "b_note" %>
+    <%= render "guest/bookshelf/b_note", books: books, detail_card_columns: detail_card_columns, pagy: pagy %>
+
+  <% when "spine" %>
+    <%= render "guest/bookshelf/spine_select_numbers", spine_per_shelf: spine_per_shelf %>
+    <%= render "guest/bookshelf/spine", books: books, pagy: pagy, spine_per_shelf: spine_per_shelf %>
+  <% end %>
+</turbo-frame>
