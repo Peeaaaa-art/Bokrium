@@ -1,11 +1,8 @@
 <div data-controller="column-selector">
 
-  <% default_value = mobile? ? 4 : 12 %>
-  <% options = mobile? ? [4, 3, 6, 8, 10] : [12, 15, 18, 21, 24] %>
-
   <div class="d-flex align-items-center mb-4 ms-3" style="gap: 0.5rem;">
     <%= select_tag :column,
-        options_for_select(options, card_columns || default_value),
+        options_for_select(options, @card_columns || default_value),
         id: "columnSelect",
         data: {
           action: "change->column-selector#change",
@@ -16,10 +13,10 @@
   </div>
 
   <div data-column-selector-target="grid" class="books-grid-iphone mt-3">
-    <% books.each_with_index do |book, index| %>
+    <% @books.each_with_index do |book, index| %>
       <div class="fade-in-right" style="--delay: <%= index * 0.01 %>s;">
-        <%= link_to book_link_path(book), data: { turbo_frame: "_top" }, class: "text-decoration-none" do %>
-          <%= display_book_cover book,
+        <%= link_to helpers.book_link_path(book), data: { turbo_frame: "_top" }, class: "text-decoration-none" do %>
+          <%= helpers.display_book_cover book,
               s3_class: "book-cover-iphone",
               url_class: "book-cover-iphone",
               nocover_img: true
@@ -28,11 +25,13 @@
       </div>
     <% end %>
   </div>
+
 </div>
 
-<%= form_with url: books_index_path, method: :get, local: true, id: "columnForm" do %>
+<%= form_with url: helpers.books_index_path, method: :get, local: true, id: "columnForm" do %>
   <%= hidden_field_tag :view, "card" %>
-  <%= hidden_field_tag :column, card_columns, id: "hiddenColumnInput" %>
+  <%= hidden_field_tag :column, @card_columns, id: "hiddenColumnInput" %>
 <% end %>
 
-<%= render "shared/pagy", pagy: pagy %>
+
+<%= render "shared/pagy", pagy: @pagy %>
