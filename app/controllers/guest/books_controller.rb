@@ -10,7 +10,8 @@ module Guest
         params: params,
         session: session,
         mobile: mobile?,
-        user_agent: request.user_agent
+        user_agent: request.user_agent,
+        pagy_context: self
       ).call
 
       @books               = presenter.books
@@ -35,6 +36,17 @@ module Guest
     end
 
     private
+
+    def render_chunk_for(view_mode)
+      case view_mode
+      when "shelf"
+        render partial: "guest/bookshelf/kino_chunk", locals: { books: @books, books_per_shelf: @books_per_shelf, pagy: @pagy }
+      when "spine"
+        render partial: "guest/bookshelf/spine_chunk", locals: { books: @books, spine_per_shelf: @spine_per_shelf, pagy: @pagy }
+      else
+        render :index
+      end
+    end
 
     def set_guest_book
       @book = guest_user.books.find(params[:id])
