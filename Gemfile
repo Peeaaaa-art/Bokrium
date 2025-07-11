@@ -41,6 +41,7 @@ gem "whenever", require: false
 gem "browser"
 gem "pagy"
 gem "stripe"
+gem "view_component", "4.0.0.rc2"
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: [ :mingw, :mswin, :x64_mingw, :jruby ]

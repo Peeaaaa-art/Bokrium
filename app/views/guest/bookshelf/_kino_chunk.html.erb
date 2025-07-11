@@ -1,3 +1,7 @@
 <turbo-frame id="next_books">
-  <%= render "guest/bookshelf/kino_books_grid", books: books, books_per_shelf: books_per_shelf, pagy: pagy %>
+    <%= render Books::KinoGridComponent.new(
+      books: books,
+      books_per_shelf: books_per_shelf,
+      pagy: pagy
+    ) %>
 </turbo-frame>

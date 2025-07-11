@@ -16,11 +16,19 @@ module ApplicationHelper
     link_to name, path, options
   end
 
-  def books_index_path
+  def books_index_path(view: nil, page: nil)
+    params = {}
+    params[:view] = view if view.present?
+    params[:page] = page if page.present?
+
     if user_signed_in?
-      current_user.books.exists? ? books_path : guest_books_path
+      if current_user.books.exists?
+        books_path(params)
+      else
+        guest_books_path(params)
+      end
     else
-      guest_books_path
+      guest_books_path(params)
     end
   end
 

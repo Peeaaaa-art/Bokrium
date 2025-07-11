@@ -1,0 +1,28 @@
+<% if show_s3_cover? %>
+  <%= image_tag cloudfront_url, {
+    alt: @alt,
+    loading: "lazy",
+    class: "img-fluid #{@s3_class}".strip,
+    height: "auto"
+  }.merge(@options) %>
+
+<% elsif show_url_cover? %>
+  <%= image_tag @book.book_cover, {
+    alt: @alt,
+    loading: "lazy",
+    class: "img-fluid #{@url_class}",
+    style: ""
+  }.merge(@options) %>
+
+<% elsif @nocover_img %>
+  <div class="cover-placeholder-wrapper <%= @no_cover_class %>">
+    <%= image_tag("no_cover.png", class: "img-fluid rounded-sm placeholder-cover") %>
+    <div class="cover-title-overlay brake-word"><%= title_for_overlay %></div>
+    <div class="logo-overlay">Bokrium</div>
+  </div>
+
+<% else %>
+  <div class="no-cover <%= @no_cover_class %>" <%= tag.attributes(@options) %>>
+    <span class="title <%= @no_cover_title %>"><%= @book.title.to_s.truncate(40) %></span>
+  </div>
+<% end %>

@@ -1,0 +1,26 @@
+<% @books.each_slice(@books_per_shelf).with_index do |row_books, idx| %>
+  <div class="shelf-row fade-in kino-fade-in delay-<%= idx %>" data-controller="book-shelf">
+    <div class="book-row">
+      <% row_books.each do |book| %>
+        <div class="book-on-shelf">
+          <%= link_to helpers.book_link_path(book), data: { turbo_frame: "_top" } do %>
+            <%= render Books::CoverComponent.new(
+              book: book,
+              s3_class: "book-cover kino-rounded",
+              url_class: "book-cover kino-rounded",
+              nocover_img: true
+            ) %>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+    <div class="shelf-bar"></div>
+    <div class="shelf-depth"></div>
+  </div>
+<% end %>
+
+<% if @pagy && @pagy.next %>
+  <turbo-frame id="next_books" src="<%= helpers.books_index_path(view: "shelf", page: @pagy.next) %>" loading="lazy">
+    <%= render "shared/loading_spinner" %>
+  </turbo-frame>
+<% end %>

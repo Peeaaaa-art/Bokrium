@@ -6,7 +6,7 @@
 
     <% case @view_mode %>
     <% when "shelf" %>
-      <%= render partial: "bookshelf/kino_books_grid", locals: { books: @books, books_per_shelf: @books_per_shelf, pagy: @pagy } %>
+        <%= render Books::KinoGridComponent.new(books: @books, books_per_shelf: @books_per_shelf, pagy: @pagy) %>
     <% when "card" %>
       <%= render partial: "bookshelf/simple_card", locals: { books: @books, card_columns: @card_columns, pagy: @pagy } %>
     <% when "detail_card" %>
