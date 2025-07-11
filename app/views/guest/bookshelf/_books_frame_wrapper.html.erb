@@ -19,6 +19,8 @@
 
   <% when "spine" %>
     <%= render "guest/bookshelf/spine_select_numbers", spine_per_shelf: spine_per_shelf %>
-    <%= render "guest/bookshelf/spine", books: books, pagy: pagy, spine_per_shelf: spine_per_shelf %>
+    <%= render Books::SpineGridComponent.new(
+      books: books, spine_per_shelf: spine_per_shelf, pagy: pagy
+    ) %>
   <% end %>
 </turbo-frame>
