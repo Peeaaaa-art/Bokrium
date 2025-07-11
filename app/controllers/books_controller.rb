@@ -6,12 +6,18 @@ class BooksController < ApplicationController
   rescue_from ActiveRecord::RecordNotFound, with: :handle_record_not_found
 
   def index
+    unless Book.exists?(user_id: current_user.id)
+      redirect_to guest_books_path and return
+    end
+    @has_books = true
+
     presenter = BooksIndexPresenter.new(
       user: current_user,
       params: params,
       session: session,
       mobile: mobile?,
-      user_agent: request.user_agent
+      user_agent: request.user_agent,
+      pagy_context: self
     ).call
 
     @books               = presenter.books
