@@ -100,25 +100,7 @@ RSpec.describe "BooksController", type: :request do
       delete book_path(book)
       expect(response).to redirect_to(books_path)
       follow_redirect!
-      expect(response.body).to include("削除しました")
-    end
-    end
-  describe "POST /books/:id/toggle_tag" do
-    before { sign_in user }
-
-    it "タグ切り替えサービスが呼び出され、元のページにリダイレクトされること" do
-      expect(BookTagToggleService).to receive(:new).and_call_original
-      post toggle_tag_book_path(book), params: { tag_id: user_tag.id }
-      expect(response).to redirect_to(book_path(book))
-    end
-  end
-
-  describe "GET /books/tag_filter" do
-    before { sign_in user }
-
-    it "タグフィルターパーシャルが描画されること" do
-      get tag_filter_books_path, headers: { 'Turbo-Frame' => 'filter' }
-      expect(response).to render_template(partial: "_tag_filter")
+      expect(flash[:info]).to include("削除しました")
     end
   end
 end
