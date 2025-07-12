@@ -16,35 +16,9 @@ module ApplicationHelper
     link_to name, path, options
   end
 
-  def books_index_path(view: nil, page: nil)
-    params = {}
-    params[:view] = view if view.present?
-    params[:page] = page if page.present?
-
-    if user_signed_in?
-      if current_user.books.exists?
-        books_path(params)
-      else
-        guest_books_path(params)
-      end
-    else
-      guest_books_path(params)
-    end
-  end
-
   def books_index_active_class
     path_prefix = user_signed_in? ? "/books" : "/guest/books"
     request.path.starts_with?(path_prefix) ? "active" : ""
-  end
-
-  def book_link_path(book)
-    return guest_starter_book_path(book) if @starter_book
-
-    if user_signed_in?
-      @has_books ? book_path(book) : guest_book_path(book)
-    else
-      guest_book_path(book)
-    end
   end
 
   def lazy_image_tag(source, options = {})
