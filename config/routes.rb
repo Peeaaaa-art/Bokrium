@@ -55,6 +55,8 @@ Rails.application.routes.draw do
 
   get "books/filters/filter", to: "books/tags#filter", as: :filter_books_tags
 
+  resource :view_mode, only: [ :update ]
+
 
   resources :user_tags, only: [ :create, :update, :destroy ]
 

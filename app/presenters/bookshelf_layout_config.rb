@@ -23,8 +23,7 @@ class BookshelfLayoutConfig
   private
 
   def configure_view_mode
-    @session[VIEW_MODE_KEY] = @params[:view] if @params[:view].present?
-    @view_mode = @session[VIEW_MODE_KEY] || "shelf"
+    @view_mode = @session[VIEW_MODE_KEY].presence || "shelf"
   end
 
   def configure_unit_per_page
