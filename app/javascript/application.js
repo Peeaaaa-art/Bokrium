@@ -9,7 +9,6 @@ import ColumnSelectorController from "./controllers/column_selector_controller.j
 import ConfirmModalController from "./controllers/confirm_modal_controller"
 import DetailCardColumnSelectorController from "./controllers/detail_card_column_selector_controller.js"
 import ImageUploadController from "./controllers/image_upload_controller"
-import InfiniteScrollController from "./controllers/infinite_scroll_controller.js"
 import LazyLoadController from "./controllers/lazy_load_controller.js"
 import MemoModalController from "./controllers/memo_modal_controller"
 import ModalSwipeController from "./controllers/modal_swipe_controller"
@@ -34,7 +33,6 @@ application.register("column-selector", ColumnSelectorController)
 application.register("confirm-modal", ConfirmModalController)
 application.register("detail-card-column-selector", DetailCardColumnSelectorController)
 application.register("image-upload", ImageUploadController)
-application.register("infinite-scroll", InfiniteScrollController)
 application.register("lazy-load", LazyLoadController)
 application.register("memo-modal", MemoModalController)
 application.register("modal-swipe", ModalSwipeController)
