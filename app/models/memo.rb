@@ -71,6 +71,7 @@ class Memo < ApplicationRecord
     publicly_listed
       .exclude_user(exclude_user)
       .with_book_and_user_avatar
+      .includes(book: [ :book_cover_s3_attachment ])
       .order(created_at: :desc)
   end
 

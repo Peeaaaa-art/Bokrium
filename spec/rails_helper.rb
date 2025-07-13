@@ -38,6 +38,17 @@ RSpec.configure do |config|
   config.include Devise::Test::IntegrationHelpers, type: :system
 
   config.include GuestUserHelper
+
+  config.before(:each) do
+    Bullet.start_request if Bullet.enabled?
+  end
+
+  config.after(:each) do
+    if Bullet.enabled?
+      Bullet.perform_out_of_channel_notifications if Bullet.notification?
+      Bullet.end_request
+    end
+  end
 end
 
 Shoulda::Matchers.configure do |config|

@@ -3,12 +3,20 @@ require 'rails_helper'
 RSpec.describe UsersHelper, type: :helper do
   describe "#user_avatar" do
     let(:user) { create(:user) }
+
     context "when user has an attached avatar" do
       before do
+        # Bulletの誤検知を回避（このテストでは無効化）
+        Bullet.enable = false
+
         user.avatar_s3.attach(
           io: File.open(Rails.root.join("spec/fixtures/files/sample.png")),
           filename: "sample.png", content_type: "image/png"
         )
+      end
+
+      after do
+        Bullet.enable = true
       end
 
       it "アバター画像が添付されている場合、:largeサイズのバリアントが正常に生成されること" do

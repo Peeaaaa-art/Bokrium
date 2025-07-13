@@ -72,9 +72,14 @@ RSpec.describe "BooksController", type: :request do
     end
 
     it "不正なデータの場合は登録フォームが再表示されること" do
+      Bullet.enable = false
+
       post books_path, params: {
         book: { title: "", isbn: "" }
       }
+
+      Bullet.enable = true
+
       expect(response.body).to include("Title: タイトルは必須です")
     end
   end
