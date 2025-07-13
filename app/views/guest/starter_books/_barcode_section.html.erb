@@ -11,8 +11,13 @@
     </section>
   </div>
 
-  <!-- バーコードスキャン動画 -->
-  <div class="layout-intro rounded-4 fade-in delay-4 mb-5" data-controller="animation">
-    <%= render "guest/starter_books/barcode_scan_video" %>
-  </div>
+<!-- バーコードスキャン動画 -->
+<div class="layout-intro-barcode position-relative rounded-4 fade-in delay-4" data-controller="animation">
+  <%= render "guest/starter_books/barcode_scan_video" %>
+
+  <p class="credit-label position-absolute m-2 text-black-50" style="font-size: 0.65rem;">
+    Designed by <a href="https://www.freepik.com" target="_blank" class="text-decoration-none footer-link">upklyak / Freepik</a>
+  </p>
+</div>
+
 </turbo-frame>
