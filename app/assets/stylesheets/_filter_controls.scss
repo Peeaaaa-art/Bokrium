@@ -10,11 +10,40 @@
   }
 }
 
+.input-group * {
+  border: none !important;
+}
+
 .rounded-pill-right {
   border-top-left-radius: 0 !important;
   border-bottom-left-radius: 0 !important;
   border-top-right-radius: 50rem !important;
   border-bottom-right-radius: 50rem !important;
+}
+
+.rounded-pill-left {
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+  border-top-left-radius: 50rem !important;
+  border-bottom-left-radius: 50rem !important;
+}
+
+
+.autocomplete-suggestions-container {
+  background-color: rgba(255, 255, 255, 0.987);
+  border: 1px solid #ced4da;
+  max-height: 280px;
+  overflow-y: auto;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+}
+.autocomplete-suggestions-container li {
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+
+  &:hover {
+    background-color: #f8f9fa;
+  }
 }
 
 .btn-icon {

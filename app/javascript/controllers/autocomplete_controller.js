@@ -37,7 +37,7 @@ export default class extends Controller {
       li.className = "list-group-item p-0"
 
       const a = document.createElement("a")
-      a.className = "d-block px-3 py-2 text-decoration-none text-body"
+      a.className = "d-block px-3 py-2 text-decoration-none text-black-50"
       a.innerHTML = item.label || item.value || "（無題）"
       a.href = item.url || "#"
 
