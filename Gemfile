@@ -69,6 +69,8 @@ group :development, :test do
   gem "factory_bot_rails"
 
   gem "bullet"
+
+  gem "newrelic_rpm"
 end
 
 group :development do
