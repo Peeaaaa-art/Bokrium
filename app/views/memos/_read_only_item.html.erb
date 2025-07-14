@@ -83,7 +83,7 @@
   <div class="memo-body" data-memo-modal-target="body">
     <div class="card-body rhodia-grid-bg">
       <%= sanitize(memo.content,
-      tags: %w(p br strong em a ul ol li blockquote h1 h2 h3 h4 h5 h6 code pre span),
+      tags: %w(p br strong em a ul ol li blockquote h1 h2 h3 h4 h5 h6 code pre span hr),
       attributes: %w(href title class data-* style)) || memo_placeholder_html %>
     </div>
   </div>
