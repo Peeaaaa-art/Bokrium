@@ -31,7 +31,7 @@ class BooksController < ApplicationController
   end
 
   def show
-    @memos = @book.memos.order(created_at: :desc)
+    @memos = @book.memos.includes(:user, :like_memos).order(created_at: :desc)
     @new_memo = @book.memos.new(user_id: current_user.id)
     @user_tag = UserTag.new
   end

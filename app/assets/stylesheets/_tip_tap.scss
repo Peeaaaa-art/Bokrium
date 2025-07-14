@@ -3,48 +3,10 @@
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   line-height: 1.4;
-  padding: 0.3rem 0.3rem;
   margin: 0;
   outline: none;
   border: none;
   background: transparent;
-}
-
-.rich-editor-root {
-  position: relative;
-  height: auto;
-  overscroll-behavior: contain; /* iOS スクロールバグ対策 */
-}
-
-.memo-body {
-  max-height: 30vh;
-  overflow-y: auto;
-  transition: max-height 0.3s ease;
-    line-height: 1.4;
-  padding: 0.3rem 0.3rem;
-  margin: 0;
-}
-
-.memo-body p {
-  // margin-bottom: 1.2em;
-  line-height: 1.5;
-}
-
-.memo-body.expanded {
-  max-height: none;
-}
-
-.memo-body blockquote {
-  border-left: 4px solid #ccc;
-  margin: 1em 0;
-  padding: 0.8em 1em;
-  background-color: #f9f9f9;
-  color: #555;
-  line-height: 1.6;
-}
-
-.memo-body blockquote p {
-  margin: 0.5em 0;
 }
 
 @media (max-width: 576px) {
@@ -70,7 +32,6 @@
   line-height: 1.5;
 }
 
-
 .ProseMirror p:empty::before {
   content: "\00a0"; /* &nbsp; を挿入 */
 }
@@ -82,15 +43,6 @@
   height: 0;
   pointer-events: none;
 }
-
-// blockquote {
-//   border-left: 4px solid #ccc;
-//     margin: 1em 0;
-//     padding: 0.8em 1em;
-//   background-color: #f9f9f9;
-//   color: #555;
-// }
-
 .ProseMirror blockquote {
   border-left: 4px solid #ccc;
   margin: 1em 0;
@@ -112,6 +64,26 @@
   background:
     linear-gradient(rgba(254, 254, 254, 0.98), rgba(253, 252, 254, 0.88));
 }
+
+.rich-editor-root {
+  position: relative;
+  height: auto;
+  overscroll-behavior: contain; /* iOS スクロールバグ対策 */
+}
+
+.memo-body {
+  max-height: 30vh;
+  overflow-y: auto;
+  transition: max-height 0.3s ease;
+    line-height: 1.4;
+  padding: 0.3rem 0.3rem;
+  margin: 0;
+}
+
+.memo-body.expanded {
+  max-height: none;
+}
+
 .modal-body {
   padding: 0 !important;
 }

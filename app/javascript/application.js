@@ -49,6 +49,8 @@ window.bootstrap = bootstrap
 import * as Turbo from "@hotwired/turbo"
 window.Turbo = Turbo
 
+import "./readonly_editor.js";
+
 import { createIcons } from "lucide"
 import {
     BookOpen,
