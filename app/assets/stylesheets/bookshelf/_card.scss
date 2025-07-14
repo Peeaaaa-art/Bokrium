@@ -1,0 +1,30 @@
+.books-grid-iphone {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 10px 10px;
+  padding: 0 7px;
+
+  @media (max-width: 576px) {
+    grid-template-columns: repeat(4, 1fr);}
+}
+
+.books-grid-iphone.cols-3  { grid-template-columns: repeat(3, 1fr); }
+.books-grid-iphone.cols-4  { grid-template-columns: repeat(4, 1fr); }
+.books-grid-iphone.cols-6  { grid-template-columns: repeat(6, 1fr); }
+.books-grid-iphone.cols-8  { grid-template-columns: repeat(8, 1fr); }
+.books-grid-iphone.cols-10 { grid-template-columns: repeat(10, 1fr); }
+
+.books-grid-iphone.cols-12 { grid-template-columns: repeat(12, 1fr); }
+.books-grid-iphone.cols-15 { grid-template-columns: repeat(15, 1fr); }
+.books-grid-iphone.cols-18 { grid-template-columns: repeat(18, 1fr); }
+.books-grid-iphone.cols-21 { grid-template-columns: repeat(21, 1fr); }
+.books-grid-iphone.cols-24 { grid-template-columns: repeat(24, 1fr); }
+
+.book-cover-iphone {
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  display: block;
+  border-radius: 0.5px;
+  object-fit: contain;
+  box-sizing: border-box;
+}

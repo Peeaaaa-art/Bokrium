@@ -1,0 +1,253 @@
+.books-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 52px;
+  padding-bottom: 48px;
+}
+
+.shelf-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  margin-top: 4rem;
+}
+
+.book-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  max-width: 94%;
+  min-width: 94%;
+  padding: 0 8px;
+}
+
+.book-on-shelf {
+  flex: 0 0 calc((94% - 148px) / 12);
+  max-width: calc((94% - 148px) / 12);
+
+  @media (max-width: 900px) {
+    flex: 0 0 calc((94% - 120px) / 10);
+    max-width: calc((94% - 120px) / 10);
+  }
+
+  @media (max-width: 576px) {
+    flex: 0 0 calc((94% - 48px) / 5);
+    max-width: calc((94% - 48px) / 5);
+  }
+
+  aspect-ratio: 2 / 3;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  height: auto;
+  margin-bottom: -2.8px;
+  z-index: 2;
+  transition: transform 0.28s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s ease;
+}
+
+.book-on-shelf:hover {
+  transform: translateY(-9px) scale(1.04);
+  z-index: 3;
+}
+
+.book-on-shelf:hover .book-cover,
+.book-on-shelf:hover .no-cover {
+  box-shadow: 0 12px 16px rgba(0, 0, 0, 0.25);
+  transition: box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.book-cover {
+  width: 100%;
+  object-fit: contain;
+  object-position: center bottom;
+  filter: drop-shadow(0 8px 6px rgba(0, 0, 0, 0.1));
+  transform: rotateX(3deg);
+  margin-bottom: 2.1px;
+}
+
+.shelf-bar {
+  width: 90%;
+  height: 22px;
+  background: linear-gradient(to bottom, #1a337e 0%, #122964 100%);
+  border-radius: 4px;
+
+  box-shadow:
+    inset 0 2px 3px rgba(255, 255, 255, 0.05),  // 上面のハイライト（光）
+    0 4px 6px rgba(0, 0, 0, 0.15);              // 下に落ちる影（棚感）
+
+  position: relative;
+  z-index: 1;
+
+  @media (max-width: 576px) {
+    height: 14px;
+  }
+}
+
+.shelf-bar::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 5px;
+  background: rgba(35, 58, 151, 0.788);
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+}
+
+.shelf-bar::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: rgba(0, 0, 0, 0.077);
+  filter: blur(1px);
+  border-radius: 0 0 4px 4px;
+}
+
+// .no-cover {
+//   position: relative;
+//   width: 100%;
+//   aspect-ratio: 2 / 3;
+//   background: #f5d75b; /* レクラム文庫のような黄色 */
+//   color: #2a1e00;
+//   display: flex;
+//   align-items: flex-start;
+//   justify-content: center;
+//   text-align: center;
+//   text-decoration: none;
+//   border-radius: 4px;
+//   font-family: "Kosugi Mono", monospace;
+//   font-size: 1.1em;
+//   font-weight: bold;
+//   line-height: 1.4;
+//   padding-bottom: 40px; /* 下帯のスペース */
+//   overflow: hidden;
+//   box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1);
+//   box-sizing: border-box;
+// }
+
+//   @media (min-width: 768px) {
+//   .no-cover  {
+//     padding: 0px 4px;
+//   }
+// }
+
+// .no-cover .title {
+//   display: -webkit-box;
+//   -webkit-line-clamp: 3;
+//   line-clamp: 3;
+//   -webkit-box-orient: vertical;
+//   overflow: hidden;
+//   text-overflow: ellipsis;
+//   word-break: break-word;
+//   width: 100%;
+//   margin-top: 0.8rem;
+//   font-size: 0.66rem;
+// }
+
+// @media (min-width: 768px) {
+//   .no-cover .title {
+//     font-size: 0.95rem;
+//   }
+// }
+
+.book-on-shelf a {
+  text-decoration: none;
+  color: inherit;
+}
+
+// .no-cover::before {
+//   content: "Bokrium";
+//   position: absolute;
+//   bottom: 0;
+//   left: 0;
+//   width: 100%;
+//   background: #333333e2;
+//   color: #fff;
+//   font-size: 0.66em;
+//   font-weight: 700;
+//   text-align: right;
+//   padding: 2px 6px;
+//   font-family: "Big Shoulders Inline", sans-serif;
+//   letter-spacing: 0.05em;
+//   box-shadow: inset 0 1px 0 rgba(255,255,255,0.1);
+// }
+
+.book-cover-show {
+  width: 180px;
+  max-height: 280px;
+  object-fit: contain;
+  @media (max-width: 576px) {
+  width: 150px;
+  }
+}
+
+.no-cover-form {
+  max-width: 90px;
+  object-fit: contain;
+  padding: 0px 11px;
+}
+
+.cover-placeholder-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 2 / 3;
+}
+
+.placeholder-cover {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain;
+  border-radius: 4px;
+}
+
+.logo-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: #333333e2;
+  color: #fff;
+  font-size: 0.77rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-align: right;
+  padding: 2px 6px;
+  font-family: "Big Shoulders Inline", sans-serif;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+
+.cover-title-overlay {
+  position: absolute;
+  top: 8%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 92%;
+  color: #100f0f;
+  font-size: 0.88rem;
+  font-weight: bold;
+  text-align: center;
+  padding: 4px 0px;
+  font-family: "Kosugi Mono", monospace;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  white-space: normal;
+  word-break: break-word;
+  text-overflow: ellipsis;
+}
+
+.kino-rounded {
+  border-radius: 0.125rem;
+}
