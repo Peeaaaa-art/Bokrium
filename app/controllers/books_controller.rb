@@ -3,10 +3,9 @@ class BooksController < ApplicationController
   before_action :set_book, only: %i[ edit update destroy ]
   before_action :set_book_with_associations, only: [ :show ]
   before_action :set_user_tags, only: %i[ show ]
-  rescue_from ActiveRecord::RecordNotFound, with: :handle_record_not_found
 
   def index
-    unless Book.exists?(user_id: current_user.id)
+    unless current_user.books.exists?
       redirect_to guest_books_path and return
     end
     @has_books = true
@@ -22,12 +21,11 @@ class BooksController < ApplicationController
 
     @books               = presenter.books
     @pagy                = presenter.pagy
-    @read_only           = presenter.read_only
     @view_mode           = presenter.view_mode
     @books_per_shelf     = presenter.books_per_shelf
+    @spine_per_shelf     = presenter.spine_per_shelf
     @card_columns        = presenter.card_columns
     @detail_card_columns = presenter.detail_card_columns
-    @spine_per_shelf     = presenter.spine_per_shelf
 
     turbo_frame_request? ? render_chunk_for(@view_mode) : render(:index)
   end
@@ -132,9 +130,5 @@ class BooksController < ApplicationController
       format.turbo_stream
       format.html { render render_action, status: :unprocessable_entity }
     end
-  end
-
-  def handle_record_not_found
-    redirect_to books_path
   end
 end

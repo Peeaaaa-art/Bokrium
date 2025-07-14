@@ -16,7 +16,6 @@ module Guest
 
       @books               = presenter.books
       @pagy                = presenter.pagy
-      @read_only           = presenter.read_only
       @view_mode           = presenter.view_mode
       @books_per_shelf     = presenter.books_per_shelf
       @card_columns        = presenter.card_columns

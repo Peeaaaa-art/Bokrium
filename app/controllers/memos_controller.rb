@@ -2,11 +2,7 @@ class MemosController < ApplicationController
   include ActionView::RecordIdentifier
   before_action :authenticate_user!
   before_action :set_book
-  before_action :set_memo, only: [ :show, :edit, :update, :destroy ]
-
-  def index; end
-
-  def show; end
+  before_action :set_memo, only: [ :edit, :update, :destroy ]
 
   def new
     @memo = @book.memos.new
@@ -28,10 +24,9 @@ class MemosController < ApplicationController
 
   def edit; end
 
-
   def update
     @memos = @book.memos.order(created_at: :asc)
-    @memo = Memo.find(params[:id])
+    @memo = current_user.memos.find(params[:id])
     if @memo.update(memo_params)
       flash[:info] = "メモを保存しました。"
       redirect_to book_path(@memo.book)
@@ -58,15 +53,11 @@ class MemosController < ApplicationController
   private
 
   def set_book
-    @book = Book.find(params[:book_id])
+    @book = current_user.books.find(params[:book_id])
   end
 
   def set_memo
-    @memo = Memo.find(params[:id])
-    unless @memo.user_id == current_user.id || @memo.shared?
-      flash[:danger] = "アクセス権限がありません。"
-      redirect_to book_memo_path(@book)
-    end
+    @memo = current_user.memos.find(params[:id])
   end
 
   def memo_params
