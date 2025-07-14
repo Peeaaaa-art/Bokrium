@@ -1,20 +1,23 @@
   <%= link_to book_path(random_memo.book), class: "text-decoration-none text-reset" do %>
     <div class="container my-4">
-      <h3 class="mb-3 mb-md-5">ランダムメモ表示</h3>
-
-      <div class="card shadow-sm bg-light-bok p-3 mx-auto" style="max-width: 720px;">
-        <div class="d-flex flex-column flex-md-row align-items-start gap-3">
+      <h3 class="mb-3 mb-md-4">ランダムメモ表示</h3>
 
           <!-- 書影 -->
-          <div style="max-width: 120px;">
-            <%= render Books::CoverComponent.new(book: random_memo.book) %>
-          </div>
+          <% if  random_memo.book.book_cover_s3.attached? && random_memo.book.book_cover_s3.key.present? || random_memo.book.book_cover.present? %>
+            <%= render Books::CoverComponent.new(
+              book: random_memo.book,
+              s3_class: "rounded w-100 w-md-auto mx-auto mx-md-0 mxw-160",
+              url_class: "rounded w-100 w-md-auto mx-auto mx-md-0 mxw-160",
+            ) %>
+          <% end %>
 
+      <div class="card shadow-sm bg-light-bok p-3 mt-3 mx-auto" style="max-width: 720px;">
+        <div class="d-flex flex-column flex-md-row align-items-start gap-3">
           <!-- テキストエリア -->
           <div class="flex-grow-1">
             <h5 class="fw-bold mb-1"><%= random_memo.book.title %></h5>
             <p class="text-muted mb-2"><%= random_memo.book.author %></p>
-            <p class="text-muted mb-0"><%= truncate(strip_tags(random_memo.content), length: 500) %></p>
+            <p class="text-muted mb-0"><%= truncate(strip_tags(random_memo.content), length: 300) %></p>
           </div>
 
         </div>
