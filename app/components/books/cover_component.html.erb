@@ -14,15 +14,10 @@
     style: ""
   }.merge(@options) %>
 
-<% elsif @nocover_img %>
-  <div class="cover-placeholder-wrapper <%= @no_cover_class %>">
-    <%= image_tag("no_cover.png", class: "img-fluid rounded-sm placeholder-cover") %>
+<% else %>
+  <div class="cover-placeholder-wrapper">
+    <%= image_tag("no_cover.png", class: "img-fluid rounded-sm placeholder-cover #{@no_cover_class}") %>
     <div class="cover-title-overlay brake-word"><%= title_for_overlay %></div>
     <div class="logo-overlay">Bokrium</div>
-  </div>
-
-<% else %>
-  <div class="no-cover <%= @no_cover_class %>" <%= tag.attributes(@options) %>>
-    <span class="title <%= @no_cover_title %>"><%= @book.title.to_s.truncate(40) %></span>
   </div>
 <% end %>

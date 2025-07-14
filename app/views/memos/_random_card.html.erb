@@ -6,19 +6,15 @@
         <div class="d-flex flex-column flex-md-row align-items-start gap-3">
 
           <!-- 書影 -->
-          <% if random_memo.book.book_cover.present? %>
-            <%= image_tag random_memo.book.book_cover, class: "img-fluid rounded w-100 w-md-auto mx-auto mx-md-0", style: "max-width: 160px;" %>
-          <% else %>
-            <div class="no-cover d-flex align-items-center justify-content-center text-muted text-center rounded w-100 w-md-auto" style="max-width: 160px; aspect-ratio: 2/3;">
-              <span class="small px-2"><%= random_memo.book.title %></span>
-            </div>
-          <% end %>
+          <div style="max-width: 120px;">
+            <%= render Books::CoverComponent.new(book: random_memo.book) %>
+          </div>
 
           <!-- テキストエリア -->
           <div class="flex-grow-1">
             <h5 class="fw-bold mb-1"><%= random_memo.book.title %></h5>
             <p class="text-muted mb-2"><%= random_memo.book.author %></p>
-            <p class="text-muted mb-0"><%= truncate(strip_tags(random_memo.content), length: 300) %></p>
+            <p class="text-muted mb-0"><%= truncate(strip_tags(random_memo.content), length: 500) %></p>
           </div>
 
         </div>

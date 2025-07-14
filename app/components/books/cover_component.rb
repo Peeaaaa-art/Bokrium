@@ -4,16 +4,13 @@ module Books
   class CoverComponent < ViewComponent::Base
     include ActionView::Helpers::SanitizeHelper
 
-    def initialize(book:, alt: nil, nocover_img: false,
-                    s3_class: "", url_class: "", no_cover_class: "", no_cover_title: nil,
-                    truncate_options: {}, **options)
+    def initialize(book:, alt: nil, s3_class: "", url_class: "",
+                   no_cover_class: "", truncate_options: {}, **options)
       @book = book
       @alt = alt || book.title.presence || "表紙画像"
-      @nocover_img = nocover_img
       @s3_class = s3_class
       @url_class = url_class
       @no_cover_class = no_cover_class
-      @no_cover_title = no_cover_title || book.title.to_s.truncate(40)
       @truncate_options = truncate_options
       @options = options
     end
