@@ -20,10 +20,31 @@
   max-height: 30vh;
   overflow-y: auto;
   transition: max-height 0.3s ease;
+    line-height: 1.4;
+  padding: 0.3rem 0.3rem;
+  margin: 0;
+}
+
+.memo-body p {
+  // margin-bottom: 1.2em;
+  line-height: 1.5;
 }
 
 .memo-body.expanded {
   max-height: none;
+}
+
+.memo-body blockquote {
+  border-left: 4px solid #ccc;
+  margin: 1em 0;
+  padding: 0.8em 1em;
+  background-color: #f9f9f9;
+  color: #555;
+  line-height: 1.6;
+}
+
+.memo-body blockquote p {
+  margin: 0.5em 0;
 }
 
 @media (max-width: 576px) {
@@ -49,10 +70,6 @@
   line-height: 1.5;
 }
 
-.card-body p {
-  margin-bottom: 0.2em;
-  line-height: 1.5;
-}
 
 .ProseMirror p:empty::before {
   content: "\00a0"; /* &nbsp; を挿入 */
@@ -66,44 +83,29 @@
   pointer-events: none;
 }
 
-
-.ProseMirror h1,
-.ProseMirror h2,
-.ProseMirror h3 {
-  margin: 1.5rem 0 1rem;
-}
-
-
-// .ProseMirror blockquote {
+// blockquote {
 //   border-left: 4px solid #ccc;
-//   margin: 1em 0;
-//   padding-left: 1rem;
+//     margin: 1em 0;
+//     padding: 0.8em 1em;
 //   background-color: #f9f9f9;
 //   color: #555;
 // }
 
-blockquote {
+.ProseMirror blockquote {
   border-left: 4px solid #ccc;
-    margin: 1em 0;
-    padding: 0.8em 1em;
+  margin: 1em 0;
+  padding: 0.8em 1em;
   background-color: #f9f9f9;
   color: #555;
+  line-height: 1.6;
+}
+
+.ProseMirror blockquote p {
+  margin: 0.5em 0;
 }
 
 .ProseMirror:focus {
   outline: none;
-}
-
-ul[data-type="taskList"] {
-  list-style: none;
-
-  li {
-    display: flex;
-    align-items: center;
-    input[type="checkbox"] {
-      margin-right: 0.5rem;
-    }
-  }
 }
 
 .rhodia-grid-bg {
