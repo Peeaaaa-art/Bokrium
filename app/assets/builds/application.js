@@ -73648,9 +73648,9 @@ img.ProseMirror-separator {
         }
         var objectIs = typeof Object.is === "function" ? Object.is : is;
         var useSyncExternalStore = shim2.useSyncExternalStore;
-        var useRef3 = React$1.useRef, useEffect3 = React$1.useEffect, useMemo = React$1.useMemo, useDebugValue2 = React$1.useDebugValue;
+        var useRef2 = React$1.useRef, useEffect3 = React$1.useEffect, useMemo = React$1.useMemo, useDebugValue2 = React$1.useDebugValue;
         function useSyncExternalStoreWithSelector(subscribe, getSnapshot, getServerSnapshot, selector, isEqual) {
-          var instRef = useRef3(null);
+          var instRef = useRef2(null);
           var inst;
           if (instRef.current === null) {
             inst = {
@@ -76127,47 +76127,58 @@ img.ProseMirror-separator {
   });
 
   // app/javascript/components/RichEditor.jsx
+  var decodeHTML = (html) => {
+    const textarea = document.createElement("textarea");
+    textarea.innerHTML = html;
+    return textarea.value;
+  };
+  var removeUnwantedBRs = (html) => {
+    const div2 = document.createElement("div");
+    div2.innerHTML = html;
+    div2.querySelectorAll("p").forEach((p) => {
+      const brs = p.querySelectorAll("br");
+      brs.forEach((br) => {
+        if (!br.classList.contains("ProseMirror-trailingBreak")) {
+          if (p.textContent.trim() === "" && p.querySelector(".ProseMirror-trailingBreak")) {
+            br.remove();
+          }
+        }
+      });
+    });
+    return div2.innerHTML;
+  };
   var RichEditor = ({ element }) => {
-    var _a2;
-    const initialContent = ((_a2 = element == null ? void 0 : element.dataset) == null ? void 0 : _a2.initialContent) || "";
-    const decodeHTML = (html) => {
-      const textarea = document.createElement("textarea");
-      textarea.innerHTML = html;
-      return textarea.value;
-    };
-    const cleanHTML = (html) => {
-      return html.replace(/<p><br(?: class="ProseMirror-trailingBreak")?><\/p>\s*$/g, "").replace(/(<p><br><\/p>\s*)+$/g, "").replace(/(<p>(<br\s*\/?>)*<\/p>\s*)+$/g, "");
-    };
+    var _a2, _b;
+    const initialRaw = ((_a2 = element == null ? void 0 : element.dataset) == null ? void 0 : _a2.initialContent) || "";
+    const inputId = ((_b = element == null ? void 0 : element.dataset) == null ? void 0 : _b.inputId) || "memo_content_input";
+    const initialContent = decodeHTML(initialRaw);
     const editor = useEditor({
       extensions: [
         StarterKit,
         BubbleMenu,
-        CharacterCount.configure({
-          limit: 1e4
-        })
+        CharacterCount.configure({ limit: 1e4 })
       ],
-      content: decodeHTML(initialContent),
+      content: initialContent,
       autofocus: true,
       editable: true,
       onUpdate: ({ editor: editor2 }) => {
-        const html = cleanHTML(editor2.getHTML());
+        const html = removeUnwantedBRs(editor2.getHTML());
         const charCountEl = document.getElementById("char-count");
         if (charCountEl) {
           charCountEl.textContent = `${editor2.storage.characterCount.characters()} \u6587\u5B57`;
         }
-        const hiddenField = document.getElementById("memo_content_input");
+        const hiddenField = document.getElementById(inputId);
         if (hiddenField) hiddenField.value = html;
         window.hasUnsavedChanges = true;
       }
     });
     (0, import_react2.useEffect)(() => {
       if (!editor) return;
-      const hiddenField = document.getElementById("memo_content_input");
-      let previousHTML = cleanHTML(editor.getHTML());
+      const hiddenField = document.getElementById(inputId);
+      let previousHTML = removeUnwantedBRs(editor.getHTML());
       if (hiddenField) hiddenField.value = previousHTML;
-      if (hiddenField) hiddenField.value = cleanHTML(editor.getHTML());
       const updateHandler = () => {
-        const currentHTML = cleanHTML(editor.getHTML());
+        const currentHTML = removeUnwantedBRs(editor.getHTML());
         if (hiddenField && currentHTML !== previousHTML) {
           hiddenField.value = currentHTML;
           previousHTML = currentHTML;
@@ -76184,89 +76195,7 @@ img.ProseMirror-separator {
       return () => editor.off("update", updateHandler);
     }, [editor]);
     if (!editor) return null;
-    return /* @__PURE__ */ import_react2.default.createElement("div", { className: "rhodia-grid-bg", style: { overflowY: "auto", position: "relative" } }, /* @__PURE__ */ import_react2.default.createElement(BubbleMenu2, { editor, tippyOptions: { duration: 150 } }, /* @__PURE__ */ import_react2.default.createElement("div", { className: "bubble-menu bg-white border rounded shadow-sm p-2 d-flex flex-wrap gap-2" }, /* @__PURE__ */ import_react2.default.createElement(
-      "button",
-      {
-        type: "button",
-        onClick: () => editor.chain().focus().undo().run(),
-        className: "btn btn-sm btn-outline-secondary",
-        title: "\u5143\u306B\u623B\u3059"
-      },
-      /* @__PURE__ */ import_react2.default.createElement("i", { className: "bi bi-arrow-left" })
-    ), /* @__PURE__ */ import_react2.default.createElement(
-      "button",
-      {
-        type: "button",
-        onClick: () => editor.chain().focus().redo().run(),
-        className: "btn btn-sm btn-outline-secondary",
-        title: "\u3084\u308A\u76F4\u3059"
-      },
-      /* @__PURE__ */ import_react2.default.createElement("i", { className: "bi bi-arrow-right" })
-    ), /* @__PURE__ */ import_react2.default.createElement(
-      "button",
-      {
-        type: "button",
-        onClick: () => editor.chain().focus().toggleBold().run(),
-        className: `btn btn-sm btn-outline-secondary ${editor.isActive("bold") ? "active" : ""}`
-      },
-      /* @__PURE__ */ import_react2.default.createElement("b", null, "B")
-    ), /* @__PURE__ */ import_react2.default.createElement(
-      "button",
-      {
-        type: "button",
-        onClick: () => editor.chain().focus().toggleItalic().run(),
-        className: `btn btn-sm btn-outline-secondary ${editor.isActive("italic") ? "active" : ""}`
-      },
-      /* @__PURE__ */ import_react2.default.createElement("i", null, "I")
-    ), /* @__PURE__ */ import_react2.default.createElement(
-      "button",
-      {
-        type: "button",
-        onClick: () => editor.chain().focus().toggleHeading({ level: 1 }).run(),
-        className: `btn btn-sm btn-outline-secondary ${editor.isActive("heading", { level: 1 }) ? "active" : ""}`
-      },
-      "H1"
-    ), /* @__PURE__ */ import_react2.default.createElement(
-      "button",
-      {
-        type: "button",
-        onClick: () => editor.chain().focus().toggleHeading({ level: 2 }).run(),
-        className: `btn btn-sm btn-outline-secondary ${editor.isActive("heading", { level: 2 }) ? "active" : ""}`
-      },
-      "H2"
-    ), /* @__PURE__ */ import_react2.default.createElement(
-      "button",
-      {
-        type: "button",
-        onClick: () => editor.chain().focus().toggleBulletList().run(),
-        className: `btn btn-sm btn-outline-secondary ${editor.isActive("bulletList") ? "active" : ""}`
-      },
-      "\u2022 List"
-    ), /* @__PURE__ */ import_react2.default.createElement(
-      "button",
-      {
-        type: "button",
-        onClick: () => editor.chain().focus().toggleOrderedList().run(),
-        className: `btn btn-sm btn-outline-secondary ${editor.isActive("orderedList") ? "active" : ""}`
-      },
-      "1. List"
-    ), /* @__PURE__ */ import_react2.default.createElement(
-      "button",
-      {
-        type: "button",
-        onClick: () => editor.chain().focus().toggleBlockquote().run(),
-        className: `btn btn-sm btn-outline-secondary ${editor.isActive("blockquote") ? "active" : ""}`
-      },
-      "> \u5F15\u7528"
-    ), /* @__PURE__ */ import_react2.default.createElement(
-      "button",
-      {
-        type: "button",
-        onClick: () => editor.chain().focus().toggleCodeBlock().run(),
-        className: `btn btn-sm btn-outline-secondary ${editor.isActive("codeBlock") ? "active" : ""}`
-      },
-      "</>"
-    ))), /* @__PURE__ */ import_react2.default.createElement(EditorContent, { editor, className: "w-100 ProseMirror" }));
+    return /* @__PURE__ */ import_react2.default.createElement("div", { className: "rhodia-grid-bg", style: { overflowY: "auto", position: "relative" } }, /* @__PURE__ */ import_react2.default.createElement(BubbleMenu2, { editor, tippyOptions: { duration: 150 } }, /* @__PURE__ */ import_react2.default.createElement("div", { className: "bubble-menu bg-white border rounded shadow-sm p-2 d-flex flex-wrap gap-2" }, /* @__PURE__ */ import_react2.default.createElement("button", { type: "button", onClick: () => editor.chain().focus().undo().run(), className: "btn btn-sm btn-outline-secondary", title: "\u5143\u306B\u623B\u3059" }, /* @__PURE__ */ import_react2.default.createElement("i", { className: "bi bi-arrow-left" })), /* @__PURE__ */ import_react2.default.createElement("button", { type: "button", onClick: () => editor.chain().focus().redo().run(), className: "btn btn-sm btn-outline-secondary", title: "\u3084\u308A\u76F4\u3059" }, /* @__PURE__ */ import_react2.default.createElement("i", { className: "bi bi-arrow-right" })), /* @__PURE__ */ import_react2.default.createElement("button", { type: "button", onClick: () => editor.chain().focus().toggleBold().run(), className: `btn btn-sm btn-outline-secondary ${editor.isActive("bold") ? "active" : ""}` }, /* @__PURE__ */ import_react2.default.createElement("b", null, "B")), /* @__PURE__ */ import_react2.default.createElement("button", { type: "button", onClick: () => editor.chain().focus().toggleItalic().run(), className: `btn btn-sm btn-outline-secondary ${editor.isActive("italic") ? "active" : ""}` }, /* @__PURE__ */ import_react2.default.createElement("i", null, "I")), /* @__PURE__ */ import_react2.default.createElement("button", { type: "button", onClick: () => editor.chain().focus().toggleHeading({ level: 1 }).run(), className: `btn btn-sm btn-outline-secondary ${editor.isActive("heading", { level: 1 }) ? "active" : ""}` }, "H1"), /* @__PURE__ */ import_react2.default.createElement("button", { type: "button", onClick: () => editor.chain().focus().toggleHeading({ level: 2 }).run(), className: `btn btn-sm btn-outline-secondary ${editor.isActive("heading", { level: 2 }) ? "active" : ""}` }, "H2"), /* @__PURE__ */ import_react2.default.createElement("button", { type: "button", onClick: () => editor.chain().focus().toggleBulletList().run(), className: `btn btn-sm btn-outline-secondary ${editor.isActive("bulletList") ? "active" : ""}` }, "\u2022 List"), /* @__PURE__ */ import_react2.default.createElement("button", { type: "button", onClick: () => editor.chain().focus().toggleOrderedList().run(), className: `btn btn-sm btn-outline-secondary ${editor.isActive("orderedList") ? "active" : ""}` }, "1. List"), /* @__PURE__ */ import_react2.default.createElement("button", { type: "button", onClick: () => editor.chain().focus().toggleBlockquote().run(), className: `btn btn-sm btn-outline-secondary ${editor.isActive("blockquote") ? "active" : ""}` }, "> \u5F15\u7528"), /* @__PURE__ */ import_react2.default.createElement("button", { type: "button", onClick: () => editor.chain().focus().toggleCodeBlock().run(), className: `btn btn-sm btn-outline-secondary ${editor.isActive("codeBlock") ? "active" : ""}` }, "</>"))), /* @__PURE__ */ import_react2.default.createElement(EditorContent, { editor, className: "w-100 ProseMirror" }));
   };
   var RichEditor_default = RichEditor;
 
@@ -85874,10 +85803,26 @@ img.ProseMirror-separator {
 
   // app/javascript/components/ReadOnlyTipTap.jsx
   var import_react5 = __toESM(require_react());
+  var removeUnwantedBRs2 = (html) => {
+    const div2 = document.createElement("div");
+    div2.innerHTML = html;
+    div2.querySelectorAll("p").forEach((p) => {
+      const brs = p.querySelectorAll("br");
+      brs.forEach((br) => {
+        if (!br.classList.contains("ProseMirror-trailingBreak")) {
+          if (p.textContent.trim() === "" && p.querySelector(".ProseMirror-trailingBreak")) {
+            br.remove();
+          }
+        }
+      });
+    });
+    return div2.innerHTML;
+  };
   var ReadOnlyTipTap = ({ content }) => {
+    const cleaned = removeUnwantedBRs2(content);
     const editor = useEditor({
       extensions: [StarterKit],
-      content,
+      content: cleaned,
       editable: false
     });
     if (!editor) return null;
