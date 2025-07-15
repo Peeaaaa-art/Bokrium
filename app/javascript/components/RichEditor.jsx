@@ -23,10 +23,7 @@ const removeUnwantedBRs = (html) => {
     const brs = p.querySelectorAll("br")
     brs.forEach((br) => {
       if (!br.classList.contains("ProseMirror-trailingBreak")) {
-        if (
-          p.textContent.trim() === "" &&
-          p.querySelector(".ProseMirror-trailingBreak")
-        ) {
+        if (p.textContent.trim() === "" && p.querySelector(".ProseMirror-trailingBreak")) {
           br.remove()
         }
       }
@@ -49,44 +46,51 @@ const RichEditor = ({ element }) => {
     content: initialContent,
     autofocus: true,
     editable: true,
-    onUpdate: ({ editor }) => {
-      const html = removeUnwantedBRs(editor.getHTML())
-
-      const charCountEl = document.getElementById("char-count")
-      if (charCountEl) {
-        charCountEl.textContent = `${editor.storage.characterCount.characters()} 文字`
-      }
-
-      const hiddenField = document.getElementById(inputId)
-      if (hiddenField) hiddenField.value = html
-      window.hasUnsavedChanges = true
-    },
   })
 
   useEffect(() => {
     if (!editor) return
 
     const hiddenField = document.getElementById(inputId)
-    let previousHTML = removeUnwantedBRs(editor.getHTML())
+    const saveButton = document.querySelector("[data-action='click->memo-modal#forceSubmit']")
 
+    let previousHTML = removeUnwantedBRs(editor.getHTML())
     if (hiddenField) hiddenField.value = previousHTML
+
+    // 初期状態で保存ボタンを無効化
+    if (saveButton) {
+      saveButton.disabled = true
+      saveButton.classList.add("disabled")
+    }
 
     const updateHandler = () => {
       const currentHTML = removeUnwantedBRs(editor.getHTML())
 
-      if (hiddenField && currentHTML !== previousHTML) {
-        hiddenField.value = currentHTML
-        previousHTML = currentHTML // 更新
+      // 内容が変わった → 保存ボタン有効化
+      if (currentHTML !== previousHTML) {
+        if (hiddenField) hiddenField.value = currentHTML
+        if (saveButton) {
+          saveButton.disabled = false
+          saveButton.classList.remove("disabled")
+        }
         window.hasUnsavedChanges = true
-        console.log("✏️ [update] 内容が変化 → hasUnsavedChanges = true")
+      } else {
+        // 内容が戻った → 保存ボタン無効化
+        if (saveButton) {
+          saveButton.disabled = true
+          saveButton.classList.add("disabled")
+        }
+        window.hasUnsavedChanges = false
       }
 
       const charCountEl = document.getElementById("char-count")
       if (charCountEl) {
-        charCountEl.textContent = `${editor.storage.characterCount.characters()} 文字`
+        const count = editor?.storage?.characterCount?.characters?.() || 0
+        charCountEl.textContent = `${count} 文字`
       }
     }
 
+    // 初期化時にも一度チェック
     updateHandler()
 
     editor.on("update", updateHandler)
