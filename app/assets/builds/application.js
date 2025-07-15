@@ -76307,7 +76307,7 @@ img.ProseMirror-separator {
       const updatedAtFull = trigger.dataset.memoModalUpdatedAtValue;
       const createdAtShort = trigger.dataset.memoModalCreatedDateValue;
       const updatedAtShort = trigger.dataset.memoModalUpdatedDateValue;
-      const contentElement = this.element.querySelector(".card-body");
+      const contentElement = this.element.querySelector(".tiptap-body");
       const contentHTML = (contentElement == null ? void 0 : contentElement.innerHTML) || "";
       const isPlaceholder = contentHTML.includes("PLACEHOLDER_TOKEN_9fz3!ifhdas094hfgfygq@_$2x");
       const initialContent = isPlaceholder ? "" : contentHTML;
