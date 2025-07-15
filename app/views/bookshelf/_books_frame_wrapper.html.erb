@@ -1,24 +1,20 @@
 <turbo-frame id="books_frame">
   <% case view_mode %>
   <% when "shelf" %>
-    <%= render "bookshelf/kino_select_numbers", books_per_shelf: books_per_shelf %>
-    <%= render "bookshelf/kino_books_grid",
-                books: books,
-                books_per_shelf: books_per_shelf,
-                pagy: pagy,
-                current_chunk_index: pagy.page %>
-
-  <% when "card" %>
-    <%= render "bookshelf/simple_card", books: books, card_columns: card_columns, pagy: pagy %>
-
-  <% when "detail_card" %>
-    <%= render "bookshelf/detail_card", books: books, pagy: pagy, detail_card_columns: @detail_card_columns %>
-
-  <% when "b_note" %>
-    <%= render "bookshelf/b_note", books: books, pagy: pagy %>
+    <%= render Books::KinoSelectNumbersComponent.new(books_per_shelf: books_per_shelf) %>
+    <%= render Books::KinoGridComponent.new(books: books, books_per_shelf: books_per_shelf, pagy: pagy) %>
 
   <% when "spine" %>
     <%= render "bookshelf/spine_select_numbers", spine_per_shelf: spine_per_shelf %>
-    <%= render "bookshelf/spine", books: books, pagy: pagy, spine_per_shelf: spine_per_shelf %>
+    <%= render Books::SpineGridComponent.new(books: books, spine_per_shelf: spine_per_shelf, pagy: pagy) %>
+
+  <% when "card" %>
+    <%= render Books::CardGridComponent.new(books: books, card_columns: card_columns, pagy: pagy) %>
+
+  <% when "detail_card" %>
+    <%= render Books::DetailCardComponent.new(books: books, pagy: pagy, detail_card_columns: detail_card_columns) %>
+
+  <% when "b_note" %>
+    <%= render "bookshelf/b_note", books: books, pagy: pagy %>
   <% end %>
 </turbo-frame>

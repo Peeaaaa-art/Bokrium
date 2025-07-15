@@ -3,11 +3,80 @@
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   line-height: 1.4;
-  padding: 0.3rem 0.3rem;
   margin: 0;
   outline: none;
   border: none;
   background: transparent;
+  padding: 0.3rem 0.35rem;
+}
+
+@media (max-width: 576px) {
+  .ProseMirror.editing {
+    max-height: 50dvh !important;
+    overflow-y: auto;
+  }
+}
+
+@media (min-width: 1200px) {
+  .ProseMirror.editing {
+    max-height: 80dvh !important;
+    overflow-y: auto;
+  }
+
+  .ProseMirror {
+    padding: 1.2rem 1.5rem;
+  }
+}
+
+.h6, h5, .h5, h4, .h4, h3, .h3, h2, .h2, h1, .h1 {
+    margin-top: 1rem;
+}
+
+em {
+  margin-right: 0.2em;
+}
+
+.ProseMirror p {
+  margin-bottom: 0.2em;
+  line-height: 1.5;
+}
+
+.ProseMirror p:empty::before {
+  content: "\00a0"; /* &nbsp; を挿入 */
+}
+
+.ProseMirror p.is-empty::before {
+  content: attr(data-placeholder);
+  color: #aaa;
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
+.ProseMirror blockquote {
+  border-left: 4px solid #ccc;
+  margin: 1em 0;
+  padding: 0.8em 1em;
+  background-color: #f9f9f9;
+  color: #555;
+  line-height: 1.6;
+}
+
+.ProseMirror blockquote p {
+  margin: 0.5em 0;
+}
+
+.ProseMirror:focus {
+  outline: none;
+}
+
+br:not([class]) {
+  display: none;
+}
+
+.rhodia-grid-bg {
+  background:
+    linear-gradient(rgba(254, 254, 254, 0.98), rgba(253, 252, 254, 0.88));
 }
 
 .rich-editor-root {
@@ -26,90 +95,6 @@
   max-height: none;
 }
 
-@media (max-width: 576px) {
-  .ProseMirror.editing {
-    max-height: 50dvh !important;
-    overflow-y: auto;
-  }
-}
-
-@media (min-width: 1200px) {
-  .ProseMirror.editing {
-    max-height: 80dvh !important;
-    overflow-y: auto;
-  }
-
-  .ProseMirror {
-    padding: 1rem 2rem;
-  }
-}
-
-.ProseMirror p {
-  margin-bottom: 0.2em;
-  line-height: 1.5;
-}
-
-.card-body p {
-  margin-bottom: 0.2em;
-  line-height: 1.5;
-}
-
-.ProseMirror p:empty::before {
-  content: "\00a0"; /* &nbsp; を挿入 */
-}
-
-.ProseMirror p.is-empty::before {
-  content: attr(data-placeholder);
-  color: #aaa;
-  float: left;
-  height: 0;
-  pointer-events: none;
-}
-
-
-.ProseMirror h1,
-.ProseMirror h2,
-.ProseMirror h3 {
-  margin: 1.5rem 0 1rem;
-}
-
-
-// .ProseMirror blockquote {
-//   border-left: 4px solid #ccc;
-//   margin: 1em 0;
-//   padding-left: 1rem;
-//   background-color: #f9f9f9;
-//   color: #555;
-// }
-
-blockquote {
-  border-left: 4px solid #ccc;
-    margin: 1em 0;
-    padding: 0.8em 1em;
-  background-color: #f9f9f9;
-  color: #555;
-}
-
-.ProseMirror:focus {
-  outline: none;
-}
-
-ul[data-type="taskList"] {
-  list-style: none;
-
-  li {
-    display: flex;
-    align-items: center;
-    input[type="checkbox"] {
-      margin-right: 0.5rem;
-    }
-  }
-}
-
-.rhodia-grid-bg {
-  background:
-    linear-gradient(rgba(254, 254, 254, 0.98), rgba(253, 252, 254, 0.88));
-}
 .modal-body {
   padding: 0 !important;
 }

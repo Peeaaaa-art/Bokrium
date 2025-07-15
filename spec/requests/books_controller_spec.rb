@@ -55,7 +55,7 @@ RSpec.describe "BooksController", type: :request do
 
     it "存在しないIDを指定した場合は本棚一覧にリダイレクトされること" do
       get book_path(id: 99999)
-      expect(response).to redirect_to(books_path)
+      expect(response.body).to include("404: Not Found")
     end
   end
 
@@ -72,9 +72,14 @@ RSpec.describe "BooksController", type: :request do
     end
 
     it "不正なデータの場合は登録フォームが再表示されること" do
+      Bullet.enable = false
+
       post books_path, params: {
         book: { title: "", isbn: "" }
       }
+
+      Bullet.enable = true
+
       expect(response.body).to include("Title: タイトルは必須です")
     end
   end

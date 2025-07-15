@@ -3,7 +3,7 @@ class ApplicationController < ActionController::Base
   allow_browser versions: :modern
   protect_from_forgery with: :exception
   before_action :configure_permitted_parameters, if: :devise_controller?
-  helper_method :guest_user, :mobile?
+  helper_method :guest_user, :mobile?, :books_index_path, :book_link_path
 
   def guest_user
     guest_email = ENV["GUEST_USER_EMAIL"]
@@ -27,5 +27,31 @@ class ApplicationController < ActionController::Base
 
   def mobile?
     browser.device.mobile?
+  end
+
+  def books_index_path(view: nil, page: nil)
+    params = {}
+    params[:view] = view if view.present?
+    params[:page] = page if page.present?
+
+    if user_signed_in?
+      if current_user.books.exists?
+        books_path(params)
+      else
+        guest_books_path(params)
+      end
+    else
+      guest_books_path(params)
+    end
+  end
+
+  def book_link_path(book)
+    return guest_starter_book_path(book) if @starter_book
+
+    if user_signed_in?
+      @has_books ? book_path(book) : guest_book_path(book)
+    else
+      guest_book_path(book)
+    end
   end
 end

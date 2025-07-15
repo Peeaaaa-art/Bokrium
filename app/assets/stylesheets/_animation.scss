@@ -4,6 +4,31 @@
   background: #fffaf4d6;
 }
 
+.layout-intro-barcode {
+  text-align: center;
+  padding: 3rem 1rem;
+  background: #fffaf4d6;
+  position: relative;
+  border-radius: 1rem;
+  overflow: hidden;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url("white_books_shelf.jpg");
+    background-size: cover;
+    background-position: center;
+    opacity: 0.2;
+    z-index: 0;
+  }
+
+  > * {
+    position: relative;
+    z-index: 1;
+  }
+}
+
 .layouts {
   display: flex;
   flex-wrap: wrap;

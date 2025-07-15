@@ -5,7 +5,7 @@ require_relative "bookshelf_display_defaults"
 class BooksIndexPresenter
   include BookshelfDisplayDefaults
 
-  CHUNKS_PER_PAGE = 7
+  CHUNKS_PER_PAGE = 4
 
   attr_reader :books, :pagy, :read_only, :display,
               :books_per_shelf, :card_columns,
@@ -22,7 +22,15 @@ class BooksIndexPresenter
   end
 
   def call
-    user_books = @user.books.includes(book_cover_s3_attachment: :blob)
+    setup_display
+    user_books =
+                case @view_mode
+                when "b_note"
+                  @user.books.select(:id, :title, :author, :publisher)
+                else
+                  @user.books.includes(book_cover_s3_attachment: :blob)
+                end
+
     load_user_books(user_books)
     self
   end
@@ -30,7 +38,6 @@ class BooksIndexPresenter
   private
 
   def load_user_books(user_books)
-    setup_display
     sync_filter_params(%w[sort status memo_visibility])
 
     filtered_books = BooksQuery.new(user_books, params: @params, current_user: @user).call

@@ -32,7 +32,7 @@ export default class extends Controller {
     const updatedAtShort = trigger.dataset.memoModalUpdatedDateValue
 
     // HTMLから初期内容取得
-    const contentElement = this.element.querySelector(".card-body")
+    const contentElement = this.element.querySelector(".tiptap-body")
     const contentHTML = contentElement?.innerHTML || ""
     const isPlaceholder = contentHTML.includes('PLACEHOLDER_TOKEN_9fz3!ifhdas094hfgfygq@_$2x')
     const initialContent = isPlaceholder ? "" : contentHTML

@@ -4,11 +4,8 @@
 
 
 <div class="d-flex align-items-center justify-content-between mt-4 mb-3 px-3">
-
   <div class="flex-shrink-0">
-<%= render "shared/bookshelf_view_switcher",
-            view_mode: @view_mode,
-            switch_path: ->(params) { guest_books_path(params) } %>
+    <%= render "shared/bookshelf_view_switcher", view_mode: @view_mode %>
   </div>
 
     <div class="mx-auto">

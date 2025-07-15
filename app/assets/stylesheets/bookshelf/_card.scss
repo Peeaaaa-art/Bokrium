@@ -22,10 +22,9 @@
 
 .book-cover-iphone {
   width: 100%;
-  aspect-ratio: 4 / 5;
+  aspect-ratio: 2 / 3;
   display: block;
-  border-radius: 4px;
+  border-radius: 0.5px;
   object-fit: contain;
   box-sizing: border-box;
-  margin: 8px auto;
 }

@@ -1,17 +1,16 @@
-<% books.each_slice(spine_per_shelf).with_index do |row_books, idx| %>
+<% @books.each_slice(@spine_per_shelf).with_index do |row_books, idx| %>
   <div class="shelf-row position-relative fade-in delay-<%= idx %>">
     <div class="book-spine-row d-flex">
       <% row_books.each do |book| %>
         <div class="spine-on-shelf"
             data-controller="spine-book"
             data-action="click->spine-book#handleClick"
-            data-spine-book-link-url-value="<%= book_link_path(book) %>">
+            data-spine-book-link-url-value="<%= helpers.book_link_path(book) %>">
           <div class="spine-top-bar"></div>
           <% if book.book_cover_s3.attached? %>
-            <%= image_tag book.book_cover_s3.variant(resize_to_limit: [240, 320]),
+            <%= image_tag  "https://img.bokrium.com/#{book.book_cover_s3.key}", width: 200, height: "auto",
                   alt: book.title,
                   class: "spine-cover-image d-none",
-                  loading: "lazy",
                   data: { spine_book_target: "cover" } %>
           <% elsif book.book_cover.present? %>
             <img src="<%= book.book_cover %>" alt="表紙画像"
@@ -25,7 +24,7 @@
           <% end %>
 
             <div class="spine-title" data-spine-book-target="title">
-              <%= book.title.truncate(11) %>
+              <%= helpers.truncate_for_device(book.title, mobile_limit: 8, desktop_limit: 11) %>
             </div>
             <div class="spine-brand">Bokrium</div>
           </div>
@@ -36,13 +35,8 @@
   </div>
 <% end %>
 
-
-<% if pagy && pagy.next %>
-  <turbo-frame id="next_books"
-                src="<%= guest_books_path(view: 'spine', page: pagy.next) %>"
-                loading="lazy"
-                data-controller="lazy-load"
-                data-lazy-load-url-value="<%= guest_books_path(view: 'spine', page: pagy.next) %>">
+<% if @pagy&.next %>
+  <turbo-frame id="next_books" src="<%= helpers.books_index_path(view: params[:view], page: @pagy.next) %>" loading="lazy">
     <%= render "shared/loading_spinner" %>
   </turbo-frame>
 <% end %>

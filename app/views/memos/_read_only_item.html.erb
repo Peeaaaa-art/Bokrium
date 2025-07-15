@@ -79,14 +79,22 @@
     <i class="bi bi-cloud-fog2-fill"></i>
   </div>
 
-  <!-- 本文 -->
-  <div class="memo-body" data-memo-modal-target="body">
-    <div class="card-body rhodia-grid-bg">
-      <%= sanitize(memo.content,
-      tags: %w(p br strong em a ul ol li blockquote h1 h2 h3 h4 h5 h6 code pre span),
-      attributes: %w(href title class data-* style)) || memo_placeholder_html %>
-    </div>
+<!-- 本文 -->
+<div class="memo-body" data-memo-modal-target="body">
+  <div class="tiptap-body rhodia-grid-bg">
+    <% if @read_only && memo.content.blank? %>
+      <%= memo_placeholder_html %>
+    <% else %>
+      <!-- 表示専用エディタ -->
+      <div class="readonly-editor-root" id="readonly-editor-<%= memo.id %>"></div>
+
+      <!-- JSONで安全にデータを渡す -->
+      <script type="application/json" id="readonly-editor-data-<%= memo.id %>">
+        <%= raw({ content: memo.content.to_s }.to_json) %>
+      </script>
+    <% end %>
   </div>
+</div>
 
   <!-- ステータスアイコン -->
   <% if current_user == memo.user && memo.like_memos.present? %>
