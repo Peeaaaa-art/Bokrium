@@ -5,7 +5,7 @@ require_relative "bookshelf_display_defaults"
 class BooksIndexPresenter
   include BookshelfDisplayDefaults
 
-  CHUNKS_PER_PAGE = 7
+  CHUNKS_PER_PAGE = 4
 
   attr_reader :books, :pagy, :read_only, :display,
               :books_per_shelf, :card_columns,
