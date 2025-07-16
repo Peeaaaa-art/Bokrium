@@ -27,3 +27,12 @@ amazon:
 #   secret_access_key: <%= ENV["AWS_SECRET_ACCESS_KEY"] %>
 #   endpoint: <%= ENV["AWS_ENDPOINT_URL_S3"] %>
 #   bucket: <%= ENV["BUCKET_NAME"] %>
+
+cloudflare_r2:
+  service: S3
+  access_key_id: <%= ENV["R2_ACCESS_KEY_ID"] %>
+  secret_access_key: <%= ENV["R2_SECRET_ACCESS_KEY"] %>
+  region: auto
+  bucket: bokrium-bucket
+  endpoint: https://0a02b4f220cb6b93916b3e879bdf3fba.r2.cloudflarestorage.com
+  force_path_style: true
