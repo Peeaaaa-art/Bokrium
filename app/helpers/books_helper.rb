@@ -39,7 +39,7 @@ module BooksHelper
     no_cover_title ||= book.title.truncate(40)
 
     if book.book_cover_s3.attached? && book.book_cover_s3.key.present?
-      image_tag book.cloudfront_url, {
+      image_tag book.bokrium_cover_url, {
         alt: alt,
         loading: "lazy",
         class: "img-fluid #{s3_class}".strip,

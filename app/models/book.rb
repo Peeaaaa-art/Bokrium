@@ -37,10 +37,16 @@ class Book < ApplicationRecord
     validate_upload_format(book_cover_s3, :book_cover_s3)
   end
 
-  def cloudfront_url
+  def bokrium_cover_url
     return nil unless book_cover_s3.attached? && book_cover_s3.key.present?
 
-    "https://img.bokrium.com/#{book_cover_s3.key}"
+    if use_r2_cover?
+      "https://cdn.bokrium.com/#{book_cover_s3.key}"
+    elsif use_s3_cover?
+      "https://img.bokrium.com/#{book_cover_s3.key}"
+    else
+      Rails.application.routes.url_helpers.rails_blob_url(book_cover_s3, only_path: false)
+    end
   end
 
   scope :autocomplete_title_or_author, ->(term) {
@@ -64,5 +70,13 @@ class Book < ApplicationRecord
 
   def normalize_isbn
     self.isbn = nil if isbn.blank?
+  end
+
+  def use_s3_cover?
+    book_cover_s3.attached? && book_cover_s3.blob.service_name.to_s == "amazon"
+  end
+
+  def use_r2_cover?
+    book_cover_s3.attached? && book_cover_s3.blob.service_name.to_s == "cloudflare_r2"
   end
 end

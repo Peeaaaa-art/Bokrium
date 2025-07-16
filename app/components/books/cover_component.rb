@@ -23,8 +23,8 @@ module Books
       @book.book_cover.present?
     end
 
-    def cloudfront_url
-      @book.cloudfront_url
+    def bokrium_cover_url
+      @book.bokrium_cover_url
     end
 
     def title_for_overlay

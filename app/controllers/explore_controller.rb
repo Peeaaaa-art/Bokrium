@@ -23,7 +23,7 @@ class ExploreController < ApplicationController
       @spine_per_shelf     = presenter.spine_per_shelf
       @read_only           = presenter.read_only
 
-      books = current_user.books.includes(book_cover_s3_attachment: :blob)
+      books = current_user.books.includes(:book_cover_s3_attachment)
       books = BooksQuery.new(books, params: params, current_user: current_user).call
 
       if @query.present?
