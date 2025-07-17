@@ -2,7 +2,7 @@
   <%= image_tag bokrium_cover_url, {
     alt: @alt,
     loading: "lazy",
-    class: "img-fluid #{@s3_class}".strip,
+    class: "img-fluid #{@image_class} #{@s3_class}".strip,
     height: "auto"
   }.merge(@options) %>
 
@@ -10,13 +10,18 @@
   <%= image_tag @book.book_cover, {
     alt: @alt,
     loading: "lazy",
-    class: "img-fluid #{@url_class}",
+    class: "img-fluid #{@image_class} #{@url_class}".strip,
     style: ""
   }.merge(@options) %>
 
 <% else %>
   <div class="cover-placeholder-wrapper">
-    <%= image_tag("no_cover.png", class: "img-fluid rounded-sm placeholder-cover #{@no_cover_class}") %>
+    <%= image_tag "no_cover.png", {
+      alt: @alt,
+      loading: "lazy",
+      class: "img-fluid rounded-sm placeholder-cover #{@image_class} #{@no_cover_class}".strip
+    }.merge(@options) %>
+
     <div class="cover-title-overlay brake-word"><%= title_for_overlay %></div>
     <div class="logo-overlay">Bokrium</div>
   </div>
