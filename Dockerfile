@@ -11,7 +11,7 @@ RUN apt-get update -qq && \
     curl \
     libjemalloc2 \
     libvips \
-    libjpeg-dev \
+    libjpeg62-turbo-dev \
     libpng-dev \
     libyaml-dev \
     libffi-dev \
