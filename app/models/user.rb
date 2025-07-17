@@ -1,7 +1,7 @@
 class User < ApplicationRecord
   has_one :line_user, dependent: :destroy
   has_one :monthly_support, dependent: :destroy
-  has_one_attached :avatar_s3, dependent: :purge_later
+  has_one_attached :avatar_s3, service: :cloudflare_private_r2, dependent: :purge
   has_many :donations, dependent: :nullify
   has_many :books, dependent: :destroy
   has_many :memos, dependent: :destroy
