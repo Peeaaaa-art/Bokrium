@@ -4,10 +4,11 @@ module Books
   class CoverComponent < ViewComponent::Base
     include ActionView::Helpers::SanitizeHelper
 
-    def initialize(book:, alt: nil, s3_class: "", url_class: "",
+    def initialize(book:, alt: nil, image_class: "", s3_class: "", url_class: "",
                    no_cover_class: "", truncate_options: {}, **options)
       @book = book
       @alt = alt || book.title.presence || "表紙画像"
+      @image_class = image_class
       @s3_class = s3_class
       @url_class = url_class
       @no_cover_class = no_cover_class
@@ -23,8 +24,8 @@ module Books
       @book.book_cover.present?
     end
 
-    def cloudfront_url
-      @book.cloudfront_url
+    def bokrium_cover_url
+      @book.bokrium_cover_url
     end
 
     def title_for_overlay

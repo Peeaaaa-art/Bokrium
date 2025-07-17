@@ -4,21 +4,11 @@
       <div class="row g-3">
         <!-- 書影 -->
         <div class="col-auto">
-          <% if memo.book.book_cover_s3.attached? %>
-            <%= image_tag memo.book.book_cover_s3.variant(resize_to_fit: [100, 150]),
-                  alt: memo.book.title, class: "book-cover", loading: "lazy" %>
 
-          <% elsif memo.book.book_cover.present? %>
-            <%= image_tag memo.book.book_cover,
-                  class: "img-fluid rounded-2",
-                  style: "width: 100px; height: auto; object-fit: cover;" %>
-
-          <% else %>
-            <div class="no-cover text-muted rounded-2"
-                  style="width: 100px; height: 150px;">
-              <span class="small text-center  title px-1"><%= memo.book.title %></span>
-            </div>
-          <% end %>
+              <%= render Books::CoverComponent.new(
+              book: memo.book,
+              image_class: "mxw-100",
+            ) %>
         </div>
 
         <!-- 右側テキスト情報 -->

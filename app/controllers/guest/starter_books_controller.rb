@@ -9,7 +9,7 @@ module Guest
     def show
       set_starter_books
       @book = @books.find(params[:id])
-      @memos = @book.memos
+      @memos = @book.memos.includes(:user)
       @new_memo = Memo.new(book_id: @book.id)
       @user_tags = []
 

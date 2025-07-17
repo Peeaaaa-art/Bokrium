@@ -28,7 +28,7 @@ class BooksIndexPresenter
                 when "b_note"
                   @user.books.select(:id, :title, :author, :publisher)
                 else
-                  @user.books.includes(book_cover_s3_attachment: :blob)
+                  @user.books.includes(:book_cover_s3_attachment)
                 end
 
     load_user_books(user_books)

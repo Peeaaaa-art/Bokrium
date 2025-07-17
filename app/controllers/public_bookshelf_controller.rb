@@ -1,9 +1,8 @@
 class PublicBookshelfController < ApplicationController
   def index
-    @others_random_memo = Memo.random_public_memo
     @view_mode = ""
 
-    @pagy, @memos = pagy(Memo.publicly_listed_with_book_and_user(exclude_user: current_user), items: 18)
+    @pagy, @memos = pagy(Memo.publicly_listed_with_book_and_user(exclude_user: current_user), limit: 9)
   end
 
   def show

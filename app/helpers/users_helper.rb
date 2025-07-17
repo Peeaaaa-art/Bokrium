@@ -16,8 +16,6 @@ module UsersHelper
     case size
     when :large
       avatar.variant(resize_to_fill: [ 400, 400 ])
-    when :medium
-      avatar.variant(resize_to_fill: [ 160, 160 ])
     when :small
       avatar.variant(resize_to_fill: [ 80, 80 ])
     else

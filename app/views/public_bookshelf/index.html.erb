@@ -1,8 +1,6 @@
 <% content_for :title, "みんなの本棚 - Bokrium" %>
 
 <div class="container text-center my-4">
-  <% if @others_random_memo && @others_random_memo.book && @others_random_memo.user %>
-
       <%= render "shared/search_bar", scope: "public", placeholder: "タイトル・著者",
                                 form_class: "mb-md-5 mb-2 d-flex justify-content-center" %>
 
@@ -15,6 +13,4 @@
           <%= render "shared/pagy", pagy: @pagy %>
         </div>
       </turbo-frame>
-
-  <% end %>
 </div>

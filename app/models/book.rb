@@ -4,7 +4,7 @@ class Book < ApplicationRecord
   before_validation :normalize_isbn
 
   belongs_to :user
-  has_one_attached :book_cover_s3, dependent: :purge_later
+  has_one_attached :book_cover_s3, service: :cloudflare_r2, dependent: :purge
   has_many :memos, dependent: :destroy
   has_many :images, dependent: :destroy
   has_many :book_tag_assignments, dependent: :destroy
@@ -15,6 +15,7 @@ class Book < ApplicationRecord
     reading: 1,      # 読書中
     finished: 2      # 読了
   }
+
   validates :title, presence: { message: ": タイトルは必須です" }, length: { maximum: 100, message: ": タイトルは100文字以内で入力してください" }
   validates :author, length: { maximum: 50, message: ": 著者は50文字以内で入力してください"  }, allow_blank: true
   validates :publisher, length: { maximum: 50,  message: ": 出版社は50文字以内で入力してください"  }, allow_blank: true
@@ -37,10 +38,18 @@ class Book < ApplicationRecord
     validate_upload_format(book_cover_s3, :book_cover_s3)
   end
 
-  def cloudfront_url
+  def bokrium_cover_url
     return nil unless book_cover_s3.attached? && book_cover_s3.key.present?
 
-    "https://img.bokrium.com/#{book_cover_s3.key}"
+    case book_cover_s3.blob.service_name.to_s
+    when "cloudflare_r2"
+      cdn_domain = Rails.env.development? ? "dev-cdn.bokrium.com" : "cdn.bokrium.com"
+      "https://#{cdn_domain}/#{book_cover_s3.key}"
+    when "amazon"
+      "https://img.bokrium.com/#{book_cover_s3.key}"
+    else
+      Rails.application.routes.url_helpers.rails_blob_url(book_cover_s3, only_path: false)
+    end
   end
 
   scope :autocomplete_title_or_author, ->(term) {
@@ -55,6 +64,7 @@ class Book < ApplicationRecord
                     tsearch: { prefix: true },
                     trigram: { threshold: 0.03 }
                   }
+
 
   scope :fuzzy_title_or_author, ->(query) {
     where("title ILIKE :q OR author ILIKE :q", q: "%#{sanitize_sql_like(query)}%")

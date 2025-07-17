@@ -11,6 +11,8 @@ RUN apt-get update -qq && \
     curl \
     libjemalloc2 \
     libvips \
+    libjpeg-turbo8-dev \
+    libpng-dev \
     libyaml-dev \
     libffi-dev \
     node-gyp \
