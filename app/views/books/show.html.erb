@@ -10,17 +10,16 @@
         <!-- 書影：左半分 -->
         <div class="col-6 d-flex justify-content-center">
           <div>
-          <%= display_book_cover @book,
-            s3_class: "book-cover-show",
-            url_class: "book-cover-show",
-            no_cover_title: " fs-5 mt-5",
-            nocover_img: true,
-            truncate_options: { mobile_limit: 80, desktop_limit: 100 }
-          %>
-          <!-- 書影情報クレジット表記 -->
-          <% if !@book.book_cover_s3.attached? && !@book.book_cover_s3.key.present? && (credit = book_cover_credit(@book.book_cover)) %>
-            <div class="text-secondary text-center small footer-font" style="font-size: 0.7rem; opacity: 0.66;"><%= credit %></div>
-          <% end %>
+            <%= render Books::CoverComponent.new(
+              book: @book,
+              image_class: "book-cover-show",
+              no_cover_title: "fs-5 mt-5",
+              truncate_options: { mobile_limit: 80, desktop_limit: 100 }
+            ) %>
+            <!-- クレジット表記 -->
+            <% if !@book.book_cover_s3.attached? && (credit = book_cover_credit(@book.book_cover)) %>
+              <div class="text-secondary text-center footer-font" style="font-size: 0.7rem; opacity: 0.66;"><%= credit %></div>
+            <% end %>
           </div>
         </div>
 
