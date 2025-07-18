@@ -23,6 +23,12 @@ jobs:
         with:
           node-version: '22'
 
+      - name: Install AWS CLI
+        run: |
+          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+          unzip awscliv2.zip
+          sudo ./aws/install
+
       - name: Install Ruby & Node deps + Precompile assets
         env:
           RAILS_ENV: production
@@ -32,17 +38,16 @@ jobs:
           npm install
           bin/rails assets:precompile
 
-      - name: Upload built assets to R2
-        uses: AndersonHappens/s3-sync-action@main
-        with:
-          args: --acl public-read --delete --endpoint-url=${{ secrets.R2_ENDPOINT }}
+      - name: Upload built assets to Cloudflare R2
         env:
-          AWS_S3_BUCKET: ${{ secrets.R2_BUCKET }}
           AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
           AWS_REGION: us-east-1
-          SOURCE_DIR: ./public/assets
-          DEST_DIR: /assets
+        run: |
+          aws s3 sync ./public/assets s3://${{ secrets.R2_BUCKET }}/assets \
+            --endpoint-url ${{ secrets.R2_ENDPOINT }} \
+            --acl public-read \
+            --delete
 
       - uses: superfly/flyctl-actions/setup-flyctl@master
 
