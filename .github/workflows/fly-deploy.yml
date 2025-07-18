@@ -8,7 +8,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    name: Deploy to Fly.io with asset_sync
+    name: Deploy to Fly.io and upload assets to R2
 
     steps:
       - uses: actions/checkout@v4
@@ -23,18 +23,24 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Install dependencies & run asset_sync
+      - name: Install dependencies and precompile assets
         env:
           RAILS_ENV: production
           RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
-          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
-          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
-          R2_BUCKET: ${{ secrets.R2_BUCKET }}
-          R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
         run: |
           bundle install
           npm install
-          bin/rails assets:precompile
+          bundle exec rails assets:precompile
+
+      - name: Upload assets to Cloudflare R2
+        run: |
+          aws s3 sync ./public/assets s3://${{ secrets.R2_BUCKET }}/assets \
+            --endpoint-url ${{ secrets.R2_ENDPOINT }} \
+            --acl public-read \
+            --delete
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
 
       - uses: superfly/flyctl-actions/setup-flyctl@master
 
