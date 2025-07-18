@@ -1,5 +1,4 @@
 Rails.application.config.after_initialize do
-  return if defined?(Rails::Server) == false && Rails.env.production?
   if Rails.env.production?
     begin
       guest_user = User.find_by(email: ENV["GUEST_USER_EMAIL"])

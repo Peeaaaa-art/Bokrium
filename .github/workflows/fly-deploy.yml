@@ -1,50 +1,18 @@
-name: Fly Deploy
+# See https://fly.io/docs/app-guides/continuous-deployment-with-github-actions/
 
+name: Fly Deploy
 on:
   push:
     branches:
       - main
-
 jobs:
   deploy:
+    name: Deploy app
     runs-on: ubuntu-latest
-    name: Deploy to Fly.io and upload assets to R2
-
+    concurrency: deploy-group    # optional: ensure only one action runs at a time
     steps:
       - uses: actions/checkout@v4
-
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: '3.4.3'
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-
-      - name: Install dependencies and precompile assets
-        env:
-          RAILS_ENV: production
-          RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
-        run: |
-          bundle install
-          npm install
-          bundle exec rails assets:precompile
-
-      - name: Upload assets to Cloudflare R2
-        run: |
-          aws s3 sync ./public/assets s3://${{ secrets.R2_BUCKET }}/assets \
-            --endpoint-url ${{ secrets.R2_ENDPOINT }} \
-            --acl public-read \
-            --delete
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
-
       - uses: superfly/flyctl-actions/setup-flyctl@master
-
-      - name: Deploy to Fly.io
-        run: flyctl deploy
+      - run: flyctl deploy --remote-only
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
