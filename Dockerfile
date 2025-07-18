@@ -34,7 +34,9 @@ RUN bundle install && \
 COPY . .
 
 RUN npm run build
-RUN bundle exec rails assets:precompile
+
+# 🔥 この行は削除！
+# RUN bundle exec rails assets:precompile
 
 FROM base
 
