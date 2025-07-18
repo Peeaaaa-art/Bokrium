@@ -33,20 +33,20 @@ jobs:
           bin/rails assets:precompile
 
       - name: Upload built assets to R2
-        uses: jakejarvis/s3-sync-action@v0.5.1
+        uses: AndersonHappens/s3-sync-action@main
         with:
-          args: --acl public-read --delete
+          args: --acl public-read --delete --endpoint-url=${{ secrets.R2_ENDPOINT }}
         env:
           AWS_S3_BUCKET: ${{ secrets.R2_BUCKET }}
           AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
-          AWS_REGION: dummy
+          AWS_REGION: us-east-1
           SOURCE_DIR: ./public/assets
           DEST_DIR: /assets
-          S3_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
 
       - uses: superfly/flyctl-actions/setup-flyctl@master
 
-      - run: flyctl deploy --remote-only
+      - name: Deploy to Fly.io
+        run: flyctl deploy --remote-only
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
