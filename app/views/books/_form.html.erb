@@ -35,14 +35,8 @@
       <%= f.label :book_cover_s3, "表紙画像", class: "form-label" %>
       <%= f.file_field :book_cover_s3, class: "form-control", direct_upload: true %>
 
-      <div class="mt-2">
-          <%= display_book_cover book,
-          resize_to: [120, 120],
-          s3_class: "img-fluid img-thumbnail",
-          url_class: "img-fluid",
-          no_cover_class: "no-cover-form",
-          no_cover_title: "",
-          style: "max-height: 120px;" %>
+      <div class="mt-2 mxw-80">
+            <%= render Books::CoverComponent.new(book: book,) %>
       </div>
 
     </div>

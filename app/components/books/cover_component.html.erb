@@ -16,7 +16,7 @@
 
 <% else %>
   <div class="cover-placeholder-wrapper">
-    <%= image_tag "no_cover.png", {
+    <%= image_tag helpers.cdn_path("no_cover.png"), {
       alt: @alt,
       loading: "lazy",
       class: "img-fluid rounded-sm placeholder-cover #{@image_class} #{@no_cover_class}".strip

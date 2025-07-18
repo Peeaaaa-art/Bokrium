@@ -5,7 +5,7 @@ module UsersHelper
     else
         num = user ? (user.id % 7) + 1 : 1
 
-        asset_path("avatar_default#{num}.png")
+        cdn_path("avatar_default#{num}.png")
     end
     image
   end

@@ -30,42 +30,6 @@ module BooksHelper
     end
   end
 
-
-  def display_book_cover(book, alt: nil,
-                        s3_class: "", url_class: "", no_cover_class: "", no_cover_title: nil,
-                        nocover_img: false, truncate_options: {}, **options)
-    return unless book.present?
-    alt ||= book.title.presence || "表紙画像"
-    no_cover_title ||= book.title.truncate(40)
-
-    if book.book_cover_s3.attached? && book.book_cover_s3.key.present?
-      image_tag book.bokrium_cover_url, {
-        alt: alt,
-        loading: "lazy",
-        class: "img-fluid #{s3_class}".strip,
-        height: "auto"
-      }.merge(options)
-
-    elsif book.book_cover.present?
-      image_tag book.book_cover,
-                { alt: alt, loading: "lazy", class: "img-fluid #{url_class}",
-                  style: "" }.merge(options)
-
-    elsif nocover_img
-      content_tag(:div, class: "cover-placeholder-wrapper #{no_cover_class}") do
-        image_tag("no_cover.png", class: "img-fluid rounded-sm placeholder-cover") +
-          content_tag(:div, truncate_for_device(book.title, **truncate_options),
-                      class: "cover-title-overlay brake-word") +
-          content_tag(:div, "Bokrium", class: "logo-overlay")
-      end
-    else
-      content_tag(:div, { class: "no-cover #{no_cover_class}" }.merge(options)) do
-        content_tag(:span, book.title&.truncate(40), class: "title #{ no_cover_title}")
-      end
-    end
-  end
-
-
   def render_book_info_list(book, list_class: "list-unstyled fs-info text-secondary mb-0 lh-show")
     content_tag(:ul, class: list_class) do
       safe_join(
