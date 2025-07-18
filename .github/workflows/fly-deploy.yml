@@ -24,10 +24,13 @@ jobs:
           node-version: '22'
 
       - name: Install Ruby & Node deps + Precompile assets
+        env:
+          RAILS_ENV: production
+          RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
         run: |
           bundle install
           npm install
-          RAILS_ENV=production bin/rails assets:precompile
+          bin/rails assets:precompile
 
       - name: Upload built assets to R2
         uses: jakejarvis/s3-sync-action@v0.5.1
