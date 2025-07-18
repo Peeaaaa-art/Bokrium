@@ -30,6 +30,7 @@ jobs:
         run: |
           bundle install
           npm install
+          bin/rails assets:clobber
           bin/rails assets:precompile
 
       - name: Upload built assets to Cloudflare R2
