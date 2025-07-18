@@ -40,7 +40,7 @@ jobs:
           AWS_S3_BUCKET: ${{ secrets.R2_BUCKET }}
           AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
-          AWS_REGION: auto
+          AWS_REGION: dummy
           SOURCE_DIR: ./public/assets
           DEST_DIR: /assets
           S3_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
