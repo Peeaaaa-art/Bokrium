@@ -1,3 +1,5 @@
+require "fog/aws"
+
 if defined?(AssetSync)
   AssetSync.configure do |config|
     config.enabled = Rails.env.production?
