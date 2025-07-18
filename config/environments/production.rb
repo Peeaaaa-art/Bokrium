@@ -22,7 +22,7 @@ Rails.application.configure do
   config.public_file_server.headers = { "cache-control" => "public, max-age=#{1.year.to_i}" }
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
-  config.asset_host = "https://assets.bokrium.com"
+  # config.asset_host = "https://assets.bokrium.com"
 
   # Store uploaded files in Tigris Global Object Storage (see config/storage.yml for options).
   config.active_storage.service = :cloudflare_private_r2
