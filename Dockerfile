@@ -50,7 +50,7 @@ COPY . .
 
 RUN npm run build
 RUN bundle exec bootsnap precompile app/ lib/
-RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
+# RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
 
 # 実行ステージ
 FROM base
