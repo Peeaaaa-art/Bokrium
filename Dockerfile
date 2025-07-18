@@ -9,7 +9,7 @@ RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y \
     curl libjemalloc2 libvips libjpeg62-turbo-dev libpng-dev libyaml-dev \
     libffi-dev node-gyp python-is-python3 postgresql-client gnupg && \
-    curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
+    curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
     apt-get install -y nodejs && \
     rm -rf /var/lib/apt/lists/* /var/cache/apt/archives
 

@@ -74,11 +74,6 @@ GEM
       uri (>= 0.13.1)
     addressable (2.8.7)
       public_suffix (>= 2.0.2, < 7.0)
-    asset_sync (2.19.2)
-      activemodel (>= 4.1.0)
-      fog-core
-      mime-types (>= 2.99)
-      unf
     ast (2.4.3)
     aws-eventstream (1.4.0)
     aws-partitions (1.1124.0)
@@ -158,8 +153,6 @@ GEM
     drb (2.2.3)
     erb (5.0.1)
     erubi (1.13.1)
-    excon (1.2.8)
-      logger
     factory_bot (6.5.4)
       activesupport (>= 6.1.0)
     factory_bot_rails (6.5.0)
@@ -179,22 +172,6 @@ GEM
     ffi (1.17.2-x86_64-darwin)
     ffi (1.17.2-x86_64-linux-gnu)
     ffi (1.17.2-x86_64-linux-musl)
-    fog-aws (3.24.0)
-      fog-core (~> 2.1)
-      fog-json (~> 1.1)
-      fog-xml (~> 0.1)
-    fog-core (2.6.0)
-      builder
-      excon (~> 1.0)
-      formatador (>= 0.2, < 2.0)
-      mime-types
-    fog-json (1.2.0)
-      fog-core
-      multi_json (~> 1.10)
-    fog-xml (0.1.5)
-      fog-core
-      nokogiri (>= 1.5.11, < 2.0.0)
-    formatador (1.1.1)
     globalid (1.2.1)
       activesupport (>= 6.1)
     google-protobuf (4.30.2)
@@ -257,17 +234,12 @@ GEM
       net-smtp
     marcel (1.0.4)
     matrix (0.4.2)
-    mime-types (3.7.0)
-      logger
-      mime-types-data (~> 3.2025, >= 3.2025.0507)
-    mime-types-data (3.2025.0715)
     mini_magick (5.2.0)
       benchmark
       logger
     mini_mime (1.1.5)
     minitest (5.25.5)
     msgpack (1.8.0)
-    multi_json (1.16.0)
     multi_xml (0.7.2)
       bigdecimal (~> 3.1)
     multipart-post (2.4.1)
@@ -511,7 +483,6 @@ GEM
       railties (>= 7.1.0)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
-    unf (0.2.0)
     unicode-display_width (3.1.4)
       unicode-emoji (~> 4.0, >= 4.0.4)
     unicode-emoji (4.0.4)
@@ -557,7 +528,6 @@ PLATFORMS
   x86_64-linux-musl
 
 DEPENDENCIES
-  asset_sync
   aws-sdk-s3 (~> 1.192)
   bootsnap
   bootstrap (~> 5.3.5)
@@ -572,7 +542,6 @@ DEPENDENCIES
   dockerfile-rails (>= 1.7)
   dotenv-rails
   factory_bot_rails
-  fog-aws
   image_processing (~> 1.2)
   importmap-rails
   jbuilder
