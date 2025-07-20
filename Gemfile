@@ -68,7 +68,7 @@ gem "browser"
 # 🌐 外部API・データ連携
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-gem "aws-sdk-s3", "~> 1.192", require: false
+gem "aws-sdk-s3", "~> 1.193", require: false
 
 gem "rakuten_web_service"
 
