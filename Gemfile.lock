@@ -124,9 +124,6 @@ GEM
       bigdecimal
       rexml
     crass (1.0.6)
-    dartsass-rails (0.5.1)
-      railties (>= 6.0.0)
-      sass-embedded (~> 1.63)
     date (3.4.1)
     debug (1.11.0)
       irb (~> 1.10)
@@ -172,21 +169,6 @@ GEM
     ffi (1.17.2-x86_64-linux-musl)
     globalid (1.2.1)
       activesupport (>= 6.1)
-    google-protobuf (4.30.2)
-      bigdecimal
-      rake (>= 13)
-    google-protobuf (4.30.2-aarch64-linux)
-      bigdecimal
-      rake (>= 13)
-    google-protobuf (4.30.2-arm64-darwin)
-      bigdecimal
-      rake (>= 13)
-    google-protobuf (4.30.2-x86_64-darwin)
-      bigdecimal
-      rake (>= 13)
-    google-protobuf (4.30.2-x86_64-linux)
-      bigdecimal
-      rake (>= 13)
     hashdiff (1.2.0)
     hashie (5.0.0)
     i18n (1.14.7)
@@ -430,22 +412,6 @@ GEM
       ffi (~> 1.12)
       logger
     rubyzip (2.4.1)
-    sass-embedded (1.86.3-aarch64-linux-gnu)
-      google-protobuf (~> 4.30)
-    sass-embedded (1.86.3-aarch64-linux-musl)
-      google-protobuf (~> 4.30)
-    sass-embedded (1.86.3-arm-linux-gnueabihf)
-      google-protobuf (~> 4.30)
-    sass-embedded (1.86.3-arm-linux-musleabihf)
-      google-protobuf (~> 4.30)
-    sass-embedded (1.86.3-arm64-darwin)
-      google-protobuf (~> 4.30)
-    sass-embedded (1.86.3-x86_64-darwin)
-      google-protobuf (~> 4.30)
-    sass-embedded (1.86.3-x86_64-linux-gnu)
-      google-protobuf (~> 4.30)
-    sass-embedded (1.86.3-x86_64-linux-musl)
-      google-protobuf (~> 4.30)
     securerandom (0.4.1)
     selenium-webdriver (4.34.0)
       base64 (~> 0.2)
@@ -534,7 +500,6 @@ DEPENDENCIES
   browser
   bullet
   capybara
-  dartsass-rails
   debug
   devise
   devise-i18n

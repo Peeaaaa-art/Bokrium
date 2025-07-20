@@ -1,0 +1,38 @@
+name: Upload Vite assets to R2
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  upload-vite-assets:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Vite assets
+        run: npm run build
+
+      - name: Install AWS CLI
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y awscli
+
+      - name: Upload to Cloudflare R2
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+        run: |
+          aws s3 sync public/vite-assets s3://${{ secrets.R2_BUCKET }}/vite-assets \
+            --endpoint-url=${{ secrets.R2_ENDPOINT }} \
+            --delete \
+            --acl public-read
