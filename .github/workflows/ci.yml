@@ -35,7 +35,7 @@ jobs:
       - name: Run Brakeman
         run: bin/brakeman --no-pager
 
-  test:
+  rspec:
     runs-on: ubuntu-latest
 
     env:
