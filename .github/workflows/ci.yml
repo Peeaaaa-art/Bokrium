@@ -35,21 +35,6 @@ jobs:
       - name: Run Brakeman
         run: bin/brakeman --no-pager
 
-  importmap_audit:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: .ruby-version
-          bundler-cache: true
-
-      - name: Audit JavaScript dependencies
-        run: bin/importmap audit
-
   test:
     runs-on: ubuntu-latest
 
@@ -69,7 +54,16 @@ jobs:
 
     steps:
       - name: Install packages
-        run: sudo apt-get update && sudo apt-get install -y libpq-dev pkg-config libvips google-chrome-stable
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libpq-dev pkg-config libvips google-chrome-stable curl gnupg
+
+      - name: Install Node.js (v22)
+        run: |
+          curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -
+          sudo apt-get install -y nodejs
+          node -v
+          npm -v
 
       - name: Checkout code
         uses: actions/checkout@v4
@@ -80,6 +74,12 @@ jobs:
           ruby-version: .ruby-version
           bundler-cache: true
 
+      - name: Install JS dependencies
+        run: npm install
+
+      - name: Build frontend (Vite)
+        run: ./bin/vite build --clear --mode=test
+
       - name: Prepare DB
         env:
           RAILS_ENV: test
@@ -89,8 +89,7 @@ jobs:
           bin/rails db:create db:schema:load
 
       - name: Inject secrets into .env.test
-        run: |
-          echo "GUEST_USER_EMAIL=${GUEST_USER_EMAIL}" > .env.test
+        run: echo "GUEST_USER_EMAIL=${GUEST_USER_EMAIL}" > .env.test
         env:
           GUEST_USER_EMAIL: ${{ secrets.GUEST_USER_EMAIL }}
 
@@ -98,8 +97,7 @@ jobs:
         env:
           RAILS_ENV: test
           DATABASE_URL: postgres://postgres:postgres@localhost:5432/test_db
-        run: |
-          bundle exec rspec
+        run: bundle exec rspec
 
       - name: Cleanup .env.test
         run: rm -f .env.test
