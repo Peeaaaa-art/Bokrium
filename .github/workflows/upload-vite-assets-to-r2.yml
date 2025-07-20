@@ -4,10 +4,6 @@ on:
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      - main
-  workflow_dispatch:
 
 jobs:
   upload-vite-assets:
@@ -33,7 +29,7 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
         run: |
-          aws s3 sync public/vite-assets s3://${{ secrets.R2_BUCKET }}/vite-assets \
+          aws s3 sync public/vite/assets s3://${{ secrets.R2_BUCKET }}/vite-assets \
             --endpoint-url=${{ secrets.R2_ENDPOINT }} \
             --delete \
             --acl public-read
