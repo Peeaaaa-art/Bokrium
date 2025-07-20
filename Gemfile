@@ -2,6 +2,7 @@ source "https://rubygems.org"
 
 ruby "~> 3.4.3"
 
+<<<<<<< HEAD
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 # 📦 Rails本体・基本構成
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -16,6 +17,30 @@ gem "propshaft"
 
 gem "vite_rails"
 
+=======
+# 私が追加したGem
+gem "devise"
+gem "devise-i18n"
+gem "rails-i18n", "~> 8.0"
+gem "dartsass-rails"
+gem "bootstrap", "~> 5.3.5"
+gem "aws-sdk-s3", "~> 1.192", require: false
+gem "rakuten_web_service"
+gem "dotenv-rails"
+gem "rexml"
+gem "redcarpet", "~> 3.6", ">= 3.6.1"
+gem "nokogiri"
+gem "pg_search"
+gem "rack-rewrite"
+gem "line-bot-api"
+gem "omniauth"
+gem "omniauth-line"
+gem "omniauth-rails_csrf_protection"
+gem "whenever", require: false
+gem "browser"
+gem "pagy"
+gem "stripe"
+>>>>>>> main
 gem "view_component", "4.0.0.rc2"
 
 # PostgreSQLドライバ

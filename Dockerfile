@@ -18,7 +18,7 @@ RUN apt-get update -qq && \
     python-is-python3 \
     postgresql-client \
     gnupg && \
-    curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
+    curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
     apt-get install -y nodejs && \
     rm -rf /var/lib/apt/lists/* /var/cache/apt/archives
 
