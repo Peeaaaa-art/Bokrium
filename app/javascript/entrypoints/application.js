@@ -1,4 +1,9 @@
-// app/javascript/application.js
+// --- Styles ---
+import "bootstrap/dist/css/bootstrap.css";
+import "bootstrap-icons/font/bootstrap-icons.css";
+import "../styles/application.scss";
+
+// --- JavaScript Modules ---
 
 import { Application } from "@hotwired/stimulus"
 import * as Turbo from "@hotwired/turbo"

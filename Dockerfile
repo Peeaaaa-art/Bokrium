@@ -50,8 +50,6 @@ RUN ./bin/vite build
 
 RUN bundle exec bootsnap precompile app/ lib/
 
-RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
-
 FROM base
 
 COPY --from=build ${BUNDLE_PATH} ${BUNDLE_PATH}
