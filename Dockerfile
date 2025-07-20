@@ -5,7 +5,6 @@ FROM ruby:$RUBY_VERSION-slim AS base
 
 WORKDIR /rails
 
-# 共通のシステムパッケージ + Node.js 追加
 RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y \
     curl \
@@ -28,7 +27,6 @@ ENV RAILS_ENV=production \
     BUNDLE_PATH=/usr/local/bundle \
     BUNDLE_WITHOUT=development:test
 
-# ビルドステージ
 FROM base AS build
 
 RUN apt-get update -qq && \
@@ -48,11 +46,12 @@ RUN bundle install && \
 
 COPY . .
 
-RUN npm run build
+RUN ./bin/vite build
+
 RUN bundle exec bootsnap precompile app/ lib/
+
 RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
 
-# 実行ステージ
 FROM base
 
 COPY --from=build ${BUNDLE_PATH} ${BUNDLE_PATH}

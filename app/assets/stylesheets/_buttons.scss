@@ -20,8 +20,6 @@
   --bs-btn-disabled-color: #fff;
   --bs-btn-disabled-bg: #2d61d1;
   --bs-btn-disabled-border-color: #2d61d1;
-
-  @extend .btn; // Bootstrap の基本ボタンを継承
 }
 
 .safari-modal-action-button {

@@ -1,4 +1,4 @@
-// app/javascript/rich_editors.js
+// app/javascript/rich_editors.jsx
 import React from "react";
 import { createRoot } from "react-dom/client";
 import RichEditor from "./components/RichEditor.jsx";
