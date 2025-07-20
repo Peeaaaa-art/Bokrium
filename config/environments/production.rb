@@ -24,6 +24,8 @@ Rails.application.configure do
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   # config.asset_host = "https://lib.bokrium.com"
 
+  config.vite.asset_host = "https://assets.bokrium.com"
+
   # Store uploaded files in Tigris Global Object Storage (see config/storage.yml for options).
   config.active_storage.service = :cloudflare_private_r2
 
