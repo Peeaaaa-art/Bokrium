@@ -4,12 +4,13 @@ import RubyPlugin from 'vite-plugin-ruby'
 export default defineConfig({
   plugins: [
     RubyPlugin({
-      publicOutputDir: 'assets',
+      publicOutputDir: '.',
     }),
   ],
   publicDir: false,
+  cacheDir: '/tmp/.vite',
   build: {
-    outDir: 'public/vite',
+    outDir: 'public/vite-assets',
     emptyOutDir: true,
     sourcemap: false,
   },
