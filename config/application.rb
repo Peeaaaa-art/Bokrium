@@ -20,5 +20,6 @@ module Bokrium
       Rails.root.join("config/locales/**/*.{yml}")
     ]
     config.time_zone = "Tokyo"
+    config.assets.paths << Rails.root.join("app/assets/builds")
   end
 end

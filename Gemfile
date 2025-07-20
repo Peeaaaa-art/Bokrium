@@ -1,92 +1,154 @@
 source "https://rubygems.org"
 
 ruby "~> 3.4.3"
-gem "rails", "~> 8.0.2"
-gem "pg", "~> 1.1"
-# Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
-gem "image_processing", "~> 1.2"
-# The modern asset pipeline for Rails [https://github.com/rails/propshaft]
-gem "propshaft"
-# Use the Puma web server [https://github.com/puma/puma]
-gem "puma", ">= 5.0"
-# Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
-gem "importmap-rails"
-# Hotwire's SPA-like page accelerator [https://turbo.hotwired.dev]
-gem "turbo-rails"
-# Hotwire's modest JavaScript framework [https://stimulus.hotwired.dev]
-gem "stimulus-rails"
-# Build JSON APIs with ease [https://github.com/rails/jbuilder]
-gem "jbuilder"
 
-# 私が追加したGem
-gem "devise"
-gem "devise-i18n"
-gem "rails-i18n", "~> 8.0"
-gem "dartsass-rails"
-gem "bootstrap", "~> 5.3.5"
-gem "aws-sdk-s3", "~> 1.192", require: false
-gem "rakuten_web_service"
-gem "dotenv-rails"
-gem "rexml"
-gem "redcarpet", "~> 3.6", ">= 3.6.1"
-gem "acts-as-taggable-on"
-gem "nokogiri"
-gem "pg_search"
-gem "rack-rewrite"
-gem "line-bot-api"
-gem "omniauth"
-gem "omniauth-line"
-gem "omniauth-rails_csrf_protection"
-gem "whenever", require: false
-gem "browser"
-gem "pagy"
-gem "stripe"
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# 📦 Rails本体・基本構成
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+gem "rails", "~> 8.0.2"
+
+gem "puma"
+
+gem "turbo-rails"
+
+gem "propshaft"
+
+gem "vite_rails"
+
 gem "view_component", "4.0.0.rc2"
 
-# Windows does not include zoneinfo files, so bundle the tzinfo-data gem
+# PostgreSQLドライバ
+gem "pg"
+# 検索機能（PostgreSQL全文検索）
+gem "pg_search"
+
+# ActiveStorageの画像変換用
+gem "image_processing"
+
+# JSON API構築用
+gem "jbuilder"
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# 🔒 認証・セキュリティ
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+gem "devise"
+
+gem "devise-i18n"
+
+gem "omniauth"
+
+gem "omniauth-line"
+
+gem "line-bot-api"
+
+gem "omniauth-rails_csrf_protection"
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# 🌍 国際化・スタイル
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+gem "rails-i18n"
+
+gem "dartsass-rails"
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# 🔎 ページネーション・補助機能
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+gem "pagy"
+
+gem "rack-rewrite"
+
+# デバイス種別の判定
+gem "browser"
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# 🌐 外部API・データ連携
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+gem "aws-sdk-s3", "~> 1.192", require: false
+
+gem "rakuten_web_service"
+
+gem "dotenv-rails"
+
+# 高速HTML/XMLパーサ（NDL API用）
+gem "nokogiri"
+
+# Markdownパーサ
+gem "redcarpet"
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# 💰 決済・マネタイズ
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+gem "stripe"
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# ⚙️ OS依存・起動最適化
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
 gem "tzinfo-data", platforms: [ :mingw, :mswin, :x64_mingw, :jruby ]
-# Use the database-backed adapters for Rails.cache, Active Job, and Action Cable
+
 gem "solid_cache"
-# gem "solid_queue"
-# gem "solid_cable"
-# Reduces boot times through caching; required in config/boot.rb
+
+# 起動高速化
 gem "bootsnap", require: false
-# Add HTTP asset caching/compression and X-Sendfile acceleration to Puma [https://github.com/basecamp/thruster/]
+
+# HTTPアセット圧縮・X-Sendfile対応
 gem "thruster", require: false
 
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# 🧪 開発・テスト環境
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
 group :development, :test do
-  # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: [ :mri, :mswin, :mingw, :x64_mingw ], require: "debug/prelude"
 
-  # Static analysis for security vulnerabilities [https://brakemanscanner.org/]
   gem "brakeman", require: false
 
-  # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
 
   gem "rspec-rails"
 
   gem "factory_bot_rails"
 
+  # N+1検出
   gem "bullet"
 
   gem "newrelic_rpm"
 end
 
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# 🛠️ 開発専用
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
 group :development do
-  # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
 end
 
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# 🧪 テスト専用
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
 group :test do
-  # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem "capybara"
+
   gem "selenium-webdriver"
-  gem "shoulda-matchers", "~> 6.5"
+
+  gem "shoulda-matchers"
+
   gem "webmock"
+
   gem "rails-controller-testing"
 end
 
-gem "letter_opener", "~> 1.10"
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# 📬 開発用メール・Docker
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-gem "dockerfile-rails", ">= 1.7", group: :development
+gem "letter_opener"
+
+gem "dockerfile-rails", group: :development

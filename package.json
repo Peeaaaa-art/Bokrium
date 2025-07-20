@@ -6,9 +6,9 @@
     "npm": "10.x"
   },
   "scripts": {
-    "build": "node esbuild.config.js",
-    "build:watch": "node esbuild.config.js --watch",
-    "heroku-postbuild": "npm run build"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
   },
   "dependencies": {
     "@hotwired/stimulus": "^3.2.2",
@@ -27,6 +27,7 @@
     "stimulus-vite-helpers": "^3.1.0"
   },
   "devDependencies": {
-    "esbuild": "^0.25.3"
+    "vite": "^5.4.19",
+    "vite-plugin-ruby": "^5.1.1"
   }
 }
