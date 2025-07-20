@@ -5,6 +5,7 @@ export default defineConfig({
   plugins: [
     RubyPlugin(),
   ],
+  publicDir: false,
   build: {
     outDir: 'public/vite-assets',
     emptyOutDir: true,
