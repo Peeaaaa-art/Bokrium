@@ -1,7 +1,52 @@
-<div class="container my-4 my-md-5">
-  <%= render partial: "books/public_details", locals: { book: @book, memos: @memos } %>
-
-  <div class="text-center mt-4">
-    <%= link_to "公開本棚にもどる", public_bookshelf_index_path, class: "btn btn-secondary" %>
+<div class="container my-3">
+  <div class="row justify-content-center">
+    <div class="col-md-8 col-lg-7">
+        <!-- 書影 -->
+        <% if @book.book_cover_s3.attached? || @book.book_cover.present? %>
+          <div class="text-center mt-3 mb-5">
+            <% if @book.book_cover_s3.attached? %>
+              <%= image_tag @book.book_cover_s3.variant(resize_to_limit: [200, 300]), class: "img-fluid rounded" %>
+            <% else %>
+              <img src="<%= @book.book_cover %>" class="img-fluid rounded" style="max-height: 300px;" alt="表紙画像">
+            <% end %>
+          </div>
+        <% end %>
+      <div class="card shadow-sm border-0">
+        <!-- ヘッダー -->
+        <div class="card-header text-center bg-rhodia-orange">
+          <h4 class="my-1 fs-3"><%= @book.title %></h4>
+          <p class="mb-0 text-mute small"><%= @book.author.presence || "" %></p>
+        </div>
+        <!-- メモ本文 -->
+        <div class="card-body rhodia-grid-bg px-4 py-3">
+          <%= sanitize(@memo.content,
+            tags: %w(p br strong em a ul ol li blockquote h1 h2 h3 h4 h5 h6 code pre span hr),
+            attributes: %w(href title class data-* style)) || memo_placeholder_html %>
+        </div>
+        <!-- 更新情報 -->
+        <div class="card-footer d-flex justify-content-between small text-muted">
+          <span><i class="bi bi-clock-history me-1"></i><%= @memo.updated_at.strftime("%F") %></span>
+          <span><%= render "like_memos/button", memo: @memo %></span>
+          <span>
+            <% if @user.avatar_s3.attached? %>
+              <%= image_tag user_avatar(@user, size: :small), alt: @user.name, class: "avatar-circle-mini me-1" %>
+            <% else %>
+              <i class="bi bi-person-circle me-1"></i>
+            <% end %>
+            <%= @user.name.present? ? "#{@user.name}さん" : "匿名ユーザー" %>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+    <div class="text-center mt-4">
+    <%= link_to "みんなの本棚にもどる", public_bookshelf_index_path, class: "btn btn-secondary" %>
   </div>
 </div>
+
+<style>
+  .ProseMirror {
+    pointer-events: none;
+    user-select: text;
+  }
+</style>

@@ -60,11 +60,9 @@ Rails.application.routes.draw do
 
   resources :user_tags, only: [ :create, :update, :destroy ]
 
-  resources :shared_memos, only: [ :show ], param: :token do
-    resource :like_memo, only: [ :create, :destroy ]
+  resources :public_bookshelf, only: [:index, :show], param: :token do
+    resource :like_memo, only: [:create, :destroy]
   end
-
-  resources :public_bookshelf, only: [ :index, :show ]
 
   get "/explore", to: "explore#index", as: :explore
 
