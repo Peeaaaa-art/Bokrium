@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
+  <title>406 Not Acceptable</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Helvetica Neue', sans-serif;
+      background: #f5f5f7;
+    }
+
+    .navbar {
+      background-color: rgb(253, 253, 250);
+      padding: 12px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #ddd;
+      position: relative;
+      z-index: 2;
+    }
+
+    .logo {
+      height: 50px;
+    }
+
+    .login-button {
+      border: 1px solid #333;
+      padding: 6px 12px;
+      text-decoration: none;
+      font-size: 0.9rem;
+      border-radius: 6px;
+      color: #333;
+    }
+
+    .background {
+      width: 100%;
+      height: 300px;
+      background: radial-gradient(circle at top left, #3b53ff 0%, #2a2a99 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .background::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 120px;
+      background: #f5f5f7;
+      border-top-left-radius: 50% 40px;
+      border-top-right-radius: 50% 40px;
+    }
+
+    .background::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image:
+        radial-gradient(#fff 1px, transparent 1px),
+        radial-gradient(#fff 1px, transparent 1px);
+      background-size: 20px 20px;
+      background-position: 0 0, 10px 10px;
+      opacity: 0.2;
+    }
+
+    .cat-image {
+      display: block;
+      margin: -50px auto 0rem;
+      position: relative;
+      z-index: 3;
+      border-radius: 8px;
+    }
+
+    .content {
+      text-align: center;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
+
+  .error-title {
+    position: absolute;
+    top: 27%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 3;
+  }
+
+  .error-code {
+    font-family: 'Big Shoulders', sans-serif;
+    font-size: 5rem;
+    font-weight: bold;
+    color: #ffffff;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  }
+
+  .error-text {
+    font-family: 'Big Shoulders', sans-serif;
+    font-size: 1.5rem;
+    color: #f0f0f5;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  }
+
+  .error-message {
+    font-family: 'Big Shoulders', sans-serif;
+
+  }
+
+    .back-link {
+      color: #007BFF;
+      text-decoration: underline;
+      font-weight: bold;
+    }
+
+@media (max-width: 768px) {
+  .error-code {
+    font-size: 3.5rem;
+  }
+
+  .error-text {
+    font-size: 1.1rem;
+  }
+
+  .error-title {
+    top: 25%;
+  }
+
+  .logo {
+    height: 40px;
+  }
+
+  .login-button {
+    font-size: 0.8rem;
+    padding: 5px 10px;
+  }
+  .cat-image {
+    width: 250px;
+    margin: -110px auto 0rem;
+  }
+}
+  </style>
+</head>
+<body>
+
+  <nav class="navbar">
+    <a href="https://bokrium.com">
+      <img src="https://assets.bokrium.com/bokrium_logo.svg" alt="Bokrium Logo" class="logo">
+    </a>
+    <a href="https://bokrium.com/users/sign_in" class="login-button">ログイン</a>
+  </nav>
+
+  <div class="background">
+    <div class="error-title">
+      <div class="error-code">406</div>
+      <div class="error-text">Not Acceptable</div>
+    </div>
+  </div>
+
+  <img src="https://assets.bokrium.com/whale.png" alt="500 Error Cat" class="cat-image">
+
+  <div class="content">
+    <div class="error-message">
+      <div class="error-message">
+        <strong>ご利用のブラウザはサポートされていません。</strong><br>
+      ブラウザを最新のバージョンにアップデートしてください。
+      </div>
+      <br><a href="https://bokrium.com" class="back-link">トップページに戻る</a>
+    </div>
+  </div>
+
+</body>
+</html>
