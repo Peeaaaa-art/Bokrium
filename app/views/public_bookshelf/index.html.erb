@@ -1,7 +1,7 @@
 <% content_for :title, "みんなの本棚 - Bokrium" %>
 
 <div class="container text-center my-4">
-      <%= render "shared/search_bar", scope: "public", placeholder: "タイトル・著者",
+      <%= render "shared/filters/search_bar", scope: "public", placeholder: "タイトル・著者",
                                 form_class: "mb-md-5 mb-2 d-flex justify-content-center" %>
 
       <turbo-frame id="public_books_frame">

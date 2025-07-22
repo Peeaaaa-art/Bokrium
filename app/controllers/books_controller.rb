@@ -27,7 +27,19 @@ class BooksController < ApplicationController
     @card_columns        = presenter.card_columns
     @detail_card_columns = presenter.detail_card_columns
 
-    turbo_frame_request? ? render_chunk_for(@view_mode) : render(:index)
+    if turbo_frame_request?
+      case request.headers["Turbo-Frame"]
+      when "next_books"
+        render_chunk_for(@view_mode, turbo_frame_id: "next_books")
+      when "books_frame"
+        render :index
+      else
+        # fallback: safest default
+        render :index
+      end
+    else
+      render :index
+    end
   end
 
   def show
@@ -89,12 +101,14 @@ class BooksController < ApplicationController
 
   private
 
-  def render_chunk_for(view_mode)
+  def render_chunk_for(view_mode, turbo_frame_id: "books_frame")
     case view_mode
     when "shelf"
-      render partial: "bookshelf/kino_chunk", locals: { books: @books, books_per_shelf: @books_per_shelf, pagy: @pagy }
+      render partial: "bookshelf/kino_chunk",
+            locals: { books: @books, books_per_shelf: @books_per_shelf, pagy: @pagy, turbo_frame_id: turbo_frame_id }
     when "spine"
-      render partial: "bookshelf/spine_chunk", locals: { books: @books, spine_per_shelf: @spine_per_shelf, pagy: @pagy }
+      render partial: "bookshelf/spine_chunk",
+            locals: { books: @books, spine_per_shelf: @spine_per_shelf, pagy: @pagy, turbo_frame_id: turbo_frame_id }
     else
       render :index
     end

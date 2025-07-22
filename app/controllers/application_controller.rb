@@ -29,10 +29,15 @@ class ApplicationController < ActionController::Base
     browser.device.mobile?
   end
 
-  def books_index_path(view: nil, page: nil)
+  def books_index_path(view: nil, page: nil, tag: nil, tags: nil, sort: nil, status: nil, memo_visibility: nil)
     params = {}
     params[:view] = view if view.present?
     params[:page] = page if page.present?
+    params[:tag] = tag if tag.present?
+    params[:tags] = tags if tags.present?
+    params[:sort] = sort if sort.present?
+    params[:status] = status if status.present?
+    params[:memo_visibility] = memo_visibility if memo_visibility.present?
 
     if user_signed_in?
       if current_user.books.exists?

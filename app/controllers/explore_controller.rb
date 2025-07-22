@@ -2,10 +2,10 @@ class ExploreController < ApplicationController
   def index
     @has_books = Book.exists?(user_id: current_user&.id)
     @query = params[:q].to_s.strip
-    @scope = params[:scope].presence_in(%w[mine public]) || "public"
+    @scope = params[:scope].presence_in(%w[mine public guest]) || "public"
 
-
-    if @scope == "mine"
+    case @scope
+    when "mine"
       return redirect_to new_user_session_path unless user_signed_in?
 
       presenter = BooksIndexPresenter.new(
@@ -35,8 +35,35 @@ class ExploreController < ApplicationController
       books_per_page = (presenter.display.unit_per_page * 3).to_i
       @pagy, @books = pagy(books, items: books_per_page)
 
+    when "guest"
+      presenter = BooksIndexPresenter.new(
+        user: guest_user,
+        params: params,
+        session: session,
+        mobile: mobile?,
+        user_agent: request.user_agent
+      ).call
 
-    else
+      @view_mode           = presenter.view_mode
+      @books_per_shelf     = presenter.books_per_shelf
+      @card_columns        = presenter.card_columns
+      @detail_card_columns = presenter.detail_card_columns
+      @spine_per_shelf     = presenter.spine_per_shelf
+      @read_only           = true
+
+      books = guest_user.books.includes(book_cover_s3_attachment: :blob)
+      books = BooksQuery.new(books, params: params, current_user: guest_user).call
+
+      if @query.present?
+        title_author_ids = books.search_by_title_and_author(@query).pluck(:id)
+        memo_book_ids = guest_user.memos.search_by_content(@query).pluck(:book_id)
+        books = books.where(id: (title_author_ids + memo_book_ids).uniq)
+      end
+
+      books_per_page = (presenter.display.unit_per_page * 3).to_i
+      @pagy, @books = pagy(books, items: books_per_page)
+
+    else # public
       @results = search_public_memos(@query)
       @pagy, @memos = pagy(@results, items: 20)
     end
@@ -51,7 +78,8 @@ class ExploreController < ApplicationController
   private
 
   def turbo_render_partial!
-    if @scope == "mine"
+    case @scope
+    when "mine", "guest"
       render turbo_stream: turbo_stream.update(
         "books_frame",
         partial: "bookshelf/books_frame_wrapper",
@@ -65,7 +93,7 @@ class ExploreController < ApplicationController
           spine_per_shelf: @spine_per_shelf
         }
       )
-    else
+    when "public"
       render turbo_stream: turbo_stream.update(
         "public_books_frame",
         partial: "public_bookshelf/public_frame_wrapper",

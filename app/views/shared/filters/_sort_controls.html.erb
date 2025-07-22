@@ -1,0 +1,20 @@
+<div class="d-flex justify-content-center">
+  <div class="d-flex flex-wrap gap-2 px-3 py-2 bg-light-bok border rounded-pill shadow-sm align-items-center">
+
+    <%= link_to "新しい順", books_index_path(tag: filtered_tag, sort: "", view: view_mode),
+          class: "btn btn-outline-secondary btn-sm rounded-pill #{'active' if current_sort.blank?}" %>
+
+    <%= link_to "古い順", books_index_path(tag: filtered_tag, sort: "oldest", view: view_mode),
+          class: "btn btn-outline-secondary btn-sm rounded-pill #{'active' if current_sort == 'oldest'}" %>
+
+    <%= link_to "タイトル順", books_index_path(tag: filtered_tag, sort: "title_asc", view: view_mode),
+          class: "btn btn-outline-secondary btn-sm rounded-pill #{'active' if current_sort == 'title_asc'}" %>
+
+    <%= link_to "著者順", books_index_path(tag: filtered_tag, sort: "author_asc", view: view_mode),
+          class: "btn btn-outline-secondary btn-sm rounded-pill #{'active' if current_sort == 'author_asc'}" %>
+
+    <%= link_to "メモ更新順", books_index_path(tag: filtered_tag, sort: "latest_memo", view: view_mode),
+          class: "btn btn-outline-secondary btn-sm rounded-pill #{'active' if current_sort == 'latest_memo'}" %>
+
+  </div>
+</div>

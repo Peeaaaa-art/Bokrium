@@ -23,6 +23,11 @@ class BookAutocompleteService
           .where("title ILIKE :t OR author ILIKE :t", t: "%#{@term}%")
           .order(Arel.sql(sorting_case_sql))
           .limit(10)
+    when "guest"
+      @user.books
+          .where("title ILIKE :t OR author ILIKE :t", t: "%#{@term}%")
+          .order(Arel.sql(sorting_case_sql))
+          .limit(10)
     else
       []
     end

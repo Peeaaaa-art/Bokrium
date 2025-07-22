@@ -62,7 +62,7 @@ class Book < ApplicationRecord
                   against: [ :title, :author ],
                   using: {
                     tsearch: { prefix: true },
-                    trigram: { threshold: 0.03 }
+                    trigram: { threshold: 0.3 }
                   }
 
 

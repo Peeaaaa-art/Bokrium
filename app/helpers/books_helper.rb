@@ -35,7 +35,7 @@ module BooksHelper
       safe_join(
         book_info_items(book).map do |item|
           content_tag(:li) do
-            icon_tag = content_tag(:i, "", class: "bi #{item[:icon]} me-1")
+            icon_tag = bi_icon(item[:icon], css: "is-6 mb-1 me-1")
             value = sanitize(item[:value].to_s, tags: [], attributes: [])
             icon_tag + value
           end
@@ -46,11 +46,11 @@ module BooksHelper
 
   def book_info_items(book)
     [
-      { icon: "bi-person",            value: book.author },
-      { icon: "bi-building",          value: book.publisher },
-      { icon: "bi-upc",               value: book.isbn },
-      { icon: "bi-file-earmark-text", value: (book.page.present? ? "#{book.page} ページ" : nil) },
-      { icon: "bi-currency-yen",      value: (book.price.present? ? "#{book.price}円" : nil) }
+      { icon: "person",            value: book.author },
+      { icon: "building",          value: book.publisher },
+      { icon: "upc",               value: book.isbn },
+      { icon: "file-earmark-text", value: (book.page.present? ? "#{book.page} ページ" : nil) },
+      { icon: "currency-yen",      value: (book.price.present? ? "#{book.price}円" : nil) }
     ].compact.select { |item| item[:value].present? }
   end
 

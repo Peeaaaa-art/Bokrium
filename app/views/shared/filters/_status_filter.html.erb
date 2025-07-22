@@ -1,0 +1,34 @@
+<% current_status = params[:status] %>
+<% current_visibility = params[:memo_visibility] %>
+
+<div class="d-flex justify-content-center">
+  <div class="d-flex flex-wrap gap-2 px-3 py-2 bg-light-bok border rounded-pill shadow-sm align-items-center">
+    <% Book.statuses.each do |key, _| %>
+      <%= link_to t("books.status.#{key}"),
+                  books_index_path(status: key, tags: params[:tags], sort: params[:sort], memo_visibility: current_visibility, view: view_mode),
+                  class: "btn btn-sm rounded-pill #{'btn-primary-bok' if current_status == key.to_s} btn-outline-secondary",
+                  aria: (current_status == key.to_s ? { current: "true" } : {}) %>
+    <% end %>
+
+    <%= link_to "すべて",
+                books_index_path(status: "", tags: params[:tags], sort: params[:sort], memo_visibility: current_visibility, view: view_mode),
+                class: "btn btn-sm btn-outline-dark rounded-pill", aria: (current_status.nil? ? { current: "true" } : {}) %>
+  </div>
+</div>
+
+<div class="d-flex justify-content-center mt-2">
+  <div class="d-flex flex-wrap gap-2 px-3 py-2 bg-light-bok border rounded-pill shadow-sm align-items-center">
+    <% Memo::VISIBILITY.each do |key, _| %>
+      <% label = t("memos.visibility.#{key}", default: key.to_s.humanize) %>
+      <%= link_to label,
+                  books_index_path(memo_visibility: key, status: current_status, tags: params[:tags], sort: params[:sort], view: view_mode),
+                  class: "btn btn-sm rounded-pill #{'btn-success text-white' if current_visibility == key.to_s} btn-outline-secondary",
+                  aria: (current_visibility == key.to_s ? { current: "true" } : {}) %>
+    <% end %>
+
+    <%= link_to "すべて",
+                books_index_path(memo_visibility: "",status: current_status, tags: params[:tags], sort: params[:sort], view: view_mode),
+                class: "btn btn-sm btn-outline-dark rounded-pill",
+                aria: (current_visibility.nil? ? { current: "true" } : {}) %>
+  </div>
+</div>
