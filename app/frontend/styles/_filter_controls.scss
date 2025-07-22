@@ -50,11 +50,12 @@
   background: transparent;
   border: none;
   padding: 0.25rem;
+  line-height: 1;
   transition: transform 0.2s ease;
 
   &:hover .icon-refined {
-    transform: scale(1.15);
-    color: #343a40;
+    transform: scale(1.09);
+    color: #4e5a2e;
   }
 }
 

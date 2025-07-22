@@ -12,6 +12,7 @@
 @use "font";
 @use "footer";
 @use "header";
+@use "icon";
 @use "modals";
 @use "pagination";
 @use "shadows";
@@ -71,4 +72,9 @@ body {
 
 .mxw-160 {
   max-width: 160px;
+}
+
+.py-2-5 {
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
 }

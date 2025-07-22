@@ -56,3 +56,9 @@
 .bg-beige {
   background: #f9f9f9fc;
 }
+
+.tooltip {
+  --bs-tooltip-bg: #5578a8;
+  --bs-tooltip-color: #fff;
+  font-size: 0.875rem;
+}
