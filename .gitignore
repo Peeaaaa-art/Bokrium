@@ -47,8 +47,7 @@
 /elasticsearch
 /elasticsearch/*
 
-**/.DS_Store
-/assets/.DS_Store
+.DS_Store
 
 # Vite Ruby
 /public/vite*

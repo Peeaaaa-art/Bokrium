@@ -6,7 +6,13 @@ class PublicBookshelfController < ApplicationController
   end
 
   def show
-    @book = Book.find_by(id: params[:id])
-    @memos = @book.memos.publicly_listed.order(created_at: :desc)
+    @memo = Memo
+              .includes(:book, :user)
+              .find_by!(public_token: params[:token])
+
+    raise ActiveRecord::RecordNotFound unless @memo.shared?
+
+    @book = @memo.book
+    @user = @memo.user
   end
 end

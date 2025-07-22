@@ -8,7 +8,8 @@
   <div class="d-flex justify-content-center mb-5">
     <div class="subtle-shadow bg-light-bok rounded-3 px-4 py-3 d-flex justify-content-between align-items-center gap-3 w-100" style="max-width: 440px;">
       <label for="email_notification_enabled" class="fw-semibold fs-6 mb-0">
-        <i class="bi <%= current_user.email_notification_enabled? ? 'bi-envelope-fill' : 'bi-envelope-slash-fill' %>"></i>
+        <%= bi_icon(current_user.email_notification_enabled? ? "envelope-fill" : "envelope-slash-fill",
+        css: "is-5 #{current_user.email_notification_enabled? ? 'text-dark' : 'text-secondary'}") %>
         メール通知は今、<%= current_user.email_notification_enabled? ? "オン" : "オフ" %>になっています。
       </label>
       <%= form_with model: current_user, url: toggle_email_notifications_path, method: :patch, class: "m-0" do |f| %>

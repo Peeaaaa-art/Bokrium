@@ -1,5 +1,0 @@
-<div class="row row-cols-4 row-cols-md-5  mb-3 g-3" id="image-list">
-  <% book.images.each_with_index do |img, idx| %>
-    <%= render partial: "images/card", locals: { image: img, book: book, thumb: true, identifier: idx } %>
-  <% end %>
-</div>

@@ -1,0 +1,69 @@
+<!-- 🎯 中央：フィルターボタン群 -->
+<div class="mx-auto">
+  <div class="filter-controls border rounded-pill shadow-sm px-4 py-md-2 py-1 d-flex align-items-center gap-3">
+    <!-- 検索 -->
+    <button class="btn btn-icon" data-bs-toggle="collapse" data-bs-target="#searchCollapse" aria-expanded="false">
+      <%= bi_icon("search", css: "icon-refined is-5") %>
+    </button>
+
+    <!-- ソート -->
+    <button class="btn btn-icon" data-bs-toggle="collapse" data-bs-target="#sortCollapse" aria-expanded="false">
+      <%= bi_icon("arrow-down-up", css: "icon-refined is-5") %>
+    </button>
+
+    <!-- タグ -->
+    <button class="btn btn-icon" data-bs-toggle="collapse" data-bs-target="#tagCollapse" aria-expanded="false">
+      <%= bi_icon("tags", css: "icon-refined is-5") %>
+    </button>
+
+    <!-- ステータス -->
+    <button class="btn btn-icon" data-bs-toggle="collapse" data-bs-target="#statusCollapse" aria-expanded="false">
+      <%= bi_icon("journal-check", css: "icon-refined is-5") %>
+    </button>
+  </div>
+</div>
+
+<!-- クリアボタン -->
+<div class="flex-shrink-0">
+  <% clear_path = context == "guest" ? clear_filters_guest_books_path : clear_filters_books_path %>
+  <% if session.to_h.slice("sort", "status", "memo_visibility", "tags", "view").values.any?(&:present?) %>
+    <%= button_to clear_path,
+                  method: :delete,
+                  class: "btn btn-light border shadow-sm d-flex align-items-center justify-content-center bookshelf-icon",
+                  title: "クリア" do %>
+
+      <%= bi_icon("x-circle", css: "is-5 icon-refined bi-icon-hover") %>
+    <% end %>
+  <% else %>
+    <div class="btn btn-light border shadow-sm d-flex align-items-center justify-content-center bookshelf-icon invisible">
+      <i class="bi bi-x-circle fs-5 icon-refined"></i>
+    </div>
+  <% end %>
+</div>
+</div>
+
+<!-- 📦 下の行：トグルで展開される内容 -->
+<!-- 検索フォーム -->
+<div class="collapse mb-2" id="searchCollapse">
+  <%= render "shared/filters/search_bar", scope: context, placeholder: context == "guest" ? "タイトル・著者名で検索" : "本やメモを検索", view_mode: view_mode %>
+</div>
+
+<!-- ソート -->
+<div class="collapse mb-2" id="sortCollapse">
+  <%= render "shared/filters/sort_controls", filtered_tag: filtered_tag, current_sort: params[:sort], view_mode: view_mode %>
+</div>
+
+<!-- タグ -->
+<div class="collapse mb-2" id="tagCollapse"
+    data-controller="tag-toggle"
+    data-tag-toggle-selected-tags-value="<%= filtered_tags&.join(',') %>">
+  <turbo-frame id="tag_filter_frame"
+               src="<%= context == 'guest' ? filter_tags_guest_books_path : filter_books_tags_path %>">
+    読み込み中…
+  </turbo-frame>
+</div>
+
+<!-- ステータス -->
+<div class="collapse mb-2" id="statusCollapse">
+  <%= render "shared/filters/status_filter", current_status: filtered_status, view_mode: view_mode %>
+</div>

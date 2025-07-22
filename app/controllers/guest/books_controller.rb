@@ -24,7 +24,19 @@ module Guest
 
       @no_books = true
 
-      turbo_frame_request? ? render_chunk_for(@view_mode) : render(:index)
+      if turbo_frame_request?
+        case request.headers["Turbo-Frame"]
+        when "next_books"
+          render_chunk_for(@view_mode, turbo_frame_id: "next_books")
+        when "books_frame"
+          render :index
+        else
+          # fallback: safest default
+          render :index
+        end
+      else
+        render :index
+      end
     end
 
     def show
@@ -34,14 +46,21 @@ module Guest
       render "books/show"
     end
 
+    def clear_filters
+      %i[sort status memo_visibility tags view].each { |key| session.delete(key) }
+      redirect_to guest_books_path
+    end
+
     private
 
-    def render_chunk_for(view_mode)
+    def render_chunk_for(view_mode, turbo_frame_id: "books_frame")
       case view_mode
       when "shelf"
-        render partial: "guest/bookshelf/kino_chunk", locals: { books: @books, books_per_shelf: @books_per_shelf, pagy: @pagy }
+        render partial: "bookshelf/kino_chunk",
+              locals: { books: @books, books_per_shelf: @books_per_shelf, pagy: @pagy, turbo_frame_id: turbo_frame_id }
       when "spine"
-        render partial: "guest/bookshelf/spine_chunk", locals: { books: @books, spine_per_shelf: @spine_per_shelf, pagy: @pagy }
+        render partial: "bookshelf/spine_chunk",
+              locals: { books: @books, spine_per_shelf: @spine_per_shelf, pagy: @pagy, turbo_frame_id: turbo_frame_id }
       else
         render :index
       end

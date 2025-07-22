@@ -4,7 +4,7 @@
 
       <div class="modal-header">
         <h5 class="modal-title" id="settingsModalLabel">
-          <i class="bi bi-gear me-2"></i> 本の操作
+          <%= bi_icon("gear", css: "is-4  me-2") %> 本の操作
         </h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="閉じる" style="margin-top: -0.2rem;"></button>
       </div>
@@ -14,9 +14,9 @@
           <li class="modal-action-item">
             <%= link_to edit_book_path(book), class: "modal-action-button edit safari-fix-button" do %>
               <span>
-                <i class="bi bi-pencil-square me-2"></i> 編集する
+                <%= bi_icon("pencil-square", css: "is-6 me-2") %> 編集する
               </span>
-              <i class="bi bi-chevron-right small"></i>
+              <%= bi_icon("chevron-right", css: "is-7") %>
             <% end %>
           </li>
           <li class="modal-action-item">
@@ -26,9 +26,9 @@
               <%= hidden_field_tag :force_html, true %>
               <button type="submit" class="modal-action-button delete safari-fix-button safari-modal-action-button">
                 <span>
-                  <i class="bi bi-trash2 me-2"></i> 削除する
+                  <%= bi_icon("trash2", css: "is-6 me-2") %>削除する
                 </span>
-                <i class="bi bi-chevron-right small"></i>
+                <%= bi_icon("chevron-right", css: "is-7") %>
               </button>
             <% end %>
           </li>

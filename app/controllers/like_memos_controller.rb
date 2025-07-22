@@ -7,7 +7,7 @@ class LikeMemosController < ApplicationController
 
     respond_to do |format|
       format.turbo_stream
-      format.html { redirect_to shared_memo_path(@memo.public_token) }
+      format.html { redirect_to public_bookshelf_path(@memo.public_token) }
     end
   end
 
@@ -17,13 +17,13 @@ class LikeMemosController < ApplicationController
 
     respond_to do |format|
       format.turbo_stream
-      format.html { redirect_to shared_memo_path(@memo.public_token) }
+      format.html { redirect_to public_bookshelf_path(@memo.public_token) }
     end
   end
 
   private
 
   def set_memo
-    @memo = Memo.find_by!(public_token: params[:shared_memo_token])
+    @memo = Memo.find_by!(public_token: params[:public_bookshelf_token])
   end
 end

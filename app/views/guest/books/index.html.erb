@@ -8,34 +8,13 @@
     <%= render "shared/bookshelf_view_switcher", view_mode: @view_mode %>
   </div>
 
-    <div class="mx-auto">
-      <div class="filter-controls border rounded-pill shadow-sm px-4 py-md-1 d-flex align-items-center gap-3"
-      style="pointer-events: none; opacity: 0.7;">
-
-        <!-- 検索 -->
-        <button class="btn btn-icon" disabled>
-          <i class="bi bi-search icon-refined"></i>
-        </button>
-
-        <!-- ソート -->
-        <button class="btn btn-icon" disabled>
-          <i class="bi bi-arrow-down-up icon-refined"></i>
-        </button>
-
-        <!-- タグ -->
-        <button class="btn btn-icon" disabled>
-          <i class="bi bi-tags icon-refined"></i>
-        </button>
-
-        <!-- ステータス -->
-        <button class="btn btn-icon" disabled>
-          <i class="bi bi-journal-check icon-refined"></i>
-        </button>
-      </div>
-    </div>
-    <!-- ➡ 右側スペース（空でOK）-->
-  <div class="flex-shrink-0 d-none-sm" style="width: 48px;"></div> <!-- サイズ合わせ用 -->
-</div>
+  <%= render "shared/filter_controls",
+              context: user_signed_in? ? "mine" : "guest",
+              filtered_tag: @filtered_tag,
+              filtered_tags: @filtered_tags,
+              filtered_status: @filtered_status,
+              view_mode: @view_mode
+  %>
 
 <%= render "guest/bookshelf/books_frame_wrapper",
             books: @books,

@@ -17,10 +17,11 @@
     </div>
 
     <!-- 💬 出力メッセージ -->
-    <p class="mt-3 fs-5 text-muted" data-barcode-target="output">
-      <i class="bi bi-upc-scan me-1 text-primary"></i>
-      バーコードをスキャンして本を検索<br>※ 連続して読み取れます<br>
-    </p>
+    <div class="mt-3 small text-muted" data-barcode-target="output">
+      <%= bi_icon("upc-scan", css: "is-5  me-1 text-primary") %>
+      バーコードをスキャンして本を検索
+      <p>※ 連続して読み取れます</p>
+    </div>
 
     <!-- 📚 検索結果の表示エリア -->
     <turbo-frame id="scanned-books" class="w-100 mt-2 px-3" style="max-width: 720px;">

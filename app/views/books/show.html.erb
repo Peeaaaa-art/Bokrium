@@ -1,4 +1,5 @@
 <% content_for :title, "読書メモ - Bokrium" %>
+
 <%= bookshelf_sample_notice %>
 <%= empty_bookshelf_notice %>
 
@@ -42,8 +43,8 @@
       <div class="d-flex flex-row align-items-center justify-content-between  filter-controls border rounded-pill shadow-sm px-3 mt-5"
             style="<%= 'pointer-events: none; opacity: 0.6;' if @read_only %>">
         <!-- タグ -->
-        <button class="btn btn-sm text-white" data-bs-toggle="modal" data-bs-target="#tagSelectModal">
-            <i class="bi bi-tags fs-5 icon-refined"></i>
+        <button class="btn btn-sm btn-icon text-white" data-bs-toggle="modal" data-bs-target="#tagSelectModal">
+          <%= bi_icon("tags", css: "is-5 icon-refined") %>
         </button>
         <% content_for :modals do %>
           <%= render "tags/tag_modals", book: @book, user_tags: @user_tags %>
@@ -56,12 +57,12 @@
                   data: { image_upload_target: "fileInput",
                           action: "change->image-upload#triggerUpload" },
                   id: "customFileInputSm" %>
-            <label for="customFileInputSm" class="btn btn-sm text-white mb-0"><i class="bi bi-camera icon-refined fs-5"></i></label>
+            <label for="customFileInputSm" class="btn btn-sm btn-icon text-white mb-0"><%= bi_icon("camera", css: "is-5 icon-refined") %></label>
           <% end %>
         </div>
         <!-- アクション：ギアボタン -->
-        <button class="btn btn-sm text-white" type="button" data-bs-toggle="modal" data-bs-target="#settingsModal" style="cursor: pointer;">
-          <i class="bi bi-gear fs-5 icon-refined"></i>
+        <button class="btn btn-sm btn-icon text-white" type="button" data-bs-toggle="modal" data-bs-target="#settingsModal" style="cursor: pointer;">
+          <%= bi_icon("gear", css: "is-5 icon-refined") %>
         </button>
         <% content_for :modals do %>
           <%= render "books/modal_edit_destroy", book: @book %>
@@ -111,7 +112,7 @@
           memo_modal_memo_id_value: "new",
           memo_modal_book_id_value: @book.id
         } do %>
-          <i class="bi bi-pen"></i> もっと書く
+          <%= bi_icon("pen", css: "is-6") %> もっと書く
         <% end %>
         <%= button_tag "戻る", type: "button",
         class: "btn btn-outline-secondary",

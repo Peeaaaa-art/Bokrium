@@ -1,9 +1,9 @@
 <% views = [
-  { key: "shelf", icon: "bi-bookshelf", title: "棚ビューに切り替え" },
-  { key: "spine", icon: "bi-layout-three-columns", title: "背表紙ビューに切り替え" },
-  { key: "card", icon: "bi-file", title: "カードビューに切り替え" },
-  { key: "detail_card", icon: "bi bi-layout-sidebar-inset", title: "詳細カードビューに切り替え" },
-  { key: "b_note", icon: "bi-table", title: "B-noteビューに切り替え" }
+  { key: "shelf", icon: "bookshelf", title: "棚ビューに切り替え" },
+  { key: "spine", icon: "layout-three-columns", title: "背表紙ビューに切り替え" },
+  { key: "card", icon: "file", title: "カードビューに切り替え" },
+  { key: "detail_card", icon: "layout-sidebar-inset", title: "詳細カードビューに切り替え" },
+  { key: "b_note", icon: "table", title: "B-noteビューに切り替え" }
 ] %>
 
 <% current_index = views.index { |v| v[:key] == view_mode } || 0 %>
@@ -12,7 +12,7 @@
 
 <%= button_to view_mode_path(view: next_view[:key]),
               method: :patch,
-              class: "btn btn-light border shadow-sm d-flex align-items-center justify-content-center bookshelf-icon",
+              class: "btn btn-light btn-icon border shadow-sm d-flex align-items-center justify-content-center bookshelf-icon",
               title: next_view[:title] do %>
-  <i class="bi <%= current_icon %> fs-5 icon-refined"></i>
+  <%= bi_icon(current_icon, css: "is-5 icon-refined" ) %>
 <% end %>

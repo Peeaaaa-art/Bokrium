@@ -2,14 +2,14 @@
   <div class="container-fluid position-relative">
     <!-- 右上ヘルプ -->
     <div class="position-absolute" style="top: 0.7rem; right: 1rem;">
-      <%= link_to guest_starter_books_path, title: "はじめてガイド" do %>
-        <i class="bi bi-question-circle fs-4 text-dark"></i>
+      <%= link_to guest_starter_books_path, class: "btn",title: "はじめてガイド" do %>
+        <%= bi_icon("question-circle", css: "is-4 text-dark bi-icon-hover") %>
       <% end %>
     </div>
     <!-- 左上GitHub -->
     <div class="position-absolute" style="top: 0.7rem; left: 1rem;">
-      <%= link_to "https://github.com/Peeaaaa-art/Bokrium", title: "GitHub", class: "github-link", target: "_blank", rel: "noopener" do %>
-        <i class="bi bi-github fs-4 text-dark"></i>
+      <%= link_to "https://github.com/Peeaaaa-art/Bokrium", title: "GitHub", class: "btn", target: "_blank", rel: "noopener" do %>
+        <%= bi_icon("github", css: "is-4 text-dark bi-icon-hover") %>
       <% end %>
     </div>
 

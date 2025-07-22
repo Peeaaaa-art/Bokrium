@@ -1,0 +1,104 @@
+.ProseMirror {
+  min-height: 30dvh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  line-height: 1.4;
+  margin: 0;
+  outline: none;
+  border: none;
+  background: transparent;
+  padding: 0.5rem 0.55rem;
+}
+
+@media (max-width: 576px) {
+  .ProseMirror.editing {
+    max-height: 50dvh !important;
+    overflow-y: auto;
+  }
+}
+
+@media (min-width: 1200px) {
+  .ProseMirror.editing {
+    max-height: 80dvh !important;
+    overflow-y: auto;
+  }
+
+  .ProseMirror {
+    padding: 1.2rem 1.5rem;
+  }
+}
+
+.h6, h5, .h5, h4, .h4, h3, .h3, h2, .h2, h1, .h1 {
+    margin-top: 1rem;
+}
+
+em {
+  margin-right: 0.2em;
+}
+
+.ProseMirror p {
+  margin-bottom: 0.2em;
+  line-height: 1.5;
+}
+
+.ProseMirror p:empty::before {
+  content: "\00a0"; /* &nbsp; を挿入 */
+}
+
+.ProseMirror p.is-empty::before {
+  content: attr(data-placeholder);
+  color: #aaa;
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
+.ProseMirror blockquote {
+  border-left: 4px solid #ccc;
+  margin: 1em 0;
+  padding: 0.8em 1em;
+  background-color: #f9f9f9;
+  color: #555;
+  line-height: 1.6;
+}
+
+.ProseMirror blockquote p {
+  margin: 0.5em 0;
+}
+
+.ProseMirror:focus {
+  outline: none;
+}
+
+br:not([class]) {
+  display: none;
+}
+
+.rhodia-grid-bg {
+  background:
+    linear-gradient(rgba(254, 254, 254, 0.98), rgba(253, 252, 254, 0.88));
+}
+
+.rich-editor-root {
+  position: relative;
+  height: auto;
+  overscroll-behavior: contain; /* iOS スクロールバグ対策 */
+}
+
+.memo-body {
+  max-height: 30vh;
+  overflow-y: auto;
+  transition: max-height 0.3s ease;
+}
+
+.memo-body.expanded {
+  max-height: none;
+}
+
+.modal-body {
+  padding: 0 !important;
+}
+
+.date-and-count {
+  border: 0.25px solid #e7a81543;
+}

@@ -8,7 +8,7 @@ class Books::TagsController < ApplicationController
   end
 
   def filter
-    render partial: "books/tag_filter", locals: {
+    render partial: "shared/filters/tag_filter", locals: {
       user_tags: current_user.user_tags.order(:id),
       filtered_tags: []
     }

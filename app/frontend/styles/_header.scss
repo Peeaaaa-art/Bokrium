@@ -1,0 +1,53 @@
+.navbar img,
+.navbar .rounded-circle {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.navbar img:hover,
+.navbar .rounded-circle:hover {
+  transform: scale(1.08);
+
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.15);
+}
+/* 汎用ナビアイコン（ロゴを除く） */
+.navbar svg:not(.logo-icon),
+.navbar .is-5 {
+  transition: transform 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+  color: #071b3f;
+}
+
+.navbar svg:not(.logo-icon):hover,
+.navbar .is-5:hover {
+  transform: translateY(-1px) scale(1.09);
+  color: #3d6bb6;
+}
+
+.navbar svg.active,
+.navbar a.active svg,
+.navbar a.active .is-5 {
+  color: #3d6bb6;
+}
+
+.bokrium-logo {
+  width: auto;
+  height: 52px;
+
+  #book-path {
+    transition: transform 0.4s ease, fill 0.4s ease;
+    transform-origin: center center;
+    fill: #1E3156;
+  }
+
+  &:hover #book-path {
+    transform: translateY(-1px) scale(1.05);
+    fill: #4472bb;
+  }
+
+  a.active & #book-path {
+    fill: #4472bb;
+  }
+
+  #bok-path{
+    fill: #071b3f;
+  }
+}

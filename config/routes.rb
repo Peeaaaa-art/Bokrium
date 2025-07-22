@@ -60,18 +60,22 @@ Rails.application.routes.draw do
 
   resources :user_tags, only: [ :create, :update, :destroy ]
 
-  resources :shared_memos, only: [ :show ], param: :token do
+  resources :public_bookshelf, only: [ :index, :show ], param: :token do
     resource :like_memo, only: [ :create, :destroy ]
   end
-
-  resources :public_bookshelf, only: [ :index, :show ]
 
   get "/explore", to: "explore#index", as: :explore
 
   root "welcome#index"
 
   namespace :guest do
-    resources :books, only: [ :index, :show ]
+    resources :books, only: [ :index, :show ] do
+      collection do
+        delete :clear_filters
+        get :filter_tags, to: "books/tags#filter"
+        get :autocomplete, to: "books/autocompletes#index"
+      end
+    end
     resources :starter_books, only: [ :index, :show ] do
       collection do
         get :five_layouts

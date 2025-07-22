@@ -12,10 +12,22 @@ class BookAutocompleteService
 
     books = case @scope
     when "mine"
-      @user.books.where("title ILIKE :t OR author ILIKE :t", t: "%#{@term}%").distinct.limit(10)
+      @user.books
+          .where("title ILIKE :t OR author ILIKE :t", t: "%#{@term}%")
+          .order(Arel.sql(sorting_case_sql))
+          .limit(10)
     when "public"
       public_book_ids = Memo.where(visibility: Memo::VISIBILITY[:public_site]).distinct.pluck(:book_id)
-      Book.where(id: public_book_ids).where("title ILIKE :t OR author ILIKE :t", t: "%#{@term}%").limit(10)
+
+      Book.where(id: public_book_ids)
+          .where("title ILIKE :t OR author ILIKE :t", t: "%#{@term}%")
+          .order(Arel.sql(sorting_case_sql))
+          .limit(10)
+    when "guest"
+      @user.books
+          .where("title ILIKE :t OR author ILIKE :t", t: "%#{@term}%")
+          .order(Arel.sql(sorting_case_sql))
+          .limit(10)
     else
       []
     end
@@ -26,5 +38,21 @@ class BookAutocompleteService
         label: "#{book.title}（#{book.author.presence || ''}）"
       }
     end
+  end
+
+  private
+
+  def sorting_case_sql
+    term = ActiveRecord::Base.connection.quote_string(@term)
+    <<~SQL.squish
+      CASE
+        WHEN title ILIKE '#{term}%' THEN 0
+        WHEN author ILIKE '#{term}%' THEN 1
+        WHEN title ILIKE '%#{term}%' THEN 2
+        WHEN author ILIKE '%#{term}%' THEN 3
+        ELSE 4
+      END,
+      title ASC
+    SQL
   end
 end

@@ -60,7 +60,7 @@ class Memo < ApplicationRecord
 
   def public_url
     return nil unless public_token.present?
-    Rails.application.routes.url_helpers.shared_memo_url(public_token, host: default_host)
+    Rails.application.routes.url_helpers.public_bookshelf_url(public_token, host: default_host)
   end
 
   def default_host
