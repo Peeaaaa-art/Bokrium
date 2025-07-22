@@ -43,7 +43,7 @@ gem "rack-rewrite"
 
 gem "browser"
 
-gem "aws-sdk-s3", "~> 1.193", require: false
+gem "aws-sdk-s3", "~> 1.194", require: false
 
 gem "rakuten_web_service"
 
