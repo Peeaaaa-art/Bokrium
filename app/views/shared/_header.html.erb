@@ -4,23 +4,26 @@
 
     <!-- 左：ロゴ -->
     <%= link_to root_path, class: "navbar-brand rounded #{current_page?(root_path) ? 'active' : ''}", style: "letter-spacing: 0.03em;", title: "ホーム" do %>
-      <%= raw File.read(Rails.root.join("app/assets/images/bokrium_logo.svg")) %>
+      <%= bi_icon("bokrium_logo", css: "logo-icon") %>
     <% end %>
 
     <!-- 中央：ナビアイコン -->
     <div class="d-flex align-items-center justify-content-evenly flex-grow-1" style="max-width: 360px;">
       <% icons = [
-        { path: search_books_path, icon: "search", title: "書籍検索", active: current_path.starts_with?('/search') },
+        { path: search_books_path, icon: "search_header", title: "書籍検索", active: current_path.starts_with?('/search') },
         { path: books_index_path, icon: "library-big", title: (user_signed_in? && current_user.books.exists? ? "本棚" : "サンプル本棚"), active: books_index_active_class.present? },
         { path: public_bookshelf_index_path, icon: "users", title: "みんなの読書メモ", active: current_path.starts_with?('/public_bookshelf') }
       ] %>
 
       <% icons.each do |item| %>
-        <%= link_to item[:path], class: "text-dark #{item[:active] ? 'active' : ''}", title: item[:title] do %>
-          <div class="d-flex align-items-center justify-content-center" style="width: 44px; height: 44px;">
-            <i data-lucide="<%= item[:icon] %>" style="width: 24px; height: 24px; display: block;"></i>
-          </div>
-        <% end %>
+<%= link_to item[:path],
+            class: "text-dark #{item[:active] ? 'active' : ''}",
+            title: item[:title],
+            data: { bs_toggle: "tooltip", bs_placement: "bottom" } do %>
+  <div class="d-flex align-items-center justify-content-center" style="width: 44px; height: 44px;">
+    <%= bi_icon(item[:icon], css: "", style: "width: 24px; height: 24px; display: block;") %>
+  </div>
+<% end %>
       <% end %>
     </div>
 

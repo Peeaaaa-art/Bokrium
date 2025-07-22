@@ -2,16 +2,19 @@
   <div style="max-width: 800px; width: 100%;">
     <div class="row g-4">
       <div class="col-8">
-        <%= link_to search_barcode_path, class: "btn filter-controls border shadow-sm rounded-4 py-4 w-100 d-flex flex-column justify-content-center align-items-center", style: "min-height: 140px;" do %>
-          <i class="bi bi-upc-scan display-5 mb-1 text-primary-bok"></i>
-          <span class="text-muted small">スキャン</span>
+        <%= link_to search_barcode_path,
+              class: "btn filter-controls border shadow-sm rounded-4 py-4 w-100 d-flex flex-column justify-content-center align-items-center",
+              style: "min-height: 100px;", data: { bs_toggle: "tooltip", bs_placement: "top" }, title: "バーコードスキャン" do %>
+          <%= bi_icon("upc-scan", css: "is-2 mb-2 text-primary-bok bi-icon-hover") %>
         <% end %>
       </div>
 
       <div class="col-4">
-        <%= link_to new_book_path, class: "btn filter-controls border shadow-sm rounded-4 py-4 w-100 d-flex flex-column justify-content-center align-items-center", style: "min-height: 140px;" do %>
-          <i class="bi bi-journal-plus display-5 mb-1 text-success"></i>
-          <span class="text-muted small">入力</span>
+        <%= link_to new_book_path,
+                class: "btn filter-controls border shadow-sm rounded-4 py-4 w-100 d-flex flex-column justify-content-center align-items-center",
+                style: "min-height: 100px;", data: { bs_toggle: "tooltip", bs_placement: "top" }, title: "手動入力" do %>
+
+          <%= bi_icon("journal-plus", css: "is-2 mb-2 text-success bi-icon-hover") %>
         <% end %>
       </div>
     </div>

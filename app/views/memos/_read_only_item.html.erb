@@ -12,20 +12,22 @@
   data-memo-modal-updated-date-value="<%= memo.updated_at&.strftime('%F') %>"
   style="overflow: visible; z-index: 1;"
 >
-  <!-- トグルボタン -->
-  <button
-    class="btn btn-sm bg-trasperant position-absolute top-0 start-0 m-2"
-    data-action="click->memo-modal#toggle click->memo-modal#stop"
-    aria-label="表示切り替え"
-  >
-    <i class="bi bi-arrows-angle-expand" data-memo-modal-target="icon"></i>
-  </button>
+
 
   <!-- ドロップダウン（右上） -->
   <% unless memo.new_record? %>
+    <!-- 拡大・縮小 -->
+    <button
+      class="btn btn-sm bg-trasperant position-absolute top-0 start-0 m-2"
+      data-action="click->memo-modal#toggle click->memo-modal#stop"
+      aria-label="表示切り替え"
+    >
+      <%= bi_icon("arrows-angle-expand", css: "is-7 bi-icon-hover", data: { memo_modal_target: "icon" }) %>
+    </button>
+    <!-- トグルボタン -->
     <div class="dropdown position-absolute top-0 end-0 m-2" data-action="click->memo-modal#stop">
       <button class="btn btn-sm bg-transperent" data-bs-toggle="dropdown" aria-expanded="false">
-        <i class="bi bi-three-dots"></i>
+        <%= bi_icon("three-dots", css: "is-7 bi-icon-hover") %>
       </button>
       <ul class="dropdown-menu dropdown-menu-end">
         <!-- 公開/非公開トグル -->
@@ -50,7 +52,7 @@
               class="dropdown-item"
               onclick="navigator.clipboard.writeText('<%= memo.public_url %>'); alert('共有URLをコピーしました');"
             >
-              <i class="bi bi-clipboard me-1"></i> 共有URLをコピー
+            <%= bi_icon("clipboard", css: "is-6 me-1") %> 共有URLをコピー
             </button>
           </li>
         <% end %>
@@ -65,7 +67,7 @@
                         },
                         form: { data: { turbo_stream: true } },
                         class: "dropdown-item text-danger" do %>
-            <i class="bi bi-trash me-1"></i> メモを削除する
+            <%= bi_icon("trash", css: "is-6 me-1") %> メモを削除する
           <% end %>
         </li>
       </ul>
@@ -73,10 +75,10 @@
   <% end %>
 
   <!-- ヘッダー -->
-  <div class="card-header bg-rhodia-orange d-flex justify-content-center py-2">
-    <i class="bi bi-cloud-fog2-fill"></i>
-    <i class="bi bi-cloud-haze2"></i>
-    <i class="bi bi-cloud-fog2-fill"></i>
+  <div class="card-header bg-rhodia-orange d-flex justify-content-center py-2-5">
+    <%= bi_icon("cloud-fog2-fill", css: "is-6") %>
+    <%= bi_icon("cloud-haze2", css: "is-6") %>
+    <%= bi_icon("cloud-fog2-fill", css: "is-6") %>
   </div>
 
 <!-- 本文 -->
@@ -99,18 +101,21 @@
   <!-- ステータスアイコン -->
   <% if current_user == memo.user && memo.like_memos.present? %>
     <span class="small d-inline-flex align-items-center ms-2">
-      <i class="bi bi-heart-fill text-danger me-1"></i>
+      <%= bi_icon("heart-fill ", css: "is-5 text-danger me-1") %>
       <span class="text-muted opacity-75"><%= memo.like_memos.count %></span>
     </span>
   <% end %>
+
   <% if memo.persisted? %>
     <div class="position-absolute bottom-0 end-0 m-2" style="z-index: 2;">
       <% if memo.visibility?(:public_site) %>
-        <span><i class="bi bi-globe text-primary"></i> </span>
+        <%= bi_icon("globe", css: "is-6 text-primary") %>
+
       <% elsif memo.visibility?(:link_only) %>
-        <span><i class="bi bi-link-45deg text-secondary"></i></span>
+        <%= bi_icon("link-45deg", css: "is-5 text-secondary") %>
+
       <% else %>
-        <span><i class="bi bi-lock-fill"></i></span>
+        <%= bi_icon("lock-fill", css: "is-6 text-dark") %>
       <% end %>
     </div>
   <% end %>

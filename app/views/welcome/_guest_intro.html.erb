@@ -21,7 +21,7 @@
       <li class="slide-in delay-<%= i + 1 %> col">
         <div class="p-4 h-100 d-flex flex-column align-items-center justify-content-start bg-beige shadow-sm rounded-4">
           <div class="mb-3 fs-1 text-success">
-            <i class="bi bi-<%= feature[:icon] %>"></i>
+            <%= bi_icon(feature[:icon], css: "is-1") %>
           </div>
           <div class="fw-bold text-primary-bok mb-2 fs-5">
             <%= feature[:title] %>
@@ -53,7 +53,7 @@
       <% buttons.each_with_index do |btn, i| %>
         <% classes = "slide-in delay-#{i + 3} btn btn-sm #{btn[:class]} d-flex align-items-center gap-2 fs-6 px-3 py-2 rounded-pill shadow-sm hover-scale" %>
         <%= link_to btn[:path], class: classes do %>
-          <i data-lucide="<%= btn[:icon] %>" style="width: 18px; height: 18px;"></i>
+          <%= bi_icon(btn[:icon], css: "is-5") %>
           <%= btn[:text] %>
         <% end %>
       <% end %>

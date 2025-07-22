@@ -4,7 +4,7 @@
                 data: { turbo_confirm: "この画像を削除しますか？" },
                 class: "btn btn-sm d-flex align-items-center justify-content-center mx-auto mt-2",
                 title: "画像を削除" do %>
-    <i class="bi bi-trash2"></i>
+    <%= bi_icon("trash2", css: "is-7") %>
   <% end %>
 
   <% image_src = thumb ? image.image_s3.variant(resize_to_fill: [200, 200]) : image.image_s3 %>

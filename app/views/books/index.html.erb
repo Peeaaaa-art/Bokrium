@@ -7,7 +7,8 @@
     <%= render "shared/bookshelf_view_switcher", view_mode: @view_mode %>
   </div>
 
-  <%= render "books/filter_controls",
+  <%= render "shared/filter_controls",
+              context: user_signed_in? ? "mine" : "guest",
               filtered_tag: @filtered_tag,
               filtered_tags: @filtered_tags,
               filtered_status: @filtered_status,

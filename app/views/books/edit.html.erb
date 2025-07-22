@@ -4,7 +4,7 @@
     <div class="col-md-8">
       <div class="card shadow">
         <div class="card-header bg-rhodia-orange d-flex justify-content-center py-2">
-          <i data-lucide="book-open-text" style="width: 20px; height: 20px;"></i>
+          <%= bi_icon("book-open-text", css: "is-4 text-dark") %>
         </div>
         <div class="card-body">
           <%= render 'books/form', book: @book %>

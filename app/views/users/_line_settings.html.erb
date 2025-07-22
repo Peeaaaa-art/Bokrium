@@ -55,6 +55,10 @@
       <div class="subtle-shadow bg-light-bok rounded-3 px-4 py-3 d-flex justify-content-between align-items-center gap-3 w-100" style="max-width: 440px;">
         <label for="notifications_enabled" class="fw-semibold fs-6 mb-0">
           <i class="bi <%= line_user.notifications_enabled? ? 'bi-bell-fill text-success' : 'bi-bell-slash-fill text-secondary' %>"></i>
+          <%= bi_icon(
+              line_user.notifications_enabled? ? "bell-fill" : "bell-slash-fill",
+              css: "is-5 #{line_user.notifications_enabled? ? 'text-success' : 'text-secondary'}"
+          ) %>
           通知は今、<%= line_user.notifications_enabled? ? "オン" : "オフ" %>になっています。
         </label>
         <%= form_with model: line_user, url: toggle_notifications_path, method: :patch, class: "m-0" do |f| %>

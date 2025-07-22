@@ -10,9 +10,9 @@
 
           <!-- アイコン：中央上部 -->
           <div class="card-header d-flex justify-content-center bg-rhodia-orange py-3">
-            <i class="bi bi-cloud-fog2-fill"></i>
-            <i class="bi bi-cloud-haze2"></i>
-            <i class="bi bi-cloud-fog2-fill"></i>
+            <%= bi_icon("cloud-fog2-fill", css: "is-6") %>
+            <%= bi_icon("cloud-haze2", css: "is-6") %>
+            <%= bi_icon("cloud-fog2-fill", css: "is-6") %>
           </div>
 
           <!-- Reactコンポーネント -->
@@ -32,14 +32,14 @@
           <% style = "width: 40px; height: 40px;" %>
           <% style += " opacity: 0.5; pointer-events: none;" if @read_only || @starter_book %>
 
-          <div class="save-button-wrapper position-absolute end-0 top-0 p-2">
+          <div class="save-button-wrapper position-absolute end-0 top-0 py-1 pe-2">
             <%= button_tag type: "submit",
                     class: "btn btn-primary-bok rounded-circle d-flex align-items-center justify-content-center shadow-sm safari-modal-action-button",
                     title: "保存",
                     data: { action: "click->memo-modal#forceSubmit" },
                     style: style,
                     disabled: @read_only || @starter_book do %>
-              <i class="bi bi-floppy-fill"></i>
+              <%= bi_icon("floppy-fill", css: "is-6 bi-icon-hover") %>
             <% end %>
           </div>
 
@@ -58,15 +58,15 @@
         <div class="d-flex justify-content-center gap-3 flex-wrap">
           <button class="btn btn-outline-secondary rounded-pill px-4 shadow-sm"
                   data-action="click->confirm-modal#cancel touchend->confirm-modal#cancel">
-            <i class="bi bi-x-circle me-1"></i> キャンセル
+            <%= bi_icon("x-circle", css: "is-6 me-1 bi-icon-hover") %> キャンセル
           </button>
           <button class="btn btn-primary rounded-pill px-4 shadow-sm"
                   data-action="click->confirm-modal#save touchend->confirm-modal#save">
-            <i class="bi bi-floppy-fill"></i> 保存
+            <%= bi_icon("floppy-fill", css: "is-6 me-1 bi-icon-hover") %> 保存
           </button>
           <button class="btn btn-danger rounded-pill px-4 shadow-sm"
                   data-action="click->confirm-modal#discard touchend->confirm-modal#discard">
-            <i class="bi bi-trash me-1"></i> 破棄
+            <%= bi_icon("trash", css: "is-6 me-1 bi-icon-hover") %> 破棄
           </button>
         </div>
       </div>

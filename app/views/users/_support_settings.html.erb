@@ -6,12 +6,12 @@
     <div class="mb-2">
       <% if support&.subscription_status == "canceled" %>
         <div class="btn btn-outline-secondary shadow-sm d-inline-flex align-items-center gap-2 px-4 py-1 rounded-pill">
-          <i class="bi bi-heart-fill fs-5" style="color: red;"></i>
+          <%= bi_icon("heart-fill", css: "is-5 text-danger") %>
           <span>ご支援ありがとうございました！</span>
         </div>
       <% else %>
-        <div class="btn btn-warning shadow-sm d-inline-flex align-items-center gap-2 px-4 py-1 rounded-pill disabled">
-          <i class="bi bi-heart-fill fs-5" style="color: red;"></i>
+        <div class="btn btn-warning shadow-sm d-inline-flex align-items-center gap-2 px-4 py-1 rounded-pill">
+          <%= bi_icon("heart-fill", css: "is-5 text-danger") %>
           <span>ご支援ありがとうございます！</span>
         </div>
       <% end %>

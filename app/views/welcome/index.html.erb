@@ -1,5 +1,4 @@
 <div class="container text-center py-3" data-controller="animation">
-
   <!-- ウェルカムページ -->
   <% if !current_user || !@memo_exists %>
     <%= render "welcome/guest_intro" %>
@@ -14,8 +13,7 @@
 <!-- 使い方ガイドへのリンク -->
 <div class="text-center my-5">
   <%= link_to guest_starter_books_path, class: "btn btn-outline-dark shadow-sm d-inline-flex align-items-center gap-2 px-4 py-1 rounded-pill" do %>
-    <i class="bi bi-question-circle-fill fs-5"></i>
+    <%= bi_icon("question-circle-fill", css: "is-5") %>
     <span class="fw-semibold" style="letter-spacing: 0.03em;">使い方ガイド</span>
   <% end %>
 </div>
-
