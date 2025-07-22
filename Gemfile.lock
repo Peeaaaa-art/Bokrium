@@ -449,7 +449,7 @@ GEM
     uri (1.0.3)
     useragent (0.16.11)
     version_gem (1.1.8)
-    view_component (4.0.0.rc2)
+    view_component (4.0.0.rc4)
       activesupport (>= 7.1.0, < 8.1)
       concurrent-ruby (~> 1)
     vite_rails (3.0.19)
@@ -535,7 +535,7 @@ DEPENDENCIES
   thruster
   turbo-rails
   tzinfo-data
-  view_component (= 4.0.0.rc2)
+  view_component (= 4.0.0.rc4)
   vite_rails
   web-console
   webmock
