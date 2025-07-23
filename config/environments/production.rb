@@ -3,8 +3,8 @@ require "active_support/core_ext/integer/time"
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
   config.middleware.insert_before(0, Rack::Rewrite) do
-    r301 %r{.*}, 'https://bokrium.com$&', if: Proc.new { |rack_env|
-      rack_env['HTTP_HOST'] == 'bokrium.fly.dev'
+    r301 %r{.*}, "https://bokrium.com$&", if: Proc.new { |rack_env|
+      rack_env["HTTP_HOST"] == "bokrium.fly.dev"
     }
   end
 
