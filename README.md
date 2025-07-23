@@ -15,6 +15,7 @@
 - 同じ本をうっかり重複して買ってしまう  
 - 自分の蔵書を整理して把握したい  
 - 読書メモや気づきをあとで見返したい
+- スマホに本のスクリーンショット画像が溜まってしまう
 
 
 ## 🛠 開発の背景
@@ -33,12 +34,17 @@ Bokriumは、そのための場です。知識を、思い出しやすく、取�
 
 ## ✨ アプリ機能紹介
 
-- [📧 ユーザー登録](#-ユーザー登録)
-- [🤳📚 書籍登録（バーコード・キーワード）](#-書籍登録)
-- [📚👀 本棚レイアウト切り替え](#-本棚)
-- [🔍 快適な検索と閲覧体験](#快適な検索と閲覧体験)
-- [📝 読書メモ・画像・タグの記録](#-メモ機能)
-- [💌 ランダム通知で知識を再発見](#-ランダム通知機能)
+[📧 ユーザー登録](#-ユーザー登録)
+
+[🤳📚 書籍登録（バーコード・キーワード）](#-書籍登録)
+
+[📚👀 本棚レイアウト切り替え](#-本棚)
+
+[🔍 快適な検索と閲覧体験](#-快適な検索と閲覧体験)
+
+[📝 読書メモ・画像・タグの記録](#-メモ機能)
+
+[💌 ランダム通知で知識を再発見](#-ランダム通知機能)
 
 <h3 align="center">📧 ユーザー登録</h3>
 
@@ -64,7 +70,7 @@ Bokriumは、そのための場です。知識を、思い出しやすく、取�
 | <p align="center">[<img src="https://i.gyazo.com/262949cb147fe5434171f211b7c5864d.gif" alt="本棚レイアウト切り替えGIF" width="100%">](https://gyazo.com/262949cb147fe5434171f211b7c5864d)</p> |
 | 書籍ごとに読書メモ・タグ・画像をまとめて保存。5つの本棚レイアウトを自由に切り替えて、見やすく振り返りやすい読書体験を提供します。 |
 
-<br><h3 align="center">快適な検索と閲覧体験 </h3>
+<br><h3 align="center">🔍 快適な検索と閲覧体験</h3>
 
 | オートコンプリート | 無限スクロール |
 |------------------|---------------------|
@@ -91,21 +97,23 @@ Bokriumは、そのための場です。知識を、思い出しやすく、取�
 
 | カテゴリ       | 技術構成                                                                                                      |
 |----------------|---------------------------------------------------------------------------------------------------------------|
-| フロントエンド | Stimulus / Turbo / React（TipTap専用） / ESBuild / JavaScript                                                |
+| フロントエンド | Stimulus / Turbo / React（TipTap専用） / Vite / JavaScript                                                |
 | バックエンド   | Ruby 3.4.3 / Ruby on Rails 8.0.2                                                                              |
 | データベース   | PostgreSQL（Neon） / pg_search                                                                               |
 | 認証           | Devise（メールログイン）/ Omniauth（LINEログイン対応）                |
 | 環境構築       | Docker                                                              |
 | CI/CD          | GitHub ActionsでPR時にRuboCop・Brakeman・RSpecを実行、mainマージ時にFly.ioへ自動デプロイ。                        |
 | インフラ       | Fly.io / Namecheap（独自ドメイン）/ Cloudflare（DNS管理・CDN）         |
-| 画像処理       | Active Storage / Amazon S3 + CloudFront（画像配信）                                                           |
+| 画像処理       | Active Storage / libvips / Cloudflare R2                                                            |
 | メモエディタ   | TipTap（Reactベース WYSIWYGエディタ）                                                                        |
 | 通知機能       | LINE Messaging API（定期メモ通知）、ActionMailer（メール通知）                                   |
 | 支援機能       | Stripe（寄付・マンスリーサポート）                                                                           |
-| 検索・UX       | 無限スクロール（Turbo + Stimulus）、オートコンプリート（書籍タイトル・著者）、フィルター・ソート機能          |
-| その他         | Bootstrap / Kaminari / Pagy /                                     |
+| 検索・UX       | 無限スクロール（Turbo + Pagy）、オートコンプリート（書籍タイトル・著者）、フィルター・ソート機能          |
+| その他         | Bootstrap                                      |
 
+# インフラ図
+[![Image from Gyazo](https://i.gyazo.com/35173655331909fae08283b4e65cb857.png)](https://gyazo.com/35173655331909fae08283b4e65cb857)
 
 
 # ER図
-[![Image from Gyazo](https://i.gyazo.com/66a2ea1cc26450ad736d119bfaa77f6d.png)](https://gyazo.com/66a2ea1cc26450ad736d119bfaa77f6d)
+[![Image from Gyazo](https://i.gyazo.com/9ad79cc3bbb85a0d08ac6ac252f6223b.png)](https://gyazo.com/9ad79cc3bbb85a0d08ac6ac252f6223b)
