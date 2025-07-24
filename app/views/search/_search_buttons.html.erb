@@ -1,19 +1,20 @@
 <% if type.blank? || type == "title" || type == "author" %>
-  <%= button_tag "楽天検索",
-        type: "submit",
-        formaction: search_books_path(engine: "rakuten", type: type || "title", query: query),
-        method: :get,
-        class: "btn btn-primary-bok rounded-pill shadow-sm px-4" %>
+	<%= button_tag "楽天検索",
+				type: "submit",
+				formaction: search_books_path(engine: "rakuten", type: type || "title", query: query),
+				method: :get,
+				class: "btn btn-primary-bok rounded-pill shadow-sm px-4" %>
 
-  <%= button_tag "Google検索",
-        type: "submit",
-        formaction: search_google_books_path(query: query, page: 1),
-        method: :get,
-        class: "btn btn-outline-success rounded-pill shadow-sm px-4" %>
+	<%= button_tag "Google検索",
+				type: "submit",
+				formaction: search_google_books_path(query: query, page: 1),
+				method: :get,
+				class: "btn btn-outline-success rounded-pill shadow-sm px-4" %>
+
 <% elsif type == "isbn" %>
-  <%= button_tag "検索",
-        type: "submit",
-        name: "engine",
-        value: "isbn",
-        class: "btn btn-primary-bok rounded-pill shadow-sm px-4" %>
+	<%= button_tag "検索",
+				type: "submit",
+				name: "engine",
+				value: "isbn",
+				class: "btn btn-primary-bok rounded-pill shadow-sm px-4" %>
 <% end %>

@@ -24,7 +24,8 @@ import AnimationController from "./controllers/animation_controller"
 import AutoCompleteController from "./controllers/autocomplete_controller"
 import AutoRemoveController from "./controllers/auto_remove_controller"
 import AutoSubmitController from "./controllers/auto_submit_controller"
-import BarcodeController from "./controllers/barcode_controller"
+import BarcodeResultController from "./controllers/barcode_result_controller"
+import BarcodeScanController from "./controllers/barcode_scan_controller"
 import BookEditController from "./controllers/book_edit_controller"
 import ColumnSelectorController from "./controllers/column_selector_controller"
 import ConfirmModalController from "./controllers/confirm_modal_controller"
@@ -35,7 +36,6 @@ import MemoModalController from "./controllers/memo_modal_controller"
 import ModalSwipeController from "./controllers/modal_swipe_controller"
 import PaginationScrollController from "./controllers/pagination_scroll_controller"
 import SafariClickFixController from "./controllers/safari_click_fix_controller"
-import ScanController from "./controllers/scan_controller"
 import SpinnerController from "./controllers/spinner_controller"
 import SpineBookController from "./controllers/spine_book_controller"
 import TagToggleController from "./controllers/tag_toggle_controller"
@@ -49,7 +49,8 @@ application.register("animation", AnimationController)
 application.register("autocomplete", AutoCompleteController)
 application.register("auto-remove", AutoRemoveController)
 application.register("auto-submit", AutoSubmitController)
-application.register("barcode", BarcodeController)
+application.register("barcode-result", BarcodeResultController)
+application.register("barcode-scan", BarcodeScanController)
 application.register("book-edit", BookEditController)
 application.register("column-selector", ColumnSelectorController)
 application.register("confirm-modal", ConfirmModalController)
@@ -60,7 +61,6 @@ application.register("memo-modal", MemoModalController)
 application.register("modal-swipe", ModalSwipeController)
 application.register("pagination-scroll", PaginationScrollController)
 application.register("safari-click-fix", SafariClickFixController)
-application.register("scan", ScanController)
 application.register("spinner", SpinnerController)
 application.register("spine-book", SpineBookController)
 application.register("tag-toggle", TagToggleController)

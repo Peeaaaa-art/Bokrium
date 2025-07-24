@@ -1,32 +1,31 @@
-<div class="container-fluid px-0 text-center bg-apple-light">
-  <div
-    data-controller="barcode scan"
-    data-action="barcode:scan@window->scan#scan"
-    class="d-flex justify-content-center flex-column align-items-center w-100"
-  >
-    <!-- 🎥 カメラ -->
-    <div class="video-wrapper w-100" style="max-width: 480px; position: relative;">
-      <video
-        data-barcode-target="video"
-        autoplay
-        muted
-        playsinline
-        class="w-100"
-        style="height: 200px; object-fit: cover; object-position: center;"
-      ></video>
-    </div>
+<div
+  data-controller="barcode-scan"
+  class="d-flex justify-content-center flex-column align-items-center w-100"
+>
+  <div class="video-wrapper w-100" style="max-width: 480px; position: relative;">
+    <video
+      data-barcode-scan-target="video"
+      autoplay
+      muted
+      playsinline
+      class="w-100"
+      style="height: 200px; object-fit: cover; object-position: center;"
+    ></video>
+  </div>
 
-    <!-- 💬 出力メッセージ -->
-    <div class="mt-3 small text-muted" data-barcode-target="output">
-      <%= bi_icon("upc-scan", css: "is-5  me-1 text-primary") %>
-      バーコードをスキャンして本を検索
-      <p>※ 連続して読み取れます</p>
-    </div>
-
-    <!-- 📚 検索結果の表示エリア -->
-    <turbo-frame id="scanned-books" class="w-100 mt-2 px-3" style="max-width: 720px;">
-    </turbo-frame>
+  <div class="mt-3 small text-muted" data-barcode-scan-target="output">
+    <%= bi_icon("upc-scan", css: "is-5  me-1 text-primary") %>
+    バーコードをスキャンして本を検索
+    <p>※ 連続して読み取れます</p>
   </div>
 </div>
 
-<div id="book_limit_error"></div>
+<div
+  data-controller="barcode-result"
+  data-barcode-result-timeout-value="5000"
+  data-action="barcode:scan@window->barcode-result#scan"
+>
+  <turbo-frame id="scanned-books" class="w-100 mt-2 px-3" style="max-width: 720px;">
+    <!-- 結果はここにTurbo Streamでprepend -->
+  </turbo-frame>
+</div>
