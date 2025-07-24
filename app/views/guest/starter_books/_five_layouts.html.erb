@@ -17,7 +17,7 @@
           <div class="col fade-in delay-<%= mobile ? 1 : layout[:delay] %>">
             <div class="text-center p-3 shadow rounded-4 h-100">
               <div class="text-muted small mb-1"><%= layout[:label] %></div>
-              <i class="bi bi-<%= layout[:icon] %> fs-2 d-block mb-2 text-secondary"></i>
+              <%= bi_icon(layout[:icon], css: "is-4 my-2 text-secondary") %>
               <%= image_tag cdn_path("bookshelf/#{layout[:img]}"), alt: layout[:label], class: "img-fluid mb-2" %>
             </div>
           </div>

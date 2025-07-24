@@ -26,8 +26,11 @@
     "stimulus-vite-helpers": "^3.1.0"
   },
   "devDependencies": {
+    "@types/bootstrap": "^5.2.10",
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
     "sass": "^1.89.2",
-    "vite": "^7.0.5",
+    "vite": "^7.0.6",
     "vite-plugin-ruby": "^5.1.1"
   }
 }

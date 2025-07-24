@@ -1,7 +1,7 @@
 require "nokogiri"
 
 module IconHelper
-  def bi_icon(name, css: "", style: "", data: {})
+  def bi_icon(name, css: nil, style: nil, data: {})
     path = Rails.root.join("app/assets/icons/#{name}.svg")
     return "(missing icon)" unless File.exist?(path)
 

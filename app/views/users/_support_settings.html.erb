@@ -31,7 +31,7 @@
 
   <% else %>
     <%= link_to donations_path, class: "btn btn-warning shadow-sm d-inline-flex align-items-center gap-2 px-4 py-1 rounded-pill" do %>
-      <i class="bi bi-box2-heart-fill fs-5"></i>
+      <%= bi_icon("box2-heart-fill", css: "is-5") %>
       <span>サポートのご案内</span>
     <% end %>
   <% end %>

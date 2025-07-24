@@ -1,6 +1,6 @@
 <turbo-frame id="public_section_frame">
     <h2 class="fade-in delay-1 text-center border-bottom fw-normal pb-2 mt-5 mb-4" data-controller="animation">
-      <span class="fs-2">🗝️</span> <%= link_to public_bookshelf_index_path, data: { turbo_frame: "_top" } do %><i class="bi bi-book-half"></i><% end %>
+      <span class="fs-2">🗝️</span> <%= link_to public_bookshelf_index_path, data: { turbo_frame: "_top" } do %><%= bi_icon("book-half", css: "is-3") %><% end %>
       <strong>閉じつつひらく。</strong>
     </h2>
   <p class="slide-in delay-2 text-muted px-2 px-md-5 mt-5" data-controller="animation">

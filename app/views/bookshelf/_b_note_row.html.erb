@@ -31,7 +31,8 @@
       data-action="click->book-edit#startEdit"
       title="編集"
       <%= "disabled" if @no_books %>>
-      <i class="bi bi-pencil fs-5 text-primary-bok <%= 'opacity-50 text-muted' if @no_books %>"></i>
+      <%= bi_icon("pencil", css: "is-5 text-primary-bok #{'opacity-50 text-muted' if @no_books}") %>
+
     </button>
 
     <%= button_to book_path(book), method: :delete,
@@ -39,7 +40,7 @@
           class: "border-0 bg-transparent p-0",
           title: "削除",
           disabled: @no_books do %>
-      <i class="bi bi-trash fs-5 <%= @no_books ? 'text-muted opacity-50' : 'text-danger' %>"></i>
+      <%= bi_icon("trash", css: "is-5 #{@no_books ? 'text-muted opacity-50' : 'text-danger'}") %>
     <% end %>
   </td>
 </tr>

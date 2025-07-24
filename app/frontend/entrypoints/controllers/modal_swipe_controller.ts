@@ -1,17 +1,18 @@
 import { Controller } from "@hotwired/stimulus"
 
-export default class extends Controller {
+export default class ModalSwipeController extends Controller<HTMLElement> {
   static targets = ["modal"]
+  declare readonly modalTarget: HTMLElement
+
+  private startY: number | null = null
+  private threshold = 250
+  private skipNextConfirmation = false
+  private shouldShowConfirmOnClose = false
 
   connect() {
-    this.startY = null
-    this.threshold = 250
-    this.skipNextConfirmation = false
-
     this.modalTarget.addEventListener("touchstart", this.onTouchStart)
     this.modalTarget.addEventListener("touchend", this.onTouchEnd)
     this.modalTarget.addEventListener("hidden.bs.modal", this.onModalHidden)
-
     this.modalTarget.addEventListener("shown.bs.modal", () => {
       this.skipNextConfirmation = false
     })
@@ -27,25 +28,25 @@ export default class extends Controller {
     this.skipNextConfirmation = true
   }
 
-  onTouchStart = (e) => {
-    this.startY = e.touches[0].clientY
+  private onTouchStart = (e: TouchEvent) => {
+    this.startY = e.touches[0]?.clientY ?? null
   }
 
-  onTouchEnd = (e) => {
-    const endY = e.changedTouches[0].clientY
-    const deltaY = endY - this.startY
+  private onTouchEnd = (e: TouchEvent) => {
+    const endY = e.changedTouches[0]?.clientY ?? 0
+    const deltaY = this.startY !== null ? endY - this.startY : 0
 
     if (Math.abs(deltaY) > this.threshold) {
       if (window.hasUnsavedChanges) {
         this.shouldShowConfirmOnClose = true
       }
-      bootstrap.Modal.getInstance(this.modalTarget)?.hide()
+      (window as any).bootstrap.Modal.getInstance(this.modalTarget)?.hide()
     }
 
     this.startY = null
   }
 
-  onModalHidden = () => {
+  private onModalHidden = () => {
     if (this.skipNextConfirmation) {
       this.skipNextConfirmation = false
       return
@@ -53,8 +54,11 @@ export default class extends Controller {
 
     if (window.hasUnsavedChanges || this.shouldShowConfirmOnClose) {
       this.shouldShowConfirmOnClose = false
-      const confirm = new bootstrap.Modal(document.getElementById("confirmModal"))
-      confirm.show()
+      const confirmModalEl = document.getElementById("confirmModal")
+      if (confirmModalEl) {
+        const confirm = new (window as any).bootstrap.Modal(confirmModalEl)
+        confirm.show()
+      }
     }
   }
 }

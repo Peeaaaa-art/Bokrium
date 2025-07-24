@@ -1,16 +1,26 @@
 import { Controller } from "@hotwired/stimulus"
 
-export default class extends Controller {
+export default class BookSpineController extends Controller {
   static targets = ["title", "cover"]
-  static values = { linkUrl: String }
-
-  connect() {
-    this.expanded = false
-    this.handleDocumentClick = this.handleDocumentClick.bind(this)
-    this.handleEscape = this.handleEscape.bind(this)
+  static values = {
+    linkUrl: String
   }
 
-  handleClick(event) {
+  declare readonly titleTarget: HTMLElement
+  declare readonly coverTarget: HTMLElement
+  declare readonly hasCoverTarget: boolean
+  declare readonly linkUrlValue: string
+
+  private expanded = false
+  private handleDocumentClick: (event: MouseEvent) => void = () => {}
+  private handleEscape: (event: KeyboardEvent) => void = () => {}
+
+  connect() {
+    this.handleDocumentClick = this._handleDocumentClick.bind(this)
+    this.handleEscape = this._handleEscape.bind(this)
+  }
+
+  handleClick(_event: Event) {
     if (!this.expanded) {
       this.expand()
     } else {
@@ -37,7 +47,6 @@ export default class extends Controller {
   collapse() {
     this.expanded = false
     this.element.classList.remove("expanded", "with-cover")
-    this.element.classList.remove("expanded")
 
     if (this.hasCoverTarget) {
       this.coverTarget.classList.add("d-none")
@@ -50,13 +59,13 @@ export default class extends Controller {
     document.removeEventListener("keydown", this.handleEscape)
   }
 
-  handleDocumentClick(event) {
-    if (!this.element.contains(event.target)) {
+  private _handleDocumentClick(event: MouseEvent) {
+    if (!this.element.contains(event.target as Node)) {
       this.collapse()
     }
   }
 
-  handleEscape(event) {
+  private _handleEscape(event: KeyboardEvent) {
     if (event.key === "Escape") {
       this.collapse()
     }

@@ -1,7 +1,9 @@
 import { Controller } from "@hotwired/stimulus"
 import { mountRichEditor } from "../rich_editor"
 
-export default class extends Controller {
+
+
+export default class MemoModalController extends Controller<HTMLElement> {
   static values = {
     initialContent: String,
     memoId: String,
@@ -12,29 +14,33 @@ export default class extends Controller {
 
   static targets = ["body", "icon"]
 
+  declare readonly hasBodyTarget: boolean
+  declare readonly hasIconTarget: boolean
+  declare readonly bodyTarget: HTMLElement
+  declare readonly iconTarget: HTMLElement
+
+  submitHandler!: EventListener
+  expanded: boolean = false
+
   connect() {
-    console.log("🔌 memo-modal connected!")
     this.submitHandler = this.handleSubmit.bind(this)
-    this.expanded = false
   }
 
-  open(event) {
-    document.activeElement?.blur?.() // iOS Safari 対策
+  open(event: Event) {
+    (document.activeElement as HTMLElement | null)?.blur?.() // iOS Safari 対策
 
-    const trigger = event.currentTarget
+    const trigger = event.currentTarget as HTMLElement
 
-    // データ取得
-    const memoId = trigger.dataset.memoModalMemoIdValue
-    const bookId = trigger.dataset.memoModalBookIdValue
+    const memoId = trigger.dataset.memoModalMemoIdValue!
+    const bookId = trigger.dataset.memoModalBookIdValue!
     const createdAtFull = trigger.dataset.memoModalCreatedAtValue
     const updatedAtFull = trigger.dataset.memoModalUpdatedAtValue
     const createdAtShort = trigger.dataset.memoModalCreatedDateValue
     const updatedAtShort = trigger.dataset.memoModalUpdatedDateValue
 
-    // HTMLから初期内容取得
     const contentElement = this.element.querySelector(".tiptap-body")
     const contentHTML = contentElement?.innerHTML || ""
-    const isPlaceholder = contentHTML.includes('PLACEHOLDER_TOKEN_9fz3!ifhdas094hfgfygq@_$2x')
+    const isPlaceholder = contentHTML.includes("PLACEHOLDER_TOKEN_9fz3!ifhdas094hfgfygq@_$2x")
     const initialContent = isPlaceholder ? "" : contentHTML
 
     const editorRoot = document.getElementById("rich-editor-root")
@@ -56,15 +62,15 @@ export default class extends Controller {
       observer.observe(editorRoot, { childList: true, subtree: true })
     }
 
-    const hiddenField = document.getElementById("memo_content_input")
+    const hiddenField = document.getElementById("memo_content_input") as HTMLInputElement | null
     if (hiddenField) hiddenField.value = initialContent
 
-    const form = document.getElementById("memo-edit-form")
+    const form = document.getElementById("memo-edit-form") as HTMLFormElement | null
     if (form) {
       form.setAttribute("action", memoId === "new" ? `/books/${bookId}/memos` : `/books/${bookId}/memos/${memoId}`)
       form.setAttribute("method", "post")
 
-      let methodInput = form.querySelector("input[name='_method']")
+      let methodInput = form.querySelector("input[name='_method']") as HTMLInputElement | null
       if (memoId !== "new") {
         if (!methodInput) {
           methodInput = document.createElement("input")
@@ -74,20 +80,19 @@ export default class extends Controller {
         }
         methodInput.value = "patch"
       } else {
-        if (methodInput) methodInput.remove()
+        methodInput?.remove()
       }
 
       form.removeEventListener("submit", this.submitHandler)
       form.addEventListener("submit", this.submitHandler)
-      form.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      form.scrollIntoView({ behavior: "smooth", block: "center" })
     }
 
-    // モーダルに作成日・更新日を表示（スマホ対応）
     const createdAtEl = document.getElementById("modal-created-at")
     const updatedAtEl = document.getElementById("modal-updated-at")
     const isMobile = window.innerWidth < 576
 
-    const fallbackDate = (full) => full?.split(" ")[0] || ""
+    const fallbackDate = (full: string | undefined) => full?.split(" ")[0] || ""
 
     if (createdAtEl) {
       createdAtEl.textContent = createdAtFull
@@ -101,17 +106,17 @@ export default class extends Controller {
         : ""
     }
 
-    // モーダル表示
     const modalElement = document.getElementById("memoEditModal")
     if (!modalElement) {
       console.error("❌ モーダルが見つかりません: memoEditModal")
       return
     }
-    const modal = new bootstrap.Modal(modalElement)
+
+    const modal = new (window as any).bootstrap.Modal(modalElement)
     modal.show()
   }
 
-  toggle(event) {
+  toggle(event: Event) {
     event.stopPropagation()
     this.expanded = !this.expanded
     this.bodyTarget.classList.toggle("expanded", this.expanded)
@@ -126,13 +131,13 @@ export default class extends Controller {
     trailingBreaks?.forEach((br) => br.remove())
 
     const updatedContent = editorRoot?.querySelector(".ProseMirror")?.innerHTML || ""
-    const hiddenField = document.getElementById("memo_content_input")
+    const hiddenField = document.getElementById("memo_content_input") as HTMLInputElement | null
     if (hiddenField) hiddenField.value = updatedContent
 
     console.log("📜 フォーム送信直前: content =", updatedContent)
   }
 
-  stop(event) {
+  stop(event: Event) {
     event.stopPropagation()
   }
 
