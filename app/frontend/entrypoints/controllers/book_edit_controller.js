@@ -11,10 +11,10 @@ export default class extends Controller {
 
     this.element.querySelector("td:last-child").innerHTML = `
       <button class="btn btn-success btn-sm d-flex align-items-center" data-action="click->book-edit#save">
-        <i class="bi bi-check-lg"></i>
+        ✓
       </button>
       <button class="btn btn-secondary btn-sm d-flex align-items-center" data-action="click->book-edit#cancel">
-        <i class="bi bi-x-lg"></i>
+        ✕
       </button>
     `
   }

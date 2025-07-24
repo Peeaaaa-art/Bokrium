@@ -104,10 +104,10 @@ const RichEditor = ({ element }) => {
       <BubbleMenu editor={editor} tippyOptions={{ duration: 150 }}>
         <div className="bubble-menu bg-white border rounded shadow-sm p-2 d-flex flex-wrap gap-2">
           <button type="button" onClick={() => editor.chain().focus().undo().run()} className="btn btn-sm btn-outline-secondary" title="元に戻す">
-            <i className="bi bi-arrow-left"></i>
+            ←
           </button>
           <button type="button" onClick={() => editor.chain().focus().redo().run()} className="btn btn-sm btn-outline-secondary" title="やり直す">
-            <i className="bi bi-arrow-right"></i>
+            →
           </button>
           <button type="button" onClick={() => editor.chain().focus().toggleBold().run()} className={`btn btn-sm btn-outline-secondary ${editor.isActive("bold") ? "active" : ""}`}>
             <b>B</b>

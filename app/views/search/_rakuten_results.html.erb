@@ -36,11 +36,11 @@
                   book_cover: book.large_image_url || book.medium_image_url || book.small_image_url,
                   affiliate_url: book.item_url
                 }), method: :post, class: "btn btn-success btn-sm mt-2 w-100" do %>
-                <i class="bi bi-bookmark-plus me-1"></i> 本棚に追加
+                <%= bi_icon("bookmark-plus", css: "is-6 me-1") %> 本棚に追加
                 <% end %>
               <% else %>
                 <button class="btn btn-success btn-sm mt-2 w-100" disabled title="ログインすると追加できます">
-                  <i class="bi bi-bookmark-plus me-1"></i> 本棚に追加
+                  <%= bi_icon("bookmark-plus", css: "is-6 me-1") %> 本棚に追加
                 </button>
               <% end %>
             </div>

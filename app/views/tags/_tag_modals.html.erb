@@ -3,7 +3,7 @@
   <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title"><i class="bi bi-tags-fill"></i> タグを選択</h5>
+        <h5 class="modal-title"><%= bi_icon("tags-fill", css: "is-5") %> タグを選択</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
       </div>
       <div class="modal-body">
@@ -22,10 +22,10 @@
         <hr>
         <div class="d-flex justify-content-center gap-2 my-3">
           <button class="btn btn-outline-primary btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#tagCreateModal">
-            <i class="bi bi-plus-circle"></i> 新しいタグを作成
+            <%= bi_icon("plus-circle", css: "is-5") %> 新しいタグを作成
           </button>
           <button class="btn btn-outline-secondary btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#tagManageModal">
-            <i class="bi bi-gear"></i> タグを管理する
+            <%= bi_icon("gear", css: "is-5") %> タグを管理する
           </button>
         </div>
       </div>
@@ -38,7 +38,7 @@
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title"><i class="bi bi-tag"></i> 新しいタグを作成</h5>
+        <h5 class="modal-title"><%= bi_icon("tag", css: "is-5") %> 新しいタグを作成</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
       </div>
       <div class="modal-body mx-3">
@@ -70,7 +70,7 @@
   <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title"><i class="bi bi-tag-fill"></i> タグの管理</h5>
+        <h5 class="modal-title"><%= bi_icon("tag-fill", css: "is-5") %> タグの管理</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
       </div>
       <div class="modal-body d-flex flex-wrap gap-2 my-3">
@@ -83,12 +83,12 @@
                     data-bs-toggle="modal"
                     data-bs-target="#editTagModal<%= tag.id %>"
                     data-bs-dismiss="modal">
-              <i class="bi bi-pencil"></i>
+              <%= bi_icon("pencil", css: "is-6") %>
             </button>
             <%= button_to user_tag_path(tag), method: :delete,
                   data: { turbo_confirm: "このタグを削除しますか？" },
                   class: "btn btn-outline-light btn-sm p-0 px-1 border-0", title: "削除" do %>
-              <i class="bi bi-trash"></i>
+              <%= bi_icon("trash", css: "is-6") %>
             <% end %>
           </div>
         <% end %>
@@ -104,7 +104,7 @@
       <div class="modal-content">
         <%= form_with model: tag, url: user_tag_path(tag), method: :patch, local: true, scope: :user_tag do |f| %>
           <div class="modal-header">
-            <h5 class="modal-title" id="editTagModalLabel<%= tag.id %>">タグの編集</h5>
+            <h5 class="modal-title" id="editTagModalLabel<%= tag.id %>"><%= bi_icon("tag", css: "is-5") %> タグの編集</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
           </div>
 

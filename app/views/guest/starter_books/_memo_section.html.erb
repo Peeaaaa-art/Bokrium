@@ -1,7 +1,7 @@
 <turbo-frame id="memo_section_frame">
   <section class="my-5" data-controller="animation">
     <h2 class="fade-in delay-1 text-center border-bottom fw-normal pb-2 mb-4">
-      <span class="fs-1">✍️</span> <%= link_to book_link_path(books.first), data: { turbo_frame: "_top" } do %><i class="bi bi-book"></i><% end %>
+      <span class="fs-1">✍️</span> <%= link_to book_link_path(books.first), data: { turbo_frame: "_top" } do %><%= bi_icon("book", css: "is-3") %><% end %>
       <strong>メモで深まる。</strong>
     </h2>
 
@@ -23,7 +23,7 @@
       <div class="col-12 col-md-8 fade-in delay-2">
         <div class="text-center p-3 shadow rounded-4 h-100">
           <div class="text-muted small mb-1">メール通知（毎朝9時に配信）</div>
-          <i class="bi bi-envelope fs-2 d-block mb-2 text-secondary"></i>
+          <%= bi_icon("envelope", css: "is-3 my-2 text-secondary") %>
           <%= image_tag cdn_path("random_access_email.png"), alt: "メール通知", class: "img-fluid mb-2" %>
         </div>
       </div>
@@ -31,7 +31,7 @@
       <div class="col-12 col-md-4 fade-in delay-3">
         <div class="text-center p-3 shadow rounded-4 h-100">
           <div class="text-muted small mb-1">LINE通知（毎月1・15日に配信）</div>
-          <i class="bi bi-line fs-2 d-block mb-2 text-secondary"></i>
+          <%= bi_icon("line", css: "is-3 my-2 text-secondary") %>
           <%= image_tag cdn_path("random_access_line.jpg"), alt: "LINE通知", class: "img-fluid mb-2" %>
         </div>
       </div>

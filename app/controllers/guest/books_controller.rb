@@ -67,7 +67,9 @@ module Guest
     end
 
     def set_guest_book
-      @book = guest_user.books.find(params[:id])
+      @book = guest_user.books
+              .includes(:user_tags, { images: :image_s3_attachment }, :book_cover_s3_attachment)
+              .find(params[:id])
     end
 
     def read_only
