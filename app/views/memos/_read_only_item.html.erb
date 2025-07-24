@@ -101,7 +101,7 @@
   <!-- ステータスアイコン -->
   <% if current_user == memo.user && memo.like_memos.present? %>
     <span class="small d-inline-flex align-items-center ms-2">
-      <%= bi_icon("heart-fill ", css: "is-5 text-danger me-1") %>
+      <%= bi_icon("heart-fill", css: "is-6 text-danger me-1") %>
       <span class="text-muted opacity-75"><%= memo.like_memos.count %></span>
     </span>
   <% end %>

@@ -1,15 +1,17 @@
-// app/javascript/controllers/safari_click_fix_controller.js
 import { Controller } from "@hotwired/stimulus"
 
-export default class extends Controller {
+export default class SafariClickFixController extends Controller<HTMLElement> {
   connect() {
     setTimeout(() => {
-      const elements = this.element.querySelectorAll(
+      const elements = this.element.querySelectorAll<
+        HTMLButtonElement | HTMLInputElement | HTMLAnchorElement
+      >(
         ".safari-fix-button, button[type='submit'], input[type='submit'], a.btn, a.modal-action-button"
       )
-      elements.forEach(el => {
+
+      elements.forEach((el) => {
         if (document.activeElement === el) {
-          el.blur()
+          (el as HTMLElement).blur()
         }
       })
     }, 100)
