@@ -10,10 +10,13 @@ Rails.application.configure do
     policy.script_src  :self, :https,  "https://assets.bokrium.com"
     policy.style_src   :self, :https,  "https://assets.bokrium.com", "https://fonts.googleapis.com"
 
-    if Rails.env.development?
-      policy.script_src *policy.script_src, :unsafe_eval, "http://localhost:3036"
-      policy.style_src *policy.style_src, :unsafe_inline
-    end
+  if Rails.env.development?
+    script_srcs = policy.script_src + [ :unsafe_eval, "http://localhost:3036" ]
+    style_srcs  = policy.style_src + [ :unsafe_inline ]
+
+    policy.script_src(*script_srcs)
+    policy.style_src(*style_srcs)
+  end
 
     policy.connect_src :self, "ws://localhost:3036"
   end
