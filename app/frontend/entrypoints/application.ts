@@ -1,6 +1,7 @@
 // --- Styles ---
 import "bootstrap/dist/css/bootstrap.css";
 import "../styles/application.scss";
+import { Tooltip } from "bootstrap";
 
 
 // --- JavaScript Modules ---
@@ -43,19 +44,25 @@ window.Turbo = {
   },
 }
 
-document.addEventListener("turbo:load", () => {
+// --- Tooltip初期化関数 ---
+function initializeTooltips(): void {
   const tooltipTriggerList = Array.from(
     document.querySelectorAll('[data-bs-toggle="tooltip"]')
   );
 
   tooltipTriggerList.forEach((el) => {
-    const existingInstance = bootstrap.Tooltip.getInstance(el);
-    if (existingInstance) {
-      existingInstance.dispose();
-    }
-
-    new bootstrap.Tooltip(el);
+    const existingInstance = Tooltip.getInstance(el);
+    if (existingInstance) existingInstance.dispose();
+    new Tooltip(el);
   });
+}
+
+document.addEventListener("turbo:load", () => {
+  initializeTooltips();
+});
+
+document.addEventListener("turbo:frame-load", () => {
+  initializeTooltips();
 });
 
 // --- Stimulus Controllers ---
