@@ -23,23 +23,26 @@
 <% if devise_mapping.omniauthable? %>
   <div class="d-flex align-items-center my-4">
     <hr class="flex-grow-1">
-    <h3 class="mx-3 mb-0 h6 text-muted">または他の方法でログイン</h3>
+    <div class="mx-3 mb-0 text-muted" style="white-space: nowrap;">
+      または他の方法でログイン
+    </div>
     <hr class="flex-grow-1">
   </div>
 
+
   <% Devise.omniauth_configs.keys.each do |provider| %>
-    <% provider_class = "btn btn-block d-flex align-items-center justify-content-center gap-2 mb-2" %>
+    <% provider_class = "" %>
 
     <% icon = case provider.to_s
-              when "line"
-                content_tag(:i, nil, class: "bi bi-line", style: "font-size: 1.5rem;")
-              else
-                content_tag(:i, nil, class: "bi bi-person-circle")
-              end %>
+            when "line"
+              bi_icon("line", css: "is-3")
+            else
+              bi_icon("person-circle", css: "is-3")
+            end %>
 
     <%= link_to send("user_#{provider}_omniauth_authorize_path"),
                 method: :get,
-                class: "#{provider_class} btn-success mt-3",
+                class: "btn-success btn btn-block d-flex align-items-center justify-content-center gap-2 mb-3",
                 data: { turbo: false } do %>
       <%= safe_join([icon, t(".sign_in_with_provider", provider: OmniAuth::Utils.camelize(provider))], " ") %>
     <% end %>
