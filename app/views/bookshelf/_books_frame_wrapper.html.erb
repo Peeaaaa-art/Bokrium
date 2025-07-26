@@ -35,7 +35,7 @@
     <%= render Books::DetailCardComponent.new(books: books, pagy: pagy, detail_card_columns: detail_card_columns) %>
 
   <% when "b_note" %>
-    <%= render "bookshelf/b_note", books: books, pagy: pagy %>
+    <%= render Books::BNoteComponent.new(books: books, pagy: pagy) %>
   <% end %>
 </turbo-frame>
 

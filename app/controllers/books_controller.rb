@@ -113,6 +113,8 @@ class BooksController < ApplicationController
       render partial: "bookshelf/card_chunk", locals: { books: @books, pagy: @pagy, card_columns: @card_columns }
     when "detail_card"
       render partial: "bookshelf/detail_card_chunk", locals: { books: @books, pagy: @pagy, detail_card_columns: @detail_card_columns }
+    when "b_note"
+      render partial: "bookshelf/b_chunk", locals: { books: @books, pagy: @pagy }
     else
       render :index
     end
