@@ -1,0 +1,48 @@
+<div class="card bg-light-bok shadow-sm p-4 mb-1 mx-auto" style="max-width: 800px;">
+  <div class="d-flex flex-row flex-md-column justify-content-md-center align-items-md-center gap-3">
+
+    <!-- 書影 -->
+    <div style="width: 100px;" class="flex-shrink-0">
+      <% if @book[:book_cover].present? %>
+        <img src="<%= @book[:book_cover] %>"
+             alt="書影"
+             class="rounded shadow-sm img-fluid"
+             style="width: 100px; height: auto; object-fit: contain;">
+      <% else %>
+        <div class="d-flex justify-content-center align-items-center rounded bg-light"
+             style="width: 100px; height: 140px;">
+          <span class="no-cover text-muted text-center px-2 small"><%= @book[:title].truncate(TITLE_TRUNCATE_LIMIT) %></span>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- 情報 + フォーム -->
+    <div class="flex-grow-1 text-md-center" style="max-width: 100%;">
+      <p class="mb-1 small"><strong><%= @book[:title]&.truncate(TITLE_TRUNCATE_LIMIT) %></strong></p>
+      <p class="mb-1 small"><strong>著者:</strong> <%= @book[:author] || "情報なし" %></p>
+      <p class="mb-1 small"><strong>出版社:</strong> <%= @book[:publisher] || "情報なし" %></p>
+
+      <%= form_with model: Book.new, url: books_path, local: true do |f| %>
+        <%= f.hidden_field :isbn, value: @book[:isbn] %>
+        <%= f.hidden_field :title, value: @book[:title] %>
+        <%= f.hidden_field :author, value: @book[:author] %>
+        <%= f.hidden_field :publisher, value: @book[:publisher] %>
+        <%= f.hidden_field :price, value: @book[:price] %>
+        <%= f.hidden_field :page, value: @book[:page] %>
+        <% if @book[:book_cover].present? %>
+          <%= f.hidden_field :book_cover, value: @book[:book_cover] %>
+        <% end %>
+
+        <% if logged_in? %>
+          <%= button_tag type: "submit", class: "btn btn-success btn-sm mt-3 me-1" do %>
+            <%= helpers.bi_icon("bookmark-plus", css: "is-6 me-1") %> 本棚に追加
+          <% end %>
+        <% else %>
+          <button class="btn btn-success btn-sm mt-3" disabled title="ログインすると追加できます">
+            <%= helpers.bi_icon("bookmark-plus", css: "is-6 me-1") %> 本棚に追加
+          </button>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</div>
