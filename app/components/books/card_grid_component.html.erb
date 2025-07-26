@@ -1,20 +1,17 @@
-<div data-controller="column-selector">
+<div data-column-selector-target="grid" class="books-grid-iphone mt-3 cols-<%= @card_columns %>">
+  <% @books.each_with_index do |book, index| %>
+    <div class="fade-in-right" style="--delay: <%= index * 0.01 %>s;">
+      <%= link_to helpers.book_link_path(book), data: { turbo_frame: "_top" }, class: "text-decoration-none" do %>
 
-  <div data-column-selector-target="grid" class="books-grid-iphone mt-3 cols-<%= @card_columns %>">
-    <% @books.each_with_index do |book, index| %>
-      <div class="fade-in-right" style="--delay: <%= index * 0.01 %>s;">
-        <%= link_to helpers.book_link_path(book), data: { turbo_frame: "_top" }, class: "text-decoration-none" do %>
-
-            <%= render Books::CoverComponent.new(
-              book: book,
-              s3_class: "book-cover-iphone",
-              url_class: "book-cover-iphone",
-              no_cover_class: ""
-            ) %>
-        <% end %>
-      </div>
-    <% end %>
-  </div>
+          <%= render Books::CoverComponent.new(
+            book: book,
+            s3_class: "book-cover-iphone",
+            url_class: "book-cover-iphone",
+            no_cover_class: ""
+          ) %>
+      <% end %>
+    </div>
+  <% end %>
 </div>
 
 <%= form_with url: helpers.books_index_path, method: :get, local: true, id: "columnForm" do %>

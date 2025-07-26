@@ -1,0 +1,7 @@
+<!-- 無限スクロール用 -->
+<turbo-frame id="next_books">
+    <%= render Books::DetailCardComponent.new(
+      books: books,
+      detail_card_columns: detail_card_columns,
+      pagy: pagy) %>
+</turbo-frame>

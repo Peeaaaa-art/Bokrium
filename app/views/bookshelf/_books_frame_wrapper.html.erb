@@ -9,13 +9,25 @@
     <%= render Books::SpineGridComponent.new(books: books, spine_per_shelf: spine_per_shelf, pagy: pagy) %>
 
   <% when "card" %>
-    <%= render "bookshelf/card_select_numbers", card_columns: card_columns %>
+    <%= render Books::ColumnSelectorComponent.new(
+          view_key: "card",
+          selected: @card_columns,
+          controller_name: "column-selector",
+          mobile: mobile?
+        ) %>
     <%= render Books::CardGridComponent.new(books: books, card_columns: card_columns, pagy: pagy) %>
 
   <% when "detail_card" %>
+    <%= render Books::ColumnSelectorComponent.new(
+          view_key: "detail_card",
+          selected: @detail_card_columns,
+          controller_name: "detail-card-column-selector",
+          mobile: mobile?
+        ) %>
     <%= render Books::DetailCardComponent.new(books: books, pagy: pagy, detail_card_columns: detail_card_columns) %>
 
   <% when "b_note" %>
     <%= render "bookshelf/b_note", books: books, pagy: pagy %>
   <% end %>
 </turbo-frame>
+
