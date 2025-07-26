@@ -1,18 +1,6 @@
 <div data-controller="column-selector">
 
-  <div class="d-flex align-items-center mb-4 ms-3" style="gap: 0.5rem;">
-    <%= select_tag :column,
-        options_for_select(options, @card_columns || default_value),
-        id: "columnSelect",
-        data: {
-          action: "change->column-selector#change",
-          column_selector_target: "selector"
-        },
-        class: "form-select form-select-sm text-secondary shadow-sm books-per-shelf"
-    %>
-  </div>
-
-  <div data-column-selector-target="grid" class="books-grid-iphone mt-3">
+  <div data-column-selector-target="grid" class="books-grid-iphone mt-3 cols-<%= @card_columns %>">
     <% @books.each_with_index do |book, index| %>
       <div class="fade-in-right" style="--delay: <%= index * 0.01 %>s;">
         <%= link_to helpers.book_link_path(book), data: { turbo_frame: "_top" }, class: "text-decoration-none" do %>
@@ -35,4 +23,8 @@
 <% end %>
 
 
-<%= render "shared/pagy", pagy: @pagy %>
+<% if @pagy && @pagy.next %>
+  <turbo-frame id="next_books" src="<%= helpers.books_index_path(view: "card", page: @pagy.next) %>" loading="lazy">
+    <%= render "shared/loading_spinner" %>
+  </turbo-frame>
+<% end %>

@@ -109,6 +109,8 @@ class BooksController < ApplicationController
     when "spine"
       render partial: "bookshelf/spine_chunk",
             locals: { books: @books, spine_per_shelf: @spine_per_shelf, pagy: @pagy, turbo_frame_id: turbo_frame_id }
+    when "card"
+      render partial: "bookshelf/card_chunk", locals: { books: @books, pagy: @pagy, card_columns: @card_columns }
     else
       render :index
     end

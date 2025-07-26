@@ -9,6 +9,7 @@
     <%= render Books::SpineGridComponent.new(books: books, spine_per_shelf: spine_per_shelf, pagy: pagy) %>
 
   <% when "card" %>
+    <%= render "bookshelf/card_select_numbers", card_columns: card_columns %>
     <%= render Books::CardGridComponent.new(books: books, card_columns: card_columns, pagy: pagy) %>
 
   <% when "detail_card" %>
