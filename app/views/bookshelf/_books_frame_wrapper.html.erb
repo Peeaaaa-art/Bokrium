@@ -1,11 +1,19 @@
 <turbo-frame id="books_frame">
   <% case view_mode %>
   <% when "shelf" %>
-    <%= render Books::KinoSelectNumbersComponent.new(books_per_shelf: books_per_shelf) %>
+    <%= render Books::KinoSelectNumbersComponent.new(
+          view_key: "shelf",
+          selected: books_per_shelf,
+          mobile: mobile?
+        ) %>
     <%= render Books::KinoGridComponent.new(books: books, books_per_shelf: books_per_shelf, pagy: pagy) %>
 
   <% when "spine" %>
-    <%= render "bookshelf/spine_select_numbers", spine_per_shelf: spine_per_shelf %>
+    <%= render Books::KinoSelectNumbersComponent.new(
+          view_key: "spine",
+          selected: spine_per_shelf,
+          mobile: mobile?
+        ) %>
     <%= render Books::SpineGridComponent.new(books: books, spine_per_shelf: spine_per_shelf, pagy: pagy) %>
 
   <% when "card" %>
