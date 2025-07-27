@@ -1,6 +1,6 @@
 <div data-column-selector-target="grid" class="books-grid-iphone mt-3 cols-<%= @card_columns %>">
   <% @books.each_with_index do |book, index| %>
-    <div class="fade-in-right" style="--delay: <%= index * 0.01 %>s;">
+    <div class="fade-in-right" style="--delay: <%= index * 0.002 %>s;">
       <%= link_to helpers.book_link_path(book), data: { turbo_frame: "_top" }, class: "text-decoration-none" do %>
 
           <%= render Books::CoverComponent.new(

@@ -1,6 +1,6 @@
 <div class="row g-3 px-3 mt-3">
   <% @books.each_with_index do |book, index| %>
-    <div class="col-<%= col_width %> fade-in-right" style="--delay: <%= index * 0.03 %>s;">
+    <div class="col-<%= col_width %> fade-in-right" style="--delay: <%= index * 0.003 %>s;">
       <%= link_to helpers.book_link_path(book),
           class: "text-decoration-none text-reset",
           data: { turbo_frame: "_top" } do %>
