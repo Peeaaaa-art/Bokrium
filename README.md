@@ -97,23 +97,35 @@ Bokriumは、そのための場です。知識を、思い出しやすく、取�
 
 | カテゴリ       | 技術構成                                                                                                      |
 |----------------|---------------------------------------------------------------------------------------------------------------|
-| フロントエンド | Stimulus / Turbo / React（TipTap専用） / Vite / JavaScript                                                |
+| フロントエンド | Hotwire(Stimulus・Turbo) / React（TipTap専用） / Vite / TypeScript                                                |
 | バックエンド   | Ruby 3.4.3 / Ruby on Rails 8.0.2                                                                              |
 | データベース   | PostgreSQL（Neon） / pg_search                                                                               |
-| 認証           | Devise（メールログイン）/ Omniauth（LINEログイン対応）                |
+| インフラ       | Fly.io / Cloudflare（DNS管理・CDN、Viteビルドアセットの配信にCloudflare R2を使用）         |
 | 環境構築       | Docker                                                              |
-| CI/CD          | GitHub ActionsでPR時にRuboCop・Brakeman・RSpecを実行、mainマージ時にFly.ioへ自動デプロイ。                        |
-| インフラ       | Fly.io / Namecheap（独自ドメイン）/ Cloudflare（DNS管理・CDN）         |
+| CI/CD | GitHub ActionsでPR時にRuboCop・Brakeman・RSpecを実行。mainマージ時に、Fly.ioへ自動デプロイ＋ViteアセットをCloudflare R2へアップロード（CDN配信）。 |
+| 開発支援       | Bullet（N+1検出） / rack-mini-profiler |
+| 認証           | Devise（メールログイン）/ OmniAuth（LINEログイン対応）                |
 | 画像処理       | Active Storage / libvips / Cloudflare R2                                                            |
 | メモエディタ   | TipTap（Reactベース WYSIWYGエディタ）                                                                        |
-| 通知機能       | LINE Messaging API（定期メモ通知）、ActionMailer（メール通知）                                   |
+| 通知機能       | LINE Messaging API、ActionMailer + cron-job.org（定期メモ通知）                                   |
 | 支援機能       | Stripe（寄付・マンスリーサポート）                                                                           |
 | 検索・UX       | 無限スクロール（Turbo + Pagy）、オートコンプリート（書籍タイトル・著者）、フィルター・ソート機能          |
-| その他         | Bootstrap                                      |
+| その他         | Bootstrap / ViewComponent / Pagy                                 |
 
 # インフラ図
-[![Image from Gyazo](https://i.gyazo.com/35173655331909fae08283b4e65cb857.png)](https://gyazo.com/35173655331909fae08283b4e65cb857)
+[![Image from Gyazo](https://i.gyazo.com/765ddbb70bc87fe1662edf6ef1768a73.png)](https://gyazo.com/765ddbb70bc87fe1662edf6ef1768a73)
 
 
-# ER図
-[![Image from Gyazo](https://i.gyazo.com/9ad79cc3bbb85a0d08ac6ac252f6223b.png)](https://gyazo.com/9ad79cc3bbb85a0d08ac6ac252f6223b)
+# ER図・テーブル設計
+[![Image from Gyazo](https://i.gyazo.com/e2435f9a607444496d7988587d96ff05.png)](https://gyazo.com/e2435f9a607444496d7988587d96ff05)
+
+Bokriumは、読書メモと本棚管理を中心とした構成です。  
+`books`, `users`, `memos` を軸に、メモはユーザーと書籍に属する中間モデルとして設計しています。公開範囲は `visibility`（enum）で制御し、いいね機能は `like_memos` に分離しました。
+
+タグは `user_tags` によってユーザーごとに管理し、`book_tag_assignments` により書籍と多対多の関係を構築。役割を明確に分けることで、拡張や保守をしやすくしています。
+
+書籍画像は `images` テーブルで管理しており、1冊の本に対して複数枚のアップロードが可能です。各画像は Active Storage を通じて Cloudflare R2 に保存され、署名付きURLによる直接アップロードとCDN配信に対応しています。
+
+通知機能は `line_users` を通じたLINE連携と、ActionMailer + cron-job.org によるメール通知に対応。支援機能としては、Stripe による単発寄付（`donations`）と継続支援（`monthly_supports`）を実装しています。
+
+全体として、拡張性と役割の分離を重視し、成長や変更に強い構成を目指しました。
