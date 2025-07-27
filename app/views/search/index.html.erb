@@ -5,7 +5,7 @@
 <%= render "search/form" %>
 
 <% if @book_data.present? %>
-  <%= render "search/isbn_result", book: @book_data %>
+  <%= render Books::IsbnResultComponent.new(book_data: @book_data) %>
 <% end %>
 
 <% if @rakuten_book_results.present? %>

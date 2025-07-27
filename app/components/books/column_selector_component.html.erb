@@ -1,0 +1,20 @@
+<div data-controller="<%= @controller_name %>">
+  <div class="d-flex align-items-center mb-4 ms-3" style="gap: 0.5rem;">
+    <%= select_tag :column,
+        options_for_select(@options, @selected),
+        id: "columnSelect",
+        data: {
+          action: "change->#{@controller_name}#change",
+          "#{@controller_name.tr('-', '_')}_target": "selector"
+        },
+        class: "form-select form-select-sm text-secondary shadow-sm books-per-shelf"
+    %>
+  </div>
+
+  <%= form_with url: helpers.books_index_path, method: :get, local: true, id: "columnForm",
+                data: { "#{@controller_name.tr('-', '_')}_target": "form" } do %>
+    <%= hidden_field_tag :view, @view_key %>
+    <%= hidden_field_tag :column, @selected, id: "hiddenColumnInput" %>
+  <% end %>
+</div>
+

@@ -1,5 +1,5 @@
 <% @books.each_slice(@books_per_shelf).with_index do |row_books, idx| %>
-  <div class="shelf-row fade-in kino-fade-in delay-<%= idx %>">
+  <div class="shelf-row fade-in kino-fade-in kino-delay-<%= idx %>">
     <div class="book-row">
       <% row_books.each do |book| %>
         <div class="book-on-shelf">

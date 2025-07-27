@@ -3,10 +3,10 @@
               local: true,
               class: "ms-3" do %>
 
-  <%= hidden_field_tag :view, "shelf" %>
+  <%= hidden_field_tag :view, @view_key %>
 
-  <%= select_tag :per,
-      options_for_select(options, @books_per_shelf),
+  <%= select_tag per_param_name,
+      options_for_select(options, @selected),
       class: "form-select form-select-sm text-secondary shadow-sm books-per-shelf",
       data: {
         auto_submit_target: "select",

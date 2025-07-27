@@ -7,6 +7,8 @@ abort("The Rails environment is running in production mode!") if Rails.env.produ
 
 require 'rspec/rails'
 
+require "view_component/test_helpers"
+
 # github action用
 require 'dotenv'
 Dotenv.load('.env.test') if Rails.env.test?
@@ -29,15 +31,13 @@ RSpec.configure do |config|
   ]
 
   config.use_transactional_fixtures = true
-
   config.filter_rails_from_backtrace!
 
   config.include FactoryBot::Syntax::Methods
-
   config.include Devise::Test::IntegrationHelpers, type: :request
   config.include Devise::Test::IntegrationHelpers, type: :system
-
   config.include GuestUserHelper
+  config.include ViewComponent::TestHelpers, type: :component
 
   config.before(:each) do
     Bullet.start_request if Bullet.enabled?

@@ -1,5 +1,5 @@
 <% @books.each_slice(@spine_per_shelf).with_index do |row_books, idx| %>
-  <div class="shelf-row position-relative fade-in delay-<%= idx %>">
+  <div class="shelf-row position-relative fade-in kino-delay-<%= idx %>">
     <div class="book-spine-row d-flex">
       <% row_books.each do |book| %>
         <div class="spine-on-shelf"
@@ -8,7 +8,7 @@
             data-spine-book-link-url-value="<%= helpers.book_link_path(book) %>">
           <div class="spine-top-bar"></div>
           <% if book.book_cover_s3.attached? %>
-            <%= image_tag  "https://img.bokrium.com/#{book.book_cover_s3.key}", width: 200, height: "auto",
+            <%= image_tag  "https://cdn.bokrium.com/#{book.book_cover_s3.key}", width: 200, height: "auto",
                   alt: book.title,
                   class: "spine-cover-image d-none",
                   data: { spine_book_target: "cover" } %>

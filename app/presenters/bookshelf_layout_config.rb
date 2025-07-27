@@ -41,7 +41,7 @@ class BookshelfLayoutConfig
       @detail_card_columns = @session[DETAIL_CARD_COLUMNS_KEY]&.to_i || @defaults[:detail_card]
       @unit_per_page = @mobile ? @detail_card_columns * 4 : @detail_card_columns
     when "b_note"
-      @unit_per_page = 10
+      @unit_per_page = 5
     when "spine"
       @session[SPINE_PER_KEY] = @params[:per_spine] if @params[:per_spine].present?
       @spine_per_shelf = @session[SPINE_PER_KEY]&.to_i || @defaults[:spine]

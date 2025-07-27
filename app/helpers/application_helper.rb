@@ -47,9 +47,9 @@ module ApplicationHelper
     truncate_mixed_width(text, limit: limit)
   end
 
-    def cdn_path(filename)
-      "https://lib.bokrium.com/images/#{filename}"
-    end
+  def cdn_path (filename)
+    "https://lib.bokrium.com/images/#{filename}"
+  end
 
   private
 

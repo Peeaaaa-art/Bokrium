@@ -1,25 +1,6 @@
-<div data-controller="detail-card-column-selector">
-  <div class="d-flex align-items-center mb-4 ms-3" style="gap: 0.5rem;">
-    <%= select_tag :column,
-        options_for_select(options, @detail_card_columns || default_value),
-        id: "columnSelect",
-        data: {
-          action: "change->detail-card-column-selector#change",
-          detail_card_column_selector_target: "selector"
-        },
-        class: "form-select form-select-sm text-secondary shadow-sm books-per-shelf"
-    %>
-  </div>
-
-  <%= form_with url: helpers.books_index_path, method: :get, local: true, id: "columnForm" do %>
-    <%= hidden_field_tag :view, "detail_card" %>
-    <%= hidden_field_tag :column, @detail_card_columns, id: "hiddenColumnInput" %>
-  <% end %>
-</div>
-
 <div class="row g-3 px-3 mt-3">
   <% @books.each_with_index do |book, index| %>
-    <div class="col-<%= col_width %> fade-in-right" style="--delay: <%= index * 0.03 %>s;">
+    <div class="col-<%= col_width %> fade-in-right" style="--delay: <%= index * 0.003 %>s;">
       <%= link_to helpers.book_link_path(book),
           class: "text-decoration-none text-reset",
           data: { turbo_frame: "_top" } do %>
@@ -33,6 +14,7 @@
                 no_cover_class: "detail-no-cover"
               ) %>
             </div>
+
             <div class="col d-flex flex-column gap-1" style="word-break: break-all;">
               <h6 class="mb-1 fw-bold small lh-sm"><%= truncate(book.title, length: 30) %></h6>
               <p class="text-muted mb-1 small lh-sm"><%= truncate(book.author, length: 20) %></p>
@@ -45,5 +27,8 @@
   <% end %>
 </div>
 
-
-<%= render "shared/pagy", pagy: @pagy %>
+<% if @pagy && @pagy.next %>
+  <turbo-frame id="next_books" src="<%= helpers.books_index_path(view: "detail_card", page: @pagy.next) %>" loading="lazy">
+    <%= render "shared/loading_spinner" %>
+  </turbo-frame>
+<% end %>
