@@ -90,6 +90,8 @@ group :development do
   gem "web-console"
 
   gem "dockerfile-rails"
+
+  gem "rack-mini-profiler"
 end
 
 group :test do
