@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
   <head>
     <title><%= content_for(:title) || "Bokrium" %></title>
 
@@ -13,6 +13,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
+    <meta name="description" content="読書の記憶を育てる本棚アプリBokrium。本のバーコードをスキャンして書籍情報を簡単登録。メモ・画像・タグで記録し、読書をあとで活かす。">
 
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
@@ -29,7 +30,16 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Inline:opsz,wght@10..72,700&family=Noto+Sans+JP:wght@400;600;700&display=swap" rel="stylesheet">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Inline:opsz,wght@10..72,700&family=Noto+Sans+JP:wght@400;600;700&display=swap"
+      rel="stylesheet"
+      media="print"
+      onload="this.media='all'">
+    <noscript>
+      <link
+        href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Inline:opsz,wght@10..72,700&family=Noto+Sans+JP:wght@400;600;700&display=swap"
+        rel="stylesheet">
+    </noscript>
 
     <!-- Vite CSS & TS -->
     <%= vite_client_tag %>

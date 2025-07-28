@@ -12,10 +12,10 @@
           cdn_path("bokrium_welcome-768w.webp") => "768w",
           cdn_path("bokrium_welcome-986w.webp") => "986w"
         },
-        sizes: "(max-width: 480px) 80vw, (max-width: 768px) 60vw, 600px",
+        sizes: "(max-width: 480px) 100vw, (max-width: 768px) 80vw, 480px",
         class: "img-fluid",
         style: "max-width: 80%; height: auto;",
-        alt: "Bokriumようこそ画像"
+        alt: "Bokriumへようこそ"
     %>
   </div>
 
@@ -46,8 +46,8 @@
   </ul>
 
   <div class="registration-cta text-center mt-8 big-shoulders-inline-bold" data-controller="animation">
-    <h3 class="fade-in delay-1 mb-3">あなたの読書体験をもっと豊かに</h3>
-    <h5 class="fade-in delay-2 text-muted">Bokriumで読書メモを管理し、知識を整理しましょう</h5>
+    <h2 class="fade-in delay-1 mb-3 fs-3">あなたの読書体験をもっと豊かに</h2>
+    <h3 class="fade-in delay-2 text-muted fs-5">Bokriumで読書メモを管理し、知識を整理しましょう</h3>
     <div class="fade-in delay-3">
         <%= link_to new_user_registration_path, class: "btn btn-success btn-lg mt-4  shadow-sm px-4 py-2 fs-5 rounded-pill" do %>
           今すぐはじめる<br class="d-sm-none">（あなたの本棚をつくる）
