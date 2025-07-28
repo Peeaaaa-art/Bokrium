@@ -61,6 +61,52 @@ Bokriumは、そのための場です。知識を、思い出しやすく、取�
 | <p align="center"><a href="https://gyazo.com/88615713f29c4da2bd917487a84d9f53"><img src="https://i.gyazo.com/88615713f29c4da2bd917487a84d9f53.gif" width="250" alt="バーコードスキャンGIF"></a></p> | <p align="center"><img src="https://github.com/user-attachments/assets/56efe725-fb4a-49a2-91d4-3e35a34cc117" width="250" alt="キーワード検索"></p> |
 | <p align="center">ZXingを用いたクライアントサイドのバーコードスキャン機能。取得したISBNを非同期で送信し、複数のAPIから書誌情報を統合取得します。</p> | <p align="center">タイトル・著者をもとに、楽天・Google Booksを切り替えて検索可能。ISBNでの検索も可能。</p> |
 
+### 🦓📚 ISBN登録処理の全体フロー
+<pre>
+🛤 ISBNの取得には2つのルートがあります：
+
+① 📱 スマホでバーコードをスキャン（🦓 ZXing使用）
+   └ 書籍から直接ISBNを取得（正規なフォーマット）
+
+② ⌨️ ユーザーが手動でISBNを入力
+   └─ 以下のようなバリデーション処理を備えた
+      専用の IsbnCheck サービス群 を導入：
+
+       ✅ ハイフン・スペース除去や "X" の正規化  
+       ✅ ISBN-10 → ISBN-13 自動変換  
+       ✅ チェックデジットによる妥当性検証  
+       ✅ エラー時は I18n 対応の適切なメッセージ表示  
+
+      ※内部では以下の2クラスを利用：
+        - IsbnCheck::IsbnService（正規化・変換・検証）
+        - IsbnCheck::ValidateIsbnService（統合バリデーション）
+
+------------------------------------------
+ISBNの取得が完了したら、後続処理は共通です：
+
+🌐 ISBNをもとに書誌情報を取得  
+   └ 以下のAPIをこの順で呼び出します：  
+        ① openBD  
+        ② Rakuten Books API  
+        ③ Google Books API  
+        ④ 国立国会図書館サーチAPI（NDL API）  
+
+   各APIから取得した情報は、  
+   不足項目を補完するかたちで統合されます。  
+   タイトル・著者・出版社・書影の4項目が揃った時点で完了します。  
+               ↓  
+🖼 Bokrium に書籍プレビューを表示し、ユーザーが確認  
+               ↓  
+✅ 「本棚に追加」ボタンをクリック
+   └ ※ すでに同じISBNの書籍が登録されている場合は、  
+        重複登録を防ぐため処理がスキップされ、  
+        ⚠️ フラッシュメッセージでユーザーに通知されます。
+               ↓  
+📚 書籍情報を本棚に登録・表示！
+</pre>
+
+
+
 <br><h3 align="center">📚👀 本棚</h3>
 
 | ビューと表示冊数を選べる本棚 |
