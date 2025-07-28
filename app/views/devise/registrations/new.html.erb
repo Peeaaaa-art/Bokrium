@@ -18,57 +18,57 @@
               <%= f.label :name, for: "floatingName" %>
             </div>
 
-<div class="form-floating mb-3">
-  <%= f.email_field :email,
-        autofocus: true,
-        autocomplete: "email",
-        class: "form-control #{'is-invalid' if resource.errors[:email].present?}",
-        id: "floatingEmail",
-        placeholder: t('.email'),
-        required: true %>
-  <%= f.label :email, for: "floatingEmail" do %>
-    <%= t('.email') %> <span class="text-danger">*</span>
-  <% end %>
-  <% if resource.errors[:email].present? %>
-    <div class="invalid-feedback">
-      <%= resource.errors[:email].first %>
-    </div>
-  <% end %>
-</div>
+            <div class="form-floating mb-3">
+              <%= f.email_field :email,
+                    autofocus: true,
+                    autocomplete: "email",
+                    class: "form-control #{'is-invalid' if resource.errors[:email].present?}",
+                    id: "floatingEmail",
+                    placeholder: t('.email'),
+                    required: true %>
+              <%= f.label :email, for: "floatingEmail" do %>
+                <%= t('.email') %> <span class="text-danger">*</span>
+              <% end %>
+              <% if resource.errors[:email].present? %>
+                <div class="invalid-feedback">
+                  <%= resource.errors[:email].first %>
+                </div>
+              <% end %>
+            </div>
 
-<div class="form-floating mb-3">
-  <%= f.password_field :password,
-        autocomplete: "new-password",
-        class: "form-control #{'is-invalid' if resource.errors[:password].present?}",
-        id: "floatingPassword",
-        placeholder: t('.password'),
-        required: true %>
-  <%= f.label :password, for: "floatingPassword" do %>
-    <%= t('.password') %> <span class="text-danger">*</span>
-  <% end %>
-  <% if resource.errors[:password].present? %>
-    <div class="invalid-feedback">
-      <%= resource.errors[:password].first %>
-    </div>
-  <% end %>
-</div>
+            <div class="form-floating mb-3">
+              <%= f.password_field :password,
+                    autocomplete: "new-password",
+                    class: "form-control #{'is-invalid' if resource.errors[:password].present?}",
+                    id: "floatingPassword",
+                    placeholder: t('.password'),
+                    required: true %>
+              <%= f.label :password, for: "floatingPassword" do %>
+                <%= t('.password') %> <span class="text-danger">*</span>
+              <% end %>
+              <% if resource.errors[:password].present? %>
+                <div class="invalid-feedback">
+                  <%= resource.errors[:password].first %>
+                </div>
+              <% end %>
+            </div>
 
-<div class="form-floating mb-3">
-  <%= f.password_field :password_confirmation,
-        autocomplete: "new-password",
-        class: "form-control #{'is-invalid' if resource.errors[:password_confirmation].present?}",
-        id: "floatingPasswordConfirmation",
-        placeholder: t('.password_confirmation'),
-        required: true %>
-  <%= f.label :password_confirmation, for: "floatingPasswordConfirmation" do %>
-    <%= t('.password_confirmation') %> <span class="text-danger">*</span>
-  <% end %>
-  <% if resource.errors[:password_confirmation].present? %>
-    <div class="invalid-feedback">
-      <%= resource.errors[:password_confirmation].first %>
-    </div>
-  <% end %>
-</div>
+            <div class="form-floating mb-3">
+              <%= f.password_field :password_confirmation,
+                    autocomplete: "new-password",
+                    class: "form-control #{'is-invalid' if resource.errors[:password_confirmation].present?}",
+                    id: "floatingPasswordConfirmation",
+                    placeholder: t('.password_confirmation'),
+                    required: true %>
+              <%= f.label :password_confirmation, for: "floatingPasswordConfirmation" do %>
+                <%= t('.password_confirmation') %> <span class="text-danger">*</span>
+              <% end %>
+              <% if resource.errors[:password_confirmation].present? %>
+                <div class="invalid-feedback">
+                  <%= resource.errors[:password_confirmation].first %>
+                </div>
+              <% end %>
+            </div>
 
             <div class="d-grid mb-3">
               <%= f.submit t('.sign_up'), class: "btn btn-primary-bok btn-lg" %>
