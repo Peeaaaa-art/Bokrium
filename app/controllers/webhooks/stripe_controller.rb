@@ -57,14 +57,14 @@ class Webhooks::StripeController < ApplicationController
       Rails.logger.info "✅ [Subscription] Checkout completed for user ##{user.id} | Customer ID: #{customer_id}"
 
     elsif mode == "payment"
-      amount = session.amount_total || session.display_items&.first&.amount || 0
+      amount = (session.amount_total || session.display_items&.first&.amount || 0).to_i
 
       if user
         user.donations.create!(
           stripe_payment_intent_id: session.payment_intent,
           stripe_checkout_session_id: session.id,
           amount: amount,
-          customer_id: customer_id,
+          stripe_customer_id: customer_id,
           status: "succeeded"
         )
 
