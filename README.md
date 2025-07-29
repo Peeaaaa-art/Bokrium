@@ -190,7 +190,6 @@ Webアプリに必要な機能が揃ったフルスタックフレームワー�
 コストを抑えつつ本番運用にも無理なく対応できる点が決め手となりました。
 
 >#### データベースは Neon、ストレージは Cloudflare R2 を採用
-[Uploading 400.html…]()
 
 Fly.io付属のDBはマネージド化するとコストが高く、Neonは半額以下で済み、接続の安定性やFly.io公式の推奨も後押しとなりました。
 ストレージには当初S3を使用していましたが、転送量課金のないR2へ移行。S3互換APIによりスムーズな切り替えができ、CDNとの統合も容易でした。
@@ -202,7 +201,7 @@ Fly.io付属のDBはマネージド化するとコストが高く、Neonは半�
 
  
 ## 🗂 ER図・テーブル設計
-[![Image from Gyazo](https://i.gyazo.com/e2435f9a607444496d7988587d96ff05.png)](https://gyazo.com/e2435f9a607444496d7988587d96ff05)
+[![Image from Gyazo](https://i.gyazo.com/773f2b9900b1460aecfea5a1fee2d8b4.png)](https://gyazo.com/773f2b9900b1460aecfea5a1fee2d8b4)
 
 >#### Bokriumは、読書メモと本棚管理を中心とした構成です。
 
