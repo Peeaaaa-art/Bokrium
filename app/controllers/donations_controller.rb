@@ -33,7 +33,7 @@ class DonationsController < ApplicationController
 
       if current_user.present?
         if current_user.donations.any?
-          stripe_customer_id = current_user.donations.last.stripe_customer_id
+          stripe_customer_id = current_user.donations.order(created_at: :desc).first&.stripe_customer_id
         end
 
         unless stripe_customer_id

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_07_02_043558) do
+ActiveRecord::Schema[8.0].define(version: 2025_07_29_091224) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -81,7 +81,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_02_043558) do
     t.string "status", default: "pending", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "customer_id"
+    t.string "stripe_customer_id"
     t.index ["user_id"], name: "index_donations_on_user_id"
   end
 
