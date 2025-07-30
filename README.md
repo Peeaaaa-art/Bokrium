@@ -191,13 +191,16 @@ app/
 
 - Devise によるパスワードのハッシュ化（BCrypt）
 - メール確認・アカウントロック・パスワード再発行機能の導入
-- CSRF対策として全POSTリクエストにトークン検証を適用（Rails標準）
+- CSRF対策としてPOSTリクエストにトークン検証を適用（Rails標準）
 - XSS対策として `sanitize` メソッドを使用し、危険なHTMLの出力を防止
-- Strong Parameters により許可されたパラメータのみを受け付ける構成
-- ActiveRecord のパラメータ化クエリで SQLインジェクションを防止
-- GitHub Actions に Brakeman を組み込み、CI/CD内で静的解析による継続的な脆弱性チェックを実施
-- Fly.ioのエッジネットワークと自動HTTPS対応により、アプリ全体の通信はTLSで暗号化。
-- Cloudflare のマネージドチャレンジをログイン・新規登録画面に適用し、Botや不正リクエストを事前ブロック
+- `Strong Parameters` により許可されたパラメータのみを受け付ける構成
+- ActiveRecord の`パラメータ化クエリ`で SQLインジェクションを防止
+- GitHub Actions に `Brakeman` を組み込み、CI/CD内で静的解析による継続的な脆弱性チェックを実施
+- GitHub `Dependabot` による脆弱性のある依存Gemの自動検出・通知を活用し、迅速なアップデート対応を実施
+- Github `Code scanning` を有効化し、セキュリティリスクやコードの問題を自動チェック
+- Github `Secret scanning` により、誤ってコミットされたトークンや鍵を即座に警告
+- Fly.ioのエッジネットワークと自動HTTPS対応により、アプリ全体の通信はTLSで暗号化
+- Cloudflare の `マネージドチャレンジ` をログイン・新規登録画面に適用し、Botや不正リクエストを事前ブロック
 - Cloudflare による DDoS・Bot検知・セキュリティヘッダー適用など、アプリ全体を保護するエッジレベルのセキュリティ機能を活用
 
 </details>
