@@ -12,7 +12,6 @@
 - [✨ アプリ機能紹介](#-アプリ機能紹介)
   - [📧 ユーザー登録](#-ユーザー登録)
   - [🤳📚 書籍登録](#-書籍登録)
-  - [🦓📚 ISBN登録処理の全体フロー](#-isbn登録処理の全体フロー)
   - [📚👀 本棚](#-本棚)
   - [🔍 快適な検索と閲覧体験](#-快適な検索と閲覧体験)
   - [📝 メモ機能](#-メモ機能)
@@ -57,17 +56,19 @@ Bokriumは、そのための場です。知識を、思い出しやすく、取�
 
 | メール認証とLINEログインの両対応 |
 |-------------------------|
-| <p align="center">[<img src="https://i.gyazo.com/b3a227e6b54caa8893d1708fa3fd1bfc.png" alt="本棚一覧画像" width="100%">](https://i.gyazo.com/b3a227e6b54caa8893d1708fa3fd1bfc)</p> |
+| <p align="center">[<img src="https://i.gyazo.com/b3a227e6b54caa8893d1708fa3fd1bfc.png" alt="ログイン画面" width="100%">](https://i.gyazo.com/b3a227e6b54caa8893d1708fa3fd1bfc)</p> |
 | アカウント登録にはDeviseによるメール認証を採用しており、安全性を確保しつつ、確認メールのリンクをクリックするだけで、そのままログイン状態になります。登録後のパスワード再設定も、メール送信によるリンク経由で安心して実施可能です。また、LINEログインにも対応しており、メールアドレスやパスワードの入力なしで、ワンタップで簡単に登録・ログインができます。 |
 
-<h3 align="center">🤳📚 書籍登録</h3>
+<br><h3 align="center">🤳📚 書籍登録</h3>
 
 | バーコードスキャン | キーワード検索 |
 |------------------|---------------------|
 | <p align="center"><a href="https://gyazo.com/88615713f29c4da2bd917487a84d9f53"><img src="https://i.gyazo.com/88615713f29c4da2bd917487a84d9f53.gif" width="250" alt="バーコードスキャンGIF"></a></p> | <p align="center"><img src="https://github.com/user-attachments/assets/56efe725-fb4a-49a2-91d4-3e35a34cc117" width="250" alt="キーワード検索"></p> |
-| <p align="center">ZXingを用いたクライアントサイドのバーコードスキャン機能。取得したISBNを非同期で送信し、複数のAPIから書誌情報を統合取得します。</p> | <p align="center">タイトル・著者をもとに、楽天・Google Booksを切り替えて検索可能。ISBNでの検索も可能。</p> |
+| <p align="center">ZXing[^1]を用いたクライアントサイドのバーコードスキャン機能。取得したISBNを非同期で送信し、複数のAPIから書誌情報を統合取得します。</p> | <p align="center">タイトル・著者をもとに、楽天・Google Booksを切り替えて検索可能。ISBNでの検索も可能。</p> |
 
-### 🦓📚 ISBN登録処理の全体フロー
+<details>
+<summary><strong>🦓📚 ISBN登録処理の全体フロー</strong></summary>
+
 <pre>
 📱 スマホでバーコードをスキャン（🦓ZXing）   ⌨️ ユーザーが手動でISBNを入力
              │                                      │
@@ -100,7 +101,7 @@ Bokriumは、そのための場です。知識を、思い出しやすく、取�
                                  ▼  
                   📚 書籍情報を本棚に登録・表示！
 </pre>
-
+</details>
 
 
 <br><h3 align="center">📚👀 本棚</h3>
@@ -112,7 +113,9 @@ Bokriumは、そのための場です。知識を、思い出しやすく、取�
 | <p align="center">[<img src="https://i.gyazo.com/262949cb147fe5434171f211b7c5864d.gif" alt="本棚レイアウト切り替えGIF" width="100%">](https://gyazo.com/262949cb147fe5434171f211b7c5864d)</p> |
 | ユーザーは5種類の本棚レイアウト（棚・カード・背表紙・リスト・表形式）と表示冊数を自由に切り替えることができます。選択したレイアウトと冊数はセッションに保存され、次回以降も自分の好みに合わせた状態が維持されます。 |
 
-### 📦 本棚表示機能における責務分離構成
+
+<details>
+<summary><strong>📦 本棚表示機能における責務分離構成</strong></summary>
 <pre>
 app/
 ├── controllers/      # 表示制御・状態更新を担うコントローラ群
@@ -124,11 +127,10 @@ app/
 │   └── books/        
 </pre>
 
-> Bokriumでは、Hotwire（Turbo + Stimulus）を活用した “HTML over the wire” アーキテクチャを採用しています。
-これにより、JavaScriptによるSPA化に頼らず、Rails本来のMVC構造を保ったままスムーズなユーザー体験を実現しています。
-> 
-> 表示処理の責務も明確に分離しており、Controllerは状態処理、QueryはDBアクセス、Presenterは表示ロジック、ViewはHotwireによるUX、Componentは再利用可能なUI部品という役割に分けています。構造を保ちながらも、表示の拡張や保守がしやすい柔軟な設計を意識しています。
+表示処理の責務を明確に分離しており、Controllerは状態処理、QueryはDBアクセス、Presenterは表示ロジック、ViewはHotwire[^2]によるUX、Componentは再利用可能なUI部品という役割に分けています。
+構造を保ちながらも、表示の拡張や保守がしやすい柔軟な設計を意識しています。
 
+</details>
  
 <br><h3 align="center">🔍 快適な検索と閲覧体験</h3>
 
@@ -187,8 +189,11 @@ app/
 <br>
 
 ## 📡 インフラ図
-[![Image from Gyazo](https://i.gyazo.com/765ddbb70bc87fe1662edf6ef1768a73.png)](https://gyazo.com/765ddbb70bc87fe1662edf6ef1768a73)
+[![インフラ図](https://i.gyazo.com/765ddbb70bc87fe1662edf6ef1768a73.png)](https://gyazo.com/765ddbb70bc87fe1662edf6ef1768a73)
 
+<details>
+<summary><strong>📡 インフラ構成の詳細</strong></summary>
+ 
 >#### アプリケーションには Ruby on Rails を採用
 
 Webアプリに必要な機能が揃ったフルスタックフレームワークであり、個人開発でも本番品質の構築がしやすいと感じたためです。
@@ -208,12 +213,16 @@ Fly.io付属のDBはマネージド化するとコストが高く、Neonは半�
 
 画像アップロードは署名付きURLでRailsと分離し、セキュアかつ低負荷な構成に。静的アセットや画像はCloudflare CDN経由で高速配信しています。
 定期処理はcron-job.orgを用いた外部スケジューリングで対応し、CI/CDはGitHub Actionsで自動化。開発から本番反映までの流れを効率化しています。
+</details>
 
 <br>
- 
-## 🗂 ER図・テーブル設計
-[![Image from Gyazo](https://i.gyazo.com/773f2b9900b1460aecfea5a1fee2d8b4.png)](https://gyazo.com/773f2b9900b1460aecfea5a1fee2d8b4)
 
+## 🗂 ER図・テーブル設計
+[![ER図・テーブル設計](https://i.gyazo.com/773f2b9900b1460aecfea5a1fee2d8b4.png)](https://gyazo.com/773f2b9900b1460aecfea5a1fee2d8b4)
+
+<details>
+<summary><strong>🗂 テーブル設計の詳細</strong></summary>
+ 
 >#### Bokriumは、読書メモと本棚管理を中心とした構成です。
 
 `books`, `users`, `memos` を軸に、メモはユーザーと書籍に属する中間モデルとして設計。<br>
@@ -228,6 +237,15 @@ Fly.io付属のDBはマネージド化するとコストが高く、Neonは半�
 
 >#### なぜ PostgreSQL なのか
 
-Bokriumでは、読書メモや書籍情報を対象とした日本語の全文検索を重視しており、pg_search を活用できる PostgreSQLの全文検索機能は必須でした。
-また、Railsとの高い親和性と安定した同時接続処理が求められる点でも、SQLiteやMySQLではなくPostgreSQLが最適と判断しました。
+Bokriumでは、読書メモや書籍情報を対象とした日本語の全文検索を重視しており、pg_search[^3] を活用できる PostgreSQLの全文検索機能は必須でした。  
+また、Railsとの高い親和性と、安定した同時接続処理が求められる点でも、SQLiteやMySQLではなく PostgreSQL が最適と判断しました。  
 本番環境では、スケーラブルかつコストパフォーマンスに優れたマネージドサービスである Neon を利用しています。
+</details>
+
+<br>
+
+[^1]: [ZXing（Zebra Crossing）](https://www.npmjs.com/package/@zxing/library) は、Java製のオープンソース1D/2Dバーコード処理ライブラリで、Web向けには `@zxing/library` パッケージが提供されています。**認識精度が高い**ことから、最終的にBokriumで採用しました。    
+
+[^2]: [Hotwire](https://github.com/hotwired) は “HTML over the wire” を略した名前で、Turbo（リンク遷移・部分更新）と Stimulus（UI制御）を組み合わせることで、サーバー側でHTMLを生成してクライアントへ送信する設計思想のことです。BokriumではこれをTurbo（部分更新）+ Stimulus（UI操作）で実現し、JavaScript中心のSPAに頼らず、  RailsのMVC構造を保ちながらもスムーズで動的なUXを提供しています。
+
+[^3]: [pg_search](https://github.com/Casecommons/pg_search) は、PostgreSQLの全文検索機能を活用できる Rails用の検索ライブラリです。`tsearch` や `trigram` を通じて、日本語検索にもある程度対応できます。
