@@ -236,7 +236,7 @@ Fly.io付属のDBはマネージド化するとコストが高く、Neonは半�
 <br>
 
 ## 🗂 ER図・テーブル設計
-[![ER図・テーブル設計](https://i.gyazo.com/773f2b9900b1460aecfea5a1fee2d8b4.png)](https://gyazo.com/773f2b9900b1460aecfea5a1fee2d8b4)
+[![ER図](https://i.gyazo.com/539178a28c82efa0657ac8aaa2bd0ba6.png)](https://gyazo.com/539178a28c82efa0657ac8aaa2bd0ba6)
 
 <details>
 <summary><strong>🗂 テーブル設計の詳細</strong></summary>
