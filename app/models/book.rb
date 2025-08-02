@@ -17,13 +17,13 @@ class Book < ApplicationRecord
   }
 
   validates :title, presence: { message: ": タイトルは必須です" }, length: { maximum: 100, message: ": タイトルは100文字以内で入力してください" }
-  validates :author, length: { maximum: 50, message: ": 著者は50文字以内で入力してください"  }, allow_blank: true
+  validates :author, length: { maximum: 100, message: ": 著者は100文字以内で入力してください"  }, allow_blank: true
   validates :publisher, length: { maximum: 50,  message: ": 出版社は50文字以内で入力してください"  }, allow_blank: true
   validates :page,
-          numericality: { only_integer: true, greater_than: 0, less_than_or_equal_to: 50_560, message: ": ページ数は50560ページ以下で入力してください" },
+          numericality: { only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 50_560, message: ": ページ数は50560ページ以下で入力してください" },
           allow_blank: true
   validates :price,
-          numericality: { only_integer: true, greater_than: 0, less_than_or_equal_to: 1_000_000, message: ": 金額は1円以上100万円以下で指定してください" },
+          numericality: { only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 1_000_000, message: ": 金額は100万円以下で指定してください" },
           allow_blank: true
   validates :status,
             inclusion: { in: statuses.keys }
