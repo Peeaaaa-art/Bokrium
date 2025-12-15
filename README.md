@@ -18,8 +18,8 @@
   - [💌 ランダム通知機能](#-ランダム通知機能)
   - [🎁 支援機能](#-支援機能)
 - [🛠 使用技術](#-使用技術)
-- [📡 インフラ図](#-インフラ図)
-- [🗂 ER図・テーブル設計](#-er図テーブル設計)
+- [📡 インフラ構成図](#-インフラ構成図)
+- [🗂 データベース設計図](#-データベース設計図物理erd--rails前提)
  
  
 ## 📖 Bokriumとは
@@ -206,7 +206,7 @@ app/
 </details>
 <br>
 
-## 📡 インフラ図
+## 📡 インフラ構成図
 [![インフラ図](https://i.gyazo.com/765ddbb70bc87fe1662edf6ef1768a73.png)](https://gyazo.com/765ddbb70bc87fe1662edf6ef1768a73)
 
 <details>
@@ -235,7 +235,7 @@ Fly.io付属のDBはマネージド化するとコストが高く、Neonは半�
 
 <br>
 
-## 🗂 ER図・テーブル設計
+## 🗂 データベース設計図（物理ERD / Rails前提）
 [![ER図](https://i.gyazo.com/539178a28c82efa0657ac8aaa2bd0ba6.png)](https://gyazo.com/539178a28c82efa0657ac8aaa2bd0ba6)
 
 <details>
