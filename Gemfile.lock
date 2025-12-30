@@ -443,7 +443,7 @@ GEM
       activerecord (>= 7.2)
       railties (>= 7.2)
     stringio (3.1.8)
-    stripe (17.1.0)
+    stripe (17.2.0)
     thor (1.4.0)
     thruster (0.1.13)
     thruster (0.1.13-aarch64-linux)
