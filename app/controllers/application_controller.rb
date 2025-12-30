@@ -59,6 +59,4 @@ class ApplicationController < ActionController::Base
       guest_book_path(book)
     end
   end
-
-
 end
