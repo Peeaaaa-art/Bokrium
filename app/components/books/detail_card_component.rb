@@ -2,8 +2,6 @@
 
 module Books
   class DetailCardComponent < ViewComponent::Base
-    include Pagy::Frontend
-
     def initialize(books:, pagy:, detail_card_columns: nil, mobile: false)
       @books = books
       @pagy = pagy
