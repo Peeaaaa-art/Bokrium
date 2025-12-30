@@ -10,21 +10,44 @@ export default class BookEditController extends Controller<HTMLElement> {
   declare readonly idValue: number
   declare readonly indexValue: number
 
+  private createInput(name: string, value: string): HTMLInputElement {
+    const input = document.createElement("input")
+    input.className = "form-control form-control-sm"
+    input.name = name
+    input.value = value
+    return input
+  }
+
+  private createButton(text: string, action: string, variant: string): HTMLButtonElement {
+    const button = document.createElement("button")
+    button.className = `btn btn-${variant} btn-sm d-flex align-items-center`
+    button.setAttribute("data-action", `click->book-edit#${action}`)
+    button.textContent = text
+    return button
+  }
+
   startEdit() {
     const title = this.titleTarget.textContent?.trim() ?? ""
     const author = this.authorTarget.textContent?.trim() ?? ""
     const publisher = this.publisherTarget.textContent?.trim() ?? ""
 
-    this.titleTarget.innerHTML = `<input class="form-control form-control-sm" name="title" value="${title}" />`
-    this.authorTarget.innerHTML = `<input class="form-control form-control-sm" name="author" value="${author}" />`
-    this.publisherTarget.innerHTML = `<input class="form-control form-control-sm" name="publisher" value="${publisher}" />`
+    // Clear existing content and append input elements safely
+    this.titleTarget.textContent = ""
+    this.titleTarget.appendChild(this.createInput("title", title))
 
-    const actionButtons = `
-      <button class="btn btn-success btn-sm d-flex align-items-center" data-action="click->book-edit#save">✓</button>
-      <button class="btn btn-secondary btn-sm d-flex align-items-center" data-action="click->book-edit#cancel">✕</button>
-    `
+    this.authorTarget.textContent = ""
+    this.authorTarget.appendChild(this.createInput("author", author))
+
+    this.publisherTarget.textContent = ""
+    this.publisherTarget.appendChild(this.createInput("publisher", publisher))
+
+    // Create action buttons safely
     const lastCell = this.element.querySelector("td:last-child")
-    if (lastCell) lastCell.innerHTML = actionButtons
+    if (lastCell) {
+      lastCell.textContent = ""
+      lastCell.appendChild(this.createButton("✓", "save", "success"))
+      lastCell.appendChild(this.createButton("✕", "cancel", "secondary"))
+    }
   }
 
   cancel() {

@@ -12,8 +12,10 @@ interface ReadOnlyTipTapProps {
 
 // 表示用でも classなし <br> を除去（防止）
 const removeUnwantedBRs = (html: string): string => {
-  const div = document.createElement("div")
-  div.innerHTML = html
+  // Use DOMParser for safer HTML parsing
+  const parser = new DOMParser()
+  const doc = parser.parseFromString(html, "text/html")
+  const div = doc.body
 
   div.querySelectorAll("p").forEach((p) => {
     const hasOnlyBRs = Array.from(p.childNodes).every((node) => {
@@ -28,7 +30,10 @@ const removeUnwantedBRs = (html: string): string => {
 
     if (hasOnlyBRs || isActuallyEmpty) {
       // 空の段落は trailingBreak だけを残す
-      p.innerHTML = ""
+      // Clear all child nodes safely
+      while (p.firstChild) {
+        p.removeChild(p.firstChild)
+      }
       const br = document.createElement("br")
       br.classList.add("ProseMirror-trailingBreak")
       p.appendChild(br)

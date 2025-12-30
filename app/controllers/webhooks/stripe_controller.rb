@@ -1,4 +1,7 @@
 class Webhooks::StripeController < ApplicationController
+  # CSRF protection is disabled for webhook endpoints because they receive requests
+  # from external services (Stripe). Instead, we verify the request authenticity
+  # using Stripe's signature verification (see Stripe::Webhook.construct_event).
   skip_before_action :verify_authenticity_token
 
   def create
