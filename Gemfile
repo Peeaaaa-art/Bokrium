@@ -37,7 +37,7 @@ gem "omniauth-rails_csrf_protection"
 
 gem "rails-i18n"
 
-gem "pagy"
+gem 'pagy', '~> 43.0'
 
 gem "rack-rewrite"
 
@@ -82,8 +82,6 @@ group :development, :test do
   gem "factory_bot_rails"
 
   gem "bullet"
-
-  gem "newrelic_rpm"
 end
 
 group :development do
