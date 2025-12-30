@@ -54,7 +54,12 @@ class BooksController < ApplicationController
 
   def create
     @book = current_user.books.build(book_params)
-    @book.save ? respond_success("本棚に『#{@book.title.truncate(TITLE_TRUNCATE_LIMIT)}』を追加しました。") : respond_failure(@book.errors.full_messages.to_sentence.presence || "追加に失敗しました。")
+    if @book.save
+      message = helpers.book_added_message(@book)
+      respond_success(message)
+    else
+      respond_failure(@book.errors.full_messages.to_sentence.presence || "追加に失敗しました。")
+    end
   end
 
   def edit

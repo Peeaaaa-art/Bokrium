@@ -49,6 +49,14 @@ module ApplicationHelper
     "https://lib.bokrium.com/images/#{filename}"
   end
 
+  def book_added_message(book)
+    sanitize(
+      "本棚に#{link_to("『#{h(book.title.truncate(ApplicationController::TITLE_TRUNCATE_LIMIT))}』", book_path(book))}を追加しました。",
+      tags: %w[a],
+      attributes: %w[href]
+    )
+  end
+
   private
 
   def truncate_mixed_width(text, limit: 10)

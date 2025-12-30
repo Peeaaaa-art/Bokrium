@@ -13,6 +13,6 @@
 
   <div class="flash-message shadow" data-status="<%= status %>">
     <%= bi_icon(icon, css: "is-5") %>
-    <span class="flash-message-text"><%= message %></span>
+    <span class="flash-message-text"><%= message.html_safe? ? message : h(message) %></span>
   </div>
 <% end %>
