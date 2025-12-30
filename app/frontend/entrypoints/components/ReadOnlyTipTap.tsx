@@ -5,6 +5,7 @@ import React from "react";
 import { useEditor, EditorContent } from "@tiptap/react"
 import StarterKit from "@tiptap/starter-kit"
 import type { ReactElement } from "react"
+import DOMPurify from "dompurify"
 
 interface ReadOnlyTipTapProps {
   content: string
@@ -44,7 +45,8 @@ const removeUnwantedBRs = (html: string): string => {
 }
 
 function ReadOnlyTipTap({ content }: ReadOnlyTipTapProps): ReactElement | null {
-  const cleaned = removeUnwantedBRs(content)
+  const sanitized = DOMPurify.sanitize(content)
+  const cleaned = removeUnwantedBRs(sanitized)
 
   const editor = useEditor({
     extensions: [StarterKit],
