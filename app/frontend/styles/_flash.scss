@@ -36,6 +36,17 @@
   min-width: 0;
 }
 
+.flash-message .flash-message-text a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 550;
+}
+
+.flash-message .flash-message-text a:hover {
+  color: #fff;
+  opacity: 0.85;
+}
+
 .flash-message i {
   flex-shrink: 0;
 }

@@ -5,6 +5,10 @@ on:
     branches:
       - main
 
+# Set minimal permissions for the entire workflow
+permissions:
+  contents: read
+
 jobs:
   upload-vite-assets:
     runs-on: ubuntu-latest

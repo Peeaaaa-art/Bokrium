@@ -33,10 +33,15 @@ RSpec.describe "Books", type: :request do
       }
 
       expect(response).to redirect_to(search_books_path)
-      follow_redirect!
 
+      # フラッシュメッセージにリンクが含まれていることを確認
+      book = Book.last
       truncated_title = long_title.truncate(ApplicationController::TITLE_TRUNCATE_LIMIT)
-      expect(response.body).to include("本棚に『#{truncated_title}』を追加しました")
+      expect(flash[:info]).to include("本棚に")
+      expect(flash[:info]).to include("『#{truncated_title}』")
+      expect(flash[:info]).to include("を追加しました")
+      # リンクが含まれていることを確認
+      expect(flash[:info]).to include("<a href=\"/books/#{book.id}\">")
     end
   end
 

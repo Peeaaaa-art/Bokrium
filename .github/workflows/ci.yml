@@ -4,6 +4,10 @@ on:
   pull_request:
     branches: [main]
 
+# Set minimal permissions for the entire workflow
+permissions:
+  contents: read
+
 jobs:
   rubocop:
     runs-on: ubuntu-latest
