@@ -1,6 +1,4 @@
 module ApplicationHelper
-  include Pagy::Frontend
-
   def nav_link_to(name = nil, path = nil, options = {}, &block)
     if block_given?
       path ||= name
