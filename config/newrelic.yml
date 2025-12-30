@@ -1,8 +1,0 @@
-common: &default_settings
-  license_key: <%= ENV['NEW_RELIC_LICENSE_KEY'] %>
-  app_name: Bokrium (Production)
-  monitor_mode: true
-  log_level: info
-
-production:
-  <<: *default_settings

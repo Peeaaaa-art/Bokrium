@@ -1,14 +1,8 @@
-# config/initializers/pagy.rb
 require "pagy"
-require "pagy/extras/bootstrap"
-require "pagy/extras/overflow"
-require "pagy/extras/array"
 
-Pagy::DEFAULT[:overflow] = :last_page
-Pagy::DEFAULT[:items] = 50
-Pagy::DEFAULT[:max_items] = nil
-Pagy::DEFAULT[:limit] = 50
+Pagy.options[:items] = 50
+# 他は必要になってからでOK
 
 Rails.application.config.to_prepare do
-  ApplicationController.include Pagy::Backend
+  ApplicationController.include Pagy::Method
 end
