@@ -172,7 +172,7 @@ app/
 | カテゴリ       | 技術構成                                                                                                      |
 |----------------|---------------------------------------------------------------------------------------------------------------|
 | フロントエンド | Hotwire（Stimulus・Turbo） / React（TipTap専用） / Vite / TypeScript                                                |
-| バックエンド   | Ruby 3.4.3 / Ruby on Rails 8.0.2                                                                              |
+| バックエンド   | Ruby 3.4.3 / Ruby on Rails 8.1.1                                                                              |
 | データベース   | PostgreSQL（Neon） / pg_search                                                                               |
 | インフラ       | Fly.io / Cloudflare（DNS管理・CDN、Viteビルドアセットの配信にCloudflare R2を使用）         |
 | 環境構築       | Docker                                                              |
