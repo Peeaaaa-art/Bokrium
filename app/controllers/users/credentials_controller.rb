@@ -6,6 +6,11 @@ module Users
 
     # 登録開始（challenge 生成）
     def new
+      # 既存のパスキーを除外リストに追加
+      exclude_credentials = current_user.credentials.map do |cred|
+        Base64.strict_decode64(cred.external_id)
+      end
+
       # WebAuthn の登録オプションを生成
       options = WebAuthn::Credential.options_for_create(
         user: {
@@ -13,9 +18,9 @@ module Users
           name: current_user.email,
           display_name: current_user.name || current_user.email
         },
-        exclude: current_user.credentials.pluck(:external_id).map { |id| Base64.strict_decode64(id) },
+        exclude: exclude_credentials,
         authenticator_selection: {
-          authenticator_attachment: "platform",  # Touch ID / Face ID を優先
+          # authenticator_attachment を指定しない（platform と cross-platform 両方を許可）
           require_resident_key: false,
           user_verification: "preferred"
         }
@@ -39,10 +44,10 @@ module Users
         },
         pubKeyCredParams: options.pub_key_cred_params,
         timeout: options.timeout,
-        excludeCredentials: options.exclude.map { |cred|
+        excludeCredentials: exclude_credentials.map { |cred_id|
           {
-            type: cred.type,
-            id: Base64.strict_encode64(cred.id)
+            type: "public-key",
+            id: Base64.strict_encode64(cred_id)
           }
         },
         authenticatorSelection: options.authenticator_selection,
