@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Users::RegistrationsController < Devise::RegistrationsController
-  # before_action :configure_sign_up_params, only: [:create]
+  before_action :configure_sign_up_params, only: [ :create ]
   # before_action :configure_account_update_params, only: [:update]
 
   # GET /resource/sign_up
@@ -10,9 +10,39 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # end
 
   # POST /resource
-  # def create
-  #   super
-  # end
+  def create
+    # パスキー登録フラグをチェック
+    if params[:user][:register_with_passkey] == "true"
+      build_resource(sign_up_params.except(:password, :password_confirmation))
+      resource.instance_variable_set(:@registering_with_passkey, true)
+      resource.password = Devise.friendly_token[0, 20]  # ダミーパスワード生成
+
+      if resource.save
+        yield resource if block_given?
+        if resource.active_for_authentication?
+          set_flash_message! :notice, :signed_up
+          sign_up(resource_name, resource)
+          # パスキー登録へ誘導するフラグ
+          session[:setup_passkey_after_confirmation] = true
+          respond_with resource, location: after_sign_up_path_for(resource)
+        else
+          # メール確認待ち
+          set_flash_message! :notice, :"signed_up_but_#{resource.inactive_message}"
+          # パスキー登録へ誘導するフラグ
+          session[:setup_passkey_after_confirmation] = true
+          expire_data_after_sign_in!
+          respond_with resource, location: after_inactive_sign_up_path_for(resource)
+        end
+      else
+        clean_up_passwords resource
+        set_minimum_password_length
+        respond_with resource
+      end
+    else
+      # 通常のパスワード登録
+      super
+    end
+  end
 
   # GET /resource/edit
   # def edit
@@ -38,12 +68,12 @@ class Users::RegistrationsController < Devise::RegistrationsController
   #   super
   # end
 
-  # protected
+  protected
 
   # If you have extra params to permit, append them to the sanitizer.
-  # def configure_sign_up_params
-  #   devise_parameter_sanitizer.permit(:sign_up, keys: [:attribute])
-  # end
+  def configure_sign_up_params
+    devise_parameter_sanitizer.permit(:sign_up, keys: [ :name, :avatar_s3, :register_with_passkey ])
+  end
 
   # If you have extra params to permit, append them to the sanitizer.
   # def configure_account_update_params

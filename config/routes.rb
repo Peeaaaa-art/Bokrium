@@ -15,6 +15,20 @@ Rails.application.routes.draw do
     patch "users/email/update", to: "users/emails#update", as: :update_user_email
 
     get "users/auth/line/connect", to: "users/omniauth_callbacks#line_connect", as: :user_line_connect
+
+    # Passkey 認証
+    get  "users/webauthn_login", to: "users/webauthn_sessions#new", as: :new_user_webauthn_session
+    post "users/webauthn_login", to: "users/webauthn_sessions#create", as: :user_webauthn_session
+
+    # Passkey 登録・削除
+    get    "users/credentials/new", to: "users/credentials#new", as: :new_user_credential
+    post   "users/credentials",     to: "users/credentials#create", as: :user_credentials
+    delete "users/credentials/:id", to: "users/credentials#destroy", as: :user_credential
+
+    # Passkey 初期設定画面
+    get  "users/passkey_setup",          to: "users/passkey_setup#show",     as: :setup_passkey
+    post "users/passkey_setup/complete", to: "users/passkey_setup#complete", as: :complete_passkey_setup
+    post "users/passkey_setup/skip",     to: "users/passkey_setup#skip",     as: :skip_passkey_setup
   end
 
   get "/up", to: proc { [ 200, {}, [ "OK" ] ] }

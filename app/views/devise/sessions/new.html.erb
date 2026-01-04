@@ -7,6 +7,21 @@
             <span class="logo-welcome" title="ボクリウム">Bokrium</span><br>
           </h1>
 
+          <!-- Passkey ログイン -->
+          <div class="d-grid mb-3">
+            <button type="button"
+                    class="btn-passkey-login"
+                    data-controller="webauthn-login"
+                    data-action="click->webauthn-login#login">
+              <%= bi_icon "key-fill", css: "passkey-icon" %>
+              <span class="passkey-text">パスキーでログイン</span>
+            </button>
+          </div>
+
+          <div class="text-center text-muted my-3">
+            <small>または</small>
+          </div>
+
           <%= form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: "needs-validation", novalidate: true }) do |f| %>
             <div class="form-floating mb-3">
               <%= f.email_field :email,
@@ -30,7 +45,7 @@
             </div>
             <% if devise_mapping.rememberable? %>
               <div class="form-check mb-3 text-start text-muted">
-                <%= f.check_box :remember_me, class: "form-check-input", id: "remember_me" %>
+                <%= f.check_box :remember_me, class: "form-check-input", id: "remember_me", checked: true %>
                 <%= f.label :remember_me, class: "form-check-label", for: "remember_me" %>
               </div>
             <% end %>

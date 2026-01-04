@@ -8,10 +8,16 @@ class User < ApplicationRecord
   has_many :user_tags, dependent: :destroy
   has_many :like_memos, dependent: :destroy
   has_many :liked_memos, through: :like_memos, source: :memo
+  has_many :credentials, dependent: :destroy
+
+  # パスキー登録フラグ（フォーム用の仮想属性）
+  attr_accessor :register_with_passkey
+
   # Include default devise modules. Others available are:
   #  :timeoutable, :trackable
+  # validatable を除外し、独自のバリデーションを実装（パスキー対応のため）
   devise :database_authenticatable, :registerable, :lockable,
-        :recoverable, :rememberable, :validatable, :confirmable,
+        :recoverable, :rememberable, :confirmable,
         :omniauthable, omniauth_providers: [ :line ]
 
   after_update :maybe_switch_to_email_login
@@ -24,9 +30,30 @@ class User < ApplicationRecord
     auth_provider == "email"
   end
 
+  def passkey_only?
+    encrypted_password.blank? && credentials.any?
+  end
+
   validates :name, length: { maximum: 50, message: ": 名前は50文字以内で入力してください" }
 
+  # メールのバリデーション（Devise validatable の代替）
+  validates :email, presence: true, uniqueness: { case_sensitive: false }
+  validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }, allow_blank: true
+
+  # パスワードのバリデーション（パスキーのみの場合はスキップ）
+  validates :password, presence: true, if: :password_required?
+  validates :password, confirmation: true, if: :password_required?
+  validates :password, length: { within: Devise.password_length }, allow_blank: true
+
   private
+
+  def password_required?
+    # パスキー登録フラグがある場合はパスワード不要
+    return false if @registering_with_passkey
+
+    # 新規登録時またはパスワード変更時のみ必須
+    !persisted? || !password.nil? || !password_confirmation.nil?
+  end
 
   def maybe_switch_to_email_login
     return unless auth_provider == "line"

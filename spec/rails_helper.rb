@@ -38,6 +38,7 @@ RSpec.configure do |config|
   config.include Devise::Test::IntegrationHelpers, type: :system
   config.include GuestUserHelper
   config.include ViewComponent::TestHelpers, type: :component
+  config.include WebAuthnHelper, type: :request
 
   config.before(:each) do
     Bullet.start_request if Bullet.enabled?

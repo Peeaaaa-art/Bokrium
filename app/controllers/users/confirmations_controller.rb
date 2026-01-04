@@ -13,7 +13,15 @@ class Users::ConfirmationsController < Devise::ConfirmationsController
     if user&.unconfirmed_email.present?
       redirect_to mypage_path, notice: "メールアドレスを更新しました。"
     else
-      redirect_to guest_starter_books_path, notice: "メール確認が完了しました。Bokriumへようこそ！"
+      # パスキー登録予定の場合、専用画面へ
+      if session[:setup_passkey_after_confirmation]
+        session.delete(:setup_passkey_after_confirmation)
+        redirect_to setup_passkey_path, notice: "メール確認が完了しました。Bokriumへようこそ！最後にパスキーを設定しましょう。"
+      else
+        # 通常の初回登録完了 → スターターガイドの後、マイページでパスキー登録を促す
+        session[:suggest_passkey_setup] = true
+        redirect_to guest_starter_books_path, notice: "メール確認が完了しました。Bokriumへようこそ！"
+      end
     end
   end
 end

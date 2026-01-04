@@ -10,8 +10,13 @@ RSpec.describe 'User email confirmation', type: :system do
   it 'Deviseから送信された確認リンクでメール認証できること' do
     visit new_user_registration_path
     fill_in 'floatingEmail', with: 'confirmtest@example.com'
-    fill_in 'floatingPassword', with: 'password123'
-    fill_in 'floatingPasswordConfirmation', with: 'password123'
+
+    # パスワード認証を選択
+    choose 'auth_password'
+
+    # rack_test は JavaScript を実行しないので、visible: false で入力
+    fill_in 'floatingPassword', with: 'password123', visible: false
+    fill_in 'floatingPasswordConfirmation', with: 'password123', visible: false
     click_button 'アカウント登録'
 
     expect(page).to have_content '確認メールを送信しました'

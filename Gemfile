@@ -35,6 +35,8 @@ gem "line-bot-api"
 
 gem "omniauth-rails_csrf_protection"
 
+gem "webauthn"
+
 gem "rails-i18n"
 
 gem "pagy", "~> 43.0"

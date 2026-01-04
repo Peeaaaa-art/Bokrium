@@ -10,11 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_12_30_041918) do
+ActiveRecord::Schema[8.1].define(version: 2025_12_30_124252) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
-  enable_extension "unaccent"
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
@@ -71,6 +70,18 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_30_041918) do
     t.index ["author"], name: "index_books_on_author"
     t.index ["user_id", "isbn"], name: "index_books_on_user_id_and_isbn_unique_if_isbn", unique: true, where: "(isbn IS NOT NULL)"
     t.index ["user_id"], name: "index_books_on_user_id"
+  end
+
+  create_table "credentials", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "external_id", null: false
+    t.string "nickname"
+    t.text "public_key", null: false
+    t.bigint "sign_count", default: 0, null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["external_id"], name: "index_credentials_on_external_id", unique: true
+    t.index ["user_id"], name: "index_credentials_on_user_id"
   end
 
   create_table "donations", force: :cascade do |t|
@@ -189,6 +200,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_30_041918) do
   add_foreign_key "book_tag_assignments", "user_tags"
   add_foreign_key "book_tag_assignments", "users"
   add_foreign_key "books", "users"
+  add_foreign_key "credentials", "users"
   add_foreign_key "donations", "users"
   add_foreign_key "images", "books"
   add_foreign_key "like_memos", "memos"
