@@ -10,10 +10,11 @@
           <!-- Passkey ログイン -->
           <div class="d-grid mb-3">
             <button type="button"
-                    class="btn btn-primary-bok btn-lg"
+                    class="btn-passkey-login"
                     data-controller="webauthn-login"
                     data-action="click->webauthn-login#login">
-              🔑 パスキーでログイン
+              <%= bi_icon "key-fill", css: "passkey-icon" %>
+              <span class="passkey-text">パスキーでログイン</span>
             </button>
           </div>
 
