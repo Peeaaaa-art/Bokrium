@@ -81,7 +81,7 @@ module Users
       # clientDataJSON から challenge を取得して比較
       client_data_json_binary = Base64.urlsafe_decode64(params[:response][:clientDataJSON])
       client_data_hash = JSON.parse(client_data_json_binary)
-      client_challenge_b64 = client_data_hash['challenge']
+      client_challenge_b64 = client_data_hash["challenge"]
       client_challenge_binary = Base64.urlsafe_decode64(client_challenge_b64)
 
       Rails.logger.debug("=== Challenge binary comparison ===")
