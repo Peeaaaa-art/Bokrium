@@ -7,6 +7,20 @@
             <span class="logo-welcome" title="ボクリウム">Bokrium</span><br>
           </h1>
 
+          <!-- Passkey ログイン -->
+          <div class="d-grid mb-3">
+            <button type="button"
+                    class="btn btn-primary-bok btn-lg"
+                    data-controller="webauthn-login"
+                    data-action="click->webauthn-login#login">
+              🔑 パスキーでログイン
+            </button>
+          </div>
+
+          <div class="text-center text-muted my-3">
+            <small>または</small>
+          </div>
+
           <%= form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: "needs-validation", novalidate: true }) do |f| %>
             <div class="form-floating mb-3">
               <%= f.email_field :email,

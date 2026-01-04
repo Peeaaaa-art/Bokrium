@@ -7,7 +7,7 @@
             <span class="logo-welcome" title="ボクリウム">Bokrium</span>
           </h1>
 
-          <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { class: "needs-validation", novalidate: true }) do |f| %>
+          <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { class: "needs-validation", novalidate: true, id: "registration-form" }) do |f| %>
             <%= render "devise/shared/error_messages", resource: resource %>
 
             <div class="form-floating mb-3">
@@ -36,38 +36,75 @@
               <% end %>
             </div>
 
-            <div class="form-floating mb-3">
-              <%= f.password_field :password,
-                    autocomplete: "new-password",
-                    class: "form-control #{'is-invalid' if resource.errors[:password].present?}",
-                    id: "floatingPassword",
-                    placeholder: t('.password'),
-                    required: true %>
-              <%= f.label :password, for: "floatingPassword" do %>
-                <%= t('.password') %> <span class="text-danger">*</span>
-              <% end %>
-              <% if resource.errors[:password].present? %>
-                <div class="invalid-feedback">
-                  <%= resource.errors[:password].first %>
-                </div>
-              <% end %>
+            <!-- 認証方法選択 -->
+            <div class="mb-3">
+              <label class="form-label fw-bold">認証方法を選択してください</label>
+
+              <div class="form-check p-3 border rounded mb-2 bg-light" style="cursor: pointer;" onclick="selectAuthMethod('passkey')">
+                <%= f.radio_button :register_with_passkey, "true", id: "auth_passkey", class: "form-check-input", checked: true %>
+                <label class="form-check-label w-100" for="auth_passkey" style="cursor: pointer;">
+                  <strong>🔑 パスキーで登録（推奨）</strong>
+                  <br>
+                  <small class="text-muted">顔認証・指紋認証でログイン。パスワード不要で安全。</small>
+                </label>
+              </div>
+
+              <div class="form-check p-3 border rounded" style="cursor: pointer;" onclick="selectAuthMethod('password')">
+                <%= f.radio_button :register_with_passkey, "false", id: "auth_password", class: "form-check-input" %>
+                <label class="form-check-label w-100" for="auth_password" style="cursor: pointer;">
+                  <strong>🔒 パスワードで登録</strong>
+                  <br>
+                  <small class="text-muted">従来のパスワード認証。後からパスキーを追加できます。</small>
+                </label>
+              </div>
             </div>
 
-            <div class="form-floating mb-3">
-              <%= f.password_field :password_confirmation,
-                    autocomplete: "new-password",
-                    class: "form-control #{'is-invalid' if resource.errors[:password_confirmation].present?}",
-                    id: "floatingPasswordConfirmation",
-                    placeholder: t('.password_confirmation'),
-                    required: true %>
-              <%= f.label :password_confirmation, for: "floatingPasswordConfirmation" do %>
-                <%= t('.password_confirmation') %> <span class="text-danger">*</span>
-              <% end %>
-              <% if resource.errors[:password_confirmation].present? %>
-                <div class="invalid-feedback">
-                  <%= resource.errors[:password_confirmation].first %>
-                </div>
-              <% end %>
+            <!-- パスワード入力欄（パスワード選択時のみ表示） -->
+            <div id="password-fields" style="display: none;">
+              <div class="form-floating mb-3">
+                <%= f.password_field :password,
+                      autocomplete: "new-password",
+                      class: "form-control #{'is-invalid' if resource.errors[:password].present?}",
+                      id: "floatingPassword",
+                      placeholder: t('.password') %>
+                <%= f.label :password, for: "floatingPassword" do %>
+                  <%= t('.password') %> <span class="text-danger">*</span>
+                <% end %>
+                <% if resource.errors[:password].present? %>
+                  <div class="invalid-feedback">
+                    <%= resource.errors[:password].first %>
+                  </div>
+                <% end %>
+              </div>
+
+              <div class="form-floating mb-3">
+                <%= f.password_field :password_confirmation,
+                      autocomplete: "new-password",
+                      class: "form-control #{'is-invalid' if resource.errors[:password_confirmation].present?}",
+                      id: "floatingPasswordConfirmation",
+                      placeholder: t('.password_confirmation') %>
+                <%= f.label :password_confirmation, for: "floatingPasswordConfirmation" do %>
+                  <%= t('.password_confirmation') %> <span class="text-danger">*</span>
+                <% end %>
+                <% if resource.errors[:password_confirmation].present? %>
+                  <div class="invalid-feedback">
+                    <%= resource.errors[:password_confirmation].first %>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+
+            <!-- パスキー選択時の説明 -->
+            <div id="passkey-info" class="alert alert-info small">
+              <strong>✨ パスキーのメリット</strong>
+              <ul class="mb-0 mt-1">
+                <li>パスワードを覚える必要なし</li>
+                <li>フィッシング詐欺に強い</li>
+                <li>わずか数秒でログイン</li>
+              </ul>
+              <p class="mb-0 mt-2 text-muted small">
+                ※ 登録後、メール確認完了時にパスキー設定画面が表示されます
+              </p>
             </div>
 
             <div class="d-grid mb-3">
@@ -83,3 +120,45 @@
     </div>
   </div>
 </div>
+
+<script>
+  function selectAuthMethod(method) {
+    const passkeyRadio = document.getElementById('auth_passkey');
+    const passwordRadio = document.getElementById('auth_password');
+    const passwordFields = document.getElementById('password-fields');
+    const passkeyInfo = document.getElementById('passkey-info');
+    const passwordInput = document.getElementById('floatingPassword');
+    const passwordConfirmInput = document.getElementById('floatingPasswordConfirmation');
+
+    if (method === 'passkey') {
+      passkeyRadio.checked = true;
+      passwordFields.style.display = 'none';
+      if (passkeyInfo) passkeyInfo.style.display = 'block';
+      passwordInput.removeAttribute('required');
+      passwordConfirmInput.removeAttribute('required');
+      passwordInput.value = '';
+      passwordConfirmInput.value = '';
+    } else {
+      passwordRadio.checked = true;
+      passwordFields.style.display = 'block';
+      if (passkeyInfo) passkeyInfo.style.display = 'none';
+      passwordInput.setAttribute('required', 'required');
+      passwordConfirmInput.setAttribute('required', 'required');
+    }
+  }
+
+  // 初期状態でパスキー選択
+  document.addEventListener('DOMContentLoaded', () => {
+    const passkeyRadio = document.getElementById('auth_passkey');
+    if (passkeyRadio && passkeyRadio.checked) {
+      selectAuthMethod('passkey');
+    }
+  });
+
+  document.addEventListener('turbo:load', () => {
+    const passkeyRadio = document.getElementById('auth_passkey');
+    if (passkeyRadio && passkeyRadio.checked) {
+      selectAuthMethod('passkey');
+    }
+  });
+</script>

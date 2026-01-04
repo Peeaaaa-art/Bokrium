@@ -86,6 +86,8 @@ import SpinnerController from "./controllers/spinner_controller";
 import SpineBookController from "./controllers/spine_book_controller";
 import TagToggleController from "./controllers/tag_toggle_controller";
 import UiToggleController from "./controllers/ui_toggle_controller";
+import WebauthnLoginController from "./controllers/webauthn_login_controller";
+import WebauthnRegistrationController from "./controllers/webauthn_registration_controller";
 
 // --- Stimulus Application ---
 const application = Application.start();
@@ -111,6 +113,8 @@ application.register("spinner", SpinnerController);
 application.register("spine-book", SpineBookController);
 application.register("tag-toggle", TagToggleController);
 application.register("ui-toggle", UiToggleController);
+application.register("webauthn-login", WebauthnLoginController);
+application.register("webauthn-registration", WebauthnRegistrationController);
 
 // --- Global Dependencies ---
 window.bootstrap = bootstrap;

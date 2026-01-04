@@ -1,0 +1,79 @@
+<% if current_user.present? %>
+  <div class="container my-5">
+    <div class="card subtle-shadow">
+      <div class="card-header bg-rhodia-blue text-white">
+        <span class="fs-5">🔑 パスキー管理</span>
+      </div>
+      <div class="card-body bg-light-bok">
+        <% if current_user.credentials.none? %>
+          <!-- 未登録の場合は目立つバナーを表示 -->
+          <% if session[:suggest_passkey_setup] %>
+            <div class="alert alert-success border-success mb-3" role="alert">
+              <h5 class="alert-heading">
+                🎉 登録完了！次はパスキーを設定しましょう
+              </h5>
+              <p class="mb-2">
+                パスキーを設定すると、次回から<strong>パスワード不要</strong>で、<strong>顔認証（Face ID）</strong>や<strong>指紋認証（Touch ID）</strong>だけでログインできます。
+              </p>
+              <p class="mb-0 small text-muted">
+                ※ 今すぐ設定しなくても、あとからいつでも追加できます
+              </p>
+            </div>
+            <% session.delete(:suggest_passkey_setup) %>
+          <% else %>
+            <div class="alert alert-warning border-warning mb-3" role="alert">
+              <h5 class="alert-heading">
+                <i class="bi bi-shield-check"></i> パスキーでより安全に
+              </h5>
+              <p class="mb-2">
+                パスワードの代わりに、<strong>顔認証（Face ID）</strong>や<strong>指紋認証（Touch ID）</strong>でログインできるようになります。
+              </p>
+              <ul class="mb-2 small">
+                <li>パスワードを覚える必要なし</li>
+                <li>フィッシング詐欺に強い</li>
+                <li>わずか数秒でログイン</li>
+              </ul>
+              <p class="mb-0 small text-muted">
+                ※ iPhone、Mac、Android、Windows Hello 対応デバイスで利用できます
+              </p>
+            </div>
+          <% end %>
+        <% else %>
+          <p class="text-muted mb-3">
+            パスキーを登録すると、パスワードを入力せずに、顔認証や指紋認証でログインできるようになります。
+          </p>
+        <% end %>
+
+        <% if current_user.credentials.any? %>
+          <ul class="list-group mb-3">
+            <% current_user.credentials.order(created_at: :desc).each do |credential| %>
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                <div>
+                  <strong><%= credential.display_name %></strong>
+                  <br>
+                  <small class="text-muted">
+                    登録日: <%= l(credential.created_at, format: :only_date) %>
+                  </small>
+                </div>
+                <%= button_to "削除",
+                              user_credential_path(credential),
+                              method: :delete,
+                              data: { turbo_confirm: "本当にこのパスキーを削除しますか？" },
+                              class: "btn btn-sm btn-outline-danger" %>
+              </li>
+            <% end %>
+          </ul>
+        <% end %>
+
+        <div class="d-grid">
+          <button type="button"
+                  class="btn btn-primary-bok btn-lg"
+                  data-controller="webauthn-registration"
+                  data-action="click->webauthn-registration#register">
+            ➕ パスキーを追加
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
