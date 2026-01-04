@@ -124,7 +124,12 @@ module Users
         # セッションから challenge を削除
         session.delete(:webauthn_challenge)
 
-        render json: { success: true, message: "パスキーを登録しました。" }
+        # パスキー登録完了後、スターターガイドへリダイレクト
+        render json: {
+          success: true,
+          message: "パスキーを登録しました。",
+          redirect_to: guest_starter_books_path
+        }
       else
         render json: { error: credential.errors.full_messages.join(", ") }, status: :unprocessable_entity
       end

@@ -10,12 +10,13 @@ module Users
         user_verification: "preferred"
       )
 
-      # challenge をセッションに保存
-      session[:webauthn_challenge] = options.challenge
+      # challenge を URLsafe Base64 (padding なし) でエンコードしてセッションに保存
+      challenge_b64 = Base64.urlsafe_encode64(options.challenge, padding: false)
+      session[:webauthn_challenge] = challenge_b64
 
-      # フロントエンドに JSON で返す
+      # フロントエンドに JSON で返す（同じ形式で）
       render json: {
-        challenge: Base64.strict_encode64(options.challenge),
+        challenge: challenge_b64,
         timeout: options.timeout,
         rpId: WebAuthn.configuration.rp_id,
         allowCredentials: [],
@@ -45,6 +46,8 @@ module Users
       end
 
       # 署名を検証
+      # verify() は内部で encoder.decode(challenge) を呼ぶので、
+      # challenge は base64 エンコードされた文字列を渡す必要がある
       begin
         webauthn_credential.verify(
           stored_challenge,
@@ -52,7 +55,7 @@ module Users
           sign_count: credential.sign_count
         )
       rescue WebAuthn::Error => e
-        Rails.logger.error("WebAuthn 認証失敗: #{e.message}")
+        Rails.logger.error("WebAuthn 認証失敗: #{e.class} - #{e.message}")
         render json: { error: "認証に失敗しました。再度お試しください。" }, status: :unauthorized
         return
       end

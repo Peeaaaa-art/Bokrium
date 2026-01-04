@@ -90,8 +90,10 @@ export default class WebauthnRegistrationController extends Controller<HTMLEleme
       const result = await verifyResponse.json();
 
       if (result.success) {
-        // リダイレクト URL が指定されている場合はそこへ
-        if (this.redirectUrlValue) {
+        // サーバーから返された redirect_to を優先的に使用
+        if (result.redirect_to) {
+          window.location.href = result.redirect_to;
+        } else if (this.redirectUrlValue) {
           window.location.href = this.redirectUrlValue;
         } else {
           alert(result.message);
