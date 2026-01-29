@@ -26,7 +26,9 @@ services:
     depends_on:
       - db
     environment:
-      DATABASE_URL: postgres://postgres:postgres@db:5432/bokrium_development
+      DATABASE_HOST: db
+      DATABASE_USERNAME: postgres
+      DATABASE_PASSWORD: postgres
       RAILS_ENV: development
       PORT: 3000
     stdin_open: true
