@@ -8,6 +8,7 @@ abort("The Rails environment is running in production mode!") if Rails.env.produ
 require 'rspec/rails'
 
 require "view_component/test_helpers"
+require 'shoulda/matchers'
 
 # github action用
 require 'dotenv'
