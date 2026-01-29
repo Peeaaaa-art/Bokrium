@@ -276,3 +276,4 @@
   [^2]: [Hotwire](https://github.com/hotwired) は “HTML over the wire” を略した名前で、Turbo（リンク遷移・部分更新）と Stimulus（UI制御）を組み合わせることで、サーバー側でHTMLを生成してクライアントへ送信する設計思想のことです。BokriumではこれをTurbo（部分更新）+ Stimulus（UI操作）で実現し、JavaScript中心のSPAに頼らず、  RailsのMVC構造を保ちながらもスムーズで動的なUXを提供しています。
   
   [^3]: [pg_search](https://github.com/Casecommons/pg_search) は、PostgreSQLの全文検索機能を活用できる Rails用の検索ライブラリです。`tsearch` や `trigram` を通じて、日本語検索にもある程度対応できます。
+
