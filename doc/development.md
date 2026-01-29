@@ -36,7 +36,7 @@ bin/dev
 
 ### pre-commit フック
 
-コミット前に自動的にテストを実行するpre-commitフックが設定されています。テストが失敗した場合、コミットは中断されます。
+コミット前に自動的にRubocopとテストを実行するpre-commitフックが設定されています。Rubocopまたはテストが失敗した場合、コミットは中断されます。
 
 #### フックの無効化
 
@@ -54,11 +54,21 @@ git commit --no-verify -m "commit message"
 
 ```bash
 #!/bin/bash
-# Pre-commit hook for running tests before commit
+# Pre-commit hook for running linter and tests before commit
 
 set -e
 
-echo "🧪 Running tests before commit..."
+echo "🔍 Running RuboCop..."
+
+# Docker環境でRuboCopを実行
+if ! docker compose run --rm web bundle exec rubocop; then
+  echo "❌ RuboCop failed! Please fix the linting errors before committing."
+  exit 1
+fi
+
+echo "✅ RuboCop passed!"
+echo ""
+echo "🧪 Running tests..."
 
 # Docker環境でRSpecを実行
 if docker compose run --rm web bundle exec rspec; then
