@@ -20,6 +20,7 @@
   - [🛠 使用技術](#-使用技術)
   - [📡 インフラ構成図](#-インフラ構成図)
   - [🗂 データベース設計図](#-データベース設計図物理erd--rails前提)
+  - [📋 開発環境](doc/development.md)
    
    
   ## 📖 Bokriumとは
@@ -238,7 +239,8 @@
   
   <br>
   
-  ## 🗂 データベース設計図（物理ERD / Rails前提）
+  
+  ## �🗂 データベース設計図（物理ERD / Rails前提）
   [![ER図](https://i.gyazo.com/539178a28c82efa0657ac8aaa2bd0ba6.png)](https://gyazo.com/539178a28c82efa0657ac8aaa2bd0ba6)
   
   <details>
