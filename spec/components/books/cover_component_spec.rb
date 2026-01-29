@@ -99,7 +99,7 @@ RSpec.describe Books::CoverComponent, type: :component do
   describe "#bokrium_cover_url" do
     it "delegates to book model" do
       allow(book).to receive(:bokrium_cover_url).and_return("https://cdn.bokrium.com/image.jpg")
-      
+
       expect(component.bokrium_cover_url).to eq("https://cdn.bokrium.com/image.jpg")
     end
   end
@@ -111,11 +111,11 @@ RSpec.describe Books::CoverComponent, type: :component do
         book: book,
         truncate_options: truncate_opts
       )
-      
+
       helpers_mock = double("Helpers")
       allow(component).to receive(:helpers).and_return(helpers_mock)
       expect(helpers_mock).to receive(:truncate_for_device).with("テスト書籍", truncate_opts)
-      
+
       component.title_for_overlay
     end
   end

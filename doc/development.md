@@ -60,8 +60,8 @@ set -e
 
 echo "🔍 Running RuboCop..."
 
-# Docker環境でRuboCopを実行
-if ! docker compose run --rm web bundle exec rubocop; then
+# Docker環境でRuboCopを実行（進捗表示形式）
+if ! docker compose run --rm web bundle exec rubocop --format progress; then
   echo "❌ RuboCop failed! Please fix the linting errors before committing."
   exit 1
 fi
@@ -70,8 +70,8 @@ echo "✅ RuboCop passed!"
 echo ""
 echo "🧪 Running tests..."
 
-# Docker環境でRSpecを実行
-if docker compose run --rm web bundle exec rspec; then
+# Docker環境でRSpecを実行（進捗表示形式）
+if docker compose run --rm web bundle exec rspec --format progress; then
   echo "✅ All tests passed! Proceeding with commit."
   exit 0
 else
