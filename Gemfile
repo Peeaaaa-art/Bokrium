@@ -69,8 +69,9 @@ gem "bootsnap", require: false
 # HTTPアセット圧縮・X-Sendfile対応
 gem "thruster", require: false
 
-gem "letter_opener"
-
+group :development do
+  gem "letter_opener_web"
+end
 
 group :development, :test do
   gem "debug", platforms: [ :mri, :mswin, :mingw, :x64_mingw ], require: "debug/prelude"
