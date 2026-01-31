@@ -13,7 +13,7 @@
   "dependencies": {
     "@hotwired/stimulus": "^3.2.2",
     "@hotwired/stimulus-webpack-helpers": "^1.0.1",
-    "@hotwired/turbo": "^8.0.13",
+    "@hotwired/turbo": "^8.0.21",
     "@popperjs/core": "^2.11.8",
     "@tiptap/extension-bubble-menu": "^2.11.9",
     "@tiptap/extension-character-count": "^2.11.9",
