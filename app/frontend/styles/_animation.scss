@@ -136,5 +136,23 @@
   animation-delay: var(--delay);
 }
 
+/* 画面遷移の柔らかさ */
+@media (prefers-reduced-motion: no-preference) {
+  main {
+    animation: pageEnter 120ms ease-out both;
+  }
+}
+
+@keyframes pageEnter {
+  from {
+    opacity: 0.96;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 
 
