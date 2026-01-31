@@ -1,34 +1,22 @@
-name: Fly Machines Schedule
+name: Fly Deploy
 
 on:
-  schedule:
-    - cron: '0 16 * * *' # 日本時間 01:00（夜間停止）
-    - cron: '0 23 * * *' # 日本時間 08:00（朝起動）
-  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+# Set minimal permissions for the entire workflow
+permissions:
+  contents: read
 
 jobs:
-  schedule_machines:
+  deploy:
+    name: Deploy app
     runs-on: ubuntu-latest
+    concurrency: deploy-group
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: superfly/flyctl-actions/setup-flyctl@master
-
-      # 夜：すべてのマシンを停止
-      - name: Night Mode (stop all machines)
-        if: github.event.schedule == '0 16 * * *' || github.event_name == 'workflow_dispatch'
-        run: |
-          IDS=$(flyctl machines list --app bokrium --json | jq -r '.[].id' | tr '\n' ' ')
-          echo "Stopping machines: $IDS"
-          flyctl machine stop $IDS --app bokrium
-        env:
-          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
-
-      # 朝：すべてのマシンを起動
-      - name: Day Mode (start all machines)
-        if: github.event.schedule == '0 23 * * *'
-        run: |
-          IDS=$(flyctl machines list --app bokrium --json | jq -r '.[].id' | tr '\n' ' ')
-          echo "Starting machines: $IDS"
-          flyctl machine start $IDS --app bokrium
+      - run: flyctl deploy --remote-only
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
