@@ -12,14 +12,21 @@ jobs:
       - uses: actions/checkout@v4
       - uses: superfly/flyctl-actions/setup-flyctl@master
 
-      # 夜間：最小起動数を0にする
+      # 夜間：すべてのマシンの設定を「最小0台」に一括更新する
       - name: Night Mode (Sleep)
-        run: flyctl app props set min_machines_running=0
+        run: |
+          for id in $(fly machines list --json | jq -r '.[].id'); do
+            fly machine update $id --metadata fly_proxy_min_machines_running=0 -y
+          done
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
-      
-      # 朝：最小起動数を1にする
+
+      # 朝：すべてのマシンの設定を「最小1台」に戻す
       - name: Active Mode (Active)
-        run: flyctl app props set min_machines_running=1
+        run: |
+          for id in $(fly machines list --json | jq -r '.[].id'); do
+            fly machine update $id --metadata fly_proxy_min_machines_running=1 -y
+          done
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+
