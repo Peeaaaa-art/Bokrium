@@ -12,21 +12,24 @@ jobs:
       - uses: actions/checkout@v4
       - uses: superfly/flyctl-actions/setup-flyctl@master
 
-      # 夜間：すべてのマシンの設定を「最小0台」に一括更新する
+      # 夜間：すべてのマシンの設定を「最小0台」に更新
       - name: Night Mode (Sleep)
+        if: github.event.schedule == '0 16 * * *' || github.event_name == 'workflow_dispatch'
         run: |
-          for id in $(fly machines list --json | jq -r '.[].id'); do
-            fly machine update $id --metadata fly_proxy_min_machines_running=0 -y
+          for id in $(flyctl machines list --json | jq -r '.[].id'); do
+            flyctl machine update $id --metadata fly_proxy_min_machines_running=0 -y
           done
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
 
       # 朝：すべてのマシンの設定を「最小1台」に戻す
       - name: Active Mode (Active)
+        if: github.event.schedule == '0 23 * * *'
         run: |
-          for id in $(fly machines list --json | jq -r '.[].id'); do
-            fly machine update $id --metadata fly_proxy_min_machines_running=1 -y
+          for id in $(flyctl machines list --json | jq -r '.[].id'); do
+            flyctl machine update $id --metadata fly_proxy_min_machines_running=1 -y
           done
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+
 
