@@ -1,0 +1,27 @@
+name: Scheduled Scaling
+on:
+  schedule:
+    - cron: '0 16 * * *' # 日本時間 01:00：最小 0台（スリープ許可）
+    - cron: '0 23 * * *' # 日本時間 08:00：最小 1台（常時起動）
+  workflow_dispatch:
+
+jobs:
+  update_scale:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+
+      # 夜間：最小起動数を0にする（アクセスがなければ全台スリープ）
+      - name: Night Mode (Sleep)
+        if: github.event.schedule == '0 16 * * *'
+        run: flyctl deploy --property http_service.min_machines_running=0 --strategy immediate
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+
+      # 朝：最小起動数を1にする（1台は常に起きてリクエストを待機）
+      - name: Day Mode (Active)
+        if: github.event.schedule == '0 23 * * *'
+        run: flyctl deploy --property http_service.min_machines_running=1 --strategy immediate
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
