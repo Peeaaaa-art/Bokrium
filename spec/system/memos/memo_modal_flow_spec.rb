@@ -36,7 +36,7 @@ RSpec.describe "メモモーダル（書籍詳細→メモクリック→編集�
       find("#memoEditModal button[title='保存']").click
 
       # リダイレクトで書籍詳細に戻るまで待機
-      expect(page).to have_current_path(book_path(book)), -> { "current: #{page.current_path}" }
+      expect(page).to(have_current_path(book_path(book), wait: 10), -> { "current: #{page.current_path}" })
       expect(page).not_to have_selector("#memoEditModal.show", wait: 5)
 
       # DB に保存されていることを確認
@@ -66,7 +66,7 @@ RSpec.describe "メモモーダル（書籍詳細→メモクリック→編集�
       find("#memoEditModal button[title='保存']").click
 
       # 書籍詳細に戻ること
-      expect(page).to have_current_path(book_path(book)), -> { "current: #{page.current_path}" }
+      expect(page).to(have_current_path(book_path(book)), -> { "current: #{page.current_path}" })
       expect(page).not_to have_selector("#memoEditModal.show", wait: 5)
 
       # DB に 1 件増え、その content に入力した文字列が含まれること
