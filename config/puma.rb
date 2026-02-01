@@ -16,7 +16,7 @@ threads threads_count, threads_count
 #   bind "tcp://0.0.0.0:#{ENV.fetch("PORT", 8080)}"  # ★ 追加：Fly の警告を抑止するため
 # end
 
-port ENV.fetch("PORT")
+port ENV.fetch("PORT", 3000)
 
 plugin :tmp_restart
 plugin :solid_queue if ENV["SOLID_QUEUE_IN_PUMA"]
