@@ -136,23 +136,31 @@
   animation-delay: var(--delay);
 }
 
-/* 画面遷移の柔らかさ */
+/* 画面遷移の柔らかさ（ページ表示時のみ1回。モーダル開閉では再実行しない） */
 @media (prefers-reduced-motion: no-preference) {
-  main {
+  body:not(.page-entered) main {
     animation: pageEnter 120ms ease-out both;
+  }
+  /* アニメーション完了後 or モーダル表示中は main のスタッキングコンテキストを外す */
+  body.page-entered main,
+  body.modal-open main {
+    animation: none;
+    opacity: 1;
+    transform: none;
   }
 }
 
 @keyframes pageEnter {
   from {
     opacity: 0.96;
-    transform: translateY(4px);
+    transform: translateY(2px);
   }
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
+
 
 
 
