@@ -14,6 +14,11 @@ RSpec.describe "画像モーダル（書籍詳細→画像クリック→モー�
     sign_in user
   end
 
+  after do
+    # この example で溜まった通知を破棄してから再有効化し、rails_helper の after で UnoptimizedQueryError にならないようにする
+    Bullet.end_request if Bullet.respond_to?(:end_request)
+    Bullet.enable = true
+  end
 
   it "書籍詳細で画像をクリックすると画像モーダルが開き、閉じる操作でモーダルが閉じる" do
     visit book_path(book)
