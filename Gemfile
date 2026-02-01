@@ -39,7 +39,7 @@ gem "webauthn"
 
 gem "rails-i18n"
 
-gem "pagy", "~> 43.0"
+gem "pagy", "~> 43.2"
 
 gem "rack-rewrite"
 
