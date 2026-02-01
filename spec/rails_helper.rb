@@ -41,6 +41,7 @@ RSpec.configure do |config|
   config.include WebAuthnHelper, type: :request
 
   config.before(:each) do
+    Bullet.enable = true if Bullet.respond_to?(:enable=)
     Bullet.start_request if Bullet.enabled?
   end
 

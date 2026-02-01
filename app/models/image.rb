@@ -1,7 +1,9 @@
 class Image < ApplicationRecord
   include UploadValidations
   belongs_to :book
-  has_one_attached :image_s3, service: :cloudflare_private_r2, dependent: :purge
+  has_one_attached :image_s3,
+    service: (Rails.env.test? ? :test : :cloudflare_private_r2),
+    dependent: :purge
 
   validate :validate_image_format
 
