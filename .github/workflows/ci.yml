@@ -45,6 +45,7 @@ jobs:
     env:
       LINE_CHANNEL_TOKEN: dummy_token_for_test
       APP_HOST: http://localhost:3000
+      PORT: "3000"
 
     services:
       postgres:
