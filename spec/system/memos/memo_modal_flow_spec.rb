@@ -32,8 +32,8 @@ RSpec.describe "メモモーダル（書籍詳細→メモクリック→編集�
       editor.click
       editor.send_keys(appended_text)
 
-      # 保存ボタンをクリック（モーダル内に限定）
-      find("#memoEditModal button[title='保存']").click
+      # 保存ボタンをクリック（RichEditor が update で有効化するまで待つ）
+      find("#memoEditModal button[title='保存']:not([disabled])", wait: 10).click
 
       # リダイレクトで書籍詳細に戻るまで待機
       expect(page).to(have_current_path(book_path(book), wait: 10), -> { "current: #{page.current_path}" })
@@ -62,8 +62,8 @@ RSpec.describe "メモモーダル（書籍詳細→メモクリック→編集�
       editor.click
       editor.send_keys(new_content)
 
-      # 保存ボタンをクリック
-      find("#memoEditModal button[title='保存']").click
+      # 保存ボタンをクリック（RichEditor が update で有効化するまで待つ）
+      find("#memoEditModal button[title='保存']:not([disabled])", wait: 10).click
 
       # 書籍詳細に戻ること
       expect(page).to(have_current_path(book_path(book), wait: 10), -> { "current: #{page.current_path}" })
