@@ -9,7 +9,7 @@ on:
   pull_request:
     branches: ["main"]
   schedule:
-    - cron: "27 17 * * 6" # 毎週土曜 17:27 UTC
+    - cron: "0 1 15 * *" # 毎月15日 01:00 UTC
 
 jobs:
   analyze:
