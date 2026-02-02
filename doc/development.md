@@ -11,12 +11,51 @@ docker compose up web
 # マイグレーション実行
 docker compose run --rm web bundle exec rails db:migrate
 
-# テスト実行
-docker compose run --rm web bundle exec rspec
+# テスト実行（必ず RAILS_ENV=test を渡す。初回は下記「テスト用 DB の準備」を先に実行）
+docker compose run --rm -e RAILS_ENV=test web bundle exec rspec
 
 # コンソール
 docker compose run --rm web bundle exec rails console
 ```
+
+**テスト用 DB の準備（Docker でテストする初回のみ）**
+
+```bash
+docker compose run --rm -e RAILS_ENV=test web bundle exec rails db:create db:schema:load
+```
+
+### テスト実行について
+
+- **Docker で実行する**: `docker compose run --rm -e RAILS_ENV=test web bundle exec rspec` で実行。**RAILS_ENV=test を付けないと development で動いてテストが失敗します。** コンテナには `GUEST_USER_EMAIL` と `LINE_CHANNEL_TOKEN` のデフォルトが入っているので、`.env.test` がコンテナ内で読めなくてもテストは通る想定です。
+- **ローカルで `bundle exec rspec` する場合**: PostgreSQL がローカルに必要。`database.yml` のデフォルトはユーザー `postgres` なので、macOS などで「role "postgres" does not exist」と出る場合は、PostgreSQL に `postgres` ロールを作成するか、`DATABASE_USERNAME` に自ユーザーを指定して実行する（例: `DATABASE_USERNAME=$(whoami) bundle exec rspec`）。
+
+### ローカル Postgres でテストする手順
+
+Docker ではなくローカルの PostgreSQL で RSpec を回す場合の最小手順。
+
+1. **PostgreSQL を起動**（Homebrew なら `brew services start postgresql@16` など）
+2. **postgres ロールがない場合**  
+   macOS の Homebrew Postgres などでは `postgres` ロールが無いことが多い。そのときは **すべてのコマンド** に `DATABASE_USERNAME=$(whoami)` を付ける（DB 作成もテスト実行も同じユーザーで繋ぐ）。
+3. **テスト用 DB を用意**（初回のみ）  
+   ```bash
+   DATABASE_USERNAME=$(whoami) RAILS_ENV=test bundle exec rails db:create db:schema:load
+   ```  
+   （postgres ロールがある環境なら `RAILS_ENV=test bundle exec rails db:create db:schema:load` でよい）
+4. **`.env.test` をプロジェクトルートに置く**  
+   `GUEST_USER_EMAIL=guest@example.com` など、テストで使うメールアドレスを1行で書く。
+5. **テスト実行**  
+   ```bash
+   DATABASE_USERNAME=$(whoami) bundle exec rspec
+   ```  
+   （postgres で繋ぐ環境なら `bundle exec rspec` でよい）
+
+### Docker でテストが通らないときの確認
+
+- **RAILS_ENV=test を付けているか**  
+  `docker compose run --rm -e RAILS_ENV=test web bundle exec rspec` のように **-e RAILS_ENV=test** が必須です。付けないと development で動き、テスト用 DB に繋がらず失敗します。
+- **テスト用 DB を作成したか**  
+  初回は `docker compose run --rm -e RAILS_ENV=test web bundle exec rails db:create db:schema:load` を実行してください。
+- コンテナには `GUEST_USER_EMAIL` と `LINE_CHANNEL_TOKEN` のデフォルトが入っているため、`.env.test` がマウントされていなくてもテストは動く想定です。`BooksQuery` は DB に `ja-x-icu` が無い環境でもフォールバックするため、Docker の Postgres でそのまま通ります。
 
 ### 初回セットアップ
 
@@ -70,8 +109,8 @@ echo "✅ RuboCop passed!"
 echo ""
 echo "🧪 Running tests..."
 
-# Docker環境でRSpecを実行（進捗表示形式）
-if docker compose run --rm web bundle exec rspec --format progress; then
+# Docker環境でRSpecを実行（RAILS_ENV=test 必須・進捗表示形式）
+if docker compose run --rm -e RAILS_ENV=test web bundle exec rspec --format progress; then
   echo "✅ All tests passed! Proceeding with commit."
   exit 0
 else
@@ -87,19 +126,19 @@ fi
 ### 全テストの実行
 
 ```bash
-docker compose run --rm web bundle exec rspec
+docker compose run --rm -e RAILS_ENV=test web bundle exec rspec
 ```
 
 ### 特定のテストファイルを実行
 
 ```bash
-docker compose run --rm web bundle exec rspec spec/models/book_spec.rb
+docker compose run --rm -e RAILS_ENV=test web bundle exec rspec spec/models/book_spec.rb
 ```
 
 ### 特定の行のテストを実行
 
 ```bash
-docker compose run --rm web bundle exec rspec spec/models/book_spec.rb:10
+docker compose run --rm -e RAILS_ENV=test web bundle exec rspec spec/models/book_spec.rb:10
 ```
 
 ## コード品質チェック
