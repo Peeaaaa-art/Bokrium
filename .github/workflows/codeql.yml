@@ -11,13 +11,17 @@ on:
   schedule:
     - cron: "0 1 15 * *" # 毎月15日 01:00 UTC
 
+# トップレベルは最小権限。security-events はジョブ単位で付与（Scorecard Token-Permissions 対応）
+permissions:
+  contents: read
+
 jobs:
   analyze:
     name: Analyze (${{ matrix.language }})
     runs-on: ubuntu-latest
     permissions:
-      security-events: write
       contents: read
+      security-events: write
 
     strategy:
       fail-fast: false
