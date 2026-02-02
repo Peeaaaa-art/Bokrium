@@ -1,6 +1,8 @@
 name: CI
 
 on:
+  push:
+    branches: [main]
   pull_request:
     branches: [main]
 
@@ -8,6 +10,19 @@ permissions:
   contents: read
 
 jobs:
+  gemfile_deprecations:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: .ruby-version
+          bundler-cache: true
+
+      - name: Check Gemfile deprecations
+        run: bin/check-gemfile-deprecations
+
   rubocop:
     runs-on: ubuntu-24.04
     steps:
@@ -71,40 +86,7 @@ jobs:
           --health-retries=10
 
     steps:
-      - uses: actions/checkout@v4
-
-      - uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: .ruby-version
-          bundler-cache: true
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: npm
-
-      - name: Install system packages
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libpq-dev pkg-config libvips curl
-
-      - name: Install JS dependencies
-        run: npm ci
-
-      - name: Build frontend (Vite)
-        run: ./bin/vite build --clear --mode=test
-
-      - name: Wait for Postgres
-        run: |
-          for i in {1..30}; do
-            pg_isready -h localhost -p 5432 -U postgres && break
-            sleep 1
-          done
-
-      - name: Prepare DB (db:prepare)
-        run: |
-          cp config/database.yml.ci config/database.yml
-          bin/rails db:prepare
+      - uses: ./.github/actions/setup-rspec-env
 
       - name: Run RSpec FAST (exclude spec/system)
         env:
@@ -183,40 +165,7 @@ jobs:
           --health-retries=10
 
     steps:
-      - uses: actions/checkout@v4
-
-      - uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: .ruby-version
-          bundler-cache: true
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: npm
-
-      - name: Install system packages
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libpq-dev pkg-config libvips curl
-
-      - name: Install JS dependencies
-        run: npm ci
-
-      - name: Build frontend (Vite)
-        run: ./bin/vite build --clear --mode=test
-
-      - name: Wait for Postgres
-        run: |
-          for i in {1..30}; do
-            pg_isready -h localhost -p 5432 -U postgres && break
-            sleep 1
-          done
-
-      - name: Prepare DB (db:prepare)
-        run: |
-          cp config/database.yml.ci config/database.yml
-          bin/rails db:prepare
+      - uses: ./.github/actions/setup-rspec-env
 
       - name: (Optional) Install Playwright browsers
         if: env.E2E_DRIVER == 'playwright'
