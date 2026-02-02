@@ -9,11 +9,15 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   gemfile_deprecations:
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - uses: ruby/setup-ruby@v1
         with:
@@ -26,7 +30,7 @@ jobs:
   rubocop:
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - uses: ruby/setup-ruby@v1
         with:
@@ -39,7 +43,7 @@ jobs:
   brakeman:
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - uses: ruby/setup-ruby@v1
         with:
@@ -67,9 +71,6 @@ jobs:
 
       TOTAL_NODES: 4
       NODE_INDEX: ${{ matrix.node_index }}
-
-      # driver switch（fastでは基本使わないが、環境としては残してOK）
-      E2E_DRIVER: selenium
 
     services:
       postgres:

@@ -4,6 +4,13 @@ on:
   push:
     branches:
       - main
+    paths:
+      - "app/frontend/**"
+      - "app/javascript/**"
+      - "package.json"
+      - "package-lock.json"
+      - "vite.config.*"
+      - "config/vite.json"
 
 # Set minimal permissions for the entire workflow
 permissions:
@@ -21,6 +28,7 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: 22
+          cache: "npm"
 
       - name: Install npm dependencies
         run: npm ci
