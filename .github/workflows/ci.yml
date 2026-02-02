@@ -92,7 +92,7 @@ jobs:
 
       - name: Run RSpec FAST (exclude spec/system)
         env:
-          GUEST_USER_EMAIL: ${{ secrets.GUEST_USER_EMAIL }}
+          GUEST_USER_EMAIL: ${{ secrets.GUEST_USER_EMAIL || 'guest@example.com' }}
         run: |
           set -euo pipefail
 
