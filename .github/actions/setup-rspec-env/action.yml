@@ -1,0 +1,47 @@
+name: Setup RSpec environment
+description: Checkout, Ruby/Node, system packages, npm, Vite build, Postgres wait, db:prepare
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/checkout@v4
+
+    - uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: .ruby-version
+        bundler-cache: true
+
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 22
+        cache: npm
+
+    - name: Install system packages
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libpq-dev pkg-config libvips curl
+      shell: bash
+
+    - name: Install JS dependencies
+      run: npm ci
+      shell: bash
+
+    - name: Build frontend (Vite)
+      run: ./bin/vite build --clear --mode=test
+      shell: bash
+
+    - name: Wait for Postgres
+      run: |
+        for i in {1..5}; do
+          pg_isready -h localhost -p 5432 -U postgres && exit 0
+          sleep 1
+        done
+        echo "Postgres did not become ready in time."
+        exit 1
+      shell: bash
+
+    - name: Prepare DB (db:prepare)
+      run: |
+        cp config/database.yml.ci config/database.yml
+        bin/rails db:prepare
+      shell: bash
