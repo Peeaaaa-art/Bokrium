@@ -1,6 +1,6 @@
 module GuestUserHelper
   def ensure_guest_user
-    guest_email = ENV["GUEST_USER_EMAIL"]
+    guest_email = ENV["GUEST_USER_EMAIL"].presence || "guest@example.com"
 
     user = User.find_or_create_by!(email: guest_email) do |u|
       u.password = 'password'
