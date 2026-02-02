@@ -240,7 +240,7 @@
   <br>
   
   
-  ## �🗂 データベース設計図（物理ERD / Rails前提）
+  ## 🗂 データベース設計図（物理ERD / Rails前提）
   [![ER図](https://i.gyazo.com/539178a28c82efa0657ac8aaa2bd0ba6.png)](https://gyazo.com/539178a28c82efa0657ac8aaa2bd0ba6)
   
   <details>
