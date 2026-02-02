@@ -93,7 +93,7 @@
 
 | アクション | 目的 | 備考 |
 |------------|------|------|
-| **CodeQL（Ruby）** | コードの脆弱性・不具合の静的解析 | Brakeman と役割が違うので併用可 |
+| **CodeQL（Ruby）** | コードの脆弱性・不具合の静的解析 | リポジトリの Security タブで既に有効化済みの場合は不要 |
 | **dependency-review** | PR で依存関係変更時の差分チェック | Dependabot PR で特に有用 |
 | **Vite アップロードの paths 制限** | フロント変更時のみ R2 アップロード | 実行時間・コスト削減 |
 | **setup-flyctl のバージョン固定** | 再現性・予測可能なデプロイ | fly-sleep / fly-deploy の両方 |
@@ -115,7 +115,7 @@
 3. **setup-rspec-env の checkout / setup-node を v6 に**
 4. **fly-sleep の setup-flyctl をバージョン固定**
 5. **upload-vite-assets-to-r2 に paths と npm cache を追加**
-6. （任意）**CodeQL ワークフローを追加**
+6. **CodeQL**: Security タブで既に有効化済みのため追加不要
 7. （任意）**dependency-review を PR 用ワークフローに追加**
 
 ---
