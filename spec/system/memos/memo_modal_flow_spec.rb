@@ -10,7 +10,7 @@ RSpec.describe "メモモーダル（書籍詳細→メモクリック→編集�
   let(:appended_text) { " E2E_#{unique_suffix}" }
 
   before do
-    driven_by :selenium_chrome_headless
+    driven_by :playwright_chrome_headless
     sign_in user
   end
 

@@ -59,7 +59,7 @@ gem "redcarpet"
 
 gem "stripe"
 
-gem "tzinfo-data", platforms: [ :mingw, :mswin, :x64_mingw, :jruby ]
+gem "tzinfo-data", platforms: [ :windows, :jruby ]
 
 gem "solid_cache"
 
@@ -74,7 +74,7 @@ group :development do
 end
 
 group :development, :test do
-  gem "debug", platforms: [ :mri, :mswin, :mingw, :x64_mingw ], require: "debug/prelude"
+  gem "debug", platforms: [ :mri, :windows ], require: "debug/prelude"
 
   gem "brakeman", "~> 8.0", require: false
 
@@ -98,7 +98,7 @@ end
 group :test do
   gem "capybara"
 
-  gem "selenium-webdriver"
+  gem "capybara-playwright-driver"
 
   gem "shoulda-matchers"
 

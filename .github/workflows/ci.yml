@@ -1,17 +1,36 @@
 name: CI
 
 on:
+  push:
+    branches: [main]
   pull_request:
     branches: [main]
 
 permissions:
   contents: read
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
+  gemfile_deprecations:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: .ruby-version
+          bundler-cache: true
+
+      - name: Check Gemfile deprecations
+        run: bin/check-gemfile-deprecations
+
   rubocop:
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - uses: ruby/setup-ruby@v1
         with:
@@ -24,7 +43,7 @@ jobs:
   brakeman:
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - uses: ruby/setup-ruby@v1
         with:
@@ -53,9 +72,6 @@ jobs:
       TOTAL_NODES: 4
       NODE_INDEX: ${{ matrix.node_index }}
 
-      # driver switch（fastでは基本使わないが、環境としては残してOK）
-      E2E_DRIVER: selenium
-
     services:
       postgres:
         image: postgres:16
@@ -71,40 +87,8 @@ jobs:
           --health-retries=10
 
     steps:
-      - uses: actions/checkout@v4
-
-      - uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: .ruby-version
-          bundler-cache: true
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: npm
-
-      - name: Install system packages
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libpq-dev pkg-config libvips curl
-
-      - name: Install JS dependencies
-        run: npm ci
-
-      - name: Build frontend (Vite)
-        run: ./bin/vite build --clear --mode=test
-
-      - name: Wait for Postgres
-        run: |
-          for i in {1..30}; do
-            pg_isready -h localhost -p 5432 -U postgres && break
-            sleep 1
-          done
-
-      - name: Prepare DB (db:prepare)
-        run: |
-          cp config/database.yml.ci config/database.yml
-          bin/rails db:prepare
+      - uses: actions/checkout@v6
+      - uses: ./.github/actions/setup-rspec-env
 
       - name: Run RSpec FAST (exclude spec/system)
         env:
@@ -152,11 +136,6 @@ jobs:
       TOTAL_NODES: 2
       NODE_INDEX: ${{ matrix.node_index }}
 
-      E2E_DRIVER: selenium
-
-      # selenium remote（systemだけで有効）
-      SELENIUM_REMOTE_URL: http://localhost:4444/wd/hub
-
     services:
       postgres:
         image: postgres:16
@@ -171,57 +150,12 @@ jobs:
           --health-timeout=5s
           --health-retries=10
 
-      chrome:
-        image: selenium/standalone-chrome:4.28.1-20250123
-        ports:
-          - 4444:4444
-        options: >-
-          --shm-size="2g"
-          --health-cmd="curl -f http://localhost:4444/wd/hub/status || exit 1"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=10
-
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
+      - uses: ./.github/actions/setup-rspec-env
 
-      - uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: .ruby-version
-          bundler-cache: true
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: npm
-
-      - name: Install system packages
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libpq-dev pkg-config libvips curl
-
-      - name: Install JS dependencies
-        run: npm ci
-
-      - name: Build frontend (Vite)
-        run: ./bin/vite build --clear --mode=test
-
-      - name: Wait for Postgres
-        run: |
-          for i in {1..30}; do
-            pg_isready -h localhost -p 5432 -U postgres && break
-            sleep 1
-          done
-
-      - name: Prepare DB (db:prepare)
-        run: |
-          cp config/database.yml.ci config/database.yml
-          bin/rails db:prepare
-
-      - name: (Optional) Install Playwright browsers
-        if: env.E2E_DRIVER == 'playwright'
-        run: |
-          npx playwright install --with-deps
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
 
       - name: Run RSpec SYSTEM (spec/system only)
         env:

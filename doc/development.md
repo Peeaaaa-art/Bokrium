@@ -71,6 +71,19 @@ docker compose run --rm web bundle exec rails db:setup
 bin/dev
 ```
 
+### ローカルで RSpec（特に system spec）を実行する場合
+
+Docker を使わずにローカルで `bundle exec rspec` を実行する場合、次が必要です。
+
+- **libvips**  
+  画像のリサイズ（ActiveStorage の variant / image_processing）で使用。書籍詳細や画像モーダルを開く spec で `Could not open library 'vips.42'` となる場合は未インストール。  
+  - **macOS（Homebrew）**: `brew install vips`
+
+- **Playwright ブラウザ（system spec 用）**  
+  system spec のドライバに Playwright（Chromium）を使用しています。初回のみブラウザのインストールが必要です。  
+  - `npx playwright install chromium`  
+  - Node が入っていれば実行可能です。
+
 ## Git Hooks
 
 ### pre-commit フック

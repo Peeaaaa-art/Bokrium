@@ -1,26 +1,47 @@
+# Semgrep: ルールベースの SAST（バグ・脆弱性・コーディング規約）
+# 結果は Security > Code scanning に表示される
+# Semgrep.dev の無料アカウントで SEMGREP_APP_TOKEN を取得し、
+# リポジトリの Secrets に設定するとルール・通知等を管理できる
+# https://semgrep.dev/docs
+#
+# This workflow uses actions that are not certified by GitHub.
+
+name: Semgrep
+
 on:
   workflow_dispatch: {}
-  pull_request: {}
   push:
-    branches:
-    - main
-    - master
-    paths:
-    - .github/workflows/semgrep.yml
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
   schedule:
-  # random HH:MM to avoid a load spike on GitHub Actions at 00:00
-  - cron: 20 9 * * *
-name: Semgrep
+    - cron: "0 3 15 * *" # 毎月15日 03:00 UTC
+
+# トップレベルは最小権限。security-events はジョブ単位で付与（Scorecard Token-Permissions 対応）
+permissions:
+  contents: read
+
 jobs:
   semgrep:
-    name: semgrep/ci
+    name: Scan
     runs-on: ubuntu-latest
+    if: github.actor != 'dependabot[bot]'
     permissions:
       contents: read
-    env:
-      SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
-    container:
-      image: semgrep/semgrep
+      security-events: write
     steps:
-    - uses: actions/checkout@v4
-    - run: semgrep ci
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Run Semgrep
+        uses: returntocorp/semgrep-action@fcd5ab7459e8d91cb1777481980d1b18b4fc6735
+        with:
+          publishToken: ${{ secrets.SEMGREP_APP_TOKEN }}
+          generateSarif: "1"
+
+      - name: Upload SARIF file
+        uses: github/codeql-action/upload-sarif@v4
+        with:
+          sarif_file: semgrep.sarif
+        if: always()
+

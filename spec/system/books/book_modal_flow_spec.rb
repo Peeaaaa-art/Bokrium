@@ -7,7 +7,7 @@ RSpec.describe "書籍編集・削除モーダル（書籍詳細→設定ボタ�
   let(:book) { create(:book, user: user) }
 
   before do
-    driven_by :selenium_chrome_headless
+    driven_by :playwright_chrome_headless
     sign_in user
   end
 
