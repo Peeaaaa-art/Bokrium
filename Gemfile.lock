@@ -206,6 +206,11 @@ GEM
       logger (~> 1.6)
     letter_opener (1.10.0)
       launchy (>= 2.2, < 4)
+    letter_opener_web (3.0.0)
+      actionmailer (>= 6.1)
+      letter_opener (~> 1.9)
+      railties (>= 6.1)
+      rexml
     line-bot-api (2.5.0)
       base64 (~> 0.2)
       multipart-post (~> 2.4)
@@ -553,7 +558,7 @@ DEPENDENCIES
   factory_bot_rails
   image_processing
   jbuilder
-  letter_opener
+  letter_opener_web
   line-bot-api
   nokogiri
   omniauth
@@ -587,7 +592,7 @@ DEPENDENCIES
   webmock
 
 RUBY VERSION
-   ruby 3.4.3p32
+  ruby 3.4.8p72
 
 BUNDLED WITH
-   2.6.8
+  4.0.5

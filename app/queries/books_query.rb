@@ -1,6 +1,17 @@
 # frozen_string_literal: true
 
 class BooksQuery
+  # Docker の Postgres などで ja-x-icu が無い環境でもテストが通るようフォールバック
+  class << self
+    def ja_x_icu_available?
+      return @ja_x_icu_available unless @ja_x_icu_available.nil?
+
+      @ja_x_icu_available = ActiveRecord::Base.connection.select_value(
+        "SELECT 1 FROM pg_collation WHERE collname = 'ja-x-icu' LIMIT 1"
+      ).present?
+    end
+  end
+
   def initialize(books, params:, current_user:)
     @books = books
     @params = params
@@ -51,9 +62,9 @@ class BooksQuery
     when "oldest"
       books.order(created_at: :asc)
     when "title_asc"
-      books.order(Arel.sql("title COLLATE \"ja-x-icu\" ASC"))
+      books.order(Arel.sql(ja_collate_sql("title", "ASC")))
     when "author_asc"
-      books.order(Arel.sql("author COLLATE \"ja-x-icu\" ASC"))
+      books.order(Arel.sql(ja_collate_sql("author", "ASC")))
     when "latest_memo"
       books
         .left_joins(:memos)
@@ -61,6 +72,14 @@ class BooksQuery
         .order(Arel.sql("MAX(memos.updated_at) DESC NULLS LAST"))
     else
       books.order(created_at: :desc)
+    end
+  end
+
+  def ja_collate_sql(column, direction)
+    if self.class.ja_x_icu_available?
+      "#{column} COLLATE \"ja-x-icu\" #{direction}"
+    else
+      "#{column} #{direction}"
     end
   end
 end
