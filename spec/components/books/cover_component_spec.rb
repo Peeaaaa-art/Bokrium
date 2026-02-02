@@ -114,7 +114,7 @@ RSpec.describe Books::CoverComponent, type: :component do
 
       helpers_mock = double("Helpers")
       allow(component).to receive(:helpers).and_return(helpers_mock)
-      expect(helpers_mock).to receive(:truncate_for_device).with("テスト書籍", truncate_opts)
+      expect(helpers_mock).to receive(:truncate_for_device).with("テスト書籍", **truncate_opts)
 
       component.title_for_overlay
     end
