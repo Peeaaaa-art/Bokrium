@@ -1,0 +1,34 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# bundle install の出力に [DEPRECATED] が出たら失敗する。
+# Bundler が出す deprecation を漏れなく検知。CI で実行し、検出時は exit 1。
+
+REPO_ROOT = File.expand_path("..", __dir__)
+
+def check_bundle_output
+  Dir.chdir(REPO_ROOT) do
+    out = nil
+    begin
+      out = `bundle install 2>&1`
+    rescue Errno::ENOENT
+      return [] # bundle がない環境ではスキップ
+    end
+    return [] if $?.success? && !out.include?("[DEPRECATED]")
+
+    deprecated_lines = out.lines.select { |l| l.include?("[DEPRECATED]") }
+    return [] if deprecated_lines.empty?
+
+    deprecated_lines
+  end
+end
+
+deprecated = check_bundle_output
+if deprecated.any?
+  $stderr.puts "Bundler reported deprecations (bundle install output):\n"
+  deprecated.each { |l| $stderr.puts "  #{l}" }
+  $stderr.puts "Fix the above and run bin/check-gemfile-deprecations again."
+  exit 1
+end
+
+$stdout.puts "Gemfile/Bundler deprecation check passed."
