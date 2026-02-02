@@ -66,7 +66,7 @@ bin/dev
 - LINE連携機能あり
 - Stripe決済機能あり
 - Rakuten Web Service APIを使用
-- 画像処理にActivateStorageとimage_processingを使用
+- 画像処理にActiveStorageとimage_processingを使用
 
 ## ディレクトリ構成の特徴
 
