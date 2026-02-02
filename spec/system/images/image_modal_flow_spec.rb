@@ -8,7 +8,7 @@ RSpec.describe "画像モーダル（書籍詳細→画像クリック→モー�
   let!(:image) { create(:image, book: book) }
 
   before do
-    driven_by :selenium_chrome_headless
+    driven_by :playwright_chrome_headless
     # ActiveStorage 内部の Attachment.includes(:record) により Bullet が AVOID を検出するため無効化
     Bullet.enable = false
     sign_in user
