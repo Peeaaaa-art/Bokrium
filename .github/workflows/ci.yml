@@ -34,32 +34,127 @@ jobs:
       - name: Run Brakeman
         run: bin/brakeman --no-pager
 
-  rspec:
+  rspec_fast:
     runs-on: ubuntu-24.04
 
     strategy:
       fail-fast: false
       matrix:
-        node_index: [1, 2, 3, 4] # ← 並列数。まずは4おすすめ
+        node_index: [1, 2, 3, 4] # ← fast側の並列数
 
     env:
-      # app
       RAILS_ENV: test
       APP_HOST: http://localhost:3000
       PORT: "3000"
       LINE_CHANNEL_TOKEN: dummy_token_for_test
 
-      # db
       DATABASE_URL: postgres://postgres:postgres@localhost:5432/test_db
 
-      # parallel split
       TOTAL_NODES: 4
       NODE_INDEX: ${{ matrix.node_index }}
 
-      # e2e driver switch: "selenium" or "playwright"
+      # driver switch（fastでは基本使わないが、環境としては残してOK）
       E2E_DRIVER: selenium
 
-      # selenium remote
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U postgres"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: .ruby-version
+          bundler-cache: true
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install system packages
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libpq-dev pkg-config libvips curl
+
+      - name: Install JS dependencies
+        run: npm ci
+
+      - name: Build frontend (Vite)
+        run: ./bin/vite build --clear --mode=test
+
+      - name: Wait for Postgres
+        run: |
+          for i in {1..30}; do
+            pg_isready -h localhost -p 5432 -U postgres && break
+            sleep 1
+          done
+
+      - name: Prepare DB (db:prepare)
+        run: |
+          cp config/database.yml.ci config/database.yml
+          bin/rails db:prepare
+
+      - name: Run RSpec FAST (exclude spec/system)
+        env:
+          GUEST_USER_EMAIL: ${{ secrets.GUEST_USER_EMAIL }}
+        run: |
+          set -euo pipefail
+
+          # Collect spec files excluding system specs
+          mapfile -t SPECS < <(
+            git ls-files "spec/**/*_spec.rb" \
+            | grep -v '^spec/system/' \
+            | sort
+          )
+
+          # Split by modulo
+          SELECTED=()
+          idx=0
+          for f in "${SPECS[@]}"; do
+            mod=$(( idx % TOTAL_NODES ))
+            if [ $mod -eq $(( NODE_INDEX - 1 )) ]; then
+              SELECTED+=("$f")
+            fi
+            idx=$((idx + 1))
+          done
+
+          echo "FAST node ${NODE_INDEX}/${TOTAL_NODES}: ${#SELECTED[@]} spec files"
+          bundle exec rspec "${SELECTED[@]}"
+
+  rspec_system:
+    runs-on: ubuntu-24.04
+
+    strategy:
+      fail-fast: false
+      matrix:
+        node_index: [1, 2] # ← system側はまず2で十分（重いので）
+
+    env:
+      RAILS_ENV: test
+      APP_HOST: http://localhost:3000
+      PORT: "3000"
+      LINE_CHANNEL_TOKEN: dummy_token_for_test
+
+      DATABASE_URL: postgres://postgres:postgres@localhost:5432/test_db
+
+      TOTAL_NODES: 2
+      NODE_INDEX: ${{ matrix.node_index }}
+
+      E2E_DRIVER: selenium
+
+      # selenium remote（systemだけで有効）
       SELENIUM_REMOTE_URL: http://localhost:4444/wd/hub
 
     services:
@@ -128,19 +223,18 @@ jobs:
         run: |
           npx playwright install --with-deps
 
-      - name: Inject secrets (env only)
-        env:
-          GUEST_USER_EMAIL: ${{ secrets.GUEST_USER_EMAIL }}
-        run: echo "GUEST_USER_EMAIL is set" > /dev/null
-
-      - name: Run RSpec (split by matrix)
+      - name: Run RSpec SYSTEM (spec/system only)
         env:
           GUEST_USER_EMAIL: ${{ secrets.GUEST_USER_EMAIL }}
         run: |
           set -euo pipefail
 
-          # Collect spec files
-          mapfile -t SPECS < <(git ls-files "spec/**/*_spec.rb" | sort)
+          mapfile -t SPECS < <(git ls-files "spec/system/**/*_spec.rb" | sort)
+
+          if [ ${#SPECS[@]} -eq 0 ]; then
+            echo "No system specs found under spec/system/. Skipping."
+            exit 0
+          fi
 
           # Split by modulo
           SELECTED=()
@@ -153,13 +247,13 @@ jobs:
             idx=$((idx + 1))
           done
 
-          echo "Node ${NODE_INDEX}/${TOTAL_NODES}: ${#SELECTED[@]} spec files"
+          echo "SYSTEM node ${NODE_INDEX}/${TOTAL_NODES}: ${#SELECTED[@]} spec files"
           bundle exec rspec "${SELECTED[@]}"
 
       - name: Collect failed screenshots
         uses: actions/upload-artifact@v4
         if: failure()
         with:
-          name: screenshots-node-${{ matrix.node_index }}
+          name: screenshots-system-node-${{ matrix.node_index }}
           path: tmp/screenshots
           if-no-files-found: ignore
