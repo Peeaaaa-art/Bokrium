@@ -22,7 +22,7 @@ jobs:
 
       - uses: superfly/flyctl-actions/setup-flyctl@63da3ecc5e2793b98a3f2519b3d75d4f4c11cec2
         with:
-          version: 0.3.186
+          version: 0.4.6
 
       - run: flyctl deploy --remote-only
         env:
