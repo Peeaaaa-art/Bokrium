@@ -100,8 +100,6 @@ group :test do
 
   gem "capybara-playwright-driver"
 
-  gem "selenium-webdriver"
-
   gem "shoulda-matchers"
 
   gem "webmock"
