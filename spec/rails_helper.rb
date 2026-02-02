@@ -1,5 +1,5 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
-# (Docker: docker compose run --rm web bundle exec rspec)
+# (Docker: docker compose run --rm -e RAILS_ENV=test web bundle exec rspec)
 require 'spec_helper'
 ENV['RAILS_ENV'] ||= 'test'
 require_relative '../config/environment'
@@ -11,9 +11,9 @@ require 'rspec/rails'
 require "view_component/test_helpers"
 require 'shoulda/matchers'
 
-# github action用
+# github action用。Rails.root 基準で読むので Docker 内で CWD がずれていても確実に読める
 require 'dotenv'
-Dotenv.load('.env.test') if Rails.env.test?
+Dotenv.load(Rails.root.join('.env.test').to_s) if Rails.env.test?
 
 # 外部HTTPリクエストをすべて遮断
 require 'webmock/rspec'

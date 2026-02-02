@@ -322,17 +322,17 @@ book = create(:book, user: user)
 ### Docker環境での実行
 
 ```bash
-# 全テスト実行
-docker compose run --rm web bundle exec rspec
+# 全テスト実行（RAILS_ENV=test 必須）
+docker compose run --rm -e RAILS_ENV=test web bundle exec rspec
 
 # 特定のファイルを実行
-docker compose run --rm web bundle exec rspec spec/models/book_spec.rb
+docker compose run --rm -e RAILS_ENV=test web bundle exec rspec spec/models/book_spec.rb
 
 # 特定の行のテストを実行
-docker compose run --rm web bundle exec rspec spec/models/book_spec.rb:10
+docker compose run --rm -e RAILS_ENV=test web bundle exec rspec spec/models/book_spec.rb:10
 
 # タグで絞り込み実行
-docker compose run --rm web bundle exec rspec --tag focus
+docker compose run --rm -e RAILS_ENV=test web bundle exec rspec --tag focus
 ```
 
 ### テストの並列実行（高速化）
@@ -358,7 +358,7 @@ bundle exec rake parallel:setup   # 初回のみ: DB を並列用に複製
 
 ```bash
 # Docker の場合
-docker compose run --rm web bundle exec rake parallel:spec
+docker compose run --rm -e RAILS_ENV=test web bundle exec rake parallel:spec
 
 # ローカルの場合
 bundle exec rake parallel:spec

@@ -45,8 +45,8 @@ docker compose up web
 # マイグレーション実行
 docker compose run --rm web bundle exec rails db:migrate
 
-# テスト実行
-docker compose run --rm web bundle exec rspec
+# テスト実行（RAILS_ENV=test 必須）
+docker compose run --rm -e RAILS_ENV=test web bundle exec rspec
 
 # コンソール
 docker compose run --rm web bundle exec rails console
