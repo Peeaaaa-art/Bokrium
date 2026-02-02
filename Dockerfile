@@ -40,7 +40,8 @@ COPY package.json package-lock.json ./
 RUN npm install
 
 COPY Gemfile Gemfile.lock ./
-RUN bundle install && \
+RUN gem install bundler -v '~> 4.0' && \
+    bundle install && \
     rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git && \
     bundle exec bootsnap precompile --gemfile
 
