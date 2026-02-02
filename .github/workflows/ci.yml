@@ -4,19 +4,16 @@ on:
   pull_request:
     branches: [main]
 
-# Set minimal permissions for the entire workflow
 permissions:
   contents: read
 
 jobs:
   rubocop:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v6
+      - uses: actions/checkout@v4
 
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
+      - uses: ruby/setup-ruby@v1
         with:
           ruby-version: .ruby-version
           bundler-cache: true
@@ -25,13 +22,11 @@ jobs:
         run: bin/rubocop --parallel -f github
 
   brakeman:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v6
+      - uses: actions/checkout@v4
 
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
+      - uses: ruby/setup-ruby@v1
         with:
           ruby-version: .ruby-version
           bundler-cache: true
@@ -40,77 +35,131 @@ jobs:
         run: bin/brakeman --no-pager
 
   rspec:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+
+    strategy:
+      fail-fast: false
+      matrix:
+        node_index: [1, 2, 3, 4] # ← 並列数。まずは4おすすめ
 
     env:
-      LINE_CHANNEL_TOKEN: dummy_token_for_test
+      # app
+      RAILS_ENV: test
       APP_HOST: http://localhost:3000
       PORT: "3000"
+      LINE_CHANNEL_TOKEN: dummy_token_for_test
+
+      # db
+      DATABASE_URL: postgres://postgres:postgres@localhost:5432/test_db
+
+      # parallel split
+      TOTAL_NODES: 4
+      NODE_INDEX: ${{ matrix.node_index }}
+
+      # e2e driver switch: "selenium" or "playwright"
+      E2E_DRIVER: selenium
+
+      # selenium remote
+      SELENIUM_REMOTE_URL: http://localhost:4444/wd/hub
 
     services:
       postgres:
-        image: postgres
+        image: postgres:16
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
         ports:
           - 5432:5432
-        options: --health-cmd="pg_isready" --health-interval=10s --health-timeout=5s --health-retries=3
+        options: >-
+          --health-cmd="pg_isready -U postgres"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+
+      chrome:
+        image: selenium/standalone-chrome:4.28.1-20250123
+        ports:
+          - 4444:4444
+        options: >-
+          --shm-size="2g"
+          --health-cmd="curl -f http://localhost:4444/wd/hub/status || exit 1"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
 
     steps:
-      - name: Install packages
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libpq-dev pkg-config libvips google-chrome-stable curl gnupg
+      - uses: actions/checkout@v4
 
-      - name: Install Node.js (v22)
-        run: |
-          curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -
-          sudo apt-get install -y nodejs
-          node -v
-          npm -v
-
-      - name: Checkout code
-        uses: actions/checkout@v6
-
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
+      - uses: ruby/setup-ruby@v1
         with:
           ruby-version: .ruby-version
           bundler-cache: true
 
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install system packages
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libpq-dev pkg-config libvips curl
+
       - name: Install JS dependencies
-        run: npm install
+        run: npm ci
 
       - name: Build frontend (Vite)
         run: ./bin/vite build --clear --mode=test
 
-      - name: Prepare DB
-        env:
-          RAILS_ENV: test
-          DATABASE_URL: postgres://postgres:postgres@localhost:5432/test_db
+      - name: Wait for Postgres
+        run: |
+          for i in {1..30}; do
+            pg_isready -h localhost -p 5432 -U postgres && break
+            sleep 1
+          done
+
+      - name: Prepare DB (db:prepare)
         run: |
           cp config/database.yml.ci config/database.yml
-          bin/rails db:create db:schema:load
+          bin/rails db:prepare
 
-      - name: Inject secrets into .env.test
-        run: echo "GUEST_USER_EMAIL=${GUEST_USER_EMAIL}" > .env.test
+      - name: (Optional) Install Playwright browsers
+        if: env.E2E_DRIVER == 'playwright'
+        run: |
+          npx playwright install --with-deps
+
+      - name: Inject secrets (env only)
         env:
           GUEST_USER_EMAIL: ${{ secrets.GUEST_USER_EMAIL }}
+        run: echo "GUEST_USER_EMAIL is set" > /dev/null
 
-      - name: Run tests
+      - name: Run RSpec (split by matrix)
         env:
-          RAILS_ENV: test
-          DATABASE_URL: postgres://postgres:postgres@localhost:5432/test_db
-        run: bundle exec rspec
+          GUEST_USER_EMAIL: ${{ secrets.GUEST_USER_EMAIL }}
+        run: |
+          set -euo pipefail
 
-      - name: Cleanup .env.test
-        run: rm -f .env.test
+          # Collect spec files
+          mapfile -t SPECS < <(git ls-files "spec/**/*_spec.rb" | sort)
+
+          # Split by modulo
+          SELECTED=()
+          idx=0
+          for f in "${SPECS[@]}"; do
+            mod=$(( idx % TOTAL_NODES ))
+            if [ $mod -eq $(( NODE_INDEX - 1 )) ]; then
+              SELECTED+=("$f")
+            fi
+            idx=$((idx + 1))
+          done
+
+          echo "Node ${NODE_INDEX}/${TOTAL_NODES}: ${#SELECTED[@]} spec files"
+          bundle exec rspec "${SELECTED[@]}"
 
       - name: Collect failed screenshots
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v4
         if: failure()
         with:
-          name: screenshots
+          name: screenshots-node-${{ matrix.node_index }}
           path: tmp/screenshots
           if-no-files-found: ignore
