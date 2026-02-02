@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   db:
     image: postgres:16
@@ -31,6 +29,9 @@ services:
       DATABASE_PASSWORD: postgres
       RAILS_ENV: development
       PORT: 3000
+      # テスト実行時に .env.test が読めない環境でも通るようデフォルトを設定（rspec は -e RAILS_ENV=test で実行すること）
+      GUEST_USER_EMAIL: guest@example.com
+      LINE_CHANNEL_TOKEN: dummy_token_for_test
     stdin_open: true
     tty: true
 
