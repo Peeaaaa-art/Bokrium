@@ -81,8 +81,8 @@ Docker を使わずにローカルで `bundle exec rspec` を実行する場合�
 
 - **Playwright ブラウザ（system spec 用）**  
   system spec のドライバに Playwright（Chromium）を使用しています。初回のみブラウザのインストールが必要です。  
-  - `npx playwright install chromium`  
-  - Node が入っていれば実行可能です。
+  - **ローカル（Docker なし）**: `npx playwright install chromium`（`playwright` は npm 経由のため `npx` が必要です）  
+  - **Docker (Dockerfile.dev)**: イメージビルド時に Chromium をインストールしています。既存イメージでエラーになる場合は `docker compose run web npx playwright install --with-deps chromium` を一度実行するか、イメージを再ビルドしてください。
 
 ## Git Hooks
 

@@ -27,6 +27,9 @@ RUN apt-get update -qq && \
 COPY package.json package-lock.json ./
 RUN npm install
 
+# Install Playwright browsers (system spec 用)
+RUN npx playwright install --with-deps chromium
+
 # Install gems
 COPY Gemfile Gemfile.lock ./
 RUN bundle install
