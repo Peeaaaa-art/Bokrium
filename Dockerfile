@@ -5,21 +5,16 @@ FROM ruby:$RUBY_VERSION-slim AS base
 
 WORKDIR /rails
 
+# hadolint ignore=DL3008
+# 全パッケージのバージョン固定は、Debian のセキュリティ更新時にビルドが壊れやすいため。
+# 再現性はベースイメージ (ruby:3.4.8-slim) と同一 RUN 内の apt-get update で担保する。
 RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y \
     curl \
     libjemalloc2 \
     libvips \
-    libjpeg62-turbo-dev \
-    libpng-dev \
-    libyaml-dev \
-    libffi-dev \
-    node-gyp \
-    python-is-python3 \
     postgresql-client \
     gnupg && \
-    curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
-    apt-get install -y nodejs && \
     rm -rf /var/lib/apt/lists/* /var/cache/apt/archives
 
 ENV RAILS_ENV=production \
@@ -29,12 +24,26 @@ ENV RAILS_ENV=production \
 
 FROM base AS build
 
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
+# hadolint ignore=DL3008
+# 同上（base ステージのコメントを参照）
 RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y \
     build-essential \
     git \
+    libffi-dev \
+    libjpeg62-turbo-dev \
+    libpng-dev \
     libpq-dev \
-    pkg-config
+    libyaml-dev \
+    node-gyp \
+    pkg-config \
+    python-is-python3 && \
+    curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
+    apt-get update -qq && \
+    apt-get install --no-install-recommends -y nodejs && \
+    rm -rf /var/lib/apt/lists/* /var/cache/apt/archives
 
 COPY package.json package-lock.json ./
 RUN npm install
@@ -47,9 +56,8 @@ RUN gem install bundler -v '~> 4.0' && \
 
 COPY . .
 
-RUN ./bin/vite build
-
-RUN bundle exec bootsnap precompile app/ lib/
+RUN ./bin/vite build && \
+    bundle exec bootsnap precompile app/ lib/
 
 FROM base
 
