@@ -43,6 +43,11 @@ module Guest
     private
 
     def set_starter_books
+      unless guest_user
+        flash[:alert] = "ゲスト表示の準備ができていません。"
+        redirect_to root_path and return
+      end
+
       isbn_list = %w[9781001001001]
       @books = guest_user.books.where(isbn: isbn_list)
 
