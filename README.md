@@ -268,7 +268,8 @@
   
   無料枠の範囲内でも十分なパフォーマンスと信頼性が得られるため、コストパフォーマンスの面でも非常に優れた選択肢となっています。
   </details>
-  
+
+  <br>
   <br>
   
   [^1]: [ZXing（Zebra Crossing）](https://www.npmjs.com/package/@zxing/library) は、Java製のオープンソース1D/2Dバーコード処理ライブラリで、Web向けには `@zxing/library` パッケージが提供されています。**認識精度が高い**ことから、最終的にBokriumで採用しました。    
