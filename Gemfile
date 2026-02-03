@@ -23,7 +23,7 @@ gem "image_processing"
 # JSON API構築用
 gem "jbuilder"
 
-gem "devise"
+gem "devise", "~> 5.0"
 
 gem "devise-i18n"
 
