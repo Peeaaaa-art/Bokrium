@@ -177,7 +177,7 @@
   | データベース   | PostgreSQL（Supabase） / pg_search                                                                               |
   | インフラ       | Fly.io / Cloudflare（DNS管理・CDN、Viteビルドアセットの配信にCloudflare R2を使用）         |
   | 環境構築       | Docker                                                              |
-  | CI/CD | GitHub ActionsでPR時にRuboCop・Brakeman・RSpecを実行。mainマージ時に、Fly.ioへ自動デプロイ＋ViteアセットをR2へアップロード（CDN配信）。 |
+  | CI/CD | GitHub Actions：PR時にGemfile非推奨チェック・RuboCop・Brakeman・RSpec（並列）・Trivy・Scorecard・OSV-Scanner・Hadolint・Semgrepを実行。mainでFly.ioへデプロイ、frontend変更時はViteアセットをR2へアップロード（CDN配信）。 |
   | 開発支援       | Bullet（N+1検出） / rack-mini-profiler |
   | 認証           | Devise（メールログイン）/ OmniAuth（LINEログイン対応）                |
   | 画像処理       | Active Storage / libvips / Cloudflare R2                                                            |
