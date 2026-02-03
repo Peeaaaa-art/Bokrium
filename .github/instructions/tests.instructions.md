@@ -321,26 +321,25 @@ book = create(:book, user: user)
 
 ### Docker環境での実行
 
+`docker-compose.yml` のサービス **`web-test`** が **`RAILS_ENV`** を `test` に設定しています（`environment` の `RAILS_ENV: test`）。そのため、以下の CLI 例では `RAILS_ENV=test` を付けずに実行できます。
+
 ```bash
 # 全テスト実行
-docker compose run --rm web bundle exec rspec
+docker compose run --rm web-test bundle exec rspec
 
 # 特定のファイルを実行
-docker compose run --rm web bundle exec rspec spec/models/book_spec.rb
+docker compose run --rm web-test bundle exec rspec spec/models/book_spec.rb
 
 # 特定の行のテストを実行
-docker compose run --rm web bundle exec rspec spec/models/book_spec.rb:10
+docker compose run --rm web-test bundle exec rspec spec/models/book_spec.rb:10
 
 # タグで絞り込み実行
-docker compose run --rm web bundle exec rspec --tag focus
+docker compose run --rm web-test bundle exec rspec --tag focus
 ```
 
-### テストの並列実行（高速化）
+### 並列実行について
 
-```bash
-# 並列実行
-docker compose run --rm web bundle exec rspec --parallel
-```
+RSpec には `--parallel` オプションはありません。CI（`.github/workflows/rspec.yml`）では matrix で spec を分割して並列実行しています。ローカルや Docker では上記の `docker compose run --rm web-test bundle exec rspec` で実行してください。
 
 ## よくあるパターン
 

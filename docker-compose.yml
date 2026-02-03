@@ -29,7 +29,29 @@ services:
       DATABASE_PASSWORD: postgres
       RAILS_ENV: development
       PORT: 3000
-      # テスト実行時に .env.test が読めない環境でも通るようデフォルトを設定（rspec は -e RAILS_ENV=test で実行すること）
+      # テスト実行時に .env.test が読めない環境でも通るようデフォルトを設定
+      GUEST_USER_EMAIL: guest@example.com
+      LINE_CHANNEL_TOKEN: dummy_token_for_test
+    stdin_open: true
+    tty: true
+
+  # RSpec 実行用。RAILS_ENV=test をサービス環境で設定しているため CLI で -e を付けなくてよい
+  web-test:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - .:/rails
+      - bundle_cache:/usr/local/bundle
+      - node_modules:/rails/node_modules
+    depends_on:
+      - db
+    environment:
+      DATABASE_HOST: db
+      DATABASE_USERNAME: postgres
+      DATABASE_PASSWORD: postgres
+      RAILS_ENV: test
+      PORT: 3000
       GUEST_USER_EMAIL: guest@example.com
       LINE_CHANNEL_TOKEN: dummy_token_for_test
     stdin_open: true

@@ -1,0 +1,159 @@
+name: RSpec
+
+on:
+  workflow_call:
+
+jobs:
+  rspec_fast:
+    runs-on: ubuntu-24.04
+
+    strategy:
+      fail-fast: false
+      matrix:
+        node_index: [1, 2, 3, 4] # ← fast側の並列数
+
+    env:
+      RAILS_ENV: test
+      APP_HOST: http://localhost:3000
+      PORT: "3000"
+      LINE_CHANNEL_TOKEN: dummy_token_for_test
+
+      DATABASE_URL: postgres://postgres:postgres@localhost:5432/test_db
+
+      TOTAL_NODES: 4
+      NODE_INDEX: ${{ matrix.node_index }}
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U postgres"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+
+    steps:
+      - uses: actions/checkout@v6
+      - uses: ./.github/actions/setup-rspec-env
+
+      - name: Run RSpec FAST (exclude spec/system)
+        env:
+          GUEST_USER_EMAIL: ${{ secrets.GUEST_USER_EMAIL || 'guest@example.com' }}
+        run: |
+          set -euo pipefail
+
+          # Collect spec files excluding system specs
+          mapfile -t SPECS < <(
+            git ls-files "spec/**/*_spec.rb" \
+            | grep -v '^spec/system/' \
+            | sort
+          )
+
+          # Split by modulo
+          SELECTED=()
+          idx=0
+          for f in "${SPECS[@]}"; do
+            mod=$(( idx % TOTAL_NODES ))
+            if [ $mod -eq $(( NODE_INDEX - 1 )) ]; then
+              SELECTED+=("$f")
+            fi
+            idx=$((idx + 1))
+          done
+
+          echo "FAST node ${NODE_INDEX}/${TOTAL_NODES}: ${#SELECTED[@]} spec files"
+          bundle exec rspec "${SELECTED[@]}"
+
+  rspec_system:
+    runs-on: ubuntu-24.04
+
+    strategy:
+      fail-fast: false
+      matrix:
+        node_index: [1, 2] # ← system側はまず2で十分（重いので）
+
+    env:
+      RAILS_ENV: test
+      APP_HOST: http://localhost:3000
+      PORT: "3000"
+      LINE_CHANNEL_TOKEN: dummy_token_for_test
+
+      DATABASE_URL: postgres://postgres:postgres@localhost:5432/test_db
+
+      TOTAL_NODES: 2
+      NODE_INDEX: ${{ matrix.node_index }}
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U postgres"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+
+    steps:
+      - uses: actions/checkout@v6
+      - uses: ./.github/actions/setup-rspec-env
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Run RSpec SYSTEM (spec/system only)
+        env:
+          # フォークPRなどで secret が未設定でも spec が通るようデフォルトを設定
+          GUEST_USER_EMAIL: ${{ secrets.GUEST_USER_EMAIL || 'guest@example.com' }}
+        run: |
+          set -euo pipefail
+
+          mapfile -t SPECS < <(git ls-files "spec/system/**/*_spec.rb" | sort)
+
+          if [ ${#SPECS[@]} -eq 0 ]; then
+            echo "No system specs found under spec/system/. Skipping."
+            exit 0
+          fi
+
+          # Split by modulo
+          SELECTED=()
+          idx=0
+          for f in "${SPECS[@]}"; do
+            mod=$(( idx % TOTAL_NODES ))
+            if [ $mod -eq $(( NODE_INDEX - 1 )) ]; then
+              SELECTED+=("$f")
+            fi
+            idx=$((idx + 1))
+          done
+
+          echo "SYSTEM node ${NODE_INDEX}/${TOTAL_NODES}: ${#SELECTED[@]} spec files"
+          bundle exec rspec "${SELECTED[@]}"
+
+      - name: Collect failed screenshots
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: screenshots-system-node-${{ matrix.node_index }}
+          path: tmp/screenshots
+          if-no-files-found: ignore
+
+  rspec_all:
+    runs-on: ubuntu-24.04
+    needs: [rspec_fast, rspec_system]
+    if: always()
+    steps:
+      - name: Ensure all RSpec jobs passed
+        run: |
+          if [ "${{ needs.rspec_fast.result }}" != "success" ] || \
+             [ "${{ needs.rspec_system.result }}" != "success" ]; then
+            echo "Some RSpec jobs failed"
+            exit 1
+          fi
+          echo "All RSpec jobs passed"

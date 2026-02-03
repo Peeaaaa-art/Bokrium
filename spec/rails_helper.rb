@@ -1,5 +1,5 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
-# (Docker: docker compose run --rm -e RAILS_ENV=test web bundle exec rspec)
+# (Docker: docker compose run --rm web-test bundle exec rspec)
 require 'spec_helper'
 ENV['RAILS_ENV'] ||= 'test'
 require_relative '../config/environment'
