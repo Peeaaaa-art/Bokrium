@@ -192,3 +192,17 @@ jobs:
           name: screenshots-system-node-${{ matrix.node_index }}
           path: tmp/screenshots
           if-no-files-found: ignore
+
+  rspec_all:
+    runs-on: ubuntu-24.04
+    needs: [rspec_fast, rspec_system]
+    if: always()
+    steps:
+      - name: Ensure all RSpec jobs passed
+        run: |
+          if [ "${{ needs.rspec_fast.result }}" != "success" ] || \
+             [ "${{ needs.rspec_system.result }}" != "success" ]; then
+            echo "Some RSpec jobs failed"
+            exit 1
+          fi
+          echo "All RSpec jobs passed"

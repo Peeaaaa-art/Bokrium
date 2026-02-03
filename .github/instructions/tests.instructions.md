@@ -123,7 +123,7 @@ RSpec.describe '書籍登録', type: :system do
 
   before do
     sign_in user
-    driven_by(:selenium_chrome_headless)
+    driven_by :playwright_chrome_headless
   end
 
   it 'ユーザーが新しい本を登録できる' do
