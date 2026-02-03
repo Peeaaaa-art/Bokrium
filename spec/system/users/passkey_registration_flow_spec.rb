@@ -1,13 +1,15 @@
 require 'rails_helper'
 
+# WebAuthn はブラウザの navigator.credentials.create/get API に依存するため、
+# システムテストではハードウェア／プラットフォーム認証子をモックしづらい。
+# サーバー側の登録・ログイン・リダイレクトは request spec で検証している。
+# - spec/requests/users/credentials_spec.rb（パスキー登録）
+# - spec/requests/users/webauthn_sessions_spec.rb（パスキーログイン）
+# - spec/requests/users/passkey_setup_spec.rb（初期設定画面）
+# E2E は手動確認、または Playwright 等で仮想認証子（Virtual Authenticator）を有効にしたうえで実装する。
 RSpec.describe "Passkey Registration Flow", type: :system do
-  # このテストは実際のブラウザ環境では動作しないため、
-  # リクエストレベルでのフローを検証します
-
   describe "新規ユーザー登録からパスキー設定まで" do
     it "ユーザー登録 → メール確認 → パスキー設定 → ログイン の一連のフローが完了する" do
-      # このテストはシステムテストとしては WebAuthn API をモックできないため、
-      # 実際の動作確認は手動テストまたは E2E テストツール（Cypress など）で行う必要があります
       skip "WebAuthn API requires browser environment with hardware/platform authenticator"
     end
   end

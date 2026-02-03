@@ -159,7 +159,8 @@ jobs:
 
       - name: Run RSpec SYSTEM (spec/system only)
         env:
-          GUEST_USER_EMAIL: ${{ secrets.GUEST_USER_EMAIL }}
+          # フォークPRなどで secret が未設定でも spec が通るようデフォルトを設定
+          GUEST_USER_EMAIL: ${{ secrets.GUEST_USER_EMAIL || 'guest@example.com' }}
         run: |
           set -euo pipefail
 

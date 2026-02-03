@@ -42,7 +42,8 @@ Devise.setup do |config|
 
   config.omniauth_path_prefix = "/users/auth"
 
-  config.responder.error_status = :unprocessable_entity
+  # Rack が :unprocessable_entity を非推奨にしたため、:unprocessable_content（422）を使用
+  config.responder.error_status = :unprocessable_content
   config.responder.redirect_status = :see_other
 end
 

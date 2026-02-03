@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-ruby "~> 3.4.8"
+ruby "~> 4.0.1"
 
 gem "rails", "~> 8.1.2"
 
@@ -23,7 +23,7 @@ gem "image_processing"
 # JSON API構築用
 gem "jbuilder"
 
-gem "devise"
+gem "devise", "~> 5.0"
 
 gem "devise-i18n"
 
