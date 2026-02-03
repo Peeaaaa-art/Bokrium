@@ -1,7 +1,8 @@
 # syntax=docker/dockerfile:1
 
 ARG RUBY_VERSION=4.0.1
-FROM ruby:${RUBY_VERSION}-slim-trixie AS base
+# イメージのハッシュ固定（再現性・タグ書き換え対策）
+FROM ruby:${RUBY_VERSION}-slim-trixie@sha256:24df04f7b0606fa2f83119ce2f5a16ef9b4242bec82268879b51488a4655ded2 AS base
 
 WORKDIR /rails
 

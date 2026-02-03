@@ -5,11 +5,7 @@ require "rails_helper"
 RSpec.describe "Users::PasskeySetup (パスキー初期設定画面)", type: :request do
   let(:user) { create(:user, password: "password123", confirmed_at: Time.current) }
 
-  before do
-    post user_session_path, params: {
-      user: { email: user.email, password: "password123" }
-    }
-  end
+  before { sign_in user }
 
   describe "GET /users/passkey_setup" do
     context "パスキー未登録のとき" do
