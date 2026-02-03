@@ -6,11 +6,12 @@ on:
       - main
     paths:
       - "app/frontend/**"
-      - "app/javascript/**"
       - "package.json"
       - "package-lock.json"
       - "vite.config.*"
       - "config/vite.json"
+      - "tsconfig.json"
+      - "types/**"
 
 # Set minimal permissions for the entire workflow
 permissions:
