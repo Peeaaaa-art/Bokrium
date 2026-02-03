@@ -86,48 +86,54 @@ Docker を使わずにローカルで `bundle exec rspec` を実行する場合�
 
 ## Git Hooks
 
-### pre-commit フック
+### pre-commit（lint のみ）
 
-コミット前に自動的にRubocopとテストを実行するpre-commitフックが設定されています。Rubocopまたはテストが失敗した場合、コミットは中断されます。
+コミット前に **RuboCop** のみを実行します。失敗するとコミットは中断されます。テストは pre-push で実行するため、コミットは軽く済みます。
+
+### pre-push（テスト）
+
+push 前に **RSpec** を実行します。失敗すると push は中断されます。
 
 #### フックの無効化
 
 緊急時やCI環境など、フックをスキップしたい場合:
 
 ```bash
-git commit --no-verify -m "commit message"
+git commit --no-verify -m "commit message"   # pre-commit をスキップ
+git push --no-verify                        # pre-push をスキップ
 ```
 
 #### フックスクリプトの場所
 
-`.git/hooks/pre-commit`
+- `.git/hooks/pre-commit` … RuboCop
+- `.git/hooks/pre-push` … RSpec
 
-#### フックの仕組み
+#### pre-commit の仕組み
 
 ```bash
 #!/bin/bash
-# Pre-commit hook for running linter and tests before commit
-
+# Pre-commit: lint のみ（RuboCop）。テストは pre-push で実行する。
 set -e
-
 echo "🔍 Running RuboCop..."
-
-# Docker環境でRuboCopを実行（進捗表示形式）
-if ! docker compose run --rm web bundle exec rubocop --format progress; then
+if ! docker compose run --rm -e RAILS_ENV=test web bundle exec rubocop; then
   echo "❌ RuboCop failed! Please fix the linting errors before committing."
   exit 1
 fi
-
 echo "✅ RuboCop passed!"
-echo ""
-echo "🧪 Running tests..."
+```
 
-# Docker環境でRSpecを実行（RAILS_ENV=test 必須・進捗表示形式）
+#### pre-push の仕組み
+
+```bash
+#!/bin/bash
+# Pre-push: RSpec を実行。push 前にテストが通ることを確認する。
+set -e
+echo "🧪 Running RSpec..."
 if docker compose run --rm -e RAILS_ENV=test web bundle exec rspec --format progress; then
-  echo "✅ All tests passed! Proceeding with commit."
+  echo "✅ All tests passed! Proceeding with push."
   exit 0
 else
-  echo "❌ Tests failed! Please fix the failing tests before committing."
+  echo "❌ Tests failed! Please fix the failing tests before pushing."
   exit 1
 fi
 ```
