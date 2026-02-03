@@ -39,9 +39,19 @@ module WebAuthnHelper
   end
 
   # WebAuthn の登録レスポンスをモック
+  # CredentialsController#create が params[:response][:clientDataJSON] を JSON.parse するため、
+  # challenge を含む有効な JSON を Base64 したものを渡す
   def mock_webauthn_credential_create(challenge:)
     raw_id = SecureRandom.random_bytes(16)
     public_key = SecureRandom.random_bytes(65)
+
+    client_data = {
+      "challenge" => challenge,
+      "type" => "webauthn.create",
+      "origin" => "http://localhost"
+    }
+    client_data_json = client_data.to_json
+    client_data_json_b64 = Base64.urlsafe_encode64(client_data_json, padding: false)
 
     credential = double(
       id: Base64.urlsafe_encode64(raw_id, padding: false),
@@ -51,7 +61,7 @@ module WebAuthnHelper
       sign_count: 0,
       response: double(
         attestation_object: "fake_attestation_object",
-        client_data_json: "fake_client_data_json"
+        client_data_json: client_data_json
       )
     )
 
@@ -68,16 +78,24 @@ module WebAuthnHelper
         type: "public-key",
         response: {
           attestationObject: Base64.urlsafe_encode64("fake_attestation_object", padding: false),
-          clientDataJSON: Base64.urlsafe_encode64("fake_client_data_json", padding: false)
+          clientDataJSON: client_data_json_b64
         }
       }
     }
   end
 
   # WebAuthn の認証レスポンスをモック
+  # clientDataJSON は challenge を含む有効な JSON にしておく（webauthn gem がパースする場合に備える）
   def mock_webauthn_credential_get(credential:, challenge:)
     authenticator_data = SecureRandom.random_bytes(37)
     signature = SecureRandom.random_bytes(70)
+
+    client_data = {
+      "challenge" => challenge,
+      "type" => "webauthn.get",
+      "origin" => "http://localhost"
+    }
+    client_data_json_b64 = Base64.urlsafe_encode64(client_data.to_json, padding: false)
 
     webauthn_credential = double(
       id: Base64.urlsafe_encode64(Base64.strict_decode64(credential.external_id), padding: false),
@@ -86,7 +104,7 @@ module WebAuthnHelper
       sign_count: credential.sign_count + 1,
       response: double(
         authenticator_data: authenticator_data,
-        client_data_json: "fake_client_data_json",
+        client_data_json: client_data.to_json,
         signature: signature,
         user_handle: credential.user_id.to_s
       )
@@ -106,7 +124,7 @@ module WebAuthnHelper
         type: "public-key",
         response: {
           authenticatorData: Base64.urlsafe_encode64(authenticator_data, padding: false),
-          clientDataJSON: Base64.urlsafe_encode64("fake_client_data_json", padding: false),
+          clientDataJSON: client_data_json_b64,
           signature: Base64.urlsafe_encode64(signature, padding: false),
           userHandle: Base64.urlsafe_encode64(credential.user_id.to_s, padding: false)
         }
