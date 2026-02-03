@@ -321,50 +321,25 @@ book = create(:book, user: user)
 
 ### Docker環境での実行
 
+`docker-compose.yml` のサービス **`web-test`** が **`RAILS_ENV`** を `test` に設定しています（`environment` の `RAILS_ENV: test`）。そのため、以下の CLI 例では `RAILS_ENV=test` を付けずに実行できます。
+
 ```bash
-# 全テスト実行（RAILS_ENV=test 必須）
-docker compose run --rm -e RAILS_ENV=test web bundle exec rspec
+# 全テスト実行
+docker compose run --rm web-test bundle exec rspec
 
 # 特定のファイルを実行
-docker compose run --rm -e RAILS_ENV=test web bundle exec rspec spec/models/book_spec.rb
+docker compose run --rm web-test bundle exec rspec spec/models/book_spec.rb
 
 # 特定の行のテストを実行
-docker compose run --rm -e RAILS_ENV=test web bundle exec rspec spec/models/book_spec.rb:10
+docker compose run --rm web-test bundle exec rspec spec/models/book_spec.rb:10
 
 # タグで絞り込み実行
-docker compose run --rm -e RAILS_ENV=test web bundle exec rspec --tag focus
+docker compose run --rm web-test bundle exec rspec --tag focus
 ```
 
-### テストの並列実行（高速化）
+### 並列実行について
 
-`parallel_tests` を使うと RSpec を並列実行して高速化できます。
-
-**1. Gemfile に gem を追加（development/test グループ）**
-
-```ruby
-group :development, :test do
-  gem 'parallel_tests'
-end
-```
-
-**2. セットアップ**
-
-```bash
-bundle install
-bundle exec rake parallel:setup   # 初回のみ: DB を並列用に複製
-```
-
-**3. 並列実行**
-
-```bash
-# Docker の場合
-docker compose run --rm -e RAILS_ENV=test web bundle exec rake parallel:spec
-
-# ローカルの場合
-bundle exec rake parallel:spec
-```
-
-`parallel_rspec` を使う場合は、`gem 'parallel_rspec'` を追加したうえで `bundle exec parallel_rspec spec` で実行できます。
+RSpec には `--parallel` オプションはありません。CI（`.github/workflows/rspec.yml`）では matrix で spec を分割して並列実行しています。ローカルや Docker では上記の `docker compose run --rm web-test bundle exec rspec` で実行してください。
 
 ## よくあるパターン
 
