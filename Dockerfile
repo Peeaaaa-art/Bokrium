@@ -1,14 +1,16 @@
 # syntax=docker/dockerfile:1
 
-ARG RUBY_VERSION=3.4.8
-FROM ruby:$RUBY_VERSION-slim AS base
+ARG RUBY_VERSION=4.0.1
+FROM ruby:${RUBY_VERSION}-slim-trixie AS base
 
 WORKDIR /rails
 
 # hadolint ignore=DL3008
 # 全パッケージのバージョン固定は、Debian のセキュリティ更新時にビルドが壊れやすいため。
-# 再現性はベースイメージ (ruby:3.4.8-slim) と同一 RUN 内の apt-get update で担保する。
+# 再現性はベースイメージ (ruby:4.0.1-slim-trixie) と同一 RUN 内の apt-get update で担保する。
+# CVE-2025-15467 対策: セキュリティアップデートを適用してから他パッケージをインストールする。
 RUN apt-get update -qq && \
+    apt-get upgrade -y --no-install-recommends && \
     apt-get install --no-install-recommends -y \
     curl \
     libjemalloc2 \
@@ -28,7 +30,9 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 # hadolint ignore=DL3008
 # 同上（base ステージのコメントを参照）
+# CVE-2025-15467 対策: セキュリティアップデートを適用してから他パッケージをインストールする。
 RUN apt-get update -qq && \
+    apt-get upgrade -y --no-install-recommends && \
     apt-get install --no-install-recommends -y \
     build-essential \
     git \
