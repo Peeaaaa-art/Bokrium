@@ -6,8 +6,7 @@ on:
       - main
     paths-ignore:
       - '**/*.md'   # README.md, AGENTS.md, SPEC.md など .md 全部
-      # 必要なら他の無視パスもここに追加
-      # - 'docs/**'
+      - 'docs/**'
 
 permissions:
   contents: read
@@ -24,6 +23,6 @@ jobs:
         with:
           version: 0.4.6
 
-      - run: flyctl deploy --remote-only
+      - run: flyctl deploy --remote-only --no-cache
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
