@@ -78,6 +78,8 @@ group :development, :test do
 
   gem "brakeman", "~> 8.0", require: false
 
+  gem "bundler-audit", require: false
+
   gem "rubocop-rails-omakase", require: false
 
   gem "rspec-rails"
