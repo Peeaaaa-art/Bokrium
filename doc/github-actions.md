@@ -15,6 +15,7 @@ PR / push で動くワークフローと、失敗時にどこを見るかをま�
 
 | ワークフロー | トリガー | 役割 |
 |-------------|----------|------|
+| Dependabot auto-merge | Dependabot の PR / CI 完了時 | パッチ更新 PR に auto-merge を有効化し、CI 通過後に即マージ |
 | Fly Deploy | push to main（パスフィルタあり） | 本番デプロイ |
 | Fly Machines Schedule | スケジュール / 手動 | マシンの夜間停止・朝起動 |
 | Upload Vite assets to R2 | push to main（フロント関連パスのみ） | R2 へアセットアップロード |
