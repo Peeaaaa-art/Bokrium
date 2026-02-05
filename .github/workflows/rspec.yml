@@ -41,7 +41,7 @@ jobs:
           --health-retries=10
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v6.0.2
       - uses: ./.github/actions/setup-rspec-env
 
       - name: Run RSpec FAST (exclude spec/system)
@@ -105,7 +105,7 @@ jobs:
           --health-retries=10
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v6.0.2
       - uses: ./.github/actions/setup-rspec-env
 
       - name: Install Playwright browsers

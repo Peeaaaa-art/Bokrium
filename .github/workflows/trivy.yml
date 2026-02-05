@@ -27,7 +27,7 @@ jobs:
       security-events: write
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v6.0.2
 
       - name: Build image from Dockerfile
         run: docker build -t bokrium:${{ github.sha }} .
