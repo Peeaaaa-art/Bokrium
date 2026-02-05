@@ -1,3 +1,4 @@
+# Lint, deps check, and RSpec. Required for branch protection / Dependabot auto-merge.
 name: CI
 
 on:
