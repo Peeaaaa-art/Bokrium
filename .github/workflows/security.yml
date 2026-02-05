@@ -25,10 +25,14 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   hadolint:
     name: "security - Hadolint"
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     permissions:
       contents: read
       security-events: write
@@ -78,7 +82,7 @@ jobs:
 
   semgrep:
     name: "security - Semgrep"
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     if: github.actor != 'dependabot[bot]'
     permissions:
       contents: read
@@ -94,14 +98,14 @@ jobs:
           generateSarif: "1"
 
       - name: Upload SARIF file
-        uses: github/codeql-action/upload-sarif@v4
+        uses: github/codeql-action/upload-sarif@cdefb33c0f6224e58673d9004f47f7cb3e328b89
         with:
           sarif_file: semgrep.sarif
         if: always()
 
   trivy:
     name: "security - Trivy"
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     permissions:
       contents: read
       security-events: write
@@ -127,14 +131,14 @@ jobs:
 
   scorecard:
     name: "security - Scorecard"
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     if: github.event.repository.default_branch == github.ref_name || github.event_name == 'pull_request'
     permissions:
       security-events: write
       id-token: write
     steps:
       - name: Checkout code
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        uses: actions/checkout@v6
         with:
           persist-credentials: false
 
@@ -153,6 +157,6 @@ jobs:
           retention-days: 5
 
       - name: Upload to code-scanning
-        uses: github/codeql-action/upload-sarif@v3
+        uses: github/codeql-action/upload-sarif@cdefb33c0f6224e58673d9004f47f7cb3e328b89
         with:
           sarif_file: results.sarif

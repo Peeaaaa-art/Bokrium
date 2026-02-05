@@ -21,7 +21,7 @@ jobs:
   # Dependabot のパッチ更新 PR に auto-merge を有効化
   enable-auto-merge:
     if: github.event_name == 'pull_request' && github.actor == 'dependabot[bot]'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Dependabot metadata
         id: metadata
@@ -39,7 +39,7 @@ jobs:
   # CI が成功したあと、Dependabot のパッチ PR で auto-merge 有効なら即マージ
   merge-when-ready:
     if: github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Get PR number for this branch
         id: pr
