@@ -40,7 +40,7 @@ jobs:
           --health-retries=10
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8
       - uses: ./.github/actions/setup-rspec-env
 
       - name: Run RSpec FAST (exclude spec/system)
@@ -81,7 +81,7 @@ jobs:
           --health-retries=10
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8
       - uses: ./.github/actions/setup-rspec-env
 
       - name: Install Playwright browsers
@@ -94,7 +94,7 @@ jobs:
         run: bin/run-rspec-matrix --glob "spec/system/**/*_spec.rb"
 
       - name: Collect failed screenshots
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         if: failure()
         with:
           name: screenshots-system-node-${{ matrix.node_index }}
