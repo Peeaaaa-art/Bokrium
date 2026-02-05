@@ -1,6 +1,6 @@
 <%= form_with url: explore_path, method: :get,
               data: { controller: "responsive-slice",
-                turbo_frame: (scope == "mine" || "guest" ? "books_frame" : "public_books_frame") },
+                turbo_frame: (scope == "mine" || scope == "guest" ? "books_frame" : "public_books_frame") },
               class: local_assigns[:form_class] || "d-flex justify-content-center position-relative" do %>
 
   <%= hidden_field_tag :scope, scope %>

@@ -8,6 +8,7 @@ permissions:
 
 jobs:
   rspec_fast:
+    name: "test - RSpec fast (${{ matrix.node_index }}/4)"
     runs-on: ubuntu-24.04
 
     strategy:
@@ -20,9 +21,7 @@ jobs:
       APP_HOST: http://localhost:3000
       PORT: "3000"
       LINE_CHANNEL_TOKEN: dummy_token_for_test
-
       DATABASE_URL: postgres://postgres:postgres@localhost:5432/test_db
-
       TOTAL_NODES: 4
       NODE_INDEX: ${{ matrix.node_index }}
 
@@ -47,31 +46,10 @@ jobs:
       - name: Run RSpec FAST (exclude spec/system)
         env:
           GUEST_USER_EMAIL: ${{ secrets.GUEST_USER_EMAIL || 'guest@example.com' }}
-        run: |
-          set -euo pipefail
-
-          # Collect spec files excluding system specs
-          mapfile -t SPECS < <(
-            git ls-files "spec/**/*_spec.rb" \
-            | grep -v '^spec/system/' \
-            | sort
-          )
-
-          # Split by modulo
-          SELECTED=()
-          idx=0
-          for f in "${SPECS[@]}"; do
-            mod=$(( idx % TOTAL_NODES ))
-            if [ $mod -eq $(( NODE_INDEX - 1 )) ]; then
-              SELECTED+=("$f")
-            fi
-            idx=$((idx + 1))
-          done
-
-          echo "FAST node ${NODE_INDEX}/${TOTAL_NODES}: ${#SELECTED[@]} spec files"
-          bundle exec rspec "${SELECTED[@]}"
+        run: bin/run-rspec-matrix --glob "spec/**/*_spec.rb" --exclude "spec/system/"
 
   rspec_system:
+    name: "test - RSpec system (${{ matrix.node_index }}/2)"
     runs-on: ubuntu-24.04
 
     strategy:
@@ -84,9 +62,7 @@ jobs:
       APP_HOST: http://localhost:3000
       PORT: "3000"
       LINE_CHANNEL_TOKEN: dummy_token_for_test
-
       DATABASE_URL: postgres://postgres:postgres@localhost:5432/test_db
-
       TOTAL_NODES: 2
       NODE_INDEX: ${{ matrix.node_index }}
 
@@ -115,29 +91,7 @@ jobs:
         env:
           # フォークPRなどで secret が未設定でも spec が通るようデフォルトを設定
           GUEST_USER_EMAIL: ${{ secrets.GUEST_USER_EMAIL || 'guest@example.com' }}
-        run: |
-          set -euo pipefail
-
-          mapfile -t SPECS < <(git ls-files "spec/system/**/*_spec.rb" | sort)
-
-          if [ ${#SPECS[@]} -eq 0 ]; then
-            echo "No system specs found under spec/system/. Skipping."
-            exit 0
-          fi
-
-          # Split by modulo
-          SELECTED=()
-          idx=0
-          for f in "${SPECS[@]}"; do
-            mod=$(( idx % TOTAL_NODES ))
-            if [ $mod -eq $(( NODE_INDEX - 1 )) ]; then
-              SELECTED+=("$f")
-            fi
-            idx=$((idx + 1))
-          done
-
-          echo "SYSTEM node ${NODE_INDEX}/${TOTAL_NODES}: ${#SELECTED[@]} spec files"
-          bundle exec rspec "${SELECTED[@]}"
+        run: bin/run-rspec-matrix --glob "spec/system/**/*_spec.rb"
 
       - name: Collect failed screenshots
         uses: actions/upload-artifact@v4
@@ -148,6 +102,7 @@ jobs:
           if-no-files-found: ignore
 
   rspec_all:
+    name: "test - RSpec gate"
     runs-on: ubuntu-24.04
     needs: [rspec_fast, rspec_system]
     if: always()

@@ -1,0 +1,79 @@
+# Dependabot のパッチ更新 PR: auto-merge を有効化し、CI 通過後に即マージ
+# https://docs.github.com/ja/code-security/tutorials/secure-your-dependencies/automating-dependabot-with-github-actions
+#
+# This workflow uses actions that are not certified by GitHub.
+
+name: Dependabot auto-merge
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_run:
+    workflows: ["CI"]
+    types: [completed]
+    branches: [main]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  # Dependabot のパッチ更新 PR に auto-merge を有効化
+  enable-auto-merge:
+    if: github.event_name == 'pull_request' && github.actor == 'dependabot[bot]'
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Dependabot metadata
+        id: metadata
+        uses: dependabot/fetch-metadata@8348ea7f5d949b08c7f125a44b569c9626b05db3
+        with:
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+
+      - name: Enable auto-merge for patch updates
+        if: steps.metadata.outputs.update-type == 'version-update:semver-patch'
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh pr merge --auto --merge "$PR_URL"
+
+  # CI が成功したあと、Dependabot のパッチ PR で auto-merge 有効なら即マージ
+  merge-when-ready:
+    if: github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Get PR number for this branch
+        id: pr
+        env:
+          HEAD_BRANCH: ${{ github.event.workflow_run.head_branch }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          PR_NUM=$(gh pr list --head "$HEAD_BRANCH" --state open --json number --limit 1 | jq -r '.[0].number // empty')
+          echo "number=$PR_NUM" >> $GITHUB_OUTPUT
+
+      - name: Merge Dependabot patch PR when auto-merge is enabled
+        if: steps.pr.outputs.number != ''
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUM: ${{ steps.pr.outputs.number }}
+        run: |
+          set -e
+          AUTHOR=$(gh pr view "$PR_NUM" --json author -q '.author.login')
+          if [ "$AUTHOR" != "dependabot[bot]" ]; then
+            echo "Not a Dependabot PR, skipping."
+            exit 0
+          fi
+
+          AUTO_MERGE=$(gh pr view "$PR_NUM" --json autoMergeRequest -q '.autoMergeRequest.enabledAt // ""')
+          if [ -z "$AUTO_MERGE" ]; then
+            echo "Auto-merge not enabled for this PR, skipping."
+            exit 0
+          fi
+
+          BODY=$(gh pr view "$PR_NUM" --json body -q '.body // ""')
+          if ! echo "$BODY" | grep -qE 'semver-patch|Version update type:.*patch'; then
+            echo "Not a patch update, skipping."
+            exit 0
+          fi
+
+          echo "Merging Dependabot patch PR #$PR_NUM"
+          gh pr merge "$PR_NUM" --merge
