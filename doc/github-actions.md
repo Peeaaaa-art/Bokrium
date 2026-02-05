@@ -4,12 +4,16 @@ PR / push で動くワークフローと、失敗時にどこを見るかをま�
 
 ## PR・push で動くワークフロー一覧
 
-`main` への push または `main` 向け PR で動くのは次の 2 本です。
+`main` への push または `main` 向け PR で動くのは次のワークフローです。
 
 | ワークフロー | 役割 |
 |-------------|------|
 | **CI** (`.github/workflows/ci.yml`) | 品質チェックとテスト（Lint + RSpec） |
-| **Security** (`.github/workflows/security.yml`) | セキュリティスキャン（Hadolint, OSV-Scanner, Semgrep, Trivy, Scorecard） |
+| **Hadolint** (`.github/workflows/hadolint.yml`) | Dockerfile のベストプラクティスチェック |
+| **OSV-Scanner** (`.github/workflows/osv-scanner.yml`) | 依存関係の脆弱性スキャン |
+| **Semgrep** (`.github/workflows/semgrep.yml`) | ルールベースの SAST |
+| **Trivy** (`.github/workflows/trivy.yml`) | コンテナイメージの脆弱性スキャン |
+| **Scorecard** (`.github/workflows/scorecard.yml`) | サプライチェーン・リポジトリの健全性スコア |
 
 このほか、トリガーが異なるワークフローがあります。
 
