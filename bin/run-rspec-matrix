@@ -1,0 +1,57 @@
+#!/usr/bin/env bash
+# Run RSpec for this matrix node: collect spec files by glob (optional exclude),
+# split by TOTAL_NODES/NODE_INDEX, then run rspec. Used by .github/workflows/rspec.yml.
+
+set -euo pipefail
+
+GLOB=""
+EXCLUDE=""
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --glob)
+      GLOB="$2"
+      shift 2
+      ;;
+    --exclude)
+      EXCLUDE="$2"
+      shift 2
+      ;;
+    *)
+      echo "Usage: $0 --glob 'spec/**/*_spec.rb' [--exclude 'spec/system/']" >&2
+      exit 1
+      ;;
+  esac
+done
+
+if [[ -z "$GLOB" ]]; then
+  echo "Usage: $0 --glob 'spec/**/*_spec.rb' [--exclude 'spec/system/']" >&2
+  exit 1
+fi
+
+: "${TOTAL_NODES:?TOTAL_NODES is required}"
+: "${NODE_INDEX:?NODE_INDEX is required}"
+
+if [[ -n "$EXCLUDE" ]]; then
+  mapfile -t SPECS < <(git ls-files "$GLOB" | grep -v "^${EXCLUDE}" | sort)
+else
+  mapfile -t SPECS < <(git ls-files "$GLOB" | sort)
+fi
+
+SELECTED=()
+idx=0
+for f in "${SPECS[@]}"; do
+  mod=$((idx % TOTAL_NODES))
+  if [[ $mod -eq $((NODE_INDEX - 1)) ]]; then
+    SELECTED+=("$f")
+  fi
+  idx=$((idx + 1))
+done
+
+if [[ ${#SELECTED[@]} -eq 0 ]]; then
+  echo "Node ${NODE_INDEX}/${TOTAL_NODES}: 0 spec files for this node, skipping."
+  exit 0
+fi
+
+echo "Node ${NODE_INDEX}/${TOTAL_NODES}: ${#SELECTED[@]} spec files"
+bundle exec rspec "${SELECTED[@]}"

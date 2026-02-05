@@ -4,12 +4,7 @@ description: Checkout, Ruby/Node, system packages, npm, Vite build, Postgres wai
 runs:
   using: composite
   steps:
-    - uses: actions/checkout@v6
-
-    - uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: .ruby-version
-        bundler-cache: true
+    - uses: ./.github/actions/setup-ruby-env
 
     - uses: actions/setup-node@v6
       with:
