@@ -15,56 +15,37 @@ concurrency:
 
 jobs:
   gemfile_deprecations:
+    name: "deps - Gemfile deprecations"
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v6
-
-      - uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: .ruby-version
-          bundler-cache: true
-
+      - uses: ./.github/actions/setup-ruby-env
       - name: Check Gemfile deprecations
         run: bin/check-gemfile-deprecations
 
   rubocop:
+    name: "lint - RuboCop"
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v6
-
-      - uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: .ruby-version
-          bundler-cache: true
-
+      - uses: ./.github/actions/setup-ruby-env
       - name: Run RuboCop
         run: bin/rubocop --parallel -f github
 
   brakeman:
+    name: "lint - Brakeman"
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v6
-
-      - uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: .ruby-version
-          bundler-cache: true
-
+      - uses: ./.github/actions/setup-ruby-env
       - name: Run Brakeman
         run: bin/brakeman --no-pager
 
   bundler_audit:
+    name: "deps - bundler-audit"
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v6
-
-      - uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: .ruby-version
-          bundler-cache: true
-
+      - uses: ./.github/actions/setup-ruby-env
       - name: Run bundler-audit
         run: bundle exec bundler-audit check --update
 
   rspec:
+    name: "test - RSpec"
     uses: ./.github/workflows/rspec.yml

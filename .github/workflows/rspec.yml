@@ -8,6 +8,7 @@ permissions:
 
 jobs:
   rspec_fast:
+    name: "test - RSpec fast (${{ matrix.node_index }}/4)"
     runs-on: ubuntu-24.04
 
     strategy:
@@ -72,6 +73,7 @@ jobs:
           bundle exec rspec "${SELECTED[@]}"
 
   rspec_system:
+    name: "test - RSpec system (${{ matrix.node_index }}/2)"
     runs-on: ubuntu-24.04
 
     strategy:
@@ -148,6 +150,7 @@ jobs:
           if-no-files-found: ignore
 
   rspec_all:
+    name: "test - RSpec gate"
     runs-on: ubuntu-24.04
     needs: [rspec_fast, rspec_system]
     if: always()
