@@ -53,5 +53,18 @@ jobs:
       - name: Run Brakeman
         run: bin/brakeman --no-pager
 
+  bundler_audit:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: .ruby-version
+          bundler-cache: true
+
+      - name: Run bundler-audit
+        run: bundle exec bundler-audit check --update
+
   rspec:
     uses: ./.github/workflows/rspec.yml
