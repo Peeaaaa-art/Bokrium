@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Users::SessionsController < Devise::SessionsController
+  rate_limit to: 10, within: 3.minutes, only: :create
+
   # before_action :configure_sign_in_params, only: [:create]
 
   # GET /resource/sign_in
