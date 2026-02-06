@@ -29,6 +29,9 @@ class Webhooks::StripeController < ApplicationController
 
       render json: { status: "success" }
 
+    rescue Regexp::TimeoutError => e
+      Rails.logger.warn "⚠️ Regexp timeout in Stripe webhook: #{e.class} - #{e.message}"
+      render json: { error: "regexp_timeout" }, status: :bad_request and return
     rescue JSON::ParserError => e
       render json: { error: "Invalid payload #{e.message}" }, status: 400 and return
     rescue Stripe::SignatureVerificationError => e
@@ -140,6 +143,8 @@ class Webhooks::StripeController < ApplicationController
     else
       Rails.logger.warn "⚠️ Payment failed for user ##{monthly_support.user_id} | No subscription ID available"
     end
+  rescue Regexp::TimeoutError => e
+    Rails.logger.warn "⚠️ Regexp timeout in invoice.payment_failed handler: #{e.class} - #{e.message}"
   rescue => e
     Rails.logger.error "❌ Error handling invoice.payment_failed: #{e.message}"
   end

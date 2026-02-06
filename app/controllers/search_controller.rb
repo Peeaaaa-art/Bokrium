@@ -97,6 +97,8 @@ class SearchController < ApplicationController
           locals: { message: "#{isbn} の書籍が見つかりません。" }
         )
       end
+    rescue Regexp::TimeoutError => e
+      handle_regexp_timeout(e)
     rescue => e
       Rails.logger.error(e)
       render turbo_stream: turbo_stream.prepend(
