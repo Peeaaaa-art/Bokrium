@@ -27,6 +27,6 @@ class Books::RowsController < ApplicationController
   end
 
   def book_params
-    params.require(:book).permit(:title, :author, :publisher)
+    params.expect(book: [ :title, :author, :publisher ])
   end
 end

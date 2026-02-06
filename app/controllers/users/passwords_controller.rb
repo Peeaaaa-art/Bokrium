@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Users::PasswordsController < Devise::PasswordsController
+  rate_limit to: 10, within: 3.minutes, only: :create
+
   skip_before_action :require_no_authentication, only: [ :send_reset_link, :trigger_reset, :edit, :update ]
   before_action :authenticate_user!, only: [ :send_reset_link, :trigger_reset ]
 

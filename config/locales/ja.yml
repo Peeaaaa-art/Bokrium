@@ -24,3 +24,6 @@ ja:
   errors:
     messages:
       invalid_isbn: "は有効なISBNではありません"
+  users:
+    omniauth:
+      regexp_timeout: "処理がタイムアウトしました。もう一度お試しください。"

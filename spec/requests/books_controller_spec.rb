@@ -82,6 +82,12 @@ RSpec.describe "BooksController", type: :request do
 
       expect(response.body).to include("Title: タイトルは必須です")
     end
+
+    it "root キー :book が無い場合は 400 Bad Request を返すこと" do
+      # params.expect の必須 root キー欠落時の仕様
+      post books_path, params: {}
+      expect(response).to have_http_status(:bad_request)
+    end
   end
 
   describe "PATCH /books/:id" do
@@ -95,6 +101,12 @@ RSpec.describe "BooksController", type: :request do
     it "更新に失敗した場合は編集フォームが再表示されること" do
       patch book_path(book), params: { book: { title: "" } }
       expect(response.body).to include("form")
+    end
+
+    it "root キー :book が無い場合は 400 Bad Request を返すこと" do
+      # params.expect の必須 root キー欠落時の仕様
+      patch book_path(book), params: {}
+      expect(response).to have_http_status(:bad_request)
     end
   end
 

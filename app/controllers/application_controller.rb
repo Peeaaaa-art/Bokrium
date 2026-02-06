@@ -5,6 +5,8 @@ class ApplicationController < ActionController::Base
   before_action :configure_permitted_parameters, if: :devise_controller?
   helper_method :guest_user, :mobile?, :books_index_path, :book_link_path
 
+  rescue_from Regexp::TimeoutError, with: :handle_regexp_timeout
+
   def guest_user
     guest_email = ENV["GUEST_USER_EMAIL"]
     @guest_user ||= User.find_by(email: guest_email)
@@ -57,6 +59,22 @@ class ApplicationController < ActionController::Base
       @has_books ? book_path(book) : guest_book_path(book)
     else
       guest_book_path(book)
+    end
+  end
+
+  def handle_regexp_timeout(exception)
+    Rails.logger.warn(
+      "Regexp timeout: #{exception.class} - #{exception.message} " \
+      "request_id=#{request.request_id} " \
+      "path=#{request.request_method} #{request.path} " \
+      "controller=#{self.class.name} action=#{action_name}"
+    )
+    Rails.logger.warn("Regexp timeout backtrace:\n#{exception.backtrace.first(10).join("\n")}") if exception.backtrace
+
+    respond_to do |format|
+      format.json { render json: { error: "regexp_timeout" }, status: :bad_request }
+      format.html { render file: Rails.root.join("public/400.html").to_s, layout: false, status: :bad_request }
+      format.any { head :bad_request }
     end
   end
 end

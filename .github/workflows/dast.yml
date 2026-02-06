@@ -1,0 +1,73 @@
+name: DAST (OWASP ZAP Baseline)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  zap_baseline:
+    name: DAST - OWASP ZAP Baseline
+    runs-on: ubuntu-24.04
+
+    env:
+      RAILS_ENV: test
+      APP_HOST: http://localhost:3000
+      PORT: "3000"
+      LINE_CHANNEL_TOKEN: dummy_token_for_test
+      DATABASE_URL: postgres://postgres:postgres@localhost:5432/test_db
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U postgres"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+
+    steps:
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8
+      - uses: ./.github/actions/setup-rspec-env
+
+      - name: Start Rails server (background)
+        run: |
+          nohup bin/rails server -b 0.0.0.0 -p 3000 > tmp/rails.log 2>&1 &
+
+      - name: Wait for Rails to boot
+        run: |
+          for i in {1..30}; do
+            status=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:3000/up || true)
+            if [ "$status" = "200" ]; then
+              echo "Rails is up"
+              exit 0
+            fi
+            sleep 2
+          done
+          echo "Rails did not become ready in time."
+          echo "Last 200 lines of tmp/rails.log:"
+          tail -n 200 tmp/rails.log || true
+          exit 1
+
+      - name: Run OWASP ZAP Baseline
+        continue-on-error: true
+        run: |
+          docker run --network host -v "${{ github.workspace }}:/zap/wrk" \
+            ghcr.io/zaproxy/zaproxy:stable \
+            zap-baseline.py -t http://localhost:3000 -I \
+            -r /zap/wrk/report.html -J /zap/wrk/report.json
+
+      - name: Upload ZAP report
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: zap-baseline-report
+          path: |
+            report.html
+            report.json
+          if-no-files-found: ignore

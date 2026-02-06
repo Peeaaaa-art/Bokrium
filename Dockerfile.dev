@@ -1,8 +1,12 @@
-FROM ruby:4.0.1-slim
+# syntax=docker/dockerfile:1
+
+ARG RUBY_VERSION=4.0.1
+# イメージのハッシュ固定（Dockerfile と同一ベース）
+FROM ruby:${RUBY_VERSION}-slim-trixie@sha256:24df04f7b0606fa2f83119ce2f5a16ef9b4242bec82268879b51488a4655ded2
 
 WORKDIR /rails
 
-# Install dependencies
+# Install dependencies（開発用: build-essential, Node など）
 RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y \
     build-essential \
@@ -20,15 +24,13 @@ RUN apt-get update -qq && \
     gnupg \
     pkg-config && \
     curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
-    apt-get install -y nodejs && \
+    apt-get update -qq && \
+    apt-get install --no-install-recommends -y nodejs && \
     rm -rf /var/lib/apt/lists/* /var/cache/apt/archives
 
 # Install npm packages
 COPY package.json package-lock.json ./
 RUN npm install
-
-# Install Playwright browsers (system spec 用)
-RUN npx playwright install --with-deps chromium
 
 # Install gems
 COPY Gemfile Gemfile.lock ./

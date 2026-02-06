@@ -5,6 +5,9 @@ class Webhooks::EmailNotificationsController < ApplicationController
   def create
     EmailNotificationSender.send_all
     render json: { status: "ok", message: "通知を送信しました。" }, status: :ok
+  rescue Regexp::TimeoutError => e
+    Rails.logger.warn("Regexp timeout in EmailNotifications webhook: #{e.class} - #{e.message}")
+    render json: { status: "error", message: "regexp_timeout" }, status: :bad_request
   rescue => e
     Rails.logger.error("メール通知のWebhook失敗: #{e.class} - #{e.message}")
     render json: { status: "error", message: e.message }, status: :internal_server_error
