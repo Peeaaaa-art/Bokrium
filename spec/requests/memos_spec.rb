@@ -31,6 +31,12 @@ RSpec.describe "Memos", type: :request do
 
       expect(book.memos.count).to eq(2)
     end
+
+    it "root キー :memo が無い場合は 400 Bad Request を返すこと" do
+      # params.expect の必須 root キー欠落時の仕様
+      post book_memos_path(book), params: {}
+      expect(response).to have_http_status(:bad_request)
+    end
   end
 
   describe "PATCH /books/:book_id/memos/:id" do
@@ -42,6 +48,12 @@ RSpec.describe "Memos", type: :request do
       }
       expect(response).to redirect_to(book_path(book))
       expect(memo.reload.content).to eq("更新されたメモ")
+    end
+
+    it "root キー :memo が無い場合は 400 Bad Request を返すこと" do
+      # params.expect の必須 root キー欠落時の仕様
+      patch book_memo_path(book, memo), params: {}
+      expect(response).to have_http_status(:bad_request)
     end
   end
 
