@@ -71,6 +71,9 @@ gem "thruster", require: false
 
 group :development do
   gem "letter_opener_web"
+  gem "web-console"
+  gem "dockerfile-rails"
+  gem "rack-mini-profiler"
 end
 
 group :development, :test do
@@ -87,14 +90,6 @@ group :development, :test do
   gem "factory_bot_rails"
 
   gem "bullet"
-end
-
-group :development do
-  gem "web-console"
-
-  gem "dockerfile-rails"
-
-  gem "rack-mini-profiler"
 end
 
 group :test do
