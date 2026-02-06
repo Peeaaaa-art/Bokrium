@@ -38,7 +38,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
     redirect_to guest_starter_books_path, notice: "LINEアカウントで登録・ログインしました。"
   rescue Regexp::TimeoutError => e
     Rails.logger.warn("Regexp timeout during LINEログイン: #{e.class} - #{e.message}")
-    redirect_to new_user_registration_url, alert: "処理がタイムアウトしました。もう一度お試しください。"
+    redirect_to new_user_registration_url, alert: I18n.t("users.omniauth.regexp_timeout")
   rescue => e
     Rails.logger.error("LINEログイン失敗: #{e.message}")
     redirect_to new_user_registration_url, alert: "LINEログインに失敗しました。"

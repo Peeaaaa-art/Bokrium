@@ -65,7 +65,7 @@ RSpec.describe 'Regexp::TimeoutError handling', type: :request do
     get '/users/auth/line/callback'
 
     expect(response).to redirect_to(new_user_registration_url)
-    expect(flash[:alert]).to include('タイムアウト')
+    expect(flash[:alert]).to eq(I18n.t('users.omniauth.regexp_timeout'))
   ensure
     OmniAuth.config.test_mode = false
     Rails.application.env_config.delete('omniauth.auth')
