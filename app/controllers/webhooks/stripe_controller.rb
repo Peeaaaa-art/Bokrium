@@ -145,6 +145,7 @@ class Webhooks::StripeController < ApplicationController
     end
   rescue Regexp::TimeoutError => e
     Rails.logger.warn "⚠️ Regexp timeout in invoice.payment_failed handler: #{e.class} - #{e.message}"
+    raise
   rescue => e
     Rails.logger.error "❌ Error handling invoice.payment_failed: #{e.message}"
   end
