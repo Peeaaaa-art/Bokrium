@@ -61,7 +61,7 @@ class MemosController < ApplicationController
   end
 
   def memo_params
-    params.require(:memo).permit(:content, :visibility).tap do |prm|
+    params.expect(memo: [ :content, :visibility ]).tap do |prm|
     prm[:visibility] = Memo::VISIBILITY[prm[:visibility].to_sym] if prm[:visibility]
     end
   end

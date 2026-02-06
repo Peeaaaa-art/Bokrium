@@ -39,6 +39,6 @@ class UserTagsController < ApplicationController
   end
 
   def user_tag_params
-    params.require(:user_tag).permit(:name, :color)
+    params.expect(user_tag: [ :name, :color ])
   end
 end
