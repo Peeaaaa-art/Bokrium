@@ -1,6 +1,6 @@
 <% if resource.errors.any? %>
   <div class="flash-message d-flex align-items-center gap-2 shadow mb-2" data-status="error" role="alert" data-turbo-cache="false">
-
+    <%= bi_icon("exclamation-triangle-fill", css: "is-5") %>
     <div>
       <strong>
         <%= I18n.t("errors.messages.not_saved",

@@ -28,6 +28,10 @@
   background-color: #e34c4c;
 }
 
+.flash-message[data-status="warning"] {
+  background-color: #c9a227;
+}
+
 .flash-message .flash-message-text {
   display: inline-block;
   white-space: normal;
