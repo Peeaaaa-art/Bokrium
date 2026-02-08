@@ -85,7 +85,7 @@ jobs:
       - uses: ./.github/actions/setup-rspec-env
 
       - name: Install Playwright browsers
-        run: npx playwright install --with-deps chromium
+        run: npx playwright install --with-deps --only-shell
 
       - name: Run RSpec SYSTEM (spec/system only)
         env:
