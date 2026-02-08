@@ -1,0 +1,25 @@
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h1 class="fw-bold big-shoulders-inline-bold mb-4 text-center">
+            <span class="logo-welcome" title="ボクリウム">Bokrium</span>
+          </h1>
+
+          <p class="mb-4">
+            本人確認メールを送信しました。メール内のリンクからアカウントを有効化してください。
+          </p>
+
+          <div class="d-grid">
+            <%= link_to "メールを確認する", "/letter_opener", target: "_blank", rel: "noopener", class: "btn btn-primary-bok btn-lg" %>
+          </div>
+
+          <div class="text-center mt-4">
+            <%= link_to "トップへ戻る", root_path, class: "text-muted small" %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

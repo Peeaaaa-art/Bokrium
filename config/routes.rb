@@ -29,9 +29,14 @@ Rails.application.routes.draw do
     get  "users/passkey_setup",          to: "users/passkey_setup#show",     as: :setup_passkey
     post "users/passkey_setup/complete", to: "users/passkey_setup#complete", as: :complete_passkey_setup
     post "users/passkey_setup/skip",     to: "users/passkey_setup#skip",     as: :skip_passkey_setup
+
+    # メール確認待ち（development のみ。letter_opener_web へのリンク用）
+    get "users/confirmation_pending", to: "users/registrations#confirmation_pending", as: :user_confirmation_pending
   end
 
   get "/up", to: proc { [ 200, {}, [ "OK" ] ] }
+
+  mount LetterOpenerWeb::Engine, at: "/letter_opener" if Rails.env.development?
 
   resources :donations, only: [ :index, :create ]
   get "donations/thank_you", to: "donations#thank_you"

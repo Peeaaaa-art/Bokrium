@@ -68,6 +68,12 @@ class Users::RegistrationsController < Devise::RegistrationsController
   #   super
   # end
 
+  # メール確認待ち（development のみ。Docker 等で letter_opener を開けないとき用）
+  def confirmation_pending
+    flash.discard(:notice)
+    render :confirmation_pending, layout: "application"
+  end
+
   protected
 
   # If you have extra params to permit, append them to the sanitizer.
@@ -90,10 +96,11 @@ class Users::RegistrationsController < Devise::RegistrationsController
     )
   end
 
-  # The path used after sign up for inactive accounts.
-  # def after_inactive_sign_up_path_for(resource)
-  #   super(resource)
-  # end
+  def after_inactive_sign_up_path_for(resource)
+    return user_confirmation_pending_path if Rails.env.development?
+    super(resource)
+  end
+
   def update_resource(resource, params)
     if params[:password].present? || params[:password_confirmation].present?
       super
