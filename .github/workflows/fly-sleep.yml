@@ -67,8 +67,27 @@ jobs:
       - name: Resolve current image
         id: image
         run: |
-          IMAGE=$(flyctl machines list --app bokrium --json \
-            | jq -r '[.[] | (.config.image // .config.image_ref // .image_ref // .image // empty)] | map(select(length > 0)) | .[0] // empty')
+          IMAGE=$(flyctl releases --app bokrium --image --json \
+            | jq -r '
+              map({
+                ts: (.created_at // .createdAt // .updated_at // .updatedAt // .timestamp // .time // ""),
+                image: (.image // .image_ref // .imageRef // .docker_image // .dockerImage // .config.image // .Image // .ImageRef // "")
+              })
+              | map(select((.image | length) > 0))
+              | sort_by(.ts)
+              | .[-1].image // empty
+            ')
+
+          if [ -z "$IMAGE" ]; then
+            IMAGE=$(flyctl machines list --app bokrium --json \
+              | jq -r '
+                sort_by(.updated_at // .created_at // "")
+                | map((.config.image // .config.image_ref // .image_ref // .image // empty))
+                | map(select(length > 0))
+                | .[-1] // empty
+              ')
+          fi
+
           if [ -z "$IMAGE" ]; then
             echo "Could not resolve current machine image."
             exit 1
