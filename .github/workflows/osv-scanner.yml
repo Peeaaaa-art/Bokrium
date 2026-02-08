@@ -16,9 +16,10 @@ on:
   schedule:
     - cron: "0 2 15 * *" # 毎月15日 02:00 UTC
 
-# トップレベルは最小権限。security-events は再利用ワークフロー内で必要に応じて付与（Scorecard Token-Permissions 対応）
 permissions:
   contents: read
+  actions: read
+  security-events: write
 
 jobs:
   scan-scheduled:
