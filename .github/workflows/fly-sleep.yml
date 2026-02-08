@@ -5,6 +5,15 @@ on:
     - cron: '0 16 * * *' # 日本時間 01:00（夜間停止）
     - cron: '0 23 * * *' # 日本時間 08:00（朝起動）
   workflow_dispatch:
+    inputs:
+      mode:
+        description: "Run mode"
+        required: true
+        default: night
+        type: choice
+        options:
+          - night
+          - day
 
 permissions:
   contents: read
@@ -18,22 +27,108 @@ jobs:
         with:
           version: "0.4.6"
 
-      # 夜：すべてのマシンを停止
-      - name: Night Mode (stop all machines)
-        if: github.event.schedule == '0 16 * * *' || github.event_name == 'workflow_dispatch'
+      - name: Resolve mode and min_machines_running
+        id: mode
         run: |
-          IDS=$(flyctl machines list --app bokrium --json | jq -r '.[].id' | tr '\n' ' ')
-          echo "Stopping machines: $IDS"
-          flyctl machine stop $IDS --app bokrium
+          if [ "${{ github.event_name }}" = "schedule" ]; then
+            if [ "${{ github.event.schedule }}" = "0 16 * * *" ]; then
+              MODE="night"
+            elif [ "${{ github.event.schedule }}" = "0 23 * * *" ]; then
+              MODE="day"
+            else
+              echo "Unsupported schedule: ${{ github.event.schedule }}"
+              exit 1
+            fi
+          else
+            MODE="${{ github.event.inputs.mode }}"
+          fi
+
+          case "$MODE" in
+            night)
+              MIN_MACHINES=0
+              ;;
+            day)
+              MIN_MACHINES=1
+              ;;
+            *)
+              echo "Invalid mode: '$MODE'. Expected 'night' or 'day'."
+              exit 1
+              ;;
+          esac
+
+          echo "mode=$MODE" >> "$GITHUB_OUTPUT"
+          echo "min_machines=$MIN_MACHINES" >> "$GITHUB_OUTPUT"
+
+      - name: Build scheduled fly config
+        run: |
+          sed -E "s/min_machines_running = [0-9]+/min_machines_running = ${{ steps.mode.outputs.min_machines }}/" fly.toml > fly.schedule.toml
+          grep "min_machines_running" fly.schedule.toml
+
+      - name: Resolve current image
+        id: image
+        run: |
+          IMAGE=$(flyctl releases --app bokrium --image --json \
+            | jq -r '
+              map({
+                ts: (.created_at // .createdAt // .updated_at // .updatedAt // .timestamp // .time // ""),
+                image: (.image // .image_ref // .imageRef // .docker_image // .dockerImage // .config.image // .Image // .ImageRef // "")
+              })
+              | map(select((.image | length) > 0))
+              | sort_by(.ts)
+              | .[-1].image // empty
+            ')
+
+          if [ -z "$IMAGE" ]; then
+            IMAGE=$(flyctl machines list --app bokrium --json \
+              | jq -r '
+                sort_by(.updated_at // .created_at // "")
+                | map((.config.image // .config.image_ref // .image_ref // .image // empty))
+                | map(select(length > 0))
+                | .[-1] // empty
+              ')
+          fi
+
+          if [ -z "$IMAGE" ]; then
+            echo "Could not resolve current machine image."
+            exit 1
+          fi
+          echo "Using image: $IMAGE"
+          echo "ref=$IMAGE" >> "$GITHUB_OUTPUT"
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
 
-      # 朝：すべてのマシンを起動
-      - name: Day Mode (start all machines)
-        if: github.event.schedule == '0 23 * * *'
+      - name: Apply scheduled fly config
+        run: |
+          flyctl deploy \
+            --remote-only \
+            --config fly.schedule.toml \
+            --image "${{ steps.image.outputs.ref }}" \
+            --skip-release-command \
+            --update-only \
+            --strategy immediate
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+
+      # 夜：即時節約のために全マシン停止
+      - name: Night mode (stop all machines)
+        if: steps.mode.outputs.mode == 'night'
+        run: |
+          IDS=$(flyctl machines list --app bokrium --json | jq -r '.[].id' | tr '\n' ' ')
+          echo "Stopping machines: $IDS"
+          if [ -n "$IDS" ]; then
+            flyctl machine stop $IDS --app bokrium
+          fi
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+
+      # 朝：即時応答のために全マシン起動
+      - name: Day mode (start all machines)
+        if: steps.mode.outputs.mode == 'day'
         run: |
           IDS=$(flyctl machines list --app bokrium --json | jq -r '.[].id' | tr '\n' ' ')
           echo "Starting machines: $IDS"
-          flyctl machine start $IDS --app bokrium
+          if [ -n "$IDS" ]; then
+            flyctl machine start $IDS --app bokrium
+          fi
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
