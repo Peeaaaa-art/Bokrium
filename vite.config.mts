@@ -6,6 +6,9 @@ export default defineConfig({
   plugins: [RubyPlugin()],
   cacheDir: '/tmp/.vite',
   publicDir: false,
+  server: {
+    host: '0.0.0.0',
+  },
   build: {
     outDir: 'public/vite',
     emptyOutDir: true,

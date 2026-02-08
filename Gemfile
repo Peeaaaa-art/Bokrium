@@ -70,6 +70,7 @@ gem "bootsnap", require: false
 gem "thruster", require: false
 
 group :development do
+  gem "foreman"
   gem "letter_opener_web"
   gem "web-console"
   gem "dockerfile-rails"

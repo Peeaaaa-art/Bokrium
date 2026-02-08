@@ -1,13 +1,16 @@
 <% flash.each do |type, message| %>
-  <% icon = case type.to_sym
+  <% normalized_type = type.to_s.downcase.to_sym %>
+  <% icon = case normalized_type
     when :success, :notice, :info then "patch-check-fill"
     when :alert, :error, :danger  then "exclamation-triangle-fill"
-    else "bi bi-info-circle-fill"
+    when :warning                then "exclamation-circle-fill"
+    else "info-circle-fill"
   end %>
 
-  <% status = case type.to_sym
+  <% status = case normalized_type
     when :success, :notice, :info then "success"
     when :alert, :error, :danger  then "error"
+    when :warning                then "warning"
     else "info"
   end %>
 

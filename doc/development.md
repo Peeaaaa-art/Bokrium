@@ -1,13 +1,38 @@
 # 開発環境ガイド
 
+## ローカルで bin/dev する場合（DB だけ Docker）
+
+Rails はホストで動かし、PostgreSQL だけ Docker で動かす場合:
+
+```bash
+# DB コンテナだけ起動（postgres/postgres で localhost:5432）
+docker compose up -d db
+
+# 初回のみ: DB 作成とマイグレーション
+bundle exec rails db:create db:migrate
+# または db:setup（スキーマ＋seed まで）
+
+# 開発サーバー起動
+bin/dev
+```
+
+`config/database.yml` のデフォルトは `username: postgres`, `password: postgres` なので、Docker の db サービスとそのまま一致します。接続エラーになる場合は、PostgreSQL が起動しているか `docker compose ps` で確認してください。
+
 ## Docker環境での起動
 
 ### 基本コマンド
 
 ```bash
-# サーバー起動
+# サーバー起動（Rails + Vite を foreman で同時起動）
 docker compose up web
+```
 
+- **Rails**: http://localhost:3000
+- **Vite 開発サーバー**: ポート 3036（アセットは自動で Rails から参照されます）
+
+その他のコマンドは `web` コンテナ内で実行します:
+
+```bash
 # マイグレーション実行
 docker compose run --rm web bundle exec rails db:migrate
 
@@ -18,19 +43,25 @@ docker compose run --rm web bundle exec rspec
 docker compose run --rm web bundle exec rails console
 ```
 
-### 初回セットアップ
+### ホットリロード
+
+- **Rails（Ruby / ERB など）**: コードを保存すると自動でリロードされます（開発モードのため）。
+- **フロント（Vite / JS / CSS）**: `app/frontend` や関連ファイルを保存すると、Vite が即時ビルドし、ブラウザは HMR で更新されます。`docker compose up web` で foreman が Rails と Vite の両方を起動しているため、ファイル変更はそのまま反映されます。
+
+### 初回セットアップ（Docker で全部やる場合）
 
 ```bash
-# 依存関係のインストール
-bundle install
-npm install
+# イメージビルド（Gemfile / package.json 変更時も再ビルド）
+docker compose build web
 
 # データベースのセットアップ
 docker compose run --rm web bundle exec rails db:setup
 
-# 開発サーバーの起動
-bin/dev
+# 開発サーバー起動
+docker compose up web
 ```
+
+`Gemfile` や `package.json` を変更したあとは `docker compose build web` を実行してから `docker compose up web` してください。
 
 ## Git Hooks
 
