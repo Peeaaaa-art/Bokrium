@@ -39,6 +39,9 @@ RUN bundle install
 # Copy the application
 COPY . .
 
+# System spec (Capybara + Playwright) 用に chromium headless shell をインストール
+RUN npx playwright install --with-deps --only-shell
+
 EXPOSE 3000
 
 CMD ["bash"]
