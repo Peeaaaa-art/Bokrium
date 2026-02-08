@@ -97,7 +97,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
   end
 
   def after_inactive_sign_up_path_for(resource)
-    return user_confirmation_pending_path if Rails.env.development?
+    return "/users/confirmation_pending" if Rails.env.development?
     super(resource)
   end
 

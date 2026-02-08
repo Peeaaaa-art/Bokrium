@@ -31,7 +31,9 @@ Rails.application.routes.draw do
     post "users/passkey_setup/skip",     to: "users/passkey_setup#skip",     as: :skip_passkey_setup
 
     # メール確認待ち（development のみ。letter_opener_web へのリンク用）
-    get "users/confirmation_pending", to: "users/registrations#confirmation_pending", as: :user_confirmation_pending
+    if Rails.env.development?
+      get "users/confirmation_pending", to: "users/registrations#confirmation_pending", as: :user_confirmation_pending
+    end
   end
 
   get "/up", to: proc { [ 200, {}, [ "OK" ] ] }
