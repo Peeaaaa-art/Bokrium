@@ -6,10 +6,11 @@
     <!-- 書影 -->
     <div style="width: 100px;" class="flex-shrink-0">
       <% if book[:book_cover].present? %>
-        <img src="<%= book[:book_cover] %>"
+        <img src="<%= book_cover_display_url(book) %>"
              alt="書影"
              class="rounded shadow-sm img-fluid"
-             style="width: 100px; height: auto; object-fit: contain;">
+             style="width: 100px; height: auto; object-fit: contain;"
+             referrerpolicy="no-referrer">
       <% else %>
         <div class="d-flex justify-content-center align-items-center rounded bg-light"
              style="width: 100px; height: 140px;">

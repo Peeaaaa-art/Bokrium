@@ -10,11 +10,12 @@
           <div class="card-img-top-container flex-shrink-0 mx-md-auto"
               style="width: 100%; max-width: 120px; height: auto background-color: #f8f9fa;">
             <% if book[:book_cover].present? %>
-              <img src="<%= book[:book_cover] %>"
+              <img src="<%= book_cover_display_url(book) %>"
                   alt="<%= book[:title] %>の表紙画像"
                   class="img-fluid p-2"
                   style="max-height: 160px; width: 100%; object-fit: contain;"
-                  loading="lazy">
+                  loading="lazy"
+                  referrerpolicy="no-referrer">
             <% else %>
               <div class="d-flex align-items-center justify-content-center h-100 text-muted"
                   style="height: 100px;">
