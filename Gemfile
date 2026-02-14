@@ -47,8 +47,6 @@ gem "browser"
 
 gem "aws-sdk-s3", "~> 1.213", require: false
 
-gem "rakuten_web_service"
-
 gem "dotenv-rails"
 
 # 高速HTML/XMLパーサ（NDL API用）
