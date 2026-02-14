@@ -1,67 +1,63 @@
 # 開発環境ガイド
 
-## ローカルで bin/dev する場合（DB だけ Docker）
+## 推奨: Docker + 1Password CLI で起動
 
-Rails はホストで動かし、PostgreSQL だけ Docker で動かす場合:
+開発環境の秘密値は `.env` に実値を書かず、`config/env/.env.1password` の `op://...` 参照を使って注入します。`op` 未ログイン時は起動を止めます（フォールバックなし）。
+`bin/docker-op` はフロント挙動を安定させるため、`RACK_ENV/NODE_ENV/VITE_RUBY_ENV` を `development` に固定して実行します。
+
+### 初回セットアップ
 
 ```bash
-# DB コンテナだけ起動（postgres/postgres で localhost:5432）
-docker compose up -d db
+# 1Password CLI にサインイン
+op signin
 
-# 初回のみ: DB 作成とマイグレーション
-bundle exec rails db:create db:migrate
-# または db:setup（スキーマ＋seed まで）
+# イメージビルド（初回 or 依存変更時）
+bin/docker-op build web
 
-# 開発サーバー起動
-bin/dev
+# DB 準備
+bin/docker-op run --rm web bundle exec rails db:prepare
 ```
 
-`config/database.yml` のデフォルトは `username: postgres`, `password: postgres` なので、Docker の db サービスとそのまま一致します。接続エラーになる場合は、PostgreSQL が起動しているか `docker compose ps` で確認してください。
-
-## Docker環境での起動
-
-### 基本コマンド
+### 通常起動
 
 ```bash
-# サーバー起動（Rails + Vite を foreman で同時起動）
-docker compose up web
+# サーバー起動（Rails + Vite）
+bin/docker-op up web
 ```
 
 - **Rails**: http://localhost:3000
-- **Vite 開発サーバー**: ポート 3036（アセットは自動で Rails から参照されます）
+- **Vite 開発サーバー**: ポート 3036
 
-その他のコマンドは `web` コンテナ内で実行します:
+### 日常コマンド
 
 ```bash
-# マイグレーション実行
-docker compose run --rm web bundle exec rails db:migrate
+# マイグレーション
+bin/docker-op run --rm web bundle exec rails db:migrate
 
-# テスト実行
-docker compose run --rm web bundle exec rspec
+# テスト
+bin/docker-op run --rm web bundle exec rspec
 
 # コンソール
-docker compose run --rm web bundle exec rails console
+bin/docker-op run --rm web bundle exec rails console
 ```
 
 ### ホットリロード
 
-- **Rails（Ruby / ERB など）**: コードを保存すると自動でリロードされます（開発モードのため）。
-- **フロント（Vite / JS / CSS）**: `app/frontend` や関連ファイルを保存すると、Vite が即時ビルドし、ブラウザは HMR で更新されます。`docker compose up web` で foreman が Rails と Vite の両方を起動しているため、ファイル変更はそのまま反映されます。
+- **Rails（Ruby / ERB など）**: コード保存で自動リロード。
+- **フロント（Vite / JS / CSS）**: `app/frontend` 変更は HMR で反映。
 
-### 初回セットアップ（Docker で全部やる場合）
+### 互換運用（非推奨）
+
+`.env` 実値方式は互換のため残していますが、基本運用は `bin/docker-op` を使用してください。
+
+## ローカルで bin/dev する場合（補助導線）
+
+Rails をホストで動かす場合も、`op run` で環境変数を注入してください。
 
 ```bash
-# イメージビルド（Gemfile / package.json 変更時も再ビルド）
-docker compose build web
-
-# データベースのセットアップ
-docker compose run --rm web bundle exec rails db:setup
-
-# 開発サーバー起動
-docker compose up web
+op signin
+bin/op-run bin/dev
 ```
-
-`Gemfile` や `package.json` を変更したあとは `docker compose build web` を実行してから `docker compose up web` してください。
 
 ## Git Hooks
 
@@ -92,7 +88,7 @@ set -e
 echo "🔍 Running RuboCop..."
 
 # Docker環境でRuboCopを実行（進捗表示形式）
-if ! docker compose run --rm web bundle exec rubocop --format progress; then
+if ! bin/docker-op run --rm web bundle exec rubocop --format progress; then
   echo "❌ RuboCop failed! Please fix the linting errors before committing."
   exit 1
 fi
@@ -102,7 +98,7 @@ echo ""
 echo "🧪 Running tests..."
 
 # Docker環境でRSpecを実行（進捗表示形式）
-if docker compose run --rm web bundle exec rspec --format progress; then
+if bin/docker-op run --rm web bundle exec rspec --format progress; then
   echo "✅ All tests passed! Proceeding with commit."
   exit 0
 else
@@ -118,19 +114,19 @@ fi
 ### 全テストの実行
 
 ```bash
-docker compose run --rm web bundle exec rspec
+bin/docker-op run --rm web bundle exec rspec
 ```
 
 ### 特定のテストファイルを実行
 
 ```bash
-docker compose run --rm web bundle exec rspec spec/models/book_spec.rb
+bin/docker-op run --rm web bundle exec rspec spec/models/book_spec.rb
 ```
 
 ### 特定の行のテストを実行
 
 ```bash
-docker compose run --rm web bundle exec rspec spec/models/book_spec.rb:10
+bin/docker-op run --rm web bundle exec rspec spec/models/book_spec.rb:10
 ```
 
 ## コード品質チェック
@@ -138,13 +134,13 @@ docker compose run --rm web bundle exec rspec spec/models/book_spec.rb:10
 ### RuboCop
 
 ```bash
-docker compose run --rm web bundle exec rubocop
+bin/docker-op run --rm web bundle exec rubocop
 ```
 
 ### Brakeman（セキュリティチェック）
 
 ```bash
-docker compose run --rm web bundle exec brakeman
+bin/docker-op run --rm web bundle exec brakeman
 ```
 
 ### Bullet（N+1クエリ検出）
@@ -157,25 +153,25 @@ docker compose run --rm web bundle exec brakeman
 
 ```bash
 # コンテナとボリュームを削除して再構築
-docker compose down -v
-docker compose build --no-cache
-docker compose up web
+bin/docker-op down -v
+bin/docker-op build --no-cache
+bin/docker-op up web
 ```
 
 ### データベース接続エラー
 
 ```bash
 # データベースコンテナの再起動
-docker compose restart db
+bin/docker-op restart db
 
 # データベースの再作成
-docker compose run --rm web bundle exec rails db:drop db:create db:migrate
+bin/docker-op run --rm web bundle exec rails db:drop db:create db:migrate
 ```
 
 ### gemの依存関係エラー
 
 ```bash
 # Bundlerのキャッシュをクリア
-docker compose run --rm web bundle clean --force
-docker compose run --rm web bundle install
+bin/docker-op run --rm web bundle clean --force
+bin/docker-op run --rm web bundle install
 ```
