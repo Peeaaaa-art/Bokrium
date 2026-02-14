@@ -357,6 +357,8 @@
 ## 6. 外部API連携
 ### 6.1 書籍情報取得API
 - **フロー**: ISBNをキーに、openBD → 楽天ブックス → Google Books → 国会図書館の順でAPIを呼び出し、情報を取得・統合する。
+- **楽天APIエンドポイント**: `https://openapi.rakuten.co.jp/services/api/BooksBook/Search/20170404` を使用。
+- **楽天API移行期限**: 2026年5月13日までに移行対応完了、2026年5月14日以降は旧ドメイン/旧アプリ/旧バージョン停止。
 - **ISBN検証**: 入力されたISBNは正規化・バリデーション・変換が行われる。
 - **コード根拠**: `app/services/book_apis/`, `app/services/isbn_check/`
 
@@ -480,6 +482,7 @@
 
 #### 書籍情報API
 - `RAKUTEN_APPLICATION_ID`: 楽天ブックスAPIのアプリケーションID
+- `RAKUTEN_ACCESS_KEY`: 楽天ブックスAPIのアクセスキー
 
 #### Stripe決済
 - `STRIPE_SECRET_KEY`: Stripeのシークレットキー
