@@ -32,6 +32,8 @@ services:
       RAILS_ENV: development
       APP_HOST: ${APP_HOST}
       RACK_ENV: development
+      NODE_ENV: ${NODE_ENV}
+      VITE_RUBY_ENV: ${VITE_RUBY_ENV}
       PORT: 3000
       USE_SSL: ${USE_SSL}
       GUEST_USER_EMAIL: ${GUEST_USER_EMAIL}

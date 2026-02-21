@@ -132,7 +132,7 @@ class SearchController < ApplicationController
         flash.now[:warning] = "楽天ブックスで該当する書籍が見つかりませんでした：（#{query}）"
       end
     rescue StandardError => e
-      flash[:error] = "楽天APIでエラーが発生しました: #{e.message}"
+      flash.now[:error] = "楽天APIでエラーが発生しました: #{e.message}"
     end
   end
 
