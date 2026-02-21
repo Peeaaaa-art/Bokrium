@@ -4,13 +4,14 @@
 
 if Rails.env.development?
   guest_email = ENV["GUEST_USER_EMAIL"].presence || ENV["GUEST_USER_EMAL"].presence || "guest@example.com"
-  guest_password = ENV["GUEST_USER_PASSWORD"].presence || "password123"
 
   guest_user = User.find_or_initialize_by(email: guest_email)
   guest_user.name ||= "Guest Sample User"
   guest_user.confirmed_at ||= Time.current
-  guest_user.password = guest_password if guest_user.new_record? || guest_user.encrypted_password.blank?
-  guest_user.password_confirmation = guest_password if guest_user.new_record? || guest_user.encrypted_password.blank?
+  if guest_user.new_record? || guest_user.encrypted_password.blank?
+    guest_user.password = SecureRandom.alphanumeric(48)
+    guest_user.password_confirmation = guest_user.password
+  end
   guest_user.save!
 
   sample_books = [
