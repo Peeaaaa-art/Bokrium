@@ -29,6 +29,12 @@
 
 en:
   hello: "Hello world"
+  books:
+    author_label: "Author:"
+    publisher_label: "Publisher:"
+    isbn_label: "ISBN:"
+    no_info: "No information"
+    add_to_shelf: "Add to shelf"
   users:
     omniauth:
       regexp_timeout: "Request timed out. Please try again."

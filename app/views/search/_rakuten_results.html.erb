@@ -3,44 +3,50 @@
     楽天ブックス検索結果<br class="d-sm-none"> <%= search_result_range(books, total_count) %>
   </h5>
     <div class="row row-cols-1 row-cols-md-3 row-cols-lg-6 g-4 mb-5">
-      <% books.each do |book| %>
-        <div class="col">
-          <div class="card h-100 shadow-sm d-flex flex-row flex-md-column">
-            <!-- 書影 -->
+	      <% books.each do |book| %>
+	        <div class="col">
+	          <div class="card h-100 shadow-sm d-flex flex-row flex-md-column">
+	            <!-- 書影 -->
             <div class="card-img-top-container flex-shrink-0 mx-md-auto"
                 style="width: 120px; height: auto; background-color: #f8f9fa;"
                 >
-              <img src="<%= book.large_image_url || book.medium_image_url %>"
-                  alt="<%= book.title %>の表紙画像"
-                  class="img-fluid p-2"
-                  style="height: 100%; width: 100%; object-fit: contain;"
-                  loading="lazy">
-            </div>
+	              <% if book[:book_cover].present? %>
+	                <img src="<%= book[:book_cover] %>"
+	                    alt="<%= book[:title] %>の表紙画像"
+	                    class="img-fluid p-2"
+	                    style="height: 100%; width: 100%; object-fit: contain;"
+	                    loading="lazy">
+	              <% else %>
+	                <div class="d-flex justify-content-center align-items-center h-100 w-100 p-2 text-muted small text-center">
+	                  <%= book[:title].to_s.truncate(16) %>
+	                </div>
+	              <% end %>
+	            </div>
 
             <!-- 情報 -->
             <div class="card-body d-flex flex-column px-3 py-2">
-              <p class="mb-1 small"><strong><%= book.title.truncate(ApplicationController::TITLE_TRUNCATE_LIMIT) %></strong></p>
+	              <p class="mb-1 small"><strong><%= book[:title].to_s.truncate(ApplicationController::TITLE_TRUNCATE_LIMIT) %></strong></p>
 
               <div class="mb-auto small text-muted">
-                <p class="mb-1"><strong>著者:</strong> <%= book.author || '情報なし' %></p>
-                <p class="mb-1"><strong>出版社:</strong> <%= book.publisher_name || '情報なし' %></p>
-                <p class="mb-1"><strong>ISBN:</strong> <%= book.isbn || '情報なし' %></p>
+                <p class="mb-1"><strong><%= t("books.author_label") %></strong> <%= book[:author].presence || t("books.no_info") %></p>
+                <p class="mb-1"><strong><%= t("books.publisher_label") %></strong> <%= book[:publisher].presence || t("books.no_info") %></p>
+                <p class="mb-1"><strong><%= t("books.isbn_label") %></strong> <%= book[:isbn].presence || t("books.no_info") %></p>
               </div>
-              <% if user_signed_in? %>
-                <%= button_to books_path(book: {
-                  title:     book.title,
-                  author:    book.author,
-                  publisher: book.publisher_name,
-                  isbn:      book.isbn,
-                  price:     book.item_price,
-                  book_cover: book.large_image_url || book.medium_image_url || book.small_image_url,
-                  affiliate_url: book.item_url
-                }), method: :post, class: "btn btn-success btn-sm mt-2 w-100" do %>
-                <%= bi_icon("bookmark-plus", css: "is-6 me-1") %> 本棚に追加
+	              <% if user_signed_in? %>
+	                <%= button_to books_path(book: {
+	                  title: book[:title],
+	                  author: book[:author],
+	                  publisher: book[:publisher],
+	                  isbn: book[:isbn],
+	                  price: book[:price],
+	                  book_cover: book[:book_cover],
+	                  affiliate_url: book[:affiliate_url]
+	                }), method: :post, class: "btn btn-success btn-sm mt-2 w-100" do %>
+                <%= bi_icon("bookmark-plus", css: "is-6 me-1") %> <%= t("books.add_to_shelf") %>
                 <% end %>
               <% else %>
                 <button class="btn btn-success btn-sm mt-2 w-100" disabled title="ログインすると追加できます">
-                  <%= bi_icon("bookmark-plus", css: "is-6 me-1") %> 本棚に追加
+                  <%= bi_icon("bookmark-plus", css: "is-6 me-1") %> <%= t("books.add_to_shelf") %>
                 </button>
               <% end %>
             </div>

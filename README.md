@@ -17,12 +17,10 @@
     - [📝 メモ機能](#-メモ機能)
     - [💌 ランダム通知機能](#-ランダム通知機能)
     - [🎁 支援機能](#-支援機能)
-  - [🛠 使用技術](#-使用技術)
-  - [📡 インフラ構成図](#-インフラ構成図)
-  - [🗂 データベース設計図](#-データベース設計図物理erd--rails前提)
-  - [📋 開発環境](doc/development.md)
-   
-   
+	  - [🛠 使用技術](#-使用技術)
+		  - [📡 インフラ構成図](#-インフラ構成図)
+		  - [🗂 データベース設計図](#-データベース設計図物理erd--rails前提)
+		  - [📋 開発環境](doc/development.md)
   ## 📖 Bokriumとは
   
   読書を「知識として蓄積し、身体化する」ことを目指す読書管理アプリです。 
@@ -65,7 +63,7 @@
   | バーコードスキャン | キーワード検索 |
   |------------------|---------------------|
   | <p align="center"><a href="https://gyazo.com/88615713f29c4da2bd917487a84d9f53"><img src="https://i.gyazo.com/88615713f29c4da2bd917487a84d9f53.gif" width="250" alt="バーコードスキャンGIF"></a></p> | <p align="center"><img src="https://github.com/user-attachments/assets/56efe725-fb4a-49a2-91d4-3e35a34cc117" width="250" alt="キーワード検索"></p> |
-  | <p align="center">ZXing[^1]を用いたクライアントサイドのバーコードスキャン機能。取得したISBNを非同期で送信し、複数のAPIから書誌情報を統合取得します。</p> | <p align="center">タイトル・著者をもとに、楽天・Google Booksを切り替えて検索可能。ISBNでの検索も可能。</p> |
+  | <p align="center">ZXing[^1]を用いたクライアントサイドのバーコードスキャン機能。取得したISBNを非同期で送信し、複数のAPIから書誌情報を統合取得します。</p> | <p align="center">タイトル・著者をもとに、楽天（openapi.rakuten.co.jp）・Google Booksを切り替えて検索可能。ISBNでの検索も可能。</p> |
   
   <details>
   <summary><strong>🦓📚 ISBN登録処理の全体フロー</strong></summary>
@@ -84,16 +82,16 @@
                                    ▼
             🌐 ISBNをもとに書誌情報を取得（以下の順で呼び出し）  
              ├─ ① openBD  
-             ├─ ② Rakuten Books API  
+             ├─ ② Rakuten Books API（openapi.rakuten.co.jp / 2017-04-04）  
              ├─ ③ Google Books API  
              └─ ④ 国立国会図書館サーチAPI（NDL API）  
      
     ▼───  🧩 各APIから取得した情報は、不足項目を補完するかたちで統合  -──▼
      ▼──     → タイトル・著者・出版社・書影 の4項目が揃った時点で完了 ──▼ 
                                    ▼  
-                   🖼 Bokrium に書籍プレビューを表示  
+	                   🖼 Bokrium に書籍プレビューを表示  
                                    ▼  
-                   ✅ 「本棚に追加」ボタンをクリック  
+	                   ✅ 「本棚に追加」ボタンをクリック  
                                    │  
            ┌───────────────────────────────────────────────┐  
            │ すでに同じ書籍が登録されている場合は、重複登録を防止し │  
@@ -101,8 +99,13 @@
            └───────────────────────────────────────────────┘  
                                    ▼  
                     📚 書籍情報を本棚に登録・表示！
-  </pre>
-  </details>
+	  </pre>
+	  </details>
+
+  #### 楽天API移行メモ（2026年対応）
+  - Rakuten Books API は `openapi.rakuten.co.jp` を利用します。
+  - 必須環境変数: `RAKUTEN_APPLICATION_ID`, `RAKUTEN_ACCESS_KEY`
+  - 旧ドメイン・旧アプリ・旧APIバージョンの停止日は `2026-05-14`（移行対応期限は `2026-05-13`）です。
   
   
   <br><h3 align="center">📚👀 本棚</h3>
@@ -276,5 +279,4 @@
   
   [^2]: [Hotwire](https://github.com/hotwired) は “HTML over the wire” を略した名前で、Turbo（リンク遷移・部分更新）と Stimulus（UI制御）を組み合わせることで、サーバー側でHTMLを生成してクライアントへ送信する設計思想のことです。BokriumではこれをTurbo（部分更新）+ Stimulus（UI操作）で実現し、JavaScript中心のSPAに頼らず、  RailsのMVC構造を保ちながらもスムーズで動的なUXを提供しています。
   
-  [^3]: [pg_search](https://github.com/Casecommons/pg_search) は、PostgreSQLの全文検索機能を活用できる Rails用の検索ライブラリです。`tsearch` や `trigram` を通じて、日本語検索にもある程度対応できます。
-
+	  [^3]: [pg_search](https://github.com/Casecommons/pg_search) は、PostgreSQLの全文検索機能を活用できる Rails用の検索ライブラリです。`tsearch` や `trigram` を通じて、日本語検索にもある程度対応できます。

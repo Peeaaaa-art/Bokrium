@@ -35,11 +35,10 @@ RSpec.describe "SearchController", type: :request do
 
   describe "GET /search (楽天エンジン時)" do
     before do
-      # API呼び出しをスタブ化
-      allow(RakutenWebService::Books::Book).to receive(:search).and_return(double(
-        to_a: [],
-        response: { "count" => "0" }
-      ))
+      allow(BookApis::RakutenService).to receive(:search_by_title_or_author).and_return({
+        items: [],
+        total_count: 0
+      })
     end
 
     it "楽天ブックスで結果がないとき警告を表示する" do
@@ -48,19 +47,20 @@ RSpec.describe "SearchController", type: :request do
     end
 
     it "楽天ブックスで検索成功時に結果を描画する" do
-      dummy_result = double(
-        title: "架空の書籍",
-        author: "テスト著者",
-        publisher_name: "テスト出版社",
-        isbn: "9781234567890",
-        large_image_url: "http://example.com/cover.jpg",
-        medium_image_url: nil
-      )
-
-      allow(RakutenWebService::Books::Book).to receive(:search).and_return(double(
-        to_a: [ dummy_result ],
-        response: { "count" => "1" }
-      ))
+      allow(BookApis::RakutenService).to receive(:search_by_title_or_author).and_return({
+        items: [
+          {
+            title: "架空の書籍",
+            author: "テスト著者",
+            publisher: "テスト出版社",
+            isbn: "9781234567890",
+            price: 1400,
+            book_cover: "http://example.com/cover.jpg",
+            affiliate_url: "https://books.rakuten.co.jp/rb/12345678/"
+          }
+        ],
+        total_count: 1
+      })
 
       get search_books_path(type: "title", query: "架空の書籍", engine: "rakuten")
       expect(response.body).to include("架空の書籍")

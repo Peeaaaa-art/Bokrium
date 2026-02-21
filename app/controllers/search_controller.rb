@@ -115,19 +115,24 @@ class SearchController < ApplicationController
 
   def search_rakuten_books(type, query, page)
     begin
-      results = RakutenWebService::Books::Book.search(type.to_sym => query, page: page, hits: 30)
-      books = results.to_a
+      response = BookApis::RakutenService.search_by_title_or_author(
+        type: type,
+        query: query,
+        page: page,
+        hits: 30
+      )
+      books = response[:items]
       @rakuten_book_results = books
 
-      raw_count = results.response["count"].to_i
+      raw_count = response[:total_count].to_i
       @rakuten_total_count = [ raw_count, 300 ].min
       @rakuten_total_pages = (@rakuten_total_count / 30.0).ceil
 
       if books.blank?
         flash.now[:warning] = "楽天ブックスで該当する書籍が見つかりませんでした：（#{query}）"
       end
-    rescue RakutenWebService::Error => e
-      flash[:error] = "楽天APIでエラーが発生しました: #{e.message}"
+    rescue StandardError => e
+      flash.now[:error] = "楽天APIでエラーが発生しました: #{e.message}"
     end
   end
 
