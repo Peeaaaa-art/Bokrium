@@ -127,7 +127,9 @@ module BookApis
         raw = "https://bokrium.com" if raw.blank?
         normalized = raw.match?(/\Ahttps?:\/\//) ? raw : "https://#{raw}"
         uri = URI.parse(normalized)
-        "#{uri.scheme}://#{uri.host}"
+        origin = +"#{uri.scheme}://#{uri.host}"
+        origin << ":#{uri.port}" if uri.port && uri.port != uri.default_port
+        origin
       rescue URI::InvalidURIError
         "https://bokrium.com"
       end

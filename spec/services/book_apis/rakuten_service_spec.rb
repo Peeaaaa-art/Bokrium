@@ -262,4 +262,28 @@ RSpec.describe BookApis::RakutenService do
       end
     end
   end
+
+  describe "request headers" do
+    it "keeps non-default port in Origin/Referer when APP_HOST has explicit port" do
+      allow(ENV).to receive(:[]).with("APP_HOST").and_return("http://localhost:3000")
+
+      stub_request(:get, endpoint)
+        .with(
+          query: hash_including(
+            "applicationId" => application_id,
+            "accessKey" => access_key,
+            "formatVersion" => "2",
+            "isbn" => "9781234567890"
+          ),
+          headers: {
+            "Authorization" => "Bearer #{access_key}",
+            "Origin" => "http://localhost:3000",
+            "Referer" => "http://localhost:3000/"
+          }
+        )
+        .to_return(status: 200, body: { count: 0, Items: [] }.to_json)
+
+      described_class.fetch("9781234567890")
+    end
+  end
 end
