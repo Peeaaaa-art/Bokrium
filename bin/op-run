@@ -1,0 +1,30 @@
+#!/usr/bin/env sh
+
+set -eu
+
+APP_ROOT="$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)"
+ENV_FILE="$APP_ROOT/config/env/.env.1password"
+
+if [ "$#" -eq 0 ]; then
+  echo "Usage: bin/op-run <command> [args...]" >&2
+  exit 1
+fi
+
+if ! command -v op >/dev/null 2>&1; then
+  echo "Error: 1Password CLI (op) is not installed." >&2
+  echo "Install op and run 'op signin' before starting development commands." >&2
+  exit 1
+fi
+
+if [ ! -f "$ENV_FILE" ]; then
+  echo "Error: env-file not found: $ENV_FILE" >&2
+  exit 1
+fi
+
+if ! op whoami >/dev/null 2>&1; then
+  echo "Error: 1Password CLI is not signed in." >&2
+  echo "Run 'op signin' and retry." >&2
+  exit 1
+fi
+
+exec op run --env-file="$ENV_FILE" -- "$@"

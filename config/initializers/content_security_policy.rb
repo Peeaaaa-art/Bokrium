@@ -10,15 +10,17 @@ Rails.application.configure do
     policy.script_src  :self, :https,  "https://assets.bokrium.com"
     policy.style_src   :self, :https,  "https://assets.bokrium.com", "https://fonts.googleapis.com"
 
-  if Rails.env.development?
-    script_srcs = policy.script_src + [ :unsafe_eval, "http://localhost:3036" ]
-    style_srcs  = policy.style_src + [ :unsafe_inline ]
+    if Rails.env.development?
+      script_srcs = policy.script_src + [ :unsafe_eval, "http://localhost:3036" ]
+      style_srcs = policy.style_src + [ :unsafe_inline, "http://localhost:3036" ]
+      connect_srcs = Array(policy.connect_src) + [ :self, "http://localhost:3036", "ws://localhost:3036" ]
 
-    policy.script_src(*script_srcs)
-    policy.style_src(*style_srcs)
-  end
-
-    policy.connect_src :self, "ws://localhost:3036"
+      policy.script_src(*script_srcs)
+      policy.style_src(*style_srcs)
+      policy.connect_src(*connect_srcs)
+    else
+      policy.connect_src :self
+    end
   end
 
   config.content_security_policy_report_only = true

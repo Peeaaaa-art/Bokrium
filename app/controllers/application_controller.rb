@@ -8,7 +8,7 @@ class ApplicationController < ActionController::Base
   rescue_from Regexp::TimeoutError, with: :handle_regexp_timeout
 
   def guest_user
-    guest_email = ENV["GUEST_USER_EMAIL"]
+    guest_email = ENV["GUEST_USER_EMAIL"].presence || "guest@example.com"
     @guest_user ||= User.find_by(email: guest_email)
   end
 

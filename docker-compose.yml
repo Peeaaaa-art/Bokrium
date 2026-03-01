@@ -15,7 +15,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.dev
-    command: bash -c "rm -f tmp/pids/server.pid && bundle exec foreman start -f Procfile.dev"
+    command: bash -c "rm -f tmp/pids/server.pid && bundle exec foreman start -f Procfile.dev -e /dev/null"
     volumes:
       - .:/rails
       - bundle_cache:/usr/local/bundle
@@ -30,7 +30,35 @@ services:
       DATABASE_USERNAME: postgres
       DATABASE_PASSWORD: postgres
       RAILS_ENV: development
+      APP_HOST: ${APP_HOST}
+      RACK_ENV: development
+      NODE_ENV: ${NODE_ENV}
+      VITE_RUBY_ENV: ${VITE_RUBY_ENV}
       PORT: 3000
+      USE_SSL: ${USE_SSL}
+      GUEST_USER_EMAIL: ${GUEST_USER_EMAIL}
+      EMAIL_CRON_TOKEN: ${EMAIL_CRON_TOKEN}
+      RAKUTEN_APPLICATION_ID: ${RAKUTEN_APPLICATION_ID}
+      RAKUTEN_ACCESS_KEY: ${RAKUTEN_ACCESS_KEY}
+      R2_ENDPOINT: ${R2_ENDPOINT}
+      R2_SECRET_ACCESS_KEY: ${R2_SECRET_ACCESS_KEY}
+      R2_BUCKET: ${R2_BUCKET}
+      R2_ACCESS_KEY_ID: ${R2_ACCESS_KEY_ID}
+      STRIPE_PRICE_ID: ${STRIPE_PRICE_ID}
+      STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET}
+      STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY}
+      STRIPE_PUBLIC_KEY: ${STRIPE_PUBLIC_KEY}
+      LINE_TRIGGER_TOKEN: ${LINE_TRIGGER_TOKEN}
+      LINE_LOGIN_CHANNEL_SECRET: ${LINE_LOGIN_CHANNEL_SECRET}
+      LINE_LOGIN_CHANNEL_ID: ${LINE_LOGIN_CHANNEL_ID}
+      MY_LINE_USER_ID: ${MY_LINE_USER_ID}
+      LINE_CHANNEL_TOKEN: ${LINE_CHANNEL_TOKEN}
+      LINE_CHANNEL_SECRET: ${LINE_CHANNEL_SECRET}
+      LINE_CHANNEL_ID: ${LINE_CHANNEL_ID}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      AWS_DEFAULT_REGION: ${AWS_DEFAULT_REGION}
+      S3_BUCKET_NAME: ${S3_BUCKET_NAME}
     stdin_open: true
     tty: true
 
