@@ -3,7 +3,7 @@
 # The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
 
 if Rails.env.development?
-  guest_email = ENV["GUEST_USER_EMAIL"].presence || ENV["GUEST_USER_EMAL"].presence || "guest@example.com"
+  guest_email = ENV["GUEST_USER_EMAIL"].presence || "guest@example.com"
 
   guest_user = User.find_or_initialize_by(email: guest_email)
   guest_user.name ||= "Guest Sample User"
