@@ -85,7 +85,7 @@ jobs:
       - uses: ./.github/actions/setup-rspec-env
 
       - name: Install Playwright browsers
-        run: npx playwright install --with-deps --only-shell
+        run: npx --no-install playwright install --with-deps --only-shell
 
       - name: Run RSpec SYSTEM (spec/system only)
         env:
@@ -94,7 +94,7 @@ jobs:
         run: bin/run-rspec-matrix --glob "spec/system/**/*_spec.rb"
 
       - name: Collect failed screenshots
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f
         if: failure()
         with:
           name: screenshots-system-node-${{ matrix.node_index }}

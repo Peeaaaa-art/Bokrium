@@ -11,6 +11,10 @@ runs:
         node-version: 22
         cache: npm
 
+    - name: Upgrade npm
+      run: npm install -g npm@11.11.0
+      shell: bash
+
     - name: Install system packages
       run: |
         sudo apt-get update

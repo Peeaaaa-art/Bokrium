@@ -3,9 +3,9 @@
 // =========================
 import { useEffect } from "react"
 import type { ReactElement } from "react"
-import { useEditor, EditorContent, BubbleMenu } from "@tiptap/react"
+import { useEditor, EditorContent } from "@tiptap/react"
+import { BubbleMenu } from "@tiptap/react/menus"
 import StarterKit from "@tiptap/starter-kit"
-import BubbleMenuExtension from "@tiptap/extension-bubble-menu"
 import CharacterCount from "@tiptap/extension-character-count"
 
 interface RichEditorProps {
@@ -54,7 +54,6 @@ function RichEditor({ element }: RichEditorProps): ReactElement | null {
   const editor = useEditor({
     extensions: [
       StarterKit,
-      BubbleMenuExtension,
       CharacterCount.configure({ limit: 10000 }),
     ],
     content: initialContent,

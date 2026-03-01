@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "engines": {
     "node": "22.x",
-    "npm": "10.x"
+    "npm": "11.x"
   },
   "scripts": {
     "dev": "vite",
@@ -15,10 +15,10 @@
     "@hotwired/stimulus-webpack-helpers": "^1.0.1",
     "@hotwired/turbo": "^8.0.21",
     "@popperjs/core": "^2.11.8",
-    "@tiptap/extension-bubble-menu": "^2.11.9",
-    "@tiptap/extension-character-count": "^2.11.9",
-    "@tiptap/react": "^2.11.9",
-    "@tiptap/starter-kit": "^2.11.9",
+    "@tiptap/extension-bubble-menu": "^3.20.0",
+    "@tiptap/extension-character-count": "^3.20.0",
+    "@tiptap/react": "^3.20.0",
+    "@tiptap/starter-kit": "^3.20.0",
     "@zxing/browser": "^0.1.5",
     "bootstrap": "^5.3.5",
     "dompurify": "^3.3.1",
@@ -31,6 +31,7 @@
     "@types/dompurify": "^3.0.5",
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
+    "playwright": "^1.58.2",
     "sass": "^1.89.2",
     "vite": "^7.3.0",
     "vite-plugin-ruby": "^5.1.1"
