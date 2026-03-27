@@ -7,7 +7,7 @@
             <% if @book.book_cover_s3.attached? %>
               <%= image_tag @book.book_cover_s3.variant(resize_to_limit: [200, 300]), class: "img-fluid rounded" %>
             <% else %>
-              <img src="<%= @book.book_cover %>" class="img-fluid rounded" style="max-height: 300px;" alt="表紙画像">
+              <img src="<%= book_cover_display_url(@book) %>" class="img-fluid rounded" style="max-height: 300px;" alt="表紙画像" referrerpolicy="no-referrer">
             <% end %>
           </div>
         <% end %>

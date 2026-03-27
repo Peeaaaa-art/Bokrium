@@ -49,6 +49,7 @@ Rails.application.routes.draw do
   get "search/barcode", to: "search#barcode", as: :search_barcode
   get "search/isbn_turbo", to: "search#search_isbn_turbo", as: :search_isbn_turbo
   get "search/search_google_books", to: "search#search_google_books", as: :search_google_books
+  get "cover_proxy", to: "cover_proxy#show", as: :cover_proxy
   post "/presigned_url", to: "uploads#presigned_url"
   post "/callback", to: "line_webhooks#callback"
 

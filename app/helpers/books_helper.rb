@@ -68,4 +68,22 @@ module BooksHelper
     return nil if source.nil?
     "image from #{source}"
   end
+
+  # ホットリンク対策でブロックされる外部書影はプロキシ経由で表示する
+  def book_cover_display_url(book_or_url)
+    url = case book_or_url
+          when Hash then book_or_url[:book_cover]
+          else book_or_url.respond_to?(:book_cover) ? book_or_url.book_cover : book_or_url
+          end
+    book_cover_display_url_from_url(url)
+  end
+
+  def book_cover_display_url_from_url(url)
+    return nil if url.blank?
+    uri = URI.parse(url)
+    return url unless uri.host && CoverProxyController.allowed_host?(uri.host)
+    cover_proxy_path(url: url)
+  rescue URI::InvalidURIError
+    url
+  end
 end

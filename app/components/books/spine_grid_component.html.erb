@@ -13,9 +13,10 @@
                   class: "spine-cover-image d-none",
                   data: { spine_book_target: "cover" } %>
           <% elsif book.book_cover.present? %>
-            <img src="<%= book.book_cover %>" alt="表紙画像"
+            <img src="<%= helpers.book_cover_display_url(book) %>" alt="表紙画像"
                 class="spine-cover-image d-none"
-                data-spine-book-target="cover">
+                data-spine-book-target="cover"
+                referrerpolicy="no-referrer">
           <% else %>
             <div class="no-cover spine-no-cover shadow-lg d-none"
                   data-spine-book-target="cover">

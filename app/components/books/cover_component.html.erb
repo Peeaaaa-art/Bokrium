@@ -7,11 +7,12 @@
   }.merge(@options) %>
 
 <% elsif show_url_cover? %>
-  <%= image_tag @book.book_cover, {
+  <%= image_tag helpers.book_cover_display_url(@book), {
     alt: @alt,
     loading: "lazy",
     class: "img-fluid #{@image_class} #{@url_class}".strip,
-    style: ""
+    style: "",
+    referrerpolicy: "no-referrer"
   }.merge(@options) %>
 
 <% else %>
