@@ -1,32 +1,54 @@
 import { Controller } from "@hotwired/stimulus";
 
+type LoginOptionsResponse = {
+  challenge: string;
+  timeout?: number;
+  rpId?: string;
+  allowCredentials: Array<{
+    id: string;
+    type: string;
+    transports?: AuthenticatorTransport[];
+  }>;
+  userVerification?: UserVerificationRequirement;
+};
+
 export default class WebauthnLoginController extends Controller<HTMLElement> {
+  private preparedOptions: LoginOptionsResponse | null = null;
+  private optionsRequest: Promise<LoginOptionsResponse> | null = null;
+
+  connect(): void {
+    // Safari / WebKit では click 内の非同期 fetch 後に get() を呼ぶと
+    // user gesture を失って失敗しやすいため、先に options を取っておく。
+    void this.prepare();
+  }
+
+  async prepare(): Promise<void> {
+    try {
+      await this.loadOptions();
+    } catch (error) {
+      console.warn("WebAuthn 認証オプションの事前取得に失敗:", error);
+    }
+  }
+
   async login(): Promise<void> {
     try {
-      // 1. サーバーから challenge を取得
-      const optionsResponse = await fetch("/users/webauthn_login", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const options = await this.loadOptions();
 
-      if (!optionsResponse.ok) {
-        throw new Error("認証オプションの取得に失敗しました。");
-      }
-
-      const options = await optionsResponse.json();
-
-      // 2. Base64 デコード
+      // 1. Base64 デコード
       const challenge = this.base64ToArrayBuffer(options.challenge);
+      const allowCredentials = options.allowCredentials.map((credential) => ({
+        ...credential,
+        type: credential.type as PublicKeyCredentialType,
+        id: this.base64ToArrayBuffer(credential.id),
+      }));
 
-      // 3. WebAuthn API を呼び出し
+      // 2. WebAuthn API を呼び出し
       const credential = (await navigator.credentials.get({
         publicKey: {
           challenge,
           timeout: options.timeout,
           rpId: options.rpId,
-          allowCredentials: options.allowCredentials,
+          allowCredentials,
           userVerification: options.userVerification || "preferred",
         },
       })) as PublicKeyCredential | null;
@@ -36,7 +58,7 @@ export default class WebauthnLoginController extends Controller<HTMLElement> {
         return;
       }
 
-      // 4. レスポンスを整形
+      // 3. レスポンスを整形
       const response = credential.response as AuthenticatorAssertionResponse;
       const body = {
         id: credential.id,
@@ -52,7 +74,7 @@ export default class WebauthnLoginController extends Controller<HTMLElement> {
         },
       };
 
-      // 5. サーバーに送信して検証
+      // 4. サーバーに送信して検証
       const verifyResponse = await fetch("/users/webauthn_login", {
         method: "POST",
         headers: {
@@ -61,6 +83,8 @@ export default class WebauthnLoginController extends Controller<HTMLElement> {
         },
         body: JSON.stringify(body),
       });
+
+      this.preparedOptions = null;
 
       if (!verifyResponse.ok) {
         const errorData = await verifyResponse.json();
@@ -77,9 +101,44 @@ export default class WebauthnLoginController extends Controller<HTMLElement> {
         alert("ログインに失敗しました。");
       }
     } catch (error) {
+      this.preparedOptions = null;
       console.error("WebAuthn ログインエラー:", error);
       alert("エラーが発生しました。再度お試しください。");
     }
+  }
+
+  private async loadOptions(): Promise<LoginOptionsResponse> {
+    if (this.preparedOptions) {
+      return this.preparedOptions;
+    }
+
+    if (this.optionsRequest) {
+      return this.optionsRequest;
+    }
+
+    this.optionsRequest = fetch("/users/webauthn_login", {
+      method: "GET",
+      cache: "no-store",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then(async (response) => {
+        if (!response.ok) {
+          throw new Error("認証オプションの取得に失敗しました。");
+        }
+
+        return (await response.json()) as LoginOptionsResponse;
+      })
+      .then((options) => {
+        this.preparedOptions = options;
+        return options;
+      })
+      .finally(() => {
+        this.optionsRequest = null;
+      });
+
+    return this.optionsRequest;
   }
 
   // Helper: Base64 → ArrayBuffer

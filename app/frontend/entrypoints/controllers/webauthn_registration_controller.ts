@@ -1,31 +1,56 @@
 import { Controller } from "@hotwired/stimulus";
 
+type RegistrationOptionsResponse = {
+  challenge: string;
+  rp: {
+    name: string;
+    id: string;
+  };
+  user: {
+    id: string;
+    name: string;
+    displayName: string;
+  };
+  pubKeyCredParams: PublicKeyCredentialParameters[];
+  timeout?: number;
+  excludeCredentials: Array<{
+    type: string;
+    id: string;
+  }>;
+  authenticatorSelection?: AuthenticatorSelectionCriteria;
+  attestation?: AttestationConveyancePreference;
+};
+
 export default class WebauthnRegistrationController extends Controller<HTMLElement> {
   static values = {
     redirectUrl: String,
   };
 
   declare redirectUrlValue: string;
+  private preparedOptions: RegistrationOptionsResponse | null = null;
+  private optionsRequest: Promise<RegistrationOptionsResponse> | null = null;
+
+  connect(): void {
+    // WebKit 系は click 内で fetch を挟むと user gesture を失いやすいため、
+    // 先に登録オプションを取得しておく。
+    void this.prepare();
+  }
+
+  async prepare(): Promise<void> {
+    try {
+      await this.loadOptions();
+    } catch (error) {
+      console.warn("WebAuthn 登録オプションの事前取得に失敗:", error);
+    }
+  }
 
   async register(): Promise<void> {
     try {
-      // 1. サーバーから challenge を取得
-      const optionsResponse = await fetch("/users/credentials/new", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const options = await this.loadOptions();
 
-      if (!optionsResponse.ok) {
-        throw new Error("登録オプションの取得に失敗しました。");
-      }
-
-      const options = await optionsResponse.json();
-
-      // 2. Base64 デコード
+      // 1. Base64 デコード
       const challenge = this.base64ToArrayBuffer(options.challenge);
-      const userId = this.base64ToArrayBuffer(options.user.id);
+      const userId = this.textToArrayBuffer(options.user.id);
       const excludeCredentials = options.excludeCredentials.map(
         (cred: { type: string; id: string }) => ({
           type: cred.type as PublicKeyCredentialType,
@@ -33,7 +58,7 @@ export default class WebauthnRegistrationController extends Controller<HTMLEleme
         })
       );
 
-      // 3. WebAuthn API を呼び出し
+      // 2. WebAuthn API を呼び出し
       const credential = (await navigator.credentials.create({
         publicKey: {
           challenge,
@@ -59,7 +84,7 @@ export default class WebauthnRegistrationController extends Controller<HTMLEleme
         return;
       }
 
-      // 4. レスポンスを整形
+      // 3. レスポンスを整形
       const response = credential.response as AuthenticatorAttestationResponse;
       const body = {
         id: credential.id,
@@ -71,7 +96,7 @@ export default class WebauthnRegistrationController extends Controller<HTMLEleme
         },
       };
 
-      // 5. サーバーに送信して検証
+      // 4. サーバーに送信して検証
       const verifyResponse = await fetch("/users/credentials", {
         method: "POST",
         headers: {
@@ -80,6 +105,8 @@ export default class WebauthnRegistrationController extends Controller<HTMLEleme
         },
         body: JSON.stringify(body),
       });
+
+      this.preparedOptions = null;
 
       if (!verifyResponse.ok) {
         const errorData = await verifyResponse.json();
@@ -104,9 +131,48 @@ export default class WebauthnRegistrationController extends Controller<HTMLEleme
         alert("登録に失敗しました。");
       }
     } catch (error) {
+      this.preparedOptions = null;
       console.error("WebAuthn 登録エラー:", error);
       alert("エラーが発生しました。再度お試しください。");
     }
+  }
+
+  private async loadOptions(): Promise<RegistrationOptionsResponse> {
+    if (this.preparedOptions) {
+      return this.preparedOptions;
+    }
+
+    if (this.optionsRequest) {
+      return this.optionsRequest;
+    }
+
+    this.optionsRequest = fetch("/users/credentials/new", {
+      method: "GET",
+      cache: "no-store",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then(async (response) => {
+        if (!response.ok) {
+          throw new Error("登録オプションの取得に失敗しました。");
+        }
+
+        return (await response.json()) as RegistrationOptionsResponse;
+      })
+      .then((options) => {
+        this.preparedOptions = options;
+        return options;
+      })
+      .finally(() => {
+        this.optionsRequest = null;
+      });
+
+    return this.optionsRequest;
+  }
+
+  private textToArrayBuffer(value: string): ArrayBuffer {
+    return new TextEncoder().encode(value).buffer;
   }
 
   // Helper: Base64 → ArrayBuffer
