@@ -50,7 +50,7 @@ export default class WebauthnRegistrationController extends Controller<HTMLEleme
 
       // 1. Base64 デコード
       const challenge = this.base64ToArrayBuffer(options.challenge);
-      const userId = this.base64ToArrayBuffer(options.user.id);
+      const userId = this.textToArrayBuffer(options.user.id);
       const excludeCredentials = options.excludeCredentials.map(
         (cred: { type: string; id: string }) => ({
           type: cred.type as PublicKeyCredentialType,
@@ -169,6 +169,10 @@ export default class WebauthnRegistrationController extends Controller<HTMLEleme
       });
 
     return this.optionsRequest;
+  }
+
+  private textToArrayBuffer(value: string): ArrayBuffer {
+    return new TextEncoder().encode(value).buffer;
   }
 
   // Helper: Base64 → ArrayBuffer
