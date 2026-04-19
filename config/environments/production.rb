@@ -61,11 +61,11 @@ Rails.application.configure do
   config.action_mailer.default_url_options = { protocol: "https", host: "bokrium.com" }
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-    address:              "mail.privateemail.com",
+    address:              "smtp.mail.me.com",
     port:                 587,
     domain:               "bokrium.com",
-    user_name:            "support@bokrium.com",
-    password:             ENV["PRIVATE_EMAIL_PASSWORD"],
+    user_name: ENV.fetch("ICLOUD_ID", "support@bokrium.com"),
+    password:  ENV.fetch("ICLOUD_APP_PASSWORD"),
     authentication:       "plain",
     enable_starttls_auto: true
   }
