@@ -20,6 +20,7 @@ jobs:
       RAILS_ENV: test
       APP_HOST: http://localhost:3000
       PORT: "3000"
+      AWS_EC2_METADATA_DISABLED: "true"
       LINE_CHANNEL_TOKEN: dummy_token_for_test
       DATABASE_URL: postgres://postgres:postgres@localhost:5432/test_db
       TOTAL_NODES: 4
@@ -61,6 +62,7 @@ jobs:
       RAILS_ENV: test
       APP_HOST: http://localhost:3000
       PORT: "3000"
+      AWS_EC2_METADATA_DISABLED: "true"
       LINE_CHANNEL_TOKEN: dummy_token_for_test
       DATABASE_URL: postgres://postgres:postgres@localhost:5432/test_db
       TOTAL_NODES: 2

@@ -18,6 +18,8 @@ runs:
       shell: bash
 
     - name: Install JS dependencies
+      env:
+        PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "1"
       run: npm ci
       shell: bash
 
