@@ -66,6 +66,13 @@ em {
   margin: 0.5em 0;
 }
 
+.ProseMirror a,
+.memo-link {
+  color: #0b63ce;
+  text-decoration: underline;
+  text-underline-offset: 0.16em;
+}
+
 .ProseMirror:focus {
   outline: none;
 }
