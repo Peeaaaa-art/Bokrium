@@ -6,10 +6,10 @@ FROM ruby:${RUBY_VERSION}-slim-trixie@sha256:24df04f7b0606fa2f83119ce2f5a16ef9b4
 
 WORKDIR /rails
 
-# hadolint ignore=DL3008
 # 全パッケージのバージョン固定は、Debian のセキュリティ更新時にビルドが壊れやすいため。
 # 再現性はベースイメージ (ruby:4.0.1-slim-trixie) と同一 RUN 内の apt-get update で担保する。
 # CVE-2025-15467 対策: セキュリティアップデートを適用してから他パッケージをインストールする。
+# hadolint ignore=DL3008
 RUN apt-get update -qq && \
     apt-get upgrade -y --no-install-recommends && \
     apt-get install --no-install-recommends -y \
@@ -29,9 +29,9 @@ FROM base AS build
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
-# hadolint ignore=DL3008
 # 同上（base ステージのコメントを参照）
 # CVE-2025-15467 対策: セキュリティアップデートを適用してから他パッケージをインストールする。
+# hadolint ignore=DL3008
 RUN apt-get update -qq && \
     apt-get upgrade -y --no-install-recommends && \
     apt-get install --no-install-recommends -y \
@@ -68,6 +68,16 @@ FROM base
 
 COPY --from=build ${BUNDLE_PATH} ${BUNDLE_PATH}
 COPY --from=build /rails /rails
+
+# hadolint ignore=DL3008
+RUN apt-get update -qq && \
+    apt-get install --no-install-recommends -y build-essential && \
+    gem install erb:6.0.4 json:2.19.4 --default --no-document && \
+    rm -f \
+      /usr/local/lib/ruby/gems/4.0.0/specifications/default/erb-6.0.1.gemspec \
+      /usr/local/lib/ruby/gems/4.0.0/specifications/default/json-2.18.0.gemspec && \
+    apt-get purge -y --auto-remove build-essential && \
+    rm -rf /var/lib/apt/lists/* /var/cache/apt/archives
 
 RUN groupadd --system --gid 1000 rails && \
     useradd rails --uid 1000 --gid 1000 --create-home --shell /bin/bash && \

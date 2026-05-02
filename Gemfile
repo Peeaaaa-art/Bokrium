@@ -64,9 +64,6 @@ gem "solid_cache"
 # 起動高速化
 gem "bootsnap", require: false
 
-# HTTPアセット圧縮・X-Sendfile対応
-gem "thruster", require: false
-
 group :development do
   gem "foreman"
   gem "letter_opener_web"
