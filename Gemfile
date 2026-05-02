@@ -45,7 +45,7 @@ gem "rack-rewrite"
 
 gem "browser"
 
-gem "aws-sdk-s3", "~> 1.213", require: false
+gem "aws-sdk-s3", "~> 1.216", require: false
 
 gem "dotenv-rails"
 
