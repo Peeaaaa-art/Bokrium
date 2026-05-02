@@ -11,7 +11,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
     # すでにLINE連携済みのユーザー
     if (line_user = LineUser.find_by(line_id: line_id))
       user = line_user.user
-      sign_in(user)
+      sign_in_and_remember(user)
       redirect_to mypage_path, notice: "LINEでログインしました。"
       return
     end
@@ -33,7 +33,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
     )
     user.create_line_user!(line_id: line_id, line_name: line_name, notifications_enabled: false)
 
-    sign_in(user)
+    sign_in_and_remember(user)
 
     redirect_to guest_starter_books_path, notice: "LINEアカウントで登録・ログインしました。"
   rescue Regexp::TimeoutError => e

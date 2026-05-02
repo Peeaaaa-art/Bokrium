@@ -34,6 +34,7 @@ RSpec.describe "Users::WebauthnSessions (パスキーログイン)", type: :requ
       # サインインしていることを確認（mypage にアクセスして 200 になる）
       get mypage_path
       expect(response).to have_http_status(:ok)
+      expect(user.reload.remember_created_at).to be_present
     end
   end
 end

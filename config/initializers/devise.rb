@@ -23,6 +23,10 @@ Devise.setup do |config|
 
   config.reconfirmable = true
 
+  config.remember_for = 1.month
+
+  config.extend_remember_period = true
+
   config.expire_all_remember_me_on_sign_out = true
 
   config.password_length = 6..128

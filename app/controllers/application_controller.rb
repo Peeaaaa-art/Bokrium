@@ -21,6 +21,11 @@ class ApplicationController < ActionController::Base
     devise_parameter_sanitizer.permit(:account_update, keys: [ :name, :avatar_s3 ])
   end
 
+  def sign_in_and_remember(resource)
+    resource.remember_me = true if resource.respond_to?(:remember_me=)
+    sign_in(resource)
+  end
+
   private
 
   def browser
