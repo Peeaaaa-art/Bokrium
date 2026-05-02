@@ -38,6 +38,21 @@ const hasMarkdownLink = (text: string): boolean => {
   return MARKDOWN_LINK_PATTERN.test(text)
 }
 
+const sanitizeMemoHtmlToFragment = (html: string): DocumentFragment => {
+  return DOMPurify.sanitize(html, {
+    ALLOWED_TAGS: SAFE_MEMO_TAGS,
+    ALLOWED_ATTR: SAFE_MEMO_ATTRIBUTES,
+    ALLOWED_URI_REGEXP: /^https?:\/\//i,
+    RETURN_DOM_FRAGMENT: true,
+  })
+}
+
+const serializeMemoFragment = (fragment: DocumentFragment): string => {
+  const template = document.createElement("template")
+  template.content.append(fragment)
+  return template.innerHTML
+}
+
 export const normalizeSafeMemoUrl = (value: string | null | undefined): string | null => {
   const trimmed = value?.trim()
   if (!trimmed) return null
@@ -61,11 +76,8 @@ const shouldSkipMarkdownLinkNode = (node: Node): boolean => {
   return false
 }
 
-export const renderMarkdownLinksToAnchors = (html: string): string => {
-  const template = document.createElement("template")
-  template.innerHTML = html
-
-  const walker = document.createTreeWalker(template.content, NodeFilter.SHOW_TEXT, {
+const renderMarkdownLinksInFragment = (fragment: DocumentFragment): void => {
+  const walker = document.createTreeWalker(fragment, NodeFilter.SHOW_TEXT, {
     acceptNode(node) {
       if (shouldSkipMarkdownLinkNode(node)) return NodeFilter.FILTER_REJECT
       return hasMarkdownLink(node.textContent ?? "") ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT
@@ -111,21 +123,10 @@ export const renderMarkdownLinksToAnchors = (html: string): string => {
     fragment.append(document.createTextNode(text.slice(cursor)))
     textNode.replaceWith(fragment)
   })
-
-  return template.innerHTML
 }
 
-export const sanitizeMemoHtml = (html: string): string => {
-  const sanitized = DOMPurify.sanitize(html, {
-    ALLOWED_TAGS: SAFE_MEMO_TAGS,
-    ALLOWED_ATTR: SAFE_MEMO_ATTRIBUTES,
-    ALLOWED_URI_REGEXP: /^https?:\/\//i,
-  })
-
-  const template = document.createElement("template")
-  template.innerHTML = sanitized
-
-  template.content.querySelectorAll("a").forEach((anchor) => {
+const enforceSafeMemoAnchors = (root: ParentNode): void => {
+  root.querySelectorAll("a").forEach((anchor) => {
     const safeUrl = normalizeSafeMemoUrl(anchor.getAttribute("href"))
 
     if (!safeUrl) {
@@ -138,12 +139,23 @@ export const sanitizeMemoHtml = (html: string): string => {
     anchor.setAttribute("rel", SAFE_MEMO_LINK_REL)
     anchor.classList.add(SAFE_MEMO_LINK_CLASS)
   })
+}
 
-  return template.innerHTML
+export const renderMarkdownLinksToAnchors = (html: string): string => {
+  const fragment = sanitizeMemoHtmlToFragment(html)
+  renderMarkdownLinksInFragment(fragment)
+  enforceSafeMemoAnchors(fragment)
+  return serializeMemoFragment(fragment)
+}
+
+export const sanitizeMemoHtml = (html: string): string => {
+  const fragment = sanitizeMemoHtmlToFragment(html)
+  enforceSafeMemoAnchors(fragment)
+  return serializeMemoFragment(fragment)
 }
 
 export const prepareMemoHtmlForSave = (html: string): string => {
-  return sanitizeMemoHtml(renderMarkdownLinksToAnchors(html))
+  return renderMarkdownLinksToAnchors(html)
 }
 
 export const prepareMemoHtmlForDisplay = prepareMemoHtmlForSave
