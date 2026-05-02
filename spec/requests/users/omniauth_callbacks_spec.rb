@@ -35,7 +35,7 @@ RSpec.describe "Users::OmniauthCallbacks", type: :request do
 
       get "/users/auth/line/callback"
 
-      expect(response).to redirect_to(mypage_path)
+      expect(response).to redirect_to(books_path)
       expect(user.reload.remember_created_at).to be_present
     end
 

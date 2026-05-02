@@ -46,11 +46,12 @@ RSpec.describe 'User login after confirmation', type: :system do
   before do
     driven_by :rack_test
 
-    User.create!(
+    user = User.create!(
       email: email,
       password: password,
       confirmed_at: Time.current
     )
+    create(:book, user: user)
   end
 
   it 'メール確認済みのユーザーが正常にログインできること' do
@@ -60,6 +61,6 @@ RSpec.describe 'User login after confirmation', type: :system do
     click_button 'ログイン'
 
     expect(page).to have_content 'ログインしました'
-    expect(page).to have_current_path(root_path)
+    expect(page).to have_current_path(books_path)
   end
 end

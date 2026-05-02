@@ -12,7 +12,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
     if (line_user = LineUser.find_by(line_id: line_id))
       user = line_user.user
       sign_in_and_remember(user)
-      redirect_to mypage_path, notice: "LINEでログインしました。"
+      redirect_to books_path, notice: "LINEでログインしました。"
       return
     end
 

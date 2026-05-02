@@ -92,7 +92,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # The path used after sign up.
   def after_sign_in_path_for(resource)
     stored_location_for(resource) || (
-      resource.sign_in_count == 1 ? guest_starter_books_path : mypage_path
+      resource.sign_in_count == 1 ? guest_starter_books_path : books_path
     )
   end
 
