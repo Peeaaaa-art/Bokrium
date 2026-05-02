@@ -5,7 +5,7 @@ import React from "react";
 import { useEditor, EditorContent } from "@tiptap/react"
 import StarterKit from "@tiptap/starter-kit"
 import type { ReactElement } from "react"
-import DOMPurify from "dompurify"
+import { createMemoLinkExtension, prepareMemoHtmlForDisplay } from "../utils/memo_links"
 
 interface ReadOnlyTipTapProps {
   content: string
@@ -45,18 +45,28 @@ const removeUnwantedBRs = (html: string): string => {
 }
 
 function ReadOnlyTipTap({ content }: ReadOnlyTipTapProps): ReactElement | null {
-  const sanitized = DOMPurify.sanitize(content)
+  const sanitized = prepareMemoHtmlForDisplay(content)
   const cleaned = removeUnwantedBRs(sanitized)
 
   const editor = useEditor({
-    extensions: [StarterKit],
+    extensions: [StarterKit, createMemoLinkExtension(true)],
     content: cleaned,
     editable: false,
   })
 
   if (!editor) return null
 
-  return <EditorContent editor={editor} />
+  const stopLinkClickPropagation = (event: React.MouseEvent<HTMLDivElement>) => {
+    if ((event.target as HTMLElement).closest("a")) {
+      event.stopPropagation()
+    }
+  }
+
+  return (
+    <div onClickCapture={stopLinkClickPropagation}>
+      <EditorContent editor={editor} />
+    </div>
+  )
 }
 
 export default ReadOnlyTipTap

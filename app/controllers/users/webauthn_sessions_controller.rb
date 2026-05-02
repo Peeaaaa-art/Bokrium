@@ -49,7 +49,7 @@ module Users
       session.delete(:webauthn_authentication_challenge)
 
       user = credential.user
-      sign_in(user)
+      sign_in_and_remember(user)
 
       render json: { success: true, redirect_to: after_sign_in_path_for(user) }
     end
@@ -57,7 +57,7 @@ module Users
     private
 
     def after_sign_in_path_for(resource)
-      stored_location_for(resource) || mypage_path
+      stored_location_for(resource) || books_path
     end
   end
 end

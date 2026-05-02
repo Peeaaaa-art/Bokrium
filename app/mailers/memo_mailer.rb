@@ -1,9 +1,10 @@
 class MemoMailer < ApplicationMailer
+  helper MemosHelper
+
   def random_memo_email(user, memo)
     @user = user
     @memo = memo
     @book = memo.book
-    @html_content = @memo.content.to_s # ← Redcarpet不要！
 
     mail(
       to: @user.email,

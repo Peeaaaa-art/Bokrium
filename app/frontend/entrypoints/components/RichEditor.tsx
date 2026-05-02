@@ -7,6 +7,7 @@ import { useEditor, EditorContent, BubbleMenu } from "@tiptap/react"
 import StarterKit from "@tiptap/starter-kit"
 import BubbleMenuExtension from "@tiptap/extension-bubble-menu"
 import CharacterCount from "@tiptap/extension-character-count"
+import { createMemoLinkExtension, prepareMemoHtmlForSave } from "../utils/memo_links"
 
 interface RichEditorProps {
   element: HTMLElement
@@ -49,11 +50,12 @@ const removeUnwantedBRs = (html: string): string => {
 function RichEditor({ element }: RichEditorProps): ReactElement | null {
   const initialRaw = element.dataset.initialContent ?? ""
   const inputId = element.dataset.inputId ?? "memo_content_input"
-  const initialContent = decodeHTML(initialRaw)
+  const initialContent = prepareMemoHtmlForSave(decodeHTML(initialRaw))
 
   const editor = useEditor({
     extensions: [
       StarterKit,
+      createMemoLinkExtension(false),
       BubbleMenuExtension,
       CharacterCount.configure({ limit: 10000 }),
     ],
@@ -70,7 +72,7 @@ function RichEditor({ element }: RichEditorProps): ReactElement | null {
       "[data-action='click->memo-modal#forceSubmit']"
     ) as HTMLButtonElement | null
 
-    let previousHTML = removeUnwantedBRs(editor.getHTML())
+    let previousHTML = prepareMemoHtmlForSave(removeUnwantedBRs(editor.getHTML()))
     if (hiddenField) hiddenField.value = previousHTML
 
     if (saveButton) {
@@ -79,7 +81,7 @@ function RichEditor({ element }: RichEditorProps): ReactElement | null {
     }
 
     const updateHandler = () => {
-      const currentHTML = removeUnwantedBRs(editor.getHTML())
+      const currentHTML = prepareMemoHtmlForSave(removeUnwantedBRs(editor.getHTML()))
 
       if (currentHTML !== previousHTML) {
         if (hiddenField) hiddenField.value = currentHTML
