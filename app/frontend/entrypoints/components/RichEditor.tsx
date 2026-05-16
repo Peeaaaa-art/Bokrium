@@ -8,6 +8,7 @@ import StarterKit from "@tiptap/starter-kit"
 import BubbleMenuExtension from "@tiptap/extension-bubble-menu"
 import CharacterCount from "@tiptap/extension-character-count"
 import { createMemoLinkExtension, prepareMemoHtmlForSave } from "../utils/memo_links"
+import { MarkdownPasteExtension } from "../utils/markdown_paste"
 
 interface RichEditorProps {
   element: HTMLElement
@@ -55,6 +56,7 @@ function RichEditor({ element }: RichEditorProps): ReactElement | null {
   const editor = useEditor({
     extensions: [
       StarterKit,
+      MarkdownPasteExtension,
       createMemoLinkExtension(false),
       BubbleMenuExtension,
       CharacterCount.configure({ limit: 10000 }),

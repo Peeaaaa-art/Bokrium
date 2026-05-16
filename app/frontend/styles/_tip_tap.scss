@@ -41,6 +41,30 @@ em {
   line-height: 1.5;
 }
 
+.ProseMirror h1 {
+  font-size: 1.42rem;
+}
+
+.ProseMirror h2 {
+  font-size: 1.28rem;
+}
+
+.ProseMirror h3 {
+  font-size: 1.16rem;
+}
+
+.ProseMirror h4 {
+  font-size: 1.08rem;
+}
+
+.ProseMirror h5 {
+  font-size: 1rem;
+}
+
+.ProseMirror h6 {
+  font-size: 0.96rem;
+}
+
 .ProseMirror p:empty::before {
   content: "\00a0"; /* &nbsp; を挿入 */
 }
