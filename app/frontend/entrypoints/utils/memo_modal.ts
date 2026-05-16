@@ -1,5 +1,3 @@
-import { application } from "../application"
-
 let isModalAnimating = false
 
 function removeBackdrop(): void {
@@ -44,9 +42,9 @@ export function discardChanges(): void {
       instance.hide()
     }
 
-    const controller = application.getControllerForElementAndIdentifier(modalEl, "modal-swipe") as {
+    const controller = (window as any).Stimulus?.getControllerForElementAndIdentifier(modalEl, "modal-swipe") as {
       skipConfirmationOnce?: () => void
-    }
+    } | undefined
 
     controller?.skipConfirmationOnce?.()
 
@@ -69,9 +67,9 @@ export function saveAndClose(): void {
     const modalEl = document.getElementById("memoEditModal")
     if (!modalEl) return
 
-    const controller = application.getControllerForElementAndIdentifier(modalEl, "modal-swipe") as {
+    const controller = (window as any).Stimulus?.getControllerForElementAndIdentifier(modalEl, "modal-swipe") as {
       skipConfirmationOnce?: () => void
-    }
+    } | undefined
     controller?.skipConfirmationOnce?.()
 
     setTimeout(() => {

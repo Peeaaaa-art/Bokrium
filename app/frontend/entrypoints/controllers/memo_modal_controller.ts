@@ -22,12 +22,31 @@ export default class MemoModalController extends Controller<HTMLElement> {
 
   submitHandler!: EventListener
   expanded: boolean = false
+  private touchStartPoint: { x: number; y: number; time: number } | null = null
 
   connect() {
     this.submitHandler = this.handleSubmit.bind(this)
   }
 
+  trackTouchStart(event: TouchEvent) {
+    const touch = event.touches[0]
+    if (!touch) return
+
+    this.touchStartPoint = {
+      x: touch.clientX,
+      y: touch.clientY,
+      time: Date.now()
+    }
+  }
+
   open(event: Event) {
+    if (this.shouldIgnoreOpen(event)) return
+
+    if (event.type === "touchend") {
+      if (!this.isTapGesture(event as TouchEvent)) return
+      event.preventDefault()
+    }
+
     (document.activeElement as HTMLElement | null)?.blur?.() // iOS Safari 対策
 
     const trigger = event.currentTarget as HTMLElement
@@ -115,6 +134,30 @@ export default class MemoModalController extends Controller<HTMLElement> {
 
     const modal = new (window as any).bootstrap.Modal(modalElement)
     modal.show()
+  }
+
+  private shouldIgnoreOpen(event: Event): boolean {
+    const trigger = event.currentTarget as HTMLElement | null
+    const target = event.target as HTMLElement | null
+    if (!trigger || !target || target === trigger) return false
+
+    return Boolean(
+      target.closest("a, button, input, select, textarea, label, summary, [role='button'], [data-bs-toggle], form")
+    )
+  }
+
+  private isTapGesture(event: TouchEvent): boolean {
+    const start = this.touchStartPoint
+    const touch = event.changedTouches[0]
+    this.touchStartPoint = null
+
+    if (!start || !touch) return false
+
+    const movementX = Math.abs(touch.clientX - start.x)
+    const movementY = Math.abs(touch.clientY - start.y)
+    const elapsed = Date.now() - start.time
+
+    return movementX <= 12 && movementY <= 12 && elapsed <= 700
   }
 
   toggle(event: Event) {
