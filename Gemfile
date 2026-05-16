@@ -12,7 +12,7 @@ gem "propshaft"
 
 gem "vite_rails"
 
-gem "view_component", "4.2.0"
+gem "view_component", ">= 4.9.0"
 
 gem "pg"
 
@@ -50,7 +50,7 @@ gem "aws-sdk-s3", "~> 1.213", require: false
 gem "dotenv-rails"
 
 # 高速HTML/XMLパーサ（NDL API用）
-gem "nokogiri"
+gem "nokogiri", ">= 1.19.3"
 
 # Markdownパーサ
 gem "redcarpet"
