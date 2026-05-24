@@ -9,6 +9,7 @@ import BubbleMenuExtension from "@tiptap/extension-bubble-menu"
 import CharacterCount from "@tiptap/extension-character-count"
 import { createMemoLinkExtension, prepareMemoHtmlForSave } from "../utils/memo_links"
 import { MarkdownPasteExtension } from "../utils/markdown_paste"
+import { normalizeProseMirrorHtmlForSave } from "../utils/prosemirror_html"
 
 interface RichEditorProps {
   element: HTMLElement
@@ -18,34 +19,6 @@ const decodeHTML = (html: string): string => {
   const textarea = document.createElement("textarea")
   textarea.innerHTML = html
   return textarea.value
-}
-
-// 不要な<br>を削除（classなし & trailingBreakと重複する場合）
-const removeUnwantedBRs = (html: string): string => {
-  const div = document.createElement("div")
-  div.innerHTML = html
-
-  div.querySelectorAll("p").forEach((p) => {
-    const hasOnlyBRs = Array.from(p.childNodes).every((node) => {
-      return (
-        node.nodeName === "BR" ||
-        (node.nodeType === Node.ELEMENT_NODE &&
-          (node as Element).classList.contains("ProseMirror-trailingBreak"))
-      )
-    })
-
-    const isActuallyEmpty = (p.textContent?.trim() ?? "") === ""
-
-    if (hasOnlyBRs || isActuallyEmpty) {
-      // 空の段落は trailingBreak だけを残す
-      p.innerHTML = ""
-      const br = document.createElement("br")
-      br.classList.add("ProseMirror-trailingBreak")
-      p.appendChild(br)
-    }
-  })
-
-  return div.innerHTML
 }
 
 function RichEditor({ element }: RichEditorProps): ReactElement | null {
@@ -74,7 +47,7 @@ function RichEditor({ element }: RichEditorProps): ReactElement | null {
       "[data-action='click->memo-modal#forceSubmit']"
     ) as HTMLButtonElement | null
 
-    let previousHTML = prepareMemoHtmlForSave(removeUnwantedBRs(editor.getHTML()))
+    let previousHTML = prepareMemoHtmlForSave(normalizeProseMirrorHtmlForSave(editor.getHTML()))
     if (hiddenField) hiddenField.value = previousHTML
 
     if (saveButton) {
@@ -83,7 +56,7 @@ function RichEditor({ element }: RichEditorProps): ReactElement | null {
     }
 
     const updateHandler = () => {
-      const currentHTML = prepareMemoHtmlForSave(removeUnwantedBRs(editor.getHTML()))
+      const currentHTML = prepareMemoHtmlForSave(normalizeProseMirrorHtmlForSave(editor.getHTML()))
 
       if (currentHTML !== previousHTML) {
         if (hiddenField) hiddenField.value = currentHTML
