@@ -41,12 +41,9 @@ class Book < ApplicationRecord
   def bokrium_cover_url
     return nil unless book_cover_s3.attached? && book_cover_s3.key.present?
 
-    case book_cover_s3.blob.service_name.to_s
-    when "cloudflare_r2"
+    if book_cover_s3.blob.service_name.to_s == "cloudflare_r2"
       cdn_domain = Rails.env.development? ? "dev-cdn.bokrium.com" : "cdn.bokrium.com"
       "https://#{cdn_domain}/#{book_cover_s3.key}"
-    when "amazon"
-      "https://img.bokrium.com/#{book_cover_s3.key}"
     else
       Rails.application.routes.url_helpers.rails_blob_url(book_cover_s3, only_path: false)
     end

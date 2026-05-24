@@ -4,7 +4,7 @@ Rails.application.configure do
 
     policy.font_src    :self, :https, :data, "https://fonts.googleapis.com", "https://fonts.gstatic.com"
     policy.img_src     :self, :https, :data,
-        "https://assets.bokrium.com", "https://lib.bokrium.com", "https://cdn.bokrium.com", "https://img.bokrium.com", "https://img.hanmoto.com", "https://bokrium-bucket.s3.ap-northeast-1.amazonaws.com",
+        "https://assets.bokrium.com", "https://lib.bokrium.com", "https://cdn.bokrium.com", "https://img.bokrium.com", "https://img.hanmoto.com",
         "https://books.google.com", "https://thumbnail.image.rakuten.co.jp", "https://webservice.rakuten.co.jp", "https://image.rakuten.co.jp", "https://rimg.jp"
     policy.object_src  :none
     policy.script_src  :self, :https,  "https://assets.bokrium.com"

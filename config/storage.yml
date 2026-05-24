@@ -1,3 +1,18 @@
+<%
+  required_r2_env = lambda do |name, fallback|
+    value = ENV[name].to_s
+    next value unless value.empty?
+
+    raise "#{name} is required for Cloudflare R2 storage" if Rails.env.production?
+
+    fallback
+  end
+
+  r2_access_key_id = required_r2_env.call("R2_ACCESS_KEY_ID", "development-r2-access-key")
+  r2_secret_access_key = required_r2_env.call("R2_SECRET_ACCESS_KEY", "development-r2-secret-key")
+  r2_endpoint = required_r2_env.call("R2_ENDPOINT", "https://example.invalid")
+%>
+
 test:
   service: Disk
   root: <%= Rails.root.join("tmp/storage") %>
@@ -6,27 +21,20 @@ local:
   service: Disk
   root: <%= Rails.root.join("storage") %>
 
-amazon:
-  service: S3
-  access_key_id: <%= ENV['AWS_ACCESS_KEY_ID'] %>
-  secret_access_key: <%= ENV['AWS_SECRET_ACCESS_KEY'] %>
-  region: <%= ENV["AWS_DEFAULT_REGION"] %>
-  bucket: <%= ENV["S3_BUCKET_NAME"] %>
-
 cloudflare_r2:
   service: S3
-  access_key_id: <%= ENV["R2_ACCESS_KEY_ID"] %>
-  secret_access_key: <%= ENV["R2_SECRET_ACCESS_KEY"] %>
+  access_key_id: <%= r2_access_key_id %>
+  secret_access_key: <%= r2_secret_access_key %>
   region: auto
   bucket: bokrium-bucket-<%= Rails.env %>
-  endpoint: <%= ENV["R2_ENDPOINT"] %>
+  endpoint: <%= r2_endpoint %>
   force_path_style: true
 
 cloudflare_private_r2:
   service: S3
-  access_key_id: <%= ENV["R2_ACCESS_KEY_ID"] %>
-  secret_access_key: <%= ENV["R2_SECRET_ACCESS_KEY"] %>
+  access_key_id: <%= r2_access_key_id %>
+  secret_access_key: <%= r2_secret_access_key %>
   region: auto
   bucket: bokrium-private-<%= Rails.env %>
-  endpoint: <%= ENV["R2_ENDPOINT"] %>
+  endpoint: <%= r2_endpoint %>
   force_path_style: true
