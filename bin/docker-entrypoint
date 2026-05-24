@@ -1,9 +1,16 @@
 #!/bin/bash -e
 
-# Enable swap
+# Setup swap
+if [ ! -f /swapfile ]; then
+    echo "Creating 512MB swapfile..."
+    fallocate -l 512M /swapfile || dd if=/dev/zero of=/swapfile bs=1M count=512
+    chmod 0600 /swapfile
+    mkswap /swapfile
+fi
+
 if [ -f /swapfile ]; then
     echo "Enabling swapfile..."
-    swapon /swapfile || echo "Failed to enable swapfile (maybe already on?)"
+    swapon /swapfile || echo "Failed to enable swapfile (maybe already on or insufficient permissions?)"
 fi
 
 # Enable jemalloc for reduced memory usage and latency.
