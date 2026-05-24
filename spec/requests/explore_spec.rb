@@ -29,31 +29,6 @@ RSpec.describe "Explore", type: :request do
     end
   end
 
-  describe "GET /explore with public scope" do
-    let(:other_user) { create(:user) }
-
-    before do
-      @public_book = create(:book, title: "青空文庫", author: "夏目漱石", user: other_user)
-      @public_memo = create(:memo, content: "吾輩は猫である", book: @public_book, user: other_user, visibility: Memo::VISIBILITY[:public_site])
-    end
-
-    # it "公開メモの内容で検索できる" do
-    #   get explore_path(q: "吾輩", scope: "public")
-    #   expect(response).to have_http_status(:ok)
-    #   expect(response.body).to include("青空")
-    # end
-
-    it "公開メモの本のタイトルで検索できる" do
-      get explore_path(q: "青空文庫", scope: "public")
-      expect(response.body).to include("吾輩は猫である") # メモが含まれるか確認
-    end
-
-    it "クエリが空でも公開メモ一覧が返る" do
-      get explore_path(scope: "public")
-      expect(response.body).to include("吾輩は猫である")
-    end
-  end
-
   describe "Turbo frame request" do
     let(:user) { create(:user, email: "test@example.com", password: "password123") }
 

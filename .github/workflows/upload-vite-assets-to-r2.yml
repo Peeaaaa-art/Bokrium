@@ -38,11 +38,20 @@ jobs:
 
       - name: Upload to Cloudflare R2
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          RCLONE_CONFIG_R2_TYPE: s3
+          RCLONE_CONFIG_R2_PROVIDER: Cloudflare
+          RCLONE_CONFIG_R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          RCLONE_CONFIG_R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          RCLONE_CONFIG_R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
         run: |
-          aws s3 sync public/vite s3://${{ secrets.R2_BUCKET }}/vite \
-            --endpoint-url=${{ secrets.R2_ENDPOINT }} \
-            --cache-control "public, max-age=31536000, immutable" \
-            --delete \
-            --acl public-read
+          docker run --rm \
+            -v "${GITHUB_WORKSPACE}:/workspace:ro" \
+            -e RCLONE_CONFIG_R2_TYPE \
+            -e RCLONE_CONFIG_R2_PROVIDER \
+            -e RCLONE_CONFIG_R2_ACCESS_KEY_ID \
+            -e RCLONE_CONFIG_R2_SECRET_ACCESS_KEY \
+            -e RCLONE_CONFIG_R2_ENDPOINT \
+            rclone/rclone:1.70.3 \
+            sync /workspace/public/vite "r2:${{ secrets.R2_BUCKET }}/vite" \
+            --s3-acl public-read \
+            --header-upload "Cache-Control: public, max-age=31536000, immutable"

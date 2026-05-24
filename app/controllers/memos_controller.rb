@@ -62,7 +62,9 @@ class MemosController < ApplicationController
 
   def memo_params
     params.expect(memo: [ :content, :visibility ]).tap do |prm|
-    prm[:visibility] = Memo::VISIBILITY[prm[:visibility].to_sym] if prm[:visibility]
+      if prm[:visibility]
+        prm[:visibility] = Memo::VISIBILITY.fetch(prm[:visibility].to_sym, Memo::VISIBILITY[:only_me])
+      end
     end
   end
 end

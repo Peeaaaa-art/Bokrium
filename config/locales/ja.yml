@@ -20,7 +20,6 @@ ja:
     visibility:
       only_me: 非公開
       link_only: リンク限定
-      public_site: 公開
   placeholders:
     isbn: "9781234567890"
     author: "村上春樹"

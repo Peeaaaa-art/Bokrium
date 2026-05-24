@@ -24,7 +24,6 @@
         <!-- 更新情報 -->
         <div class="card-footer d-flex justify-content-between small text-muted">
           <span><%= bi_icon("clock-history", css: "is-5 me-1") %><%= @memo.updated_at.strftime("%F") %></span>
-          <span><%= render "like_memos/button", memo: @memo %></span>
           <span>
             <% if @user.avatar_s3.attached? %>
               <%= image_tag user_avatar(@user, size: :small), alt: @user.name, class: "avatar-circle-mini me-1" %>
@@ -36,9 +35,6 @@
         </div>
       </div>
     </div>
-  </div>
-    <div class="text-center mt-4">
-    <%= link_to "みんなの本棚にもどる", public_bookshelf_index_path, class: "btn btn-secondary" %>
   </div>
 </div>
 

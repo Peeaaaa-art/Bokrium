@@ -17,7 +17,7 @@
     - 書籍にメモや画像を紐づけて保存する。
     - タグ付けやステータス（読みたい/読書中/読了）で本棚を整理する。
     - 過去のメモをランダムにLINEで受け取り、知識を再確認する。
-    - メモを公開し、他者と共有する。
+    - メモをリンク限定で共有する。
 
 - **コード根拠**: `README.md`
 
@@ -90,7 +90,7 @@
 ### 3.2 テーブル定義
 - **`users`**: ユーザー情報。Deviseによる認証カラム、LINE連携用の`auth_provider`を持つ。
 - **`books`**: 書籍情報。`user`に所属。タイトル、著者、ISBN、ステータス等。
-- **`memos`**: メモ情報。`user`と`book`に所属。公開設定(`visibility`)を持つ。
+- **`memos`**: メモ情報。`user`と`book`に所属。共有設定(`visibility`)を持つ。
 - **`user_tags`**: ユーザーが作成したタグ。`user`に所属。
 - **`book_tag_assignments`**: `books`と`user_tags`の中間テーブル。
 - **`images`**: 書籍に紐づく画像。`book`に所属。
@@ -98,7 +98,6 @@
 - **`line_users`**: LINE連携情報。`user`に所属。
 - **`donations`**: 単発支援の記録。`user`に所属(匿名も可)。
 - **`monthly_supports`**: 月額サポートの記録。`user`に所属。
-- **`like_memos`**: メモへの「いいね」記録。`user`と`memo`に所属。
 - **Active Storage関連**: `active_storage_blobs`, `active_storage_attachments`, `active_storage_variant_records`。
 
 - **コード根拠**: `db/schema.rb`, `app/models/*.rb`
@@ -172,7 +171,7 @@
     - **フィルタリング/ソート**:
         - タグフィルター: 複数タグによる絞り込み (`Books::TagsController#filter`)
         - ステータスフィルター: 読みたい/読書中/読了 (`BooksQuery`)
-        - メモ公開設定フィルター: only_me/link_only/public_site (`BooksQuery`)
+        - メモ共有設定フィルター: only_me/link_only (`BooksQuery`)
         - ソート: 新しい順/古い順/タイトル順/著者順/メモ更新順 (`BooksQuery`)
         - フィルター状態の永続化: セッションに保存され、次回アクセス時も維持される (`BooksIndexPresenter#sync_filter_params`)
         - フィルタークリア機能 (`BooksController#clear_filters`)
@@ -196,8 +195,7 @@
 - **権限**: ログインユーザーは自身のメモのみ操作可能。
 - **機能**:
     - **CRUD**: `MemosController`による作成、編集、削除。
-    - **公開設定**: `only_me`(自分のみ), `link_only`(リンクを知る人), `public_site`(公開)の3段階。(`Memo`モデルの`VISIBILITY` enum)
-    - **いいね機能**: `LikeMemosController`でいいねの作成・削除。
+    - **共有設定**: `only_me`(自分のみ), `link_only`(リンクを知る人)の2段階。(`Memo`モデルの`VISIBILITY` enum)
 
 - **コード根拠**: `app/controllers/memos_controller.rb`, `app/models/memo.rb`
 
@@ -255,35 +253,32 @@
 
 - **コード根拠**: `app/services/email_notification_sender.rb`, `app/mailers/memo_mailer.rb`, `app/controllers/webhooks/email_notifications_controller.rb`, `app/controllers/users_controller.rb`
 
-### 5.7 公開機能
+### 5.7 リンク共有機能
 
-#### 5.7.1 公開本棚（Public Bookshelf）
+#### 5.7.1 共有メモ
 - **機能**:
-    - 公開メモ一覧: 全ユーザーの公開設定されたメモを一覧表示（自分のメモは除外） (`PublicBookshelfController#index`)
-    - トークンベース表示: 公開メモごとに一意のトークンを生成し、URLで個別アクセス可能 (`PublicBookshelfController#show`)
-    - いいね機能: 他ユーザーの公開メモに「いいね」を付与/解除 (`LikeMemosController`)
+    - トークンベース表示: リンク限定メモごとに一意のトークンを生成し、URLで個別アクセス可能 (`PublicBookshelfController#show`)
 
-- **権限**: 一覧と詳細は未ログインでも閲覧可能。いいねはログイン必須。
+- **権限**: 共有リンクを知っているユーザーは未ログインでも閲覧可能。
 
-- **コード根拠**: `app/controllers/public_bookshelf_controller.rb`, `app/controllers/like_memos_controller.rb`, `app/models/memo.rb` (`ensure_public_token_if_shared`, `public_url`)
+- **コード根拠**: `app/controllers/public_bookshelf_controller.rb`, `app/models/memo.rb` (`ensure_public_token_if_shared`, `public_url`)
 
-#### 5.7.2 公開メモ
-- **公開レベル**: 
+#### 5.7.2 共有レベル
+- **共有レベル**: 
     - `only_me` (0): 自分のみ
     - `link_only` (1): リンクを知る人のみ
-    - `public_site` (2): サイトに公開（一覧に表示）
 
-- **トークン生成**: `link_only`または`public_site`に設定すると、自動的に20文字のランダムトークンを生成
+- **トークン生成**: `link_only`に設定すると、自動的に20文字のランダムトークンを生成
 
 - **コード根拠**: `app/models/memo.rb` (`VISIBILITY`, `ensure_public_token_if_shared`)
 
 #### 5.7.3 探索（Explore）機能
 - **機能**:
-    - 横断検索: 自分の本棚、公開メモ、ゲスト本棚を横断して検索
-    - スコープ切り替え: `mine`（自分）、`public`（公開）、`guest`（ゲスト）
+    - 横断検索: 自分の本棚、ゲスト本棚を検索
+    - スコープ切り替え: `mine`（自分）、`guest`（ゲスト）
     - 全文検索: タイトル、著者、メモ内容を対象に検索
 
-- **権限**: 未ログインでも公開メモとゲスト本棚は検索可能。自分の本棚検索はログイン必須。
+- **権限**: 未ログインではゲスト本棚を検索可能。自分の本棚検索はログイン必須。
 
 - **コード根拠**: `app/controllers/explore_controller.rb`
 
@@ -527,7 +522,7 @@
 
 #### Memoモデル
 - コンテンツ: 最大10,000文字
-- 公開設定: only_me(0), link_only(1), public_site(2)のいずれか
+- 共有設定: only_me(0), link_only(1)のいずれか
 
 #### UserTagモデル
 - タグ名: 必須、ユーザーごとに一意、最大30文字
@@ -539,9 +534,6 @@
 - external_id: 必須、ユニーク
 - public_key: 必須
 - sign_count: 0以上の整数
-
-#### LikeMemoモデル
-- user_id + memo_id: ユニーク（同じメモに複数回いいねできない）
 
 #### BookTagAssignmentモデル
 - book_id + user_tag_id: ユニーク（同じ書籍に同じタグを複数回付けられない）

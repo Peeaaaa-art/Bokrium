@@ -44,7 +44,7 @@ RSpec.describe "Memos", type: :request do
 
     it "メモを更新できる" do
       patch book_memo_path(book, memo), params: {
-        memo: { content: "更新されたメモ", visibility: "public_site" }
+        memo: { content: "更新されたメモ", visibility: "link_only" }
       }
       expect(response).to redirect_to(book_path(book))
       expect(memo.reload.content).to eq("更新されたメモ")

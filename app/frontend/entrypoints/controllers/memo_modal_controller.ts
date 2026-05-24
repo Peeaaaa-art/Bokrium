@@ -1,6 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 import { mountRichEditor } from "../rich_editor"
 import { prepareMemoHtmlForSave } from "../utils/memo_links"
+import { normalizeProseMirrorHtmlForSave } from "../utils/prosemirror_html"
 
 
 
@@ -171,11 +172,8 @@ export default class MemoModalController extends Controller<HTMLElement> {
 
   handleSubmit() {
     const editorRoot = document.getElementById("rich-editor-root")
-    const trailingBreaks = editorRoot?.querySelectorAll(".ProseMirror-trailingBreak")
-    trailingBreaks?.forEach((br) => br.remove())
-
     const rawContent = editorRoot?.querySelector(".ProseMirror")?.innerHTML || ""
-    const updatedContent = prepareMemoHtmlForSave(rawContent)
+    const updatedContent = prepareMemoHtmlForSave(normalizeProseMirrorHtmlForSave(rawContent))
     const hiddenField = document.getElementById("memo_content_input") as HTMLInputElement | null
     if (hiddenField) hiddenField.value = updatedContent
 

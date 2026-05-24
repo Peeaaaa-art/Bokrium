@@ -4,13 +4,10 @@ class Memo < ApplicationRecord
 
   belongs_to :user
   belongs_to :book
-  has_many :like_memos, dependent: :destroy
-  has_many :liked_users, through: :like_memos, source: :user
 
   VISIBILITY = {
     only_me: 0,
-    link_only: 1,
-    public_site: 2
+    link_only: 1
   }.freeze
 
   before_save :ensure_public_token_if_shared
@@ -18,8 +15,7 @@ class Memo < ApplicationRecord
   validates :content, length: { maximum: 10_000, message: ": メモは10,000文字以内で入力してください" }
 
 
-  scope :published_to_others, -> { where(visibility: %i[link_only public_site]) }
-  scope :publicly_listed, -> { where(visibility: VISIBILITY[:public_site]) }
+  scope :published_to_others, -> { where(visibility: VISIBILITY[:link_only]) }
   scope :exclude_user, ->(user) { user.present? ? where.not(user_id: user.id) : all }
   scope :with_book_and_user_avatar, -> { includes(:book, user: { avatar_s3_attachment: :blob }) }
 
@@ -51,11 +47,7 @@ class Memo < ApplicationRecord
   end
 
   def shared?
-    visibility?(:link_only) || visibility?(:public_site)
-  end
-
-  def publicly_listed?
-    visibility?(:public_site)
+    visibility?(:link_only)
   end
 
   def public_url
@@ -65,19 +57,5 @@ class Memo < ApplicationRecord
 
   def default_host
     Rails.application.routes.default_url_options[:host] || "localhost:3000"
-  end
-
-  def self.publicly_listed_with_book_and_user(exclude_user: nil)
-    publicly_listed
-      .exclude_user(exclude_user)
-      .with_book_and_user_avatar
-      .includes(book: [ :book_cover_s3_attachment ])
-      .order(created_at: :desc)
-  end
-
-  def self.random_public_memo
-    publicly_listed
-      .with_book_and_user_avatar
-      .random_1
   end
 end

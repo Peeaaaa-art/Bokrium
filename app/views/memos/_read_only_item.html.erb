@@ -30,14 +30,14 @@
         <%= bi_icon("three-dots", css: "is-7 bi-icon-hover") %>
       </button>
       <ul class="dropdown-menu dropdown-menu-end">
-        <!-- 公開/非公開トグル -->
+        <!-- 共有設定トグル -->
         <li>
           <%= form_with model: [book, memo], method: :patch do |f| %>
             <%= f.hidden_field :content, value: memo.content %>
             <div class="dropdown-item">
               <%= f.label :visibility, "公開範囲", class: "form-label small text-muted mb-1" %>
               <%= f.select :visibility,
-                    [["非公開", "only_me"], ["リンク限定", "link_only"], ["公開", "public_site"]],
+                    [["非公開", "only_me"], ["リンク限定", "link_only"]],
                     { selected: memo.visibility },
                     class: "form-select form-select-sm",
                     onchange: "this.form.requestSubmit();" %>
@@ -45,7 +45,7 @@
           <% end %>
         </li>
 
-        <!-- 公開リンクのコピー（link_only or public_site の場合） -->
+        <!-- 共有リンクのコピー（link_only の場合） -->
         <% if memo.shared? && memo.public_token.present? %>
           <li>
             <button
@@ -98,20 +98,9 @@
   </div>
 </div>
 
-  <!-- ステータスアイコン -->
-  <% if current_user == memo.user && memo.like_memos.present? %>
-    <span class="small d-inline-flex align-items-center ms-2">
-      <%= bi_icon("heart-fill", css: "is-6 text-danger me-1") %>
-      <span class="text-muted opacity-75"><%= memo.like_memos.count %></span>
-    </span>
-  <% end %>
-
   <% if memo.persisted? %>
     <div class="position-absolute bottom-0 end-0 m-2" style="z-index: 2;">
-      <% if memo.visibility?(:public_site) %>
-        <%= bi_icon("globe", css: "is-6 text-primary") %>
-
-      <% elsif memo.visibility?(:link_only) %>
+      <% if memo.visibility?(:link_only) %>
         <%= bi_icon("link-45deg", css: "is-5 text-secondary") %>
 
       <% else %>

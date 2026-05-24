@@ -2,7 +2,7 @@ class ExploreController < ApplicationController
   def index
     @has_books = Book.exists?(user_id: current_user&.id)
     @query = params[:q].to_s.strip
-    @scope = params[:scope].presence_in(%w[mine public guest]) || "public"
+    @scope = params[:scope].presence_in(%w[mine guest]) || (user_signed_in? ? "mine" : "guest")
 
     case @scope
     when "mine"
@@ -63,9 +63,6 @@ class ExploreController < ApplicationController
       books_per_page = (presenter.display.unit_per_page * 3).to_i
       @pagy, @books = pagy(books, items: books_per_page)
 
-    else # public
-      @results = search_public_memos(@query)
-      @pagy, @memos = pagy(@results, items: 20)
     end
 
     if turbo_frame_request?
@@ -93,21 +90,6 @@ class ExploreController < ApplicationController
           spine_per_shelf: @spine_per_shelf
         }
       )
-    when "public"
-      render turbo_stream: turbo_stream.update(
-        "public_books_frame",
-        partial: "public_bookshelf/public_frame_wrapper",
-        locals: { memos: @memos, pagy: @pagy }
-      )
     end
-  end
-
-  def search_public_memos(query)
-    scope = Memo.where(visibility: Memo::VISIBILITY[:public_site]).includes(:book, :user)
-    return scope unless query.present?
-
-    book_ids = Book.search_by_title_and_author(query).pluck(:id)
-    memo_ids = scope.search_by_content(query).pluck(:id)
-    scope.where(id: memo_ids).or(scope.where(book_id: book_ids))
   end
 end

@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [[ "${SKIP_TEST_PREPARE:-}" != "1" ]]; then
+  bin/vite build --clear --mode=test
+  bin/rails db:prepare
+fi
+
+if [[ "$#" -eq 0 ]]; then
+  exec bundle exec rspec
+fi
+
+exec "$@"

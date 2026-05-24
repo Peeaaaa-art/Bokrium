@@ -1,10 +1,10 @@
 <turbo-frame id="public_section_frame">
     <h2 class="fade-in delay-1 text-center border-bottom fw-normal pb-2 mt-5 mb-4" data-controller="animation">
-      <span class="fs-2">🗝️</span> <%= link_to public_bookshelf_index_path, data: { turbo_frame: "_top" } do %><%= bi_icon("book-half", css: "is-3") %><% end %>
-      <strong>閉じつつひらく。</strong>
+      <span class="fs-2">🗝️</span> <%= bi_icon("link-45deg", css: "is-3") %>
+      <strong>必要なときだけ共有。</strong>
     </h2>
   <p class="slide-in delay-2 text-muted px-2 px-md-5 mt-5" data-controller="animation">
-    Bokriumでは、作成した読書メモの公開範囲を設定できます。デフォルトでは
+    Bokriumでは、作成した読書メモをリンク限定で共有できます。デフォルトでは
     <span class="p-1 text-light bg-dark rounded">非公開</span> になっており、
     あなた以外は見ることができません。
   </p>

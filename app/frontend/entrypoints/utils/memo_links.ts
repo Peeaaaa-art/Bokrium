@@ -1,4 +1,5 @@
 import Link from "@tiptap/extension-link"
+import { Extension, InputRule } from "@tiptap/core"
 import DOMPurify from "dompurify"
 
 export const SAFE_MEMO_LINK_REL = "noopener noreferrer nofollow ugc"
@@ -176,3 +177,28 @@ export const createMemoLinkExtension = (openOnClick: boolean) => {
     shouldAutoLink: (url) => normalizeSafeMemoUrl(url) !== null,
   })
 }
+
+export const MarkdownLinkInputExtension = Extension.create({
+  name: "markdownLinkInput",
+
+  addInputRules() {
+    return [
+      new InputRule({
+        find: /\[([^\]\n]{1,200})\]\((https?:\/\/[^\s<>"']{1,2048}?)\)$/,
+        handler: ({ state, range, match }) => {
+          const label = match[1]?.trim()
+          const safeUrl = normalizeSafeMemoUrl(match[2])
+          const linkMark = state.schema.marks.link
+
+          if (!label || !safeUrl || !linkMark) return null
+
+          state.tr.replaceWith(
+            range.from,
+            range.to,
+            state.schema.text(label, [linkMark.create({ href: safeUrl })])
+          )
+        },
+      }),
+    ]
+  },
+})

@@ -150,7 +150,7 @@
   |-------------------------|
   | <p align="center">[<img src="https://i.gyazo.com/d1fe020ed89a02f13b27dea417abe1ab.gif" alt="本ごとのまとめ表示" width="100%">](https://gyazo.com/d1fe020ed89a02f13b27dea417abe1ab)</p> |
   | **読書メモ**には、**Markdown対応のTipTapエディタ**を採用。見たまま編集できる直感的なUI。さらに、タグ付けや書籍情報の編集、「読書中・読みたい・読了」といったステータスの設定にも対応。
-  **通常表示**では、左上に拡大・縮小ボタン、右上に「非公開・リンク限定・公開」から選べる公開設定メニューが表示されます。
+  **通常表示**では、左上に拡大・縮小ボタン、右上に「非公開・リンク限定」から選べる共有設定メニューが表示されます。
   **モーダル表示**では、メモの文字数や作成日・更新日も確認できます。保存ボタンの自動制御や改行仕様にも細かく対応し、ストレスのない編集体験を提供しています。 |
   
    
@@ -176,7 +176,7 @@
   | カテゴリ       | 技術構成                                                                                                      |
   |----------------|---------------------------------------------------------------------------------------------------------------|
   | フロントエンド | Hotwire（Stimulus・Turbo） / React（TipTap専用） / Vite / TypeScript                                                |
-  | バックエンド   | Ruby 4.0.1 / Ruby on Rails 8.1.2                                                                              |
+  | バックエンド   | Ruby 4.0.1 / Ruby on Rails 8.1.3                                                                              |
   | データベース   | PostgreSQL（Supabase） / pg_search                                                                               |
   | インフラ       | Fly.io / Cloudflare（DNS管理・CDN、Viteビルドアセットの配信にCloudflare R2を使用）         |
   | 環境構築       | Docker                                                              |
@@ -252,7 +252,7 @@
   >#### Bokriumは、読書メモと本棚管理を中心とした構成です。
   
   `books`, `users`, `memos` を軸に、メモはユーザーと書籍に属する中間モデルとして設計。<br>
-  公開範囲は `visibility`（enum）で制御し、いいね機能は `like_memos` に分離。<br>
+  共有範囲は `visibility`（enum）で制御し、リンク限定共有に対応。<br>
   タグは `user_tags` によってユーザーごとに管理し、`book_tag_assignments` により書籍と多対多の関係を構築。<br>
   画像は `images` テーブルで管理しており、1冊の本に対して複数枚のアップロードが可能です。各画像は Active Storage を通じて Cloudflare R2 に保存され、署名付きURLによる直接アップロードとCDN配信に対応。<br>
   通知機能は、`line_users` でLINE連携、`users.email_notification_enabled` でメール配信を制御。<br>

@@ -6,8 +6,6 @@ class User < ApplicationRecord
   has_many :books, dependent: :destroy
   has_many :memos, dependent: :destroy
   has_many :user_tags, dependent: :destroy
-  has_many :like_memos, dependent: :destroy
-  has_many :liked_memos, through: :like_memos, source: :memo
   has_many :credentials, dependent: :destroy
 
   # パスキー登録フラグ（フォーム用の仮想属性）
