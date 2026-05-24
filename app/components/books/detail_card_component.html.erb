@@ -28,7 +28,7 @@
 </div>
 
 <% if @pagy && @pagy.next %>
-  <turbo-frame id="next_books" src="<%= helpers.books_index_path(view: "detail_card", page: @pagy.next) %>" loading="lazy">
+  <turbo-frame id="next_books" src="<%= @next_page_path || helpers.books_index_path(view: "detail_card", page: @pagy.next) %>" loading="lazy">
     <%= render "shared/loading_spinner" %>
   </turbo-frame>
 <% end %>

@@ -1,4 +1,6 @@
 <turbo-frame id="books_frame">
+  <% next_page_path = local_assigns[:next_page_path] %>
+
   <% case view_mode %>
   <% when "shelf" %>
     <%= render Books::KinoSelectNumbersComponent.new(
@@ -6,7 +8,7 @@
           selected: books_per_shelf,
           mobile: mobile?
         ) %>
-    <%= render Books::KinoGridComponent.new(books: books, books_per_shelf: books_per_shelf, pagy: pagy) %>
+    <%= render Books::KinoGridComponent.new(books: books, books_per_shelf: books_per_shelf, pagy: pagy, next_page_path: next_page_path) %>
 
   <% when "spine" %>
     <%= render Books::KinoSelectNumbersComponent.new(
@@ -14,7 +16,7 @@
           selected: spine_per_shelf,
           mobile: mobile?
         ) %>
-    <%= render Books::SpineGridComponent.new(books: books, spine_per_shelf: spine_per_shelf, pagy: pagy) %>
+    <%= render Books::SpineGridComponent.new(books: books, spine_per_shelf: spine_per_shelf, pagy: pagy, next_page_path: next_page_path) %>
 
   <% when "card" %>
     <%= render Books::ColumnSelectorComponent.new(
@@ -23,7 +25,7 @@
           controller_name: "column-selector",
           mobile: mobile?
         ) %>
-    <%= render Books::CardGridComponent.new(books: books, card_columns: card_columns, pagy: pagy) %>
+    <%= render Books::CardGridComponent.new(books: books, card_columns: card_columns, pagy: pagy, next_page_path: next_page_path) %>
 
   <% when "detail_card" %>
     <%= render Books::ColumnSelectorComponent.new(
@@ -32,10 +34,9 @@
           controller_name: "detail-card-column-selector",
           mobile: mobile?
         ) %>
-    <%= render Books::DetailCardComponent.new(books: books, pagy: pagy, detail_card_columns: detail_card_columns) %>
+    <%= render Books::DetailCardComponent.new(books: books, pagy: pagy, detail_card_columns: detail_card_columns, next_page_path: next_page_path) %>
 
   <% when "b_note" %>
-    <%= render Books::BNoteComponent.new(books: books, pagy: pagy) %>
+    <%= render Books::BNoteComponent.new(books: books, pagy: pagy, next_page_path: next_page_path) %>
   <% end %>
 </turbo-frame>
-

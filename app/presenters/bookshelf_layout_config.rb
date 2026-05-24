@@ -6,6 +6,7 @@ class BookshelfLayoutConfig
   CARD_COLUMNS_KEY        = :card_columns
   DETAIL_CARD_COLUMNS_KEY = :detail_card_columns
   SPINE_PER_KEY           = :spine_per
+  VALID_VIEW_MODES        = %w[shelf spine card detail_card b_note].freeze
 
   attr_reader :view_mode, :unit_per_page, :books_per_shelf,
               :card_columns, :detail_card_columns, :spine_per_shelf
@@ -23,6 +24,10 @@ class BookshelfLayoutConfig
   private
 
   def configure_view_mode
+    if @params[:view].present? && VALID_VIEW_MODES.include?(@params[:view])
+      @session[VIEW_MODE_KEY] = @params[:view]
+    end
+
     @view_mode = @session[VIEW_MODE_KEY].presence || "shelf"
   end
 

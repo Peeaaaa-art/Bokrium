@@ -3,6 +3,7 @@
   <%= render Books::KinoGridComponent.new(
       books: books,
       books_per_shelf: books_per_shelf,
-      pagy: pagy
+      pagy: pagy,
+      next_page_path: local_assigns[:next_page_path]
     ) %>
 </turbo-frame>

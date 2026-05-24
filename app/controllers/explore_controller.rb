@@ -23,17 +23,13 @@ class ExploreController < ApplicationController
       @spine_per_shelf     = presenter.spine_per_shelf
       @read_only           = presenter.read_only
 
-      books = current_user.books.includes(book_cover_s3_attachment: :blob)
+      books = user_books_for(current_user)
       books = BooksQuery.new(books, params: params, current_user: current_user).call
+      books = filter_by_query(books, current_user)
 
-      if @query.present?
-        title_author_ids = books.search_by_title_and_author(@query).pluck(:id)
-        memo_book_ids = current_user.memos.search_by_content(@query).pluck(:book_id)
-        books = books.where(id: (title_author_ids + memo_book_ids).uniq)
-      end
-
-      books_per_page = (presenter.display.unit_per_page * 3).to_i
-      @pagy, @books = pagy(books, items: books_per_page)
+      books_per_page = (presenter.display.unit_per_page * BooksIndexPresenter::CHUNKS_PER_PAGE).to_i
+      @pagy, @books = pagy(books, limit: books_per_page)
+      @next_page_path = next_page_path
 
     when "guest"
       presenter = BooksIndexPresenter.new(
@@ -51,17 +47,13 @@ class ExploreController < ApplicationController
       @spine_per_shelf     = presenter.spine_per_shelf
       @read_only           = true
 
-      books = guest_user.books.includes(book_cover_s3_attachment: :blob)
+      books = user_books_for(guest_user)
       books = BooksQuery.new(books, params: params, current_user: guest_user).call
+      books = filter_by_query(books, guest_user)
 
-      if @query.present?
-        title_author_ids = books.search_by_title_and_author(@query).pluck(:id)
-        memo_book_ids = guest_user.memos.search_by_content(@query).pluck(:book_id)
-        books = books.where(id: (title_author_ids + memo_book_ids).uniq)
-      end
-
-      books_per_page = (presenter.display.unit_per_page * 3).to_i
-      @pagy, @books = pagy(books, items: books_per_page)
+      books_per_page = (presenter.display.unit_per_page * BooksIndexPresenter::CHUNKS_PER_PAGE).to_i
+      @pagy, @books = pagy(books, limit: books_per_page)
+      @next_page_path = next_page_path
 
     end
 
@@ -75,8 +67,12 @@ class ExploreController < ApplicationController
   private
 
   def turbo_render_partial!
-    case @scope
-    when "mine", "guest"
+    return unless %w[mine guest].include?(@scope)
+
+    case request.headers["Turbo-Frame"]
+    when "next_books"
+      render_chunk_for(@view_mode)
+    else
       render turbo_stream: turbo_stream.update(
         "books_frame",
         partial: "bookshelf/books_frame_wrapper",
@@ -87,9 +83,52 @@ class ExploreController < ApplicationController
           books_per_shelf: @books_per_shelf,
           card_columns: @card_columns,
           detail_card_columns: @detail_card_columns,
-          spine_per_shelf: @spine_per_shelf
+          spine_per_shelf: @spine_per_shelf,
+          next_page_path: @next_page_path
         }
       )
     end
+  end
+
+  def render_chunk_for(view_mode)
+    case view_mode
+    when "shelf"
+      render partial: "bookshelf/kino_chunk",
+            locals: { books: @books, books_per_shelf: @books_per_shelf, pagy: @pagy, next_page_path: @next_page_path }
+    when "spine"
+      render partial: "bookshelf/spine_chunk",
+            locals: { books: @books, spine_per_shelf: @spine_per_shelf, pagy: @pagy, next_page_path: @next_page_path }
+    when "card"
+      render partial: "bookshelf/card_chunk",
+            locals: { books: @books, pagy: @pagy, card_columns: @card_columns, next_page_path: @next_page_path }
+    when "detail_card"
+      render partial: "bookshelf/detail_card_chunk",
+            locals: { books: @books, pagy: @pagy, detail_card_columns: @detail_card_columns, next_page_path: @next_page_path }
+    when "b_note"
+      render partial: "bookshelf/b_chunk",
+            locals: { books: @books, pagy: @pagy, next_page_path: @next_page_path }
+    end
+  end
+
+  def next_page_path
+    return unless @pagy&.next
+
+    explore_path(request.query_parameters.merge(page: @pagy.next, view: @view_mode))
+  end
+
+  def user_books_for(user)
+    if @view_mode == "b_note"
+      user.books.select(:id, :title, :author, :publisher)
+    else
+      user.books.includes(book_cover_s3_attachment: :blob)
+    end
+  end
+
+  def filter_by_query(books, user)
+    return books if @query.blank?
+
+    title_author_ids = books.fuzzy_title_or_author(@query).pluck(:id)
+    memo_book_ids = user.memos.search_by_content(@query).pluck(:book_id)
+    books.where(id: (title_author_ids + memo_book_ids).uniq)
   end
 end

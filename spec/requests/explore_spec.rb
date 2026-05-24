@@ -48,5 +48,78 @@ RSpec.describe "Explore", type: :request do
       expect(response.media_type).to eq("text/vnd.turbo-stream.html")
       expect(response.body).to include("Turbo本")
     end
+
+    it "タイトルの途中一致で自分の本棚を検索できる" do
+      matching_book = create(:book, title: "実践Ruby設計", user: user)
+      create(:book, title: "Python設計", user: user)
+
+      get explore_path(q: "Ruby", scope: "mine"), headers: { "Turbo-Frame" => "books_frame" }
+
+      expect(response.media_type).to eq("text/vnd.turbo-stream.html")
+      expect(response.body).to include(matching_book.title)
+      expect(response.body).not_to include("Python設計")
+    end
+
+    it "著者の途中一致で自分の本棚を検索できる" do
+      matching_book = create(:book, title: "文豪の本", author: "夏目漱石", user: user)
+      create(:book, title: "別の本", author: "芥川龍之介", user: user)
+
+      get explore_path(q: "漱石", scope: "mine"), headers: { "Turbo-Frame" => "books_frame" }
+
+      expect(response.media_type).to eq("text/vnd.turbo-stream.html")
+      expect(response.body).to include(matching_book.title)
+      expect(response.body).not_to include("別の本")
+    end
+
+    it "空クエリで自分の本棚一覧を返す" do
+      other_book = create(:book, title: "別の本", user: user)
+
+      get explore_path(q: "", scope: "mine"), headers: { "Turbo-Frame" => "books_frame" }
+
+      expect(response.media_type).to eq("text/vnd.turbo-stream.html")
+      expect(response.body).to include(@book.title)
+      expect(response.body).to include(other_book.title)
+    end
+
+    it "サンプル本棚もTurbo Streamで検索できる" do
+      guest = ensure_guest_user
+      create(:book, title: "ゲストTurbo本", author: "ゲスト著者", user: guest)
+
+      get explore_path(q: "ゲストTurbo", scope: "guest"), headers: { "Turbo-Frame" => "books_frame" }
+
+      expect(response.media_type).to eq("text/vnd.turbo-stream.html")
+      expect(response.body).to include("ゲストTurbo本")
+    end
+
+    it "検索結果のnext_books URLに検索条件を保持する" do
+      create_list(:book, 70, title: "Turbo検索本", user: user)
+
+      get explore_path(q: "Turbo検索", scope: "mine", view: "shelf"), headers: { "Turbo-Frame" => "books_frame" }
+
+      expect(response.body).to include("src=\"/explore?")
+      expect(response.body).to include("q=Turbo")
+      expect(response.body).to include("scope=mine")
+      expect(response.body).to include("view=shelf")
+    end
+
+    it "棚ビュー検索結果の1ページ目を棚4段分で返す" do
+      create_list(:book, 70, title: "Ruby棚本", user: user)
+
+      get explore_path(q: "Ruby棚", scope: "mine", view: "shelf", per: 12), headers: { "Turbo-Frame" => "books_frame" }
+
+      expect(response.body.scan('class="book-on-shelf"').size).to eq(48)
+    end
+
+    it "next_booksリクエストで現在の表示モードのchunkを返す" do
+      create_list(:book, 70, title: "Turboページ本", user: user)
+
+      %w[shelf spine card detail_card b_note].each do |view_mode|
+        get explore_path(q: "Turboページ", scope: "mine", view: view_mode, page: 2), headers: { "Turbo-Frame" => "next_books" }
+
+        expect(response).to have_http_status(:ok)
+        expect(response.media_type).to eq("text/html")
+        expect(response.body).to include('turbo-frame id="next_books"')
+      end
+    end
   end
 end

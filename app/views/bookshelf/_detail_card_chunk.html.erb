@@ -3,5 +3,6 @@
     <%= render Books::DetailCardComponent.new(
       books: books,
       detail_card_columns: detail_card_columns,
-      pagy: pagy) %>
+      pagy: pagy,
+      next_page_path: local_assigns[:next_page_path]) %>
 </turbo-frame>
