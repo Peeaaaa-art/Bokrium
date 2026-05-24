@@ -20,6 +20,11 @@ RUN apt-get update -qq && \
     gnupg && \
     rm -rf /var/lib/apt/lists/* /var/cache/apt/archives
 
+# Create 512MB swap file
+RUN fallocate -l 512M /swapfile && \
+    chmod 0600 /swapfile && \
+    mkswap /swapfile
+
 ENV RAILS_ENV=production \
     BUNDLE_DEPLOYMENT=1 \
     BUNDLE_PATH=/usr/local/bundle \

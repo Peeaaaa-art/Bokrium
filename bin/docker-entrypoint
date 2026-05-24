@@ -1,5 +1,11 @@
 #!/bin/bash -e
 
+# Enable swap
+if [ -f /swapfile ]; then
+    echo "Enabling swapfile..."
+    swapon /swapfile || echo "Failed to enable swapfile (maybe already on?)"
+fi
+
 # Enable jemalloc for reduced memory usage and latency.
 if [ -z "${LD_PRELOAD+x}" ]; then
     LD_PRELOAD=$(find /usr/lib -name libjemalloc.so.2 -print -quit)
