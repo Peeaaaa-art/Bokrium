@@ -17,7 +17,7 @@ console_command = '/rails/bin/rails console'
 
 [[vm]]
   size = 'shared-cpu-1x'
-  memory = '768mb'
+  memory = '512mb'
   processes = ['app']
 
 [deploy]

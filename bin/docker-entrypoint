@@ -1,5 +1,18 @@
 #!/bin/bash -e
 
+# Setup swap
+if [ ! -f /swapfile ]; then
+    echo "Creating 512MB swapfile..."
+    fallocate -l 512M /swapfile || dd if=/dev/zero of=/swapfile bs=1M count=512
+    chmod 0600 /swapfile
+    mkswap /swapfile
+fi
+
+if [ -f /swapfile ]; then
+    echo "Enabling swapfile..."
+    swapon /swapfile || echo "Failed to enable swapfile (maybe already on or insufficient permissions?)"
+fi
+
 # Enable jemalloc for reduced memory usage and latency.
 if [ -z "${LD_PRELOAD+x}" ]; then
     LD_PRELOAD=$(find /usr/lib -name libjemalloc.so.2 -print -quit)
