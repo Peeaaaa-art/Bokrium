@@ -1,16 +1,11 @@
 #!/bin/bash -e
 
-# Setup swap
-if [ ! -f /swapfile ]; then
-    echo "Creating 512MB swapfile..."
-    fallocate -l 512M /swapfile || dd if=/dev/zero of=/swapfile bs=1M count=512
-    chmod 0600 /swapfile
-    mkswap /swapfile
-fi
-
+# Setup and Enable swap
 if [ -f /swapfile ]; then
-    echo "Enabling swapfile..."
-    swapon /swapfile || echo "Failed to enable swapfile (maybe already on or insufficient permissions?)"
+    # mkswap/swapon require root or specific capabilities. 
+    # In some environments (like release_command), this may fail due to permissions.
+    # We ignore errors so the app can still boot without swap if necessary.
+    grep -q /swapfile /proc/swaps || (mkswap /swapfile && swapon /swapfile) 2>/dev/null || echo "Notice: Could not enable swapfile (insufficient permissions), proceeding without swap."
 fi
 
 # Enable jemalloc for reduced memory usage and latency.
