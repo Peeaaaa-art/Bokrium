@@ -24,8 +24,7 @@
       { icon: "journal-richtext", title: "読書メモや画像を整理・保存", desc: "本ごとに感想や学びを記録し、いつでも振り返りが可能です。" },
       { icon: "upc-scan",         title: "ISBNバーコードスキャンで簡単登録", desc: "書籍情報をすばやく電子本棚に追加できます。" },
       { icon: "collection",       title: "重複購入を防ぎ、蔵書を一目で把握", desc: "同じ本を何度も買ってしまう心配がなくなります。" },
-      { icon: "shuffle",          title: "過去のメモをランダム表示", desc: "忘れかけていた知識や気づきを日常に活かせます。" },
-      { icon: "people",           title: "読書メモの共有機能", desc: "他のユーザーの視点や知識に触れ、新たな発見を得られます。" }
+      { icon: "shuffle",          title: "過去のメモをランダム表示", desc: "忘れかけていた知識や気づきを日常に活かせます。" }
     ] %>
 
     <% features.each_with_index do |feature, i| %>
@@ -57,8 +56,7 @@
     <div class="d-flex flex-wrap justify-content-center align-items-center gap-3 my-4" data-controller="animation">
       <% buttons = [
         { path: search_books_path,  icon: "search",       text: "本を探す",       class: "btn-outline-primary" },
-        { path: guest_books_path,   icon: "library-big",  text: "本棚を見る",     class: "btn-outline-success" },
-        { path: public_bookshelf_index_path, icon: "users", text: "みんなのメモ", class: "btn-outline-danger" }
+        { path: guest_books_path,   icon: "library-big",  text: "本棚を見る",     class: "btn-outline-success" }
       ] %>
 
       <% buttons.each_with_index do |btn, i| %>
@@ -70,4 +68,3 @@
       <% end %>
     </div>
   </div>
-

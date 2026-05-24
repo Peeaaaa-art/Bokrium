@@ -18,13 +18,6 @@
     <% else %>
       <p class="text-warning">ビューが不正です</p>
     <% end %>
-
-  <% elsif @scope == "public" && @memos.present? %>
-    <h2 class="mb-3">検索結果（<%= @memos.size %>件）</h2>
-    <div id="memo-grid" class="row row-cols-1 row-cols-md-3 g-4">
-      <%= render partial: "public_bookshelf/public_card", collection: @memos, as: :memo %>
-    </div>
-
   <% else %>
     <p class="text-muted mt-4">該当する書籍が見つかりませんでした。</p>
   <% end %>

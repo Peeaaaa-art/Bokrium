@@ -32,13 +32,13 @@ RSpec.describe Memo, type: :model do
 
   describe "#visibility?" do
     it "公開範囲が正しく判定される" do
-      memo = FactoryBot.build(:memo, visibility: Memo::VISIBILITY[:public_site])
-      expect(memo.visibility?(:public_site)).to be true
+      memo = FactoryBot.build(:memo, visibility: Memo::VISIBILITY[:link_only])
+      expect(memo.visibility?(:link_only)).to be true
     end
   end
 
   describe "#shared?" do
-    it "link_only や public_site の場合 true になる" do
+    it "link_only の場合 true になる" do
       memo = FactoryBot.build(:memo, visibility: Memo::VISIBILITY[:link_only])
       expect(memo.shared?).to be true
     end

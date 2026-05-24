@@ -1,6 +1,6 @@
 class Books::AutocompletesController < ApplicationController
   def index
-    return render json: [] unless user_signed_in? || params[:scope] == "public"
+    return render json: [] unless user_signed_in?
 
     results = BookAutocompleteService.new(
       term: params[:term],
