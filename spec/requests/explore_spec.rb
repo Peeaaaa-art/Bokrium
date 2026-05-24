@@ -102,6 +102,14 @@ RSpec.describe "Explore", type: :request do
       expect(response.body).to include("view=shelf")
     end
 
+    it "棚ビュー検索結果の1ページ目を棚4段分で返す" do
+      create_list(:book, 70, title: "Ruby棚本", user: user)
+
+      get explore_path(q: "Ruby棚", scope: "mine", view: "shelf", per: 12), headers: { "Turbo-Frame" => "books_frame" }
+
+      expect(response.body.scan('class="book-on-shelf"').size).to eq(48)
+    end
+
     it "next_booksリクエストで現在の表示モードのchunkを返す" do
       create_list(:book, 70, title: "Turboページ本", user: user)
 

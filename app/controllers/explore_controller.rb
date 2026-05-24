@@ -27,8 +27,8 @@ class ExploreController < ApplicationController
       books = BooksQuery.new(books, params: params, current_user: current_user).call
       books = filter_by_query(books, current_user)
 
-      books_per_page = (presenter.display.unit_per_page * 3).to_i
-      @pagy, @books = pagy(books, items: books_per_page)
+      books_per_page = (presenter.display.unit_per_page * BooksIndexPresenter::CHUNKS_PER_PAGE).to_i
+      @pagy, @books = pagy(books, limit: books_per_page)
       @next_page_path = next_page_path
 
     when "guest"
@@ -51,8 +51,8 @@ class ExploreController < ApplicationController
       books = BooksQuery.new(books, params: params, current_user: guest_user).call
       books = filter_by_query(books, guest_user)
 
-      books_per_page = (presenter.display.unit_per_page * 3).to_i
-      @pagy, @books = pagy(books, items: books_per_page)
+      books_per_page = (presenter.display.unit_per_page * BooksIndexPresenter::CHUNKS_PER_PAGE).to_i
+      @pagy, @books = pagy(books, limit: books_per_page)
       @next_page_path = next_page_path
 
     end
