@@ -114,10 +114,10 @@
         } do %>
           <%= bi_icon("pen", css: "is-6") %> もっと書く
         <% end %>
-        <%= button_tag "戻る", type: "button",
-        class: "btn btn-outline-secondary",
-        onclick: "history.back();",
-        title: (@readonly ? "サンプル本棚に戻ります" : "自分の本棚に戻ります") %>
+        <%= link_to "戻る",
+              books_index_path,
+              class: "btn btn-outline-secondary",
+              title: (@readonly ? "サンプル本棚に戻ります" : "自分の本棚に戻ります") %>
       </div>
     </div>
   </div>
