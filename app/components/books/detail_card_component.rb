@@ -2,11 +2,12 @@
 
 module Books
   class DetailCardComponent < ViewComponent::Base
-    def initialize(books:, pagy:, detail_card_columns: nil, mobile: false)
+    def initialize(books:, pagy:, detail_card_columns: nil, mobile: false, next_page_path: nil)
       @books = books
       @pagy = pagy
       @detail_card_columns = detail_card_columns
       @mobile = mobile
+      @next_page_path = next_page_path
     end
 
     def options

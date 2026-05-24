@@ -38,7 +38,7 @@
 
 <% if @pagy.next %>
   <turbo-frame id="next_books"
-               src="<%= helpers.books_index_path(view: 'b_note', page: @pagy.next) %>"
+               src="<%= @next_page_path || helpers.books_index_path(view: 'b_note', page: @pagy.next) %>"
                loading="lazy">
     <%= render "shared/loading_spinner" %>
   </turbo-frame>
