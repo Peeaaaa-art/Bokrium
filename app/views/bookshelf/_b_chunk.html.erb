@@ -1,5 +1,4 @@
 <!-- 無限スクロール用 -->
 <turbo-frame id="next_books">
-  <%= render Books::BNoteComponent.new(books: books, pagy: pagy) %>
+  <%= render Books::BNoteComponent.new(books: books, pagy: pagy, next_page_path: local_assigns[:next_page_path]) %>
 </turbo-frame>
-

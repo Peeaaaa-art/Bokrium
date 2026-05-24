@@ -3,5 +3,6 @@
     <%= render Books::CardGridComponent.new(
       books: books,
       card_columns: card_columns,
-      pagy: pagy) %>
+      pagy: pagy,
+      next_page_path: local_assigns[:next_page_path]) %>
 </turbo-frame>

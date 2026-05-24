@@ -16,10 +16,17 @@ export default class AutocompleteController extends Controller {
   declare readonly suggestionsTarget: HTMLElement
   declare readonly urlValue: string
 
-  private debounceTimer: number | null = null
+  private suggestionsTimer: number | null = null
+  private searchTimer: number | null = null
 
   connect(): void {
-    this.debounceTimer = null
+    this.suggestionsTimer = null
+    this.searchTimer = null
+  }
+
+  disconnect(): void {
+    if (this.suggestionsTimer) clearTimeout(this.suggestionsTimer)
+    if (this.searchTimer) clearTimeout(this.searchTimer)
   }
 
   fetchSuggestions(event: Event): void {
@@ -28,17 +35,22 @@ export default class AutocompleteController extends Controller {
 
     if (query.length < 1) {
       this.clearSuggestions()
+      this.scheduleBookshelfSearch()
       return
     }
 
-    if (this.debounceTimer) clearTimeout(this.debounceTimer)
+    this.scheduleBookshelfSearch()
 
-    this.debounceTimer = window.setTimeout(() => {
+    if (this.suggestionsTimer) clearTimeout(this.suggestionsTimer)
+
+    this.suggestionsTimer = window.setTimeout(() => {
       const url = `${this.urlValue}&term=${encodeURIComponent(query)}&_ts=${Date.now()}`
 
       fetch(url)
         .then((res) => res.json())
         .then((data: SuggestionItem[]) => {
+          if (this.inputTarget.value.trim() !== query) return
+
           this.showSuggestions(data)
         })
         .catch((error) => console.error("Autocomplete error:", error))
@@ -54,13 +66,18 @@ export default class AutocompleteController extends Controller {
 
       const a = document.createElement("a")
       a.className = "d-block px-3 py-2 text-decoration-none text-black-50"
-      a.innerHTML = item.label || item.value || "（無題）"
+      a.textContent = item.label || item.value || "（無題）"
       a.href = item.url || "#"
 
       li.addEventListener("mousedown", (e) => {
         e.preventDefault()
         this.inputTarget.value = item.value || ""
         this.clearSuggestions()
+        this.submitBookshelfSearch()
+      })
+
+      a.addEventListener("click", (e) => {
+        e.preventDefault()
       })
 
       li.appendChild(a)
@@ -70,5 +87,25 @@ export default class AutocompleteController extends Controller {
 
   clearSuggestions(): void {
     this.suggestionsTarget.innerHTML = ""
+  }
+
+  private scheduleBookshelfSearch(): void {
+    if (this.searchTimer) clearTimeout(this.searchTimer)
+
+    this.searchTimer = window.setTimeout(() => {
+      this.submitBookshelfSearch()
+    }, 200)
+  }
+
+  private submitBookshelfSearch(): void {
+    if (this.searchTimer) {
+      clearTimeout(this.searchTimer)
+      this.searchTimer = null
+    }
+
+    const form = this.element.closest("form")
+    if (form instanceof HTMLFormElement) {
+      form.requestSubmit()
+    }
   }
 }
