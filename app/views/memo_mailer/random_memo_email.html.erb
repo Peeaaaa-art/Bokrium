@@ -2,6 +2,11 @@
   <p style="font-size: 1.1em; font-weight: bold; margin-bottom: 0.5em;">
     『<%= @book.title.presence || "無題の本" %>』より
   </p>
+  <% if @book.author.present? %>
+    <p style="font-size: 0.9em; color: #777777; margin-top: -0.25em; margin-bottom: 1em; margin-left: 1em;">
+      <%= @book.author %>
+    </p>
+  <% end %>
 
   <div style="background-color: #fff; padding: 1em; border: 1px solid #ddd; border-radius: 6px; margin-bottom: 1.5em; line-height: 1.6; font-size: 1em;">
     <%= render_memo_email_content(@memo.content) %>
