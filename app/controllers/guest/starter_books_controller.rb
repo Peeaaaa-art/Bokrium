@@ -3,11 +3,23 @@ module Guest
     rescue_from ActiveRecord::RecordNotFound, with: :handle_guest_not_found
 
     def index
+      return if handle_root_callbacks
+
       set_starter_books
     end
 
+    def random_memo
+      redirect_to root_path and return unless user_signed_in?
+
+      set_random_memo
+    end
+
     def show
-      set_starter_books
+      unless set_starter_books
+        flash[:alert] = "ゲスト表示の準備ができていません。"
+        redirect_to root_path and return
+      end
+
       @book = @books.find(params[:id])
       @memos = @book.memos
       @new_memo = Memo.new(book_id: @book.id)
@@ -42,20 +54,53 @@ module Guest
 
     private
 
+    def handle_root_callbacks
+      if params[:session_id].present?
+        flash[:notice] = "Bokriumマンスリーサポートにご参加いただき、ありがとうございます。今後の運営の励みとなります。"
+        redirect_to donations_thank_you_path
+        true
+      elsif params[:canceled]
+        flash.now[:alert] = "ご登録はキャンセルされましたが、Bokriumにご関心をお寄せいただき、ありがとうございました。"
+        false
+      elsif params[:donation] == "success"
+        flash[:notice] = "ご支援いただき、誠にありがとうございます！"
+        session[:recent_donation] = true
+        redirect_to donations_thank_you_path
+        true
+      elsif params[:donation] == "cancelled"
+        flash.now[:alert] = "寄付はキャンセルされました。"
+        false
+      else
+        false
+      end
+    end
+
+    def set_random_memo
+      return unless user_signed_in?
+
+      memos = current_user.memos.includes(:book)
+      @random_memo = memos.random_1
+    end
+
     def set_starter_books
+      @starter_book = true
+
       unless guest_user
-        flash[:alert] = "ゲスト表示の準備ができていません。"
-        redirect_to root_path and return
+        @books = Book.none
+        return false
       end
 
       isbn_list = %w[9781001001001]
       @books = guest_user.books.where(isbn: isbn_list)
 
-      @starter_book = true
+      true
     end
 
     def lazy_render(name, with_books: false, extra: {})
-      set_starter_books if with_books
+      if with_books && !set_starter_books
+        render plain: "", status: :ok and return
+      end
+
       render partial: "guest/starter_books/#{name}", locals: extra.merge(with_books ? { books: @books } : {})
     end
 

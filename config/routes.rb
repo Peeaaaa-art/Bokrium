@@ -70,7 +70,6 @@ Rails.application.routes.draw do
     end
 
     collection do
-      get :autocomplete, to: "books/autocompletes#index"
       delete :clear_filters
     end
   end
@@ -85,15 +84,15 @@ Rails.application.routes.draw do
   resources :public_bookshelf, only: [ :show ], param: :token
 
   get "/explore", to: "explore#index", as: :explore
+  get "/random_memo", to: "guest/starter_books#random_memo", as: :random_memo
 
-  root "welcome#index"
+  root "guest/starter_books#index"
 
   namespace :guest do
     resources :books, only: [ :index, :show ] do
       collection do
         delete :clear_filters
         get :filter_tags, to: "books/tags#filter"
-        get :autocomplete, to: "books/autocompletes#index"
       end
     end
     resources :starter_books, only: [ :index, :show ] do

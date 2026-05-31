@@ -1,0 +1,16 @@
+<% content_for :title, "ランダムメモ - Bokrium" %>
+
+<div class="container py-3 px-3 px-md-5 px-md-0">
+  <% if @random_memo&.book %>
+    <%= render "memos/random_card", random_memo: @random_memo %>
+  <% else %>
+    <div class="container text-center py-5">
+      <h1 class="fw-bold mb-3">ランダムメモ表示</h1>
+      <p class="text-muted mb-4">表示できるメモがまだありません。</p>
+      <%= link_to search_books_path, class: "btn btn-outline-primary d-inline-flex align-items-center gap-2 px-4 py-2 rounded-pill shadow-sm" do %>
+        <%= bi_icon("search", css: "is-5") %>
+        <span>本を探す</span>
+      <% end %>
+    </div>
+  <% end %>
+</div>

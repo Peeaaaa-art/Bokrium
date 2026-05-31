@@ -52,6 +52,25 @@ module MemosHelper
     enforce_safe_memo_links(sanitized)
   end
 
+  def render_memo_email_content(content)
+    html = render_memo_content(content)
+    fragment = Nokogiri::HTML::DocumentFragment.parse(html.to_s)
+
+    fragment.css("blockquote").each do |blockquote|
+      blockquote["style"] = [
+        "margin: 0.75em 0 0.75em 0.35em",
+        "padding: 0 0 0 0.35em",
+        "border-left: 0",
+        "background-color: transparent",
+        "color: #777777",
+        "font-size: 1em",
+        "line-height: 1.6"
+      ].join("; ")
+    end
+
+    fragment.to_html.html_safe
+  end
+
   private
 
   def convert_markdown_links_to_html(html)

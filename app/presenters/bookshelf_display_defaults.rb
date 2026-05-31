@@ -20,7 +20,7 @@ module BookshelfDisplayDefaults
   def default_spine_per_shelf(browser)
     case
     when browser.device.mobile? then 7
-    when browser.device.tablet? then 14
+    when browser.device.tablet? then 13
     else 21
     end
   end

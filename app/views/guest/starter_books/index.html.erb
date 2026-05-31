@@ -1,13 +1,34 @@
-<% content_for :title, "使い方ガイド - Bokrium" %>
+<% content_for :title, "Bokrium - 読書の記憶を育てる本棚アプリ" %>
 
 <div class="container py-3 px-3 px-md-5 px-md-0">
-  <section class="mb-5 text-center">
+  <section class="mb-5 text-center" data-controller="animation">
     <h1 class="fw-bold my-2 big-shoulders-inline-bold">
       <span class="logo-welcome" title="ボクリウム">Bokrium</span><br>
     </h1>
     <p class="lead text-muted">
-      新しい本棚へようこそ。
+      新しい本棚へようこそ。<br class="d-md-none">
+      「読んだだけ」で終わらせない。<br class="d-md-none">
+      読書の記憶を育てる本棚アプリ
     </p>
+
+    <div class="d-flex flex-wrap justify-content-center align-items-center gap-3 mt-4">
+      <% unless user_signed_in? %>
+        <%= link_to new_user_registration_path, class: "btn btn-success d-inline-flex align-items-center gap-2 px-4 py-2 rounded-pill shadow-sm fade-in delay-1" do %>
+          <%= bi_icon("bookshelf", css: "is-5") %>
+          <span>本棚をつくる</span>
+        <% end %>
+      <% end %>
+
+      <%= link_to search_books_path, class: "btn btn-outline-primary d-inline-flex align-items-center gap-2 px-4 py-2 rounded-pill shadow-sm slide-in delay-2" do %>
+        <%= bi_icon("search", css: "is-5") %>
+        <span>本を探す</span>
+      <% end %>
+
+      <%= link_to books_index_path, class: "btn btn-outline-success d-inline-flex align-items-center gap-2 px-4 py-2 rounded-pill shadow-sm slide-in delay-3" do %>
+        <%= bi_icon("library-big", css: "is-5") %>
+        <span><%= user_signed_in? && current_user.books.exists? ? "本棚を見る" : "サンプル本棚を見る" %></span>
+      <% end %>
+    </div>
   </section>
 
 <!-- スマホでピッと。-->
@@ -27,3 +48,4 @@
 
 <!-- 使い方本 -->
 <%= lazy_section(:guidebook_section_frame, guidebook_section_guest_starter_books_path) %>
+</div>
