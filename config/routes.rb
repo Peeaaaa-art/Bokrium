@@ -70,7 +70,6 @@ Rails.application.routes.draw do
     end
 
     collection do
-      get :autocomplete, to: "books/autocompletes#index"
       delete :clear_filters
     end
   end
@@ -93,7 +92,6 @@ Rails.application.routes.draw do
       collection do
         delete :clear_filters
         get :filter_tags, to: "books/tags#filter"
-        get :autocomplete, to: "books/autocompletes#index"
       end
     end
     resources :starter_books, only: [ :index, :show ] do
