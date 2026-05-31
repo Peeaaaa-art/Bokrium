@@ -31,10 +31,6 @@
     </div>
   </section>
 
-  <% if current_user && @random_memo&.book %>
-    <%= render "memos/random_card", random_memo: @random_memo %>
-  <% end %>
-
 <!-- スマホでピッと。-->
 <%= lazy_section(:barcode_section_frame, barcode_section_guest_starter_books_path) %>
 

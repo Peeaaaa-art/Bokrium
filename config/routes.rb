@@ -84,6 +84,7 @@ Rails.application.routes.draw do
   resources :public_bookshelf, only: [ :show ], param: :token
 
   get "/explore", to: "explore#index", as: :explore
+  get "/random_memo", to: "guest/starter_books#random_memo", as: :random_memo
 
   root "guest/starter_books#index"
 

@@ -1,23 +1,46 @@
-  <%= link_to book_path(random_memo.book), class: "text-decoration-none text-reset" do %>
-    <div class="container my-4">
-      <h3 class="mb-3 mb-md-4">ランダムメモ表示</h3>
-        <!-- 書影 -->
-        <% if  random_memo.book.book_cover_s3.attached? && random_memo.book.book_cover_s3.key.present? || random_memo.book.book_cover.present? %>
-          <%= render Books::CoverComponent.new(
-            book: random_memo.book,
-            image_class: "rounded mxw-160"
-          ) %>
-        <% end %>
+<div class="container my-4" style="max-width: 1200px;">
+  <div class="d-flex justify-content-center mb-3 mb-md-4">
+    <%= link_to random_memo_path,
+          class: "btn btn-light btn-icon border shadow-sm d-flex align-items-center justify-content-center",
+          title: "別のメモを表示",
+          data: { bs_toggle: "tooltip", bs_placement: "bottom", turbo: false } do %>
+      <%= bi_icon("shuffle", css: "is-5") %>
+    <% end %>
+  </div>
 
-      <div class="card shadow-sm bg-light-bok p-3 mt-3 mx-auto" style="max-width: 720px;">
-        <div class="d-flex flex-column flex-md-row align-items-start gap-3">
-          <!-- テキストエリア -->
-          <div class="flex-grow-1">
-            <h5 class="fw-bold mb-1"><%= random_memo.book.title %></h5>
-            <p class="text-muted mb-2"><%= random_memo.book.author %></p>
-            <p class="text-muted mb-0"><%= truncate(strip_tags(random_memo.content), length: 300) %></p>
+  <div class="row justify-content-center">
+    <div class="col-lg-10">
+      <div class="row g-4 align-items-center mt-md-1">
+        <div class="col-6 d-flex justify-content-center">
+          <div>
+            <%= link_to book_path(random_memo.book), class: "text-decoration-none text-reset" do %>
+              <%= render Books::CoverComponent.new(
+                    book: random_memo.book,
+                    image_class: "book-cover-show",
+                    no_cover_title: "fs-5 mt-5",
+                    truncate_options: { mobile_limit: 80, desktop_limit: 100 }
+                  ) %>
+            <% end %>
+
+            <% if !random_memo.book.book_cover_s3.attached? && (credit = book_cover_credit(random_memo.book.book_cover)) %>
+              <div class="text-secondary text-center footer-font" style="font-size: 0.7rem; opacity: 0.66;"><%= credit %></div>
+            <% end %>
+          </div>
+        </div>
+
+        <div class="col-6">
+          <div class="card border-0 shadow-none bg-transparent h-100">
+            <%= link_to book_path(random_memo.book), class: "text-decoration-none text-reset" do %>
+              <div class="fw-bold fs-title mb-2"><%= random_memo.book.title %></div>
+            <% end %>
+            <%= render_book_info_list(random_memo.book) %>
           </div>
         </div>
       </div>
+
+      <div class="mt-4">
+        <%= render "memos/read_only_item", book: random_memo.book, memo: random_memo, display_only: true, expanded: true %>
+      </div>
     </div>
-  <% end %>
+  </div>
+</div>

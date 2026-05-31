@@ -5,8 +5,13 @@ module Guest
     def index
       return if handle_root_callbacks
 
-      set_random_memo
       set_starter_books
+    end
+
+    def random_memo
+      redirect_to root_path and return unless user_signed_in?
+
+      set_random_memo
     end
 
     def show
