@@ -1,13 +1,5 @@
 #!/bin/bash -e
 
-# Setup and Enable swap
-if [ -f /swapfile ]; then
-    # mkswap/swapon require root or specific capabilities. 
-    # In some environments (like release_command), this may fail due to permissions.
-    # We ignore errors so the app can still boot without swap if necessary.
-    grep -q /swapfile /proc/swaps || (mkswap /swapfile && swapon /swapfile) 2>/dev/null || echo "Notice: Could not enable swapfile (insufficient permissions), proceeding without swap."
-fi
-
 # Enable jemalloc for reduced memory usage and latency.
 if [ -z "${LD_PRELOAD+x}" ]; then
     LD_PRELOAD=$(find /usr/lib -name libjemalloc.so.2 -print -quit)

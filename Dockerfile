@@ -20,9 +20,6 @@ RUN apt-get update -qq && \
     gnupg && \
     rm -rf /var/lib/apt/lists/* /var/cache/apt/archives
 
-    # Pre-allocate swap file (creation only, formatting/enabling in entrypoint)
-    RUN fallocate -l 512M /swapfile && \
-    chmod 0600 /swapfile
 
     ENV RAILS_ENV=production \
     BUNDLE_DEPLOYMENT=1 \
