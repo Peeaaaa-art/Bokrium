@@ -1,6 +1,16 @@
 require 'rails_helper'
 
 RSpec.describe "Pages", type: :request do
+  describe "GET /" do
+    it "renders the starter guide as the top page" do
+      get "/"
+
+      expect(response).to have_http_status(:ok)
+      expect(response.body).to include("Bokrium")
+      expect(response.body).to include("読書の記憶を育てる本棚アプリ")
+    end
+  end
+
   describe "GET /index" do
     it "Terms" do
       get "/terms"

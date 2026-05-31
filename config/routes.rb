@@ -86,7 +86,7 @@ Rails.application.routes.draw do
 
   get "/explore", to: "explore#index", as: :explore
 
-  root "welcome#index"
+  root "guest/starter_books#index"
 
   namespace :guest do
     resources :books, only: [ :index, :show ] do
