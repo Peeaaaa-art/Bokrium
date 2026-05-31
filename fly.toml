@@ -5,12 +5,14 @@
 
 app = 'bokrium'
 primary_region = 'nrt'
+swap_size_mb = 512
 console_command = '/rails/bin/rails console'
 
 [build]
 
 [env]
   PORT = '8080'
+  RAILS_MAX_THREADS = '3'
 
 [processes]
   app = './bin/rails server -b 0.0.0.0 -p 8080'
