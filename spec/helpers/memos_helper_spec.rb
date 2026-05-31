@@ -36,4 +36,17 @@ RSpec.describe MemosHelper, type: :helper do
       expect(html).not_to include("<script")
     end
   end
+
+  describe "#render_memo_email_content" do
+    it "applies compact gray inline styles to blockquotes for email clients" do
+      html = helper.render_memo_email_content("<p>本文</p><blockquote><p>引用文</p></blockquote>")
+
+      expect(html).to include("<blockquote")
+      expect(html).to include("margin: 0.75em 0 0.75em 0.35em")
+      expect(html).to include("padding: 0 0 0 0.35em")
+      expect(html).to include("color: #777777")
+      expect(html).to include("font-size: 1em")
+      expect(html).to include("background-color: transparent")
+    end
+  end
 end
