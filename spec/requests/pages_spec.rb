@@ -8,6 +8,7 @@ RSpec.describe "Pages", type: :request do
       expect(response).to have_http_status(:ok)
       expect(response.body).to include("Bokrium")
       expect(response.body).to include("読書の記憶を育てる本棚アプリ")
+      expect(response.body).to include('property="og:image" content="https://lib.bokrium.com/bokrium_ogp_meishi.png"')
     end
   end
 
