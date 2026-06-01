@@ -6,9 +6,21 @@
     <meta property="og:title" content="<%= content_for?(:og_title) ? yield(:og_title) : 'Bokrium - 読書メモアプリ' %>">
     <meta property="og:description" content="<%= content_for?(:og_description) ? yield(:og_description) : '「読んだだけ」で終わらせない。Bokriumは、読書の記憶を育てる本棚アプリです。' %>">
     <meta property="og:image" content="<%= content_for?(:og_image) ? yield(:og_image) : cdn_path("bokrium_ogp.png") %>">
+    <% if content_for?(:og_image_type) %>
+      <meta property="og:image:type" content="<%= yield(:og_image_type) %>">
+    <% end %>
+    <% if content_for?(:og_image_width) %>
+      <meta property="og:image:width" content="<%= yield(:og_image_width) %>">
+    <% end %>
+    <% if content_for?(:og_image_height) %>
+      <meta property="og:image:height" content="<%= yield(:og_image_height) %>">
+    <% end %>
     <meta property="og:url" content="<%= request.original_url %>">
-    <meta property="og:type" content="website">
+    <meta property="og:type" content="<%= content_for?(:og_type) ? yield(:og_type) : 'website' %>">
     <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="<%= content_for?(:og_title) ? yield(:og_title) : 'Bokrium - 読書メモアプリ' %>">
+    <meta name="twitter:description" content="<%= content_for?(:og_description) ? yield(:og_description) : '「読んだだけ」で終わらせない。Bokriumは、読書の記憶を育てる本棚アプリです。' %>">
+    <meta name="twitter:image" content="<%= content_for?(:og_image) ? yield(:og_image) : cdn_path("bokrium_ogp.png") %>">
 
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">

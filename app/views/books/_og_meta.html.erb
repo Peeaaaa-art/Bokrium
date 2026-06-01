@@ -1,0 +1,11 @@
+<% book_title = @book.title.presence || "無題の本" %>
+<% book_description = [@book.author.presence, @book.publisher.presence].compact.join(" / ").presence || "Bokriumに保存した読書メモの本です。" %>
+
+<% content_for :title, "#{book_title} - Bokrium" %>
+<% content_for :og_title, book_title %>
+<% content_for :og_description, book_description %>
+<% content_for :og_image, og_image_book_url(@book, format: :svg) %>
+<% content_for :og_image_type, "image/svg+xml" %>
+<% content_for :og_image_width, BookOgImageSvg::WIDTH.to_s %>
+<% content_for :og_image_height, BookOgImageSvg::HEIGHT.to_s %>
+<% content_for :og_type, "article" %>

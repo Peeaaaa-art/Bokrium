@@ -1,8 +1,9 @@
 class BooksController < ApplicationController
-  before_action :authenticate_user!, only: %i[ index create show edit update destroy ]
+  before_action :authenticate_user!, only: %i[ index create edit update destroy ]
   before_action :set_book, only: %i[ edit update destroy ]
   before_action :set_book_with_associations, only: [ :show ]
-  before_action :set_user_tags, only: %i[ show ]
+  before_action :set_og_image_book, only: [ :og_image ]
+  before_action :set_user_tags, only: %i[ show ], if: :user_signed_in?
 
   def index
     unless current_user.books.exists?
@@ -43,9 +44,20 @@ class BooksController < ApplicationController
   end
 
   def show
+    unless user_signed_in?
+      render :og_preview and return
+    end
+
     @memos = @book.memos.order(created_at: :desc)
     @new_memo = @book.memos.new(user_id: current_user.id)
     @user_tag = UserTag.new
+  end
+
+  def og_image
+    expires_in 1.day, public: true
+    send_data BookOgImageSvg.new(@book).call,
+              type: "image/svg+xml; charset=utf-8",
+              disposition: "inline"
   end
 
   def new
@@ -130,9 +142,15 @@ class BooksController < ApplicationController
   end
 
   def set_book_with_associations
-    @book = current_user.books
+    scope = user_signed_in? ? current_user.books : Book.all
+
+    @book = scope
             .includes(:user_tags, { images: :image_s3_attachment }, :book_cover_s3_attachment)
             .find(params[:id])
+  end
+
+  def set_og_image_book
+    @book = Book.find(params[:id])
   end
 
   def set_user_tags
