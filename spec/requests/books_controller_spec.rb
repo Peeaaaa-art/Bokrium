@@ -53,9 +53,41 @@ RSpec.describe "BooksController", type: :request do
       expect(response.body).to include(book.title)
     end
 
+    it "books#show 用の OGP メタタグが表示されること" do
+      get book_path(book)
+
+      expect(response).to have_http_status(:ok)
+      expect(response.body).to include(%(property="og:title" content="#{book.title}"))
+      expect(response.body).to include(%(property="og:image" content="http://www.example.com/books/#{book.id}/og_image.svg"))
+      expect(response.body).to include(%(property="og:image:type" content="image/svg+xml"))
+      expect(response.body).to include(%(property="og:image:width" content="1200"))
+      expect(response.body).to include(%(property="og:image:height" content="630"))
+    end
+
     it "存在しないIDを指定した場合は本棚一覧にリダイレクトされること" do
       get book_path(id: 99999)
       expect(response.body).to include("404: Not Found")
+    end
+
+    context "when not signed in" do
+      before { sign_out user }
+
+      it "OGP を取得できるプレビューページが表示されること" do
+        get book_path(book)
+
+        expect(response).to have_http_status(:ok)
+        expect(response.body).to include(%(property="og:title" content="#{book.title}"))
+        expect(response.body).to include("この本の読書メモを見るにはログインしてください。")
+      end
+    end
+
+    it "Bokrium デフォルト書影の OGP 画像 SVG を返すこと" do
+      get og_image_book_path(book, format: :svg)
+
+      expect(response).to have_http_status(:ok)
+      expect(response.media_type).to eq("image/svg+xml")
+      expect(response.body).to include("Bokrium")
+      expect(response.body).to include(book.title)
     end
   end
 

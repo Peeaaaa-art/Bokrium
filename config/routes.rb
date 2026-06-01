@@ -62,6 +62,10 @@ Rails.application.routes.draw do
   get "mypage", to: "users#show", as: :mypage
 
   resources :books do
+    member do
+      get :og_image, defaults: { format: :svg }
+    end
+
     resources :memos, only: [ :create, :new, :edit, :update, :destroy ]
     resources :images, only: [ :create, :destroy ]
     resource :row, only: [ :show, :edit, :update ], controller: "books/rows"
