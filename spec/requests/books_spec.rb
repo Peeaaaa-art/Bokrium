@@ -20,6 +20,16 @@ RSpec.describe "Books", type: :request do
       expect(response).to have_http_status(:ok)
       expect(response.body).to include("詳細テスト本")
     end
+
+    it "トップページと同じデフォルトOGPメタ情報が表示される" do
+      book = create(:book, user: user, title: "詳細テスト本")
+
+      get book_path(book)
+
+      expect(response.body).to include('property="og:title" content="Bokrium - 読書メモアプリ"')
+      expect(response.body).to include('property="og:description" content="「読んだだけ」で終わらせない。Bokriumは、読書の記憶を育てる本棚アプリです。"')
+      expect(response.body).to include('property="og:image" content="https://lib.bokrium.com/bokrium_ogp_meishi.png"')
+    end
   end
 
   describe "POST /books" do
