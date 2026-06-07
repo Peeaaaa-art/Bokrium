@@ -1,4 +1,5 @@
 import { Controller } from "@hotwired/stimulus"
+import { Modal } from "bootstrap"
 
 export default class ModalSwipeController extends Controller<HTMLElement> {
   static targets = ["modal"]
@@ -33,7 +34,7 @@ export default class ModalSwipeController extends Controller<HTMLElement> {
     if (window.hasUnsavedChanges) {
       const confirmModalEl = document.getElementById("confirmModal")
       if (confirmModalEl) {
-        const confirm = new window.bootstrap.Modal(confirmModalEl)
+        const confirm = Modal.getOrCreateInstance(confirmModalEl)
         confirm.show()
       }
     }
