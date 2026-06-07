@@ -4,7 +4,7 @@ ruby "~> 4.0.1"
 
 gem "rails", "~> 8.1.2"
 
-gem "puma"
+gem "puma", "~> 8.0", ">= 8.0.2"
 
 gem "turbo-rails"
 
