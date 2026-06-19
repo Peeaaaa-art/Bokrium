@@ -9,7 +9,7 @@ module BookApis
     def self.fetch(isbn)
       return nil if isbn.blank?
 
-      uri = URI.parse("#{ENDPOINT}?q=isbn:#{URI.encode_www_form_component(isbn)}")
+      uri = URI.parse("#{ENDPOINT}?q=isbn:#{URI.encode_www_form_component(isbn)}&country=JP")
       response = Net::HTTP.get_response(uri)
       return nil unless response.is_a?(Net::HTTPSuccess)
 
@@ -25,7 +25,8 @@ module BookApis
       uri = URI.parse("#{ENDPOINT}?" + URI.encode_www_form({
         q: query,
         maxResults: 30,
-        startIndex: (page - 1) * 30
+        startIndex: (page - 1) * 30,
+        country: "JP"
       }))
 
       response = Net::HTTP.get_response(uri)
