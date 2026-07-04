@@ -1,5 +1,5 @@
 <div class="d-flex justify-content-center mb-5">
-  <%= link_to export_books_path, class: "btn btn-outline-primary shadow-sm d-inline-flex align-items-center gap-2 px-4 py-1 rounded-pill" do %>
+  <%= link_to export_books_path, class: "btn btn-outline-primary shadow-sm d-inline-flex align-items-center gap-2 px-4 py-1 rounded-pill", data: { turbo: false } do %>
     <span>読書データをCSVでエクスポート</span>
   <% end %>
 </div>
