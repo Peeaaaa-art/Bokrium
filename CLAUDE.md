@@ -27,3 +27,25 @@ git worktree add ~/Workspace/Bokrium-worktrees/{issue番号}-{実装内容を表
 ```
 
 作業が終わったら、マージ後に `git worktree remove` で片付ける。
+
+新しいworktreeでは、gitに含まれない以下のセットアップが別途必要:
+
+```sh
+cp ~/Workspace/Bokrium/.env .env
+bundle install
+npm install
+```
+
+## テスト実行(Docker)
+
+ローカルのHomebrew版PostgreSQLは `pg_trgm` 拡張のバージョン不整合で動かないことがあるため、開発・テストは `docker-compose.yml` の `web-test` サービスを使う。
+
+```sh
+docker compose run --rm web-test
+```
+
+内部でアセットビルド・`db:prepare`・`bundle exec rspec` が自動実行される(`bin/docker-test-entrypoint` 参照)。個別のspecだけ実行したい場合:
+
+```sh
+docker compose run --rm web-test bundle exec rspec spec/requests/exports_spec.rb
+```
