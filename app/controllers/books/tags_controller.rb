@@ -3,8 +3,25 @@ class Books::TagsController < ApplicationController
   before_action :set_book, only: [ :toggle ]
 
   def toggle
-    BookTagToggleService.new(book: @book, user: current_user, tag_id: params[:tag_id], flash: flash).call
-    redirect_back fallback_location: @book
+    respond_to do |format|
+      format.turbo_stream do
+        # 非同期トグル: フラッシュに頼らず、押されたタグと本詳細のバッジ一覧だけを差し替える。
+        # サーバー応答で状態が確定するため、楽観的更新のロールバックは不要(常に整合)。
+        BookTagToggleService.new(book: @book, user: current_user, tag_id: params[:tag_id]).call
+        @tag = current_user.user_tags.find_by(id: params[:tag_id])
+        @book.user_tags.reload
+
+        if @tag
+          render :toggle
+        else
+          head :unprocessable_content
+        end
+      end
+      format.html do
+        BookTagToggleService.new(book: @book, user: current_user, tag_id: params[:tag_id], flash: flash).call
+        redirect_back fallback_location: @book
+      end
+    end
   end
 
   def filter

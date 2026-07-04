@@ -1,0 +1,9 @@
+<%= turbo_stream.replace "book_#{@book.id}_tag_#{@tag.id}" do %>
+  <%= render "tags/tag_select_button", book: @book, tag: @tag %>
+<% end %>
+
+<%= turbo_stream.replace "book_tag_badges_#{@book.id}" do %>
+  <div class="px-1 pt-1" id="book_tag_badges_<%= @book.id %>">
+    <%= render "tags/tag_badge_list", book: @book %>
+  </div>
+<% end %>
