@@ -42,7 +42,6 @@ export default function HandwrittenNoteEditor({
   const apiRef = useRef<ExcalidrawImperativeAPI | null>(null)
   const saveTimerRef = useRef<number | null>(null)
   const lastSavedMarkerRef = useRef<string | null>(null)
-  const currentMarkerRef = useRef<string | null>(null)
   const [status, setStatus] = useState<SaveStatus>("idle")
 
   const initialData = useMemo(() => {
@@ -95,10 +94,10 @@ export default function HandwrittenNoteEditor({
 
   const doSave = useCallback(
     async (options: { keepalive?: boolean } = {}) => {
+      const marker = sceneMarker()
+      if (marker === null || marker === lastSavedMarkerRef.current) return
       const scene = buildPersistedScene()
-      const marker = currentMarkerRef.current
-      if (!scene || marker === null) return
-      if (marker === lastSavedMarkerRef.current) return
+      if (!scene) return
 
       setStatus("saving")
       try {
@@ -133,17 +132,14 @@ export default function HandwrittenNoteEditor({
     [doSave]
   )
 
+  // 描画中のonChangeは毎フレーム発火するため、ここでは重い処理をしない。
+  // シーンバージョンの計算・比較は保存時（debounce後）にまとめて行う
   const handleChange = useCallback(() => {
-    const marker = sceneMarker()
-    if (marker === null) return
     if (lastSavedMarkerRef.current === null) {
-      // 初回onChange（マウント直後）は保存対象にしない
-      lastSavedMarkerRef.current = marker
-      currentMarkerRef.current = marker
+      // 初回onChange（マウント直後の復元描画）は保存対象にしない
+      lastSavedMarkerRef.current = sceneMarker()
       return
     }
-    if (marker === currentMarkerRef.current) return
-    currentMarkerRef.current = marker
 
     if (saveTimerRef.current !== null) {
       window.clearTimeout(saveTimerRef.current)
