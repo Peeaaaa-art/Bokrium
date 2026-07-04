@@ -69,6 +69,7 @@ Rails.application.routes.draw do
     resources :handwritten_notes, only: [ :create, :show, :update, :destroy ] do
       patch :thumbnail, on: :member
     end
+    resource :reading_schedule, only: [ :update ], controller: "books/reading_schedules"
     resource :row, only: [ :show, :edit, :update ], controller: "books/rows"
     resource :tags, only: [], controller: "books/tags" do
       post :toggle
@@ -80,6 +81,8 @@ Rails.application.routes.draw do
   end
 
   get "books/filters/filter", to: "books/tags#filter", as: :filter_books_tags
+
+  resource :reading_board, only: [ :show ], controller: "reading_board"
 
   resource :view_mode, only: [ :update ]
 

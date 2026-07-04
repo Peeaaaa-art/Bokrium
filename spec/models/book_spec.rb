@@ -155,4 +155,111 @@ RSpec.describe Book, type: :model do
       expect(results).not_to include(book1)
     end
   end
+
+  describe "current_page のバリデーション" do
+    it "nil を許可する" do
+      expect(build(:book, current_page: nil)).to be_valid
+    end
+
+    it "0以上の整数を許可する" do
+      expect(build(:book, current_page: 0)).to be_valid
+      expect(build(:book, current_page: 120)).to be_valid
+    end
+
+    it "負の値は無効" do
+      book = build(:book, current_page: -1)
+      expect(book).not_to be_valid
+      expect(book.errors[:current_page]).to be_present
+    end
+  end
+
+  describe "読書スケジュールの算出メソッド" do
+    describe "#reading_progress_ratio" do
+      it "総ページと現在ページから進捗率を返す" do
+        expect(build(:book, page: 200, current_page: 50).reading_progress_ratio).to eq(0.25)
+      end
+
+      it "総ページや現在ページが不明なら nil" do
+        expect(build(:book, page: nil, current_page: 50).reading_progress_ratio).to be_nil
+        expect(build(:book, page: 200, current_page: nil).reading_progress_ratio).to be_nil
+        expect(build(:book, page: 0, current_page: 10).reading_progress_ratio).to be_nil
+      end
+
+      it "現在ページが総ページを超えても 1.0 を上限にする" do
+        expect(build(:book, page: 100, current_page: 150).reading_progress_ratio).to eq(1.0)
+      end
+    end
+
+    describe "#pages_remaining" do
+      it "残りページ数を返す" do
+        expect(build(:book, page: 200, current_page: 50).pages_remaining).to eq(150)
+      end
+
+      it "読了ページを超えても 0 未満にはならない" do
+        expect(build(:book, page: 100, current_page: 150).pages_remaining).to eq(0)
+      end
+
+      it "算出不能なら nil" do
+        expect(build(:book, page: nil, current_page: 50).pages_remaining).to be_nil
+      end
+    end
+
+    describe "#days_remaining" do
+      it "目標日までの残り日数を返す" do
+        book = build(:book, target_finish_on: Date.new(2026, 7, 10))
+        expect(book.days_remaining(from: Date.new(2026, 7, 5))).to eq(5)
+      end
+
+      it "過ぎていれば負を返す" do
+        book = build(:book, target_finish_on: Date.new(2026, 7, 1))
+        expect(book.days_remaining(from: Date.new(2026, 7, 5))).to eq(-4)
+      end
+
+      it "目標日未設定なら nil" do
+        expect(build(:book, target_finish_on: nil).days_remaining).to be_nil
+      end
+    end
+
+    describe "#required_daily_pages" do
+      it "残りページを残り日数で割って切り上げる" do
+        book = build(:book, page: 200, current_page: 50, target_finish_on: Date.new(2026, 7, 12))
+        expect(book.required_daily_pages(from: Date.new(2026, 7, 5))).to eq(22) # 150 / 7 = 21.4 -> 22
+      end
+
+      it "当日・超過なら残り全ページを返す" do
+        book = build(:book, page: 200, current_page: 50, target_finish_on: Date.new(2026, 7, 5))
+        expect(book.required_daily_pages(from: Date.new(2026, 7, 5))).to eq(150)
+      end
+
+      it "算出不能なら nil" do
+        expect(build(:book, page: 200, current_page: 50, target_finish_on: nil).required_daily_pages).to be_nil
+        expect(build(:book, page: nil, current_page: nil, target_finish_on: Date.current).required_daily_pages).to be_nil
+      end
+    end
+
+    describe "#reading_schedule_status" do
+      it "目標日未設定なら :no_target" do
+        expect(build(:book, status: :reading, target_finish_on: nil).reading_schedule_status).to eq(:no_target)
+      end
+
+      it "目標日が過去なら :overdue" do
+        book = build(:book, status: :reading, target_finish_on: Date.new(2026, 7, 1))
+        expect(book.reading_schedule_status(from: Date.new(2026, 7, 5))).to eq(:overdue)
+      end
+
+      it "目標日が当日なら :due_today" do
+        book = build(:book, status: :reading, target_finish_on: Date.new(2026, 7, 5))
+        expect(book.reading_schedule_status(from: Date.new(2026, 7, 5))).to eq(:due_today)
+      end
+
+      it "目標日が未来なら :on_track" do
+        book = build(:book, status: :reading, target_finish_on: Date.new(2026, 7, 10))
+        expect(book.reading_schedule_status(from: Date.new(2026, 7, 5))).to eq(:on_track)
+      end
+
+      it "読了済みなら :finished" do
+        expect(build(:book, status: :finished, target_finish_on: Date.new(2026, 7, 1)).reading_schedule_status).to eq(:finished)
+      end
+    end
+  end
 end

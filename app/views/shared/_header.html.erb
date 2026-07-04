@@ -14,6 +14,9 @@
         { path: search_books_path, icon: "search_header", title: "書籍検索", active: current_path.starts_with?('/search') },
         { path: books_index_path, icon: "library-big", title: (user_signed_in? && current_user.books.exists? ? "本棚" : "サンプル本棚"), active: books_index_active_class.present? }
       ] %>
+      <% if user_signed_in? %>
+        <% icons << { path: reading_board_path, icon: "calendar-check", title: "読書戦略ボード", active: current_path.starts_with?('/reading_board') } %>
+      <% end %>
 
       <% icons.each do |item| %>
 <%= link_to item[:path],

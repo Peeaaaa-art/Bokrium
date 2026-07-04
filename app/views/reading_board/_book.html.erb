@@ -1,0 +1,57 @@
+<div class="col" id="reading_board_book_<%= book.id %>">
+  <div class="card h-100 shadow-sm">
+    <div class="card-body d-flex flex-column">
+      <div class="d-flex gap-3">
+        <%= link_to book_path(book), class: "flex-shrink-0", title: book.title do %>
+          <% if book.book_cover_s3.attached? %>
+            <%= lazy_image_tag book.book_cover_s3, alt: book.title,
+                  style: "width: 56px; height: 80px; object-fit: cover; border-radius: 4px;" %>
+          <% else %>
+            <div class="d-flex align-items-center justify-content-center bg-light text-secondary rounded"
+                 style="width: 56px; height: 80px;">
+              <%= bi_icon("book", css: "is-5") %>
+            </div>
+          <% end %>
+        <% end %>
+
+        <div class="flex-grow-1 min-w-0">
+          <div class="d-flex justify-content-between align-items-start gap-2">
+            <%= link_to book.title, book_path(book),
+                  class: "fw-bold text-decoration-none text-body text-truncate d-block", title: book.title %>
+            <%= reading_schedule_badge(book) %>
+          </div>
+          <% if book.author.present? %>
+            <div class="small text-secondary text-truncate"><%= book.author %></div>
+          <% end %>
+
+          <% if (ratio = book.reading_progress_ratio) %>
+            <% percent = (ratio * 100).round %>
+            <div class="progress mt-2" role="progressbar" aria-label="読書の進捗"
+                 aria-valuenow="<%= percent %>" aria-valuemin="0" aria-valuemax="100" style="height: 6px;">
+              <div class="progress-bar bg-success" style="width: <%= percent %>%;"></div>
+            </div>
+            <div class="small text-secondary mt-1"><%= book.current_page %> / <%= book.page %> ページ（<%= percent %>%）</div>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="small text-secondary mt-2"><%= reading_pace_text(book) %></div>
+
+      <%= form_with model: book, url: book_reading_schedule_path(book), method: :patch,
+            class: "row g-2 align-items-end mt-2" do |f| %>
+        <div class="col-6">
+          <%= f.label :target_finish_on, "読了目標日", class: "form-label small mb-1" %>
+          <%= f.date_field :target_finish_on, value: book.target_finish_on, class: "form-control form-control-sm" %>
+        </div>
+        <div class="col-4">
+          <%= f.label :current_page, "現在ページ", class: "form-label small mb-1" %>
+          <%= f.number_field :current_page, value: book.current_page, min: 0,
+                max: (book.page.presence || 50_560), class: "form-control form-control-sm" %>
+        </div>
+        <div class="col-2 d-grid">
+          <%= f.submit "更新", class: "btn btn-sm btn-primary" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
