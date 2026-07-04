@@ -25,11 +25,16 @@ class HandwrittenNotesController < ApplicationController
                         @book.handwritten_notes.create!(user: current_user, data: {})
   end
 
-  # Excalidrawのシーンは任意のキーを持つため、サイズ上限（モデル側）だけを課して受け入れる
+  # Excalidrawのシーンは任意のキーを持つJSONのため、Strong Parametersは通さず
+  # ボディを直接パースする。dataはjsonbカラムにのみ代入され、
+  # サイズ上限はモデル側で検証する
   def handwritten_note_data
-    data = params.require(:handwritten_note).require(:data)
-    raise ActionController::BadRequest, "data must be an object" unless data.is_a?(ActionController::Parameters)
+    body = JSON.parse(request.raw_post)
+    data = body.is_a?(Hash) ? body.dig("handwritten_note", "data") : nil
+    raise ActionController::BadRequest, "data must be an object" unless data.is_a?(Hash)
 
-    data.permit!.to_h
+    data
+  rescue JSON::ParserError
+    raise ActionController::BadRequest, "request body must be JSON"
   end
 end
