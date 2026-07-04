@@ -20,7 +20,9 @@ function mountHandwrittenNote(): void {
   if (!element) return
 
   const updateUrl = element.dataset.updateUrl
-  if (!updateUrl) return
+  const thumbnailUrl = element.dataset.thumbnailUrl
+  if (!updateUrl || !thumbnailUrl) return
+  const viewMode = element.dataset.viewMode === "true"
 
   let initialSceneData = {}
   const dataScript = document.querySelector("#handwritten-note-data")
@@ -37,6 +39,8 @@ function mountHandwrittenNote(): void {
   mountedRoot.render(
     <HandwrittenNoteEditor
       updateUrl={updateUrl}
+      thumbnailUrl={thumbnailUrl}
+      viewMode={viewMode}
       initialSceneData={initialSceneData}
     />
   )

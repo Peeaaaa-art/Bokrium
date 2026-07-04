@@ -66,7 +66,9 @@ Rails.application.routes.draw do
   resources :books do
     resources :memos, only: [ :create, :new, :edit, :update, :destroy ]
     resources :images, only: [ :create, :destroy ]
-    resource :handwritten_note, only: [ :show, :update ]
+    resources :handwritten_notes, only: [ :create, :show, :update, :destroy ] do
+      patch :thumbnail, on: :member
+    end
     resource :row, only: [ :show, :edit, :update ], controller: "books/rows"
     resource :tags, only: [], controller: "books/tags" do
       post :toggle

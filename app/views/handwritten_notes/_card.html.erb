@@ -1,0 +1,24 @@
+<%= button_to book_handwritten_note_path(book, note),
+              method: :delete,
+              data: { turbo_confirm: "「#{note.display_title}」を削除しますか？" },
+              class: "btn btn-sm d-flex align-items-center justify-content-center mx-auto mt-2",
+              title: "手書きノートを削除" do %>
+  <%= bi_icon("trash2", css: "is-7") %>
+<% end %>
+
+<%= link_to book_handwritten_note_path(book, note), class: "text-decoration-none" do %>
+  <div class="card">
+    <% if note.thumbnail_s3.attached? %>
+      <%= lazy_image_tag note.thumbnail_s3,
+            class: "card-img-top img-fluid",
+            alt: note.display_title,
+            style: "max-width: 240px; width: 100%; aspect-ratio: 3 / 4; object-fit: contain; background: #fff;" %>
+    <% else %>
+      <div class="card-img-top d-flex align-items-center justify-content-center text-secondary bg-white"
+           style="max-width: 240px; width: 100%; aspect-ratio: 3 / 4;">
+        <%= bi_icon("vector-pen", css: "is-5") %>
+      </div>
+    <% end %>
+  </div>
+  <div class="small text-secondary text-truncate text-center mt-1"><%= note.display_title %></div>
+<% end %>
