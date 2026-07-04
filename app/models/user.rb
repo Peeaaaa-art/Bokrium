@@ -5,6 +5,7 @@ class User < ApplicationRecord
   has_many :donations, dependent: :nullify
   has_many :books, dependent: :destroy
   has_many :memos, dependent: :destroy
+  has_many :handwritten_notes, dependent: :destroy
   has_many :user_tags, dependent: :destroy
   has_many :credentials, dependent: :destroy
 

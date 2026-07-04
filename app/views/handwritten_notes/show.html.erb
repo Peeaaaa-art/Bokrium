@@ -1,0 +1,22 @@
+<% content_for :title, "手書きノート - #{@book.title} - Bokrium" %>
+<% content_for :head do %>
+  <meta name="turbo-cache-control" content="no-cache">
+  <%= vite_javascript_tag "handwritten_note.tsx" %>
+<% end %>
+
+<div class="container-fluid px-2 px-md-3 py-2">
+  <div class="d-flex align-items-center gap-2 mb-2">
+    <%= link_to book_path(@book), class: "btn btn-sm btn-outline-secondary rounded-pill px-3 flex-shrink-0" do %>
+      <%= bi_icon("arrow-left", css: "is-6") %> 本の詳細へ
+    <% end %>
+    <div class="fw-bold text-truncate"><%= @book.title %></div>
+  </div>
+
+  <div id="handwritten-note-root"
+       class="handwritten-note-canvas border rounded shadow-sm"
+       data-update-url="<%= book_handwritten_note_path(@book) %>"></div>
+
+  <script type="application/json" id="handwritten-note-data">
+    <%= raw({ data: @handwritten_note.data }.to_json) %>
+  </script>
+</div>
