@@ -36,6 +36,26 @@ bundle install
 npm install
 ```
 
+## 共有Postgresコンテナ
+
+worktreeごとに `db` サービスを起動すると、host側のport 5432を奪い合って複数worktreeを同時に動かせない。そのため、Postgresはマシンに1つだけ常駐させ、全worktreeで共有する(DB名はworktreeごとに分離されるためデータが混ざることはない)。
+
+初回のみ、専用の共有ネットワークとコンテナをマシンに1つ起動しておく:
+
+```sh
+docker network create bokrium-shared
+docker volume create bokrium-shared-db-data
+docker run -d --name bokrium-shared-db \
+  --network bokrium-shared \
+  -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres \
+  -v bokrium-shared-db-data:/var/lib/postgresql/data \
+  postgres:16
+```
+
+各worktreeの `docker-compose.yml` は `networks.default` をこの `bokrium-shared` ネットワーク(external)に参加させており、`web`/`web-test` サービスはコンテナ名 `bokrium-shared-db` で接続する。DB名は `${COMPOSE_PROJECT_NAME}` (worktreeのディレクトリ名)からworktreeごとに自動的に一意な名前が組み立てられるので、手動設定は不要。
+
+host側のport 5432は公開しない(Homebrew版postgresなど、host上の既存プロセスと衝突しないようにするため)。
+
 ## テスト実行(Docker)
 
 ローカルのHomebrew版PostgreSQLは `pg_trgm` 拡張のバージョン不整合で動かないことがあるため、開発・テストは `docker-compose.yml` の `web-test` サービスを使う。
