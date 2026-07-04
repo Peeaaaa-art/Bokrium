@@ -60,6 +60,10 @@
             <label for="customFileInputSm" class="btn btn-sm btn-icon text-white mb-0"><%= bi_icon("camera", css: "is-5 icon-refined") %></label>
           <% end %>
         </div>
+        <!-- 手書きノート -->
+        <%= link_to book_handwritten_note_path(@book), class: "btn btn-sm btn-icon text-white", title: "手書きノート" do %>
+          <%= bi_icon("vector-pen", css: "is-5 icon-refined") %>
+        <% end %>
         <!-- アクション：ギアボタン -->
         <button class="btn btn-sm btn-icon text-white" type="button" data-bs-toggle="modal" data-bs-target="#settingsModal" style="cursor: pointer;">
           <%= bi_icon("gear", css: "is-5 icon-refined") %>

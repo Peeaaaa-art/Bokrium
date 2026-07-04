@@ -1,0 +1,13 @@
+/* Excalidrawは親要素の明示的な高さを要求する。
+   ヘッダー＋戻るバーを差し引いた残りをキャンバスに充てる */
+.handwritten-note-canvas {
+  height: calc(100vh - 140px);
+  height: calc(100dvh - 140px);
+  min-height: 400px;
+  overflow: hidden;
+}
+
+/* 描画中にiPad Safariがページをスクロール・ズームさせないようにする */
+.handwritten-note-canvas .excalidraw {
+  touch-action: none;
+}

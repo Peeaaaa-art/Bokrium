@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_24_000000) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_04_000000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -95,6 +95,19 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_24_000000) do
     t.datetime "updated_at", null: false
     t.bigint "user_id"
     t.index ["user_id"], name: "index_donations_on_user_id"
+  end
+
+  create_table "handwritten_notes", force: :cascade do |t|
+    t.bigint "book_id", null: false
+    t.datetime "created_at", null: false
+    t.jsonb "data", default: {}, null: false
+    t.integer "position", default: 0, null: false
+    t.string "title"
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["book_id"], name: "index_handwritten_notes_on_book_id"
+    t.index ["user_id", "book_id"], name: "index_handwritten_notes_on_user_id_and_book_id"
+    t.index ["user_id"], name: "index_handwritten_notes_on_user_id"
   end
 
   create_table "images", force: :cascade do |t|
@@ -193,6 +206,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_24_000000) do
   add_foreign_key "books", "users"
   add_foreign_key "credentials", "users"
   add_foreign_key "donations", "users"
+  add_foreign_key "handwritten_notes", "books"
+  add_foreign_key "handwritten_notes", "users"
   add_foreign_key "images", "books"
   add_foreign_key "memos", "books"
   add_foreign_key "memos", "users"

@@ -7,6 +7,7 @@ class Book < ApplicationRecord
   has_one_attached :book_cover_s3, service: :cloudflare_r2, dependent: :purge
   has_many :memos, dependent: :destroy
   has_many :images, dependent: :destroy
+  has_many :handwritten_notes, dependent: :destroy
   has_many :book_tag_assignments, dependent: :destroy
   has_many :user_tags, through: :book_tag_assignments
 
