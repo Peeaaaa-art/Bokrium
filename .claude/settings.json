@@ -1,0 +1,55 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git status*)",
+      "Bash(git diff*)",
+      "Bash(git log*)",
+      "Bash(git fetch*)",
+      "Bash(git branch*)",
+      "Bash(git ls-tree*)",
+      "Bash(git worktree list*)",
+      "Bash(docker ps*)",
+      "Bash(docker compose logs*)",
+      "Bash(docker compose run --rm web-test*)",
+      "Bash(docker compose run --rm -e SKIP_TEST_PREPARE=1 web-test*)",
+      "Bash(docker compose run --rm web bundle exec rails db:prepare*)",
+      "Bash(docker compose run --rm web bundle exec rails db:migrate*)",
+      "Bash(docker compose run --rm web bundle exec rails runner*)",
+      "Bash(docker compose run --rm web bin/vite build*)",
+      "Bash(docker compose run --rm -e NODE_ENV=production web bin/vite build*)",
+      "Bash(docker compose run --rm web npm install*)",
+      "Bash(bundle install*)",
+      "Bash(bundle exec rubocop*)",
+      "Bash(bundle exec brakeman*)",
+      "Bash(bundle exec rspec*)",
+      "Bash(npm install*)",
+      "Bash(npm run*)",
+      "Bash(npm ls*)",
+      "Bash(npx tsc*)",
+      "Bash(gh issue view*)",
+      "Bash(gh issue list*)",
+      "Bash(gh pr view*)",
+      "Bash(gh pr list*)",
+      "Bash(gh pr checks*)",
+      "Bash(gh pr diff*)",
+      "Bash(gh run view*)",
+      "Bash(gh run list*)",
+      "Bash(curl -sf https://raw.githubusercontent.com/twbs/icons/*)"
+    ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/rubocop_changed_file.sh",
+            "timeout": 60,
+            "statusMessage": "RuboCop"
+          }
+        ]
+      }
+    ]
+  }
+}
