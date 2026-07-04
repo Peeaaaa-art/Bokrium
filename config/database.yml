@@ -9,12 +9,12 @@ default: &default
 
 development:
   <<: *default
-  database: bokrium_development
+  database: <%= ENV.fetch("DATABASE_NAME") { "bokrium_development" } %>
 
 
 test:
   <<: *default
-  database: bokrium_test
+  database: <%= ENV.fetch("DATABASE_NAME") { "bokrium_test" } %>
 
 
 production:

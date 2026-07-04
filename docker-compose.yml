@@ -1,16 +1,5 @@
 
 services:
-  db:
-    image: postgres:16
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: bokrium_development
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-
   web:
     image: bokrium-web
     build:
@@ -24,10 +13,9 @@ services:
     ports:
       - "3000:3000"
       - "3036:3036"
-    depends_on:
-      - db
     environment:
-      DATABASE_HOST: db
+      DATABASE_HOST: bokrium-shared-db
+      DATABASE_NAME: ${COMPOSE_PROJECT_NAME}_development
       DATABASE_USERNAME: postgres
       DATABASE_PASSWORD: postgres
       RAILS_ENV: development
@@ -70,10 +58,9 @@ services:
       - .:/rails
       - bundle_cache:/usr/local/bundle
       - node_modules:/rails/node_modules
-    depends_on:
-      - db
     environment:
-      DATABASE_HOST: db
+      DATABASE_HOST: bokrium-shared-db
+      DATABASE_NAME: ${COMPOSE_PROJECT_NAME}_test
       DATABASE_USERNAME: postgres
       DATABASE_PASSWORD: postgres
       RAILS_ENV: test
@@ -88,6 +75,10 @@ services:
     tty: true
 
 volumes:
-  postgres_data:
   bundle_cache:
   node_modules:
+
+networks:
+  default:
+    external: true
+    name: bokrium-shared
