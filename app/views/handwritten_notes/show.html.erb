@@ -1,4 +1,4 @@
-<% content_for :title, "手書きノート - #{@book.title} - Bokrium" %>
+<% content_for :title, "#{@handwritten_note.display_title} - #{@book.title} - Bokrium" %>
 <% content_for :head do %>
   <meta name="turbo-cache-control" content="no-cache">
   <%= vite_javascript_tag "handwritten_note.tsx" %>
@@ -9,12 +9,21 @@
     <%= link_to book_path(@book), class: "btn btn-sm btn-outline-secondary rounded-pill px-3 flex-shrink-0" do %>
       <%= bi_icon("arrow-left", css: "is-6") %> 本の詳細へ
     <% end %>
-    <div class="fw-bold text-truncate"><%= @book.title %></div>
+    <div class="text-secondary text-truncate flex-shrink-0" style="max-width: 30%;"><%= @book.title %></div>
+    <input type="text"
+           id="handwritten-note-title"
+           class="form-control form-control-sm border-0 fw-bold"
+           placeholder="ノートのタイトル"
+           maxlength="100"
+           value="<%= @handwritten_note.title %>"
+           <%= "readonly" if mobile? %>>
   </div>
 
   <div id="handwritten-note-root"
        class="handwritten-note-canvas border rounded shadow-sm"
-       data-update-url="<%= book_handwritten_note_path(@book) %>"></div>
+       data-update-url="<%= book_handwritten_note_path(@book, @handwritten_note) %>"
+       data-thumbnail-url="<%= thumbnail_book_handwritten_note_path(@book, @handwritten_note) %>"
+       data-view-mode="<%= mobile? %>"></div>
 
   <script type="application/json" id="handwritten-note-data">
     <%= raw({ data: @handwritten_note.data }.to_json) %>

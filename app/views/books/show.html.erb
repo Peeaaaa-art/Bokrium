@@ -61,8 +61,14 @@
           <% end %>
         </div>
         <!-- 手書きノート -->
-        <%= link_to book_handwritten_note_path(@book), class: "btn btn-sm btn-icon text-white", title: "手書きノート" do %>
-          <%= bi_icon("vector-pen", css: "is-5 icon-refined") %>
+        <% if @handwritten_notes.present? %>
+          <%= link_to book_handwritten_note_path(@book, @handwritten_notes.first), class: "btn btn-sm btn-icon text-white", title: "手書きノート" do %>
+            <%= bi_icon("vector-pen", css: "is-5 icon-refined") %>
+          <% end %>
+        <% else %>
+          <%= button_to book_handwritten_notes_path(@book), method: :post, class: "btn btn-sm btn-icon text-white", form_class: "d-inline", title: "手書きノートを作成" do %>
+            <%= bi_icon("vector-pen", css: "is-5 icon-refined") %>
+          <% end %>
         <% end %>
         <!-- アクション：ギアボタン -->
         <button class="btn btn-sm btn-icon text-white" type="button" data-bs-toggle="modal" data-bs-target="#settingsModal" style="cursor: pointer;">
@@ -86,6 +92,25 @@
       <div class="px-1 pt-1">
         <%= render "tags/tag_badge_list", book: @book %>
       </div>
+      <!-- 手書きノートリスト -->
+      <% if @handwritten_notes.present? %>
+        <div class="row row-cols-4 row-cols-md-6 g-2 mb-2" id="handwritten-note-list">
+          <% @handwritten_notes.each do |note| %>
+            <div class="col" id="handwritten_note_<%= note.id %>">
+              <%= render "handwritten_notes/card", book: @book, note: note %>
+            </div>
+          <% end %>
+          <div class="col d-flex align-items-center justify-content-center">
+            <%= button_to book_handwritten_notes_path(@book), method: :post,
+                  class: "btn btn-outline-secondary d-flex flex-column align-items-center justify-content-center",
+                  style: "width: 100%; aspect-ratio: 3 / 4; border-style: dashed;",
+                  title: "手書きノートを追加" do %>
+              <%= bi_icon("vector-pen", css: "is-5") %>
+              <span class="small mt-1">追加</span>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
       <!-- 画像リスト -->
       <div class="row row-cols-4 row-cols-md-6 g-2 mb-4" id="image-list">
         <% @book.images.each_with_index do |image, identifier| %>

@@ -46,6 +46,7 @@ class BooksController < ApplicationController
     @memos = @book.memos.order(created_at: :desc)
     @new_memo = @book.memos.new(user_id: current_user.id)
     @user_tag = UserTag.new
+    @handwritten_notes = @book.handwritten_notes.ordered.with_attached_thumbnail_s3
   end
 
   def new

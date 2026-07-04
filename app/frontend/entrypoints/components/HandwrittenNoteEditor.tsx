@@ -1,5 +1,10 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
-import { Excalidraw, restore, getSceneVersion } from "@excalidraw/excalidraw"
+import {
+  Excalidraw,
+  restore,
+  getSceneVersion,
+  exportToBlob,
+} from "@excalidraw/excalidraw"
 import "@excalidraw/excalidraw/index.css"
 
 type ExcalidrawImperativeAPI = Parameters<
@@ -15,6 +20,9 @@ const PERSISTED_APP_STATE_KEYS = [
 ] as const
 
 const AUTOSAVE_DEBOUNCE_MS = 1200
+const TITLE_DEBOUNCE_MS = 800
+const THUMBNAIL_DEBOUNCE_MS = 5000
+const THUMBNAIL_MAX_SIZE = 480
 
 type SaveStatus = "idle" | "saving" | "saved" | "error"
 
@@ -25,6 +33,8 @@ interface SceneData {
 
 interface Props {
   updateUrl: string
+  thumbnailUrl: string
+  viewMode: boolean
   initialSceneData: SceneData
 }
 
@@ -37,10 +47,13 @@ function csrfToken(): string {
 
 export default function HandwrittenNoteEditor({
   updateUrl,
+  thumbnailUrl,
+  viewMode,
   initialSceneData,
 }: Props): React.JSX.Element {
   const apiRef = useRef<ExcalidrawImperativeAPI | null>(null)
   const saveTimerRef = useRef<number | null>(null)
+  const thumbnailTimerRef = useRef<number | null>(null)
   const lastSavedMarkerRef = useRef<string | null>(null)
   const [status, setStatus] = useState<SaveStatus>("idle")
 
@@ -92,6 +105,50 @@ export default function HandwrittenNoteEditor({
     return `${getSceneVersion(api.getSceneElementsIncludingDeleted())}|${appStatePart}`
   }, [])
 
+  // サムネイルは補助情報。失敗しても本体の保存フローには影響させない
+  const uploadThumbnail = useCallback(
+    async (options: { keepalive?: boolean } = {}) => {
+      const api = apiRef.current
+      if (!api) return
+      const elements = api.getSceneElements()
+      if (elements.length === 0) return
+
+      try {
+        const blob = await exportToBlob({
+          elements,
+          appState: api.getAppState(),
+          files: api.getFiles(),
+          maxWidthOrHeight: THUMBNAIL_MAX_SIZE,
+          mimeType: "image/png",
+        })
+        const form = new FormData()
+        form.append("thumbnail", blob, "thumbnail.png")
+        await fetch(thumbnailUrl, {
+          method: "PATCH",
+          headers: {
+            "X-CSRF-Token": csrfToken(),
+            Accept: "application/json",
+          },
+          body: form,
+          keepalive: options.keepalive ?? false,
+        })
+      } catch {
+        // no-op
+      }
+    },
+    [thumbnailUrl]
+  )
+
+  const scheduleThumbnail = useCallback(() => {
+    if (thumbnailTimerRef.current !== null) {
+      window.clearTimeout(thumbnailTimerRef.current)
+    }
+    thumbnailTimerRef.current = window.setTimeout(() => {
+      thumbnailTimerRef.current = null
+      void uploadThumbnail()
+    }, THUMBNAIL_DEBOUNCE_MS)
+  }, [uploadThumbnail])
+
   const doSave = useCallback(
     async (options: { keepalive?: boolean } = {}) => {
       const marker = sceneMarker()
@@ -114,11 +171,12 @@ export default function HandwrittenNoteEditor({
         if (!response.ok) throw new Error(`save failed: ${response.status}`)
         lastSavedMarkerRef.current = marker
         setStatus("saved")
+        scheduleThumbnail()
       } catch {
         setStatus("error")
       }
     },
-    [buildPersistedScene, updateUrl]
+    [sceneMarker, buildPersistedScene, updateUrl, scheduleThumbnail]
   )
 
   const flushSave = useCallback(
@@ -127,14 +185,20 @@ export default function HandwrittenNoteEditor({
         window.clearTimeout(saveTimerRef.current)
         saveTimerRef.current = null
       }
+      if (thumbnailTimerRef.current !== null) {
+        window.clearTimeout(thumbnailTimerRef.current)
+        thumbnailTimerRef.current = null
+        void uploadThumbnail(options)
+      }
       void doSave(options)
     },
-    [doSave]
+    [doSave, uploadThumbnail]
   )
 
   // 描画中のonChangeは毎フレーム発火するため、ここでは重い処理をしない。
   // シーンバージョンの計算・比較は保存時（debounce後）にまとめて行う
   const handleChange = useCallback(() => {
+    if (viewMode) return
     if (lastSavedMarkerRef.current === null) {
       // 初回onChange（マウント直後の復元描画）は保存対象にしない
       lastSavedMarkerRef.current = sceneMarker()
@@ -148,9 +212,69 @@ export default function HandwrittenNoteEditor({
       saveTimerRef.current = null
       void doSave()
     }, AUTOSAVE_DEBOUNCE_MS)
-  }, [sceneMarker, doSave])
+  }, [viewMode, sceneMarker, doSave])
+
+  // タイトル入力はReactの外（ヘッダー行）にあるため、直接リッスンする
+  useEffect(() => {
+    if (viewMode) return
+
+    const input = document.querySelector<HTMLInputElement>(
+      "#handwritten-note-title"
+    )
+    if (!input) return
+
+    let timer: number | null = null
+    let lastSavedTitle = input.value
+
+    const saveTitle = async (): Promise<void> => {
+      if (input.value === lastSavedTitle) return
+      const title = input.value
+      setStatus("saving")
+      try {
+        const response = await fetch(updateUrl, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRF-Token": csrfToken(),
+            Accept: "application/json",
+          },
+          body: JSON.stringify({ handwritten_note: { title } }),
+        })
+        if (!response.ok) throw new Error(`save failed: ${response.status}`)
+        lastSavedTitle = title
+        setStatus("saved")
+      } catch {
+        setStatus("error")
+      }
+    }
+
+    const onInput = (): void => {
+      if (timer !== null) window.clearTimeout(timer)
+      timer = window.setTimeout(() => {
+        timer = null
+        void saveTitle()
+      }, TITLE_DEBOUNCE_MS)
+    }
+    const onBlur = (): void => {
+      if (timer !== null) {
+        window.clearTimeout(timer)
+        timer = null
+      }
+      void saveTitle()
+    }
+
+    input.addEventListener("input", onInput)
+    input.addEventListener("blur", onBlur)
+    return () => {
+      input.removeEventListener("input", onInput)
+      input.removeEventListener("blur", onBlur)
+      if (timer !== null) window.clearTimeout(timer)
+    }
+  }, [viewMode, updateUrl])
 
   useEffect(() => {
+    if (viewMode) return
+
     // iPad Safariはタブをすぐ破棄するので、画面を離れる瞬間に必ず書き出す
     const onPageHide = (): void => flushSave({ keepalive: true })
     const onVisibilityChange = (): void => {
@@ -168,8 +292,11 @@ export default function HandwrittenNoteEditor({
       if (saveTimerRef.current !== null) {
         window.clearTimeout(saveTimerRef.current)
       }
+      if (thumbnailTimerRef.current !== null) {
+        window.clearTimeout(thumbnailTimerRef.current)
+      }
     }
-  }, [flushSave])
+  }, [viewMode, flushSave])
 
   const statusLabel: Record<SaveStatus, string> = {
     idle: "",
@@ -186,26 +313,31 @@ export default function HandwrittenNoteEditor({
       initialData={initialData}
       onChange={handleChange}
       langCode="ja-JP"
-      renderTopRightUI={() => (
-        <div
-          className={`d-flex align-items-center small px-2 ${
-            status === "error" ? "text-danger" : "text-secondary"
-          }`}
-          style={{ whiteSpace: "nowrap" }}
-        >
-          {status === "error" ? (
-            <button
-              type="button"
-              className="btn btn-sm btn-outline-danger py-0"
-              onClick={() => flushSave()}
-            >
-              {statusLabel[status]}（再試行）
-            </button>
-          ) : (
-            statusLabel[status]
-          )}
-        </div>
-      )}
+      viewModeEnabled={viewMode}
+      renderTopRightUI={
+        viewMode
+          ? undefined
+          : () => (
+              <div
+                className={`d-flex align-items-center small px-2 ${
+                  status === "error" ? "text-danger" : "text-secondary"
+                }`}
+                style={{ whiteSpace: "nowrap" }}
+              >
+                {status === "error" ? (
+                  <button
+                    type="button"
+                    className="btn btn-sm btn-outline-danger py-0"
+                    onClick={() => flushSave()}
+                  >
+                    {statusLabel[status]}（再試行）
+                  </button>
+                ) : (
+                  statusLabel[status]
+                )}
+              </div>
+            )
+      }
     />
   )
 }

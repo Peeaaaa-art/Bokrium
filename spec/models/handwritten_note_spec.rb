@@ -46,4 +46,21 @@ RSpec.describe HandwrittenNote, type: :model do
       expect { note.book.destroy }.to change(HandwrittenNote, :count).by(-1)
     end
   end
+
+  describe ".ordered" do
+    it "position昇順、同positionはid昇順で並ぶ" do
+      user = create(:user)
+      book = create(:book, user: user)
+      second = create(:handwritten_note, user: user, book: book, position: 1)
+      first = create(:handwritten_note, user: user, book: book, position: 0)
+      expect(book.handwritten_notes.ordered).to eq([ first, second ])
+    end
+  end
+
+  describe "#display_title" do
+    it "タイトルがあればそれを、なければ既定名を返す" do
+      expect(build(:handwritten_note, title: "読書マップ").display_title).to eq("読書マップ")
+      expect(build(:handwritten_note, title: nil).display_title).to eq("手書きノート")
+    end
+  end
 end

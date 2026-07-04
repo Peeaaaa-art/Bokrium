@@ -8,6 +8,8 @@ Rails.application.configure do
     Bullet.enable        = true
     Bullet.bullet_logger = true
     Bullet.raise         = true # raise an error if n+1 query occurs
+    # ActiveStorageがattach時に内部で行うincludes(:record)をBulletが誤検知するため除外する
+    Bullet.add_safelist type: :unused_eager_loading, class_name: "ActiveStorage::Attachment", association: :record
   end
 
   # Settings specified here will take precedence over those in config/application.rb.
