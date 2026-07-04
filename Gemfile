@@ -16,6 +16,8 @@ gem "view_component", ">= 4.9.0"
 
 gem "pg"
 
+gem "csv"
+
 gem "pg_search"
 
 gem "image_processing"

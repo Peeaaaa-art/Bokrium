@@ -61,6 +61,8 @@ Rails.application.routes.draw do
 
   get "mypage", to: "users#show", as: :mypage
 
+  get "export/books", to: "exports#books", as: :export_books
+
   resources :books do
     resources :memos, only: [ :create, :new, :edit, :update, :destroy ]
     resources :images, only: [ :create, :destroy ]
