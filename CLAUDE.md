@@ -14,7 +14,7 @@ Bokrium(bokrium.com)の開発方針。
 
 ## Worktree
 
-issueごとに作業用のworktreeを作る。メインの作業ディレクトリ(`~/Workspace/Bokrium`)の状態を汚さないため。
+issueごとに作業用のworktreeを作る。メインのcheckout(`~/Workspace/Bokrium-worktrees/Bokrium`)の状態を汚さないため。
 
 - 配置場所: `~/Workspace/Bokrium-worktrees/{issue番号}-{実装内容を表す英語}/`
 - ディレクトリ名はブランチ名から `issue/` を除いたもの
@@ -31,9 +31,15 @@ git worktree add ~/Workspace/Bokrium-worktrees/{issue番号}-{実装内容を表
 新しいworktreeでは、gitに含まれない以下のセットアップが別途必要:
 
 ```sh
-cp ~/Workspace/Bokrium/.env .env
+cp ~/Workspace/Bokrium-worktrees/Bokrium/.env .env
 bundle install
 npm install
+```
+
+**npmパッケージを追加・更新したら**、Dockerボリューム内のnode_modulesは古いままなので、テスト前にコンテナ内でもインストールする:
+
+```sh
+docker compose run --rm -e SKIP_TEST_PREPARE=1 web-test npm install
 ```
 
 ## 共有Postgresコンテナ
@@ -69,3 +75,28 @@ docker compose run --rm web-test
 ```sh
 docker compose run --rm web-test bundle exec rspec spec/requests/exports_spec.rb
 ```
+
+## PR前のローカルゲート
+
+CIで落ちる前にローカルで全部通す(Brakemanはlintゲートとして必須。`permit!`などはここで落ちる):
+
+```sh
+bundle exec rubocop
+bundle exec brakeman -q --no-pager
+npm run typecheck
+docker compose run --rm web-test
+```
+
+PRの本文は `## 概要` `## 対応` `## 影響範囲` `## Test plan` 形式、マージはsquash。
+
+## フロントエンドの規約
+
+- アイコンは `bi_icon` ヘルパー経由で `app/assets/icons/{name}.svg` を読む。未追加のアイコンは公式Bootstrap Iconsから取得する:
+  `curl -sf https://raw.githubusercontent.com/twbs/icons/main/icons/{name}.svg -o app/assets/icons/{name}.svg`
+- ページ専用のVite entrypoint(`app/frontend/entrypoints/*.tsx`)を追加するときは、`turbo:load` リスナーに加えて**モジュール評価時の即時マウント**も行う。Turbo遷移で初めて読み込まれた場合、`turbo:load` は発火済みのため(実例: `handwritten_note.tsx`)
+- 重いライブラリはページ専用entrypointに分離し、既存ページのバンドルに影響させない(`vite build` 後にマニフェストで確認)
+
+## Claude Code
+
+- セッションは**worktreeディレクトリ内で起動する**。`.claude/settings.json`(権限allowlist・RuboCopフック)とプロジェクトスキルはそこから読み込まれる
+- スキル: `/start-issue {N}`(issue着手の定型セットアップ)、`/ship`(ローカルゲート→PR→auto-merge→片付け)、`/verify`(実アプリでの動作確認手順)
