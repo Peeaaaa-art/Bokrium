@@ -30,11 +30,12 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <%# onload属性はCSP強制下で使えないため、media切替はapplication.tsのactivateAsyncStylesheetsが行う %>
     <link
       href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Inline:opsz,wght@10..72,700&family=Noto+Sans+JP:wght@400;600;700&display=swap"
       rel="stylesheet"
       media="print"
-      onload="this.media='all'">
+      data-media-onload="all">
     <noscript>
       <link
         href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Inline:opsz,wght@10..72,700&family=Noto+Sans+JP:wght@400;600;700&display=swap"

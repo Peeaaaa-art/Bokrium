@@ -1,4 +1,4 @@
-<div class="barcode-scan-preview-container rounded-5 shadow-sm position-relative">
+<div class="barcode-scan-preview-container rounded-5 shadow-sm position-relative" data-controller="video-play">
   <video
     id="barcodeVideo"
     class="video-click-to-play rounded-5 w-100 d-block"
@@ -9,6 +9,7 @@
     playsinline
     poster="<%= cdn_path('barcode_scan.png') %>"
     style="background-color: black;"
+    data-video-play-target="video"
   >
 
     <source src="https://lib.bokrium.com/barcode_scan.webm" type="video/webm">
@@ -21,7 +22,8 @@
     type="button"
     class="btn btn-danger btn-lg position-absolute top-50 start-50 translate-middle shadow"
     style="z-index: 10; border-radius: 33%;"
-    onclick="document.getElementById('barcodeVideo').play(); this.style.display='none';"
+    data-video-play-target="button"
+    data-action="video-play#play"
   >
     <%= bi_icon("play-fill", css: "is-2 is-round") %>
   </button>
