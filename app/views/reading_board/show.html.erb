@@ -1,25 +1,33 @@
 <% content_for :title, "読書戦略ボード - Bokrium" %>
 
-<div class="container my-4 my-md-5" style="max-width: 960px;">
+<div class="container my-4 my-md-5" style="max-width: <%= @view == "kanban" ? "1200px" : "960px" %>;">
   <div class="d-flex align-items-center gap-2 mb-1">
     <%= bi_icon("calendar-check", css: "is-4") %>
     <h1 class="h4 fw-bold mb-0">読書戦略ボード</h1>
   </div>
-  <p class="text-secondary small mb-4">
-    読書中の本に読了目標日を決めて、コツコツ読み進めましょう。締切が近い順に並びます。
+  <p class="text-secondary small mb-3">
+    <% if @view == "kanban" %>
+      カードをドラッグしてステータスを変更できます。
+    <% else %>
+      読書中の本に読了目標日を決めて、コツコツ読み進めましょう。締切が近い順に並びます。
+    <% end %>
   </p>
 
-  <% if @books.any? %>
-    <div class="row row-cols-1 row-cols-md-2 g-3">
-      <%= render partial: "reading_board/book", collection: @books, as: :book %>
-    </div>
+  <div class="btn-group btn-group-sm mb-4" role="group" aria-label="表示の切り替え">
+    <%= link_to reading_board_path(view: "list"),
+          class: "btn #{@view == 'list' ? 'btn-secondary' : 'btn-outline-secondary'}" do %>
+      <%= bi_icon("list-ul", css: "is-7") %> リスト
+    <% end %>
+    <%= link_to reading_board_path(view: "kanban"),
+          class: "btn #{@view == 'kanban' ? 'btn-secondary' : 'btn-outline-secondary'}" do %>
+      <%= bi_icon("kanban", css: "is-7") %> かんばん
+    <% end %>
+  </div>
+
+  <% if @view == "kanban" %>
+    <%= render "reading_board/kanban" %>
   <% else %>
-    <div class="text-center text-secondary py-5">
-      <%= bi_icon("book", css: "is-3 mb-2") %>
-      <p class="mb-1">読書中の本がありません。</p>
-      <p class="small mb-3">本のステータスを「読書中」にすると、ここに並びます。</p>
-      <%= link_to "本棚へ", books_index_path, class: "btn btn-sm btn-outline-primary" %>
-    </div>
+    <%= render "reading_board/list" %>
   <% end %>
 
   <div class="mt-4">

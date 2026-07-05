@@ -1,0 +1,15 @@
+<div class="kanban-column"
+     id="kanban_column_<%= column[:status] %>"
+     data-controller="kanban-column"
+     data-kanban-column-status-value="<%= column[:status] %>">
+  <div class="d-flex align-items-center justify-content-between px-2 pt-2">
+    <span class="fw-bold small"><%= t("books.status.#{column[:status]}") %></span>
+    <% truncated = column[:books].size < column[:total] %>
+    <span class="badge rounded-pill text-bg-light" title="<%= "直近#{column[:books].size}冊を表示" if truncated %>">
+      <%= column[:total] %>
+    </span>
+  </div>
+  <div class="kanban-list p-2" data-kanban-column-target="list">
+    <%= render partial: "reading_board/kanban_card", collection: column[:books], as: :book %>
+  </div>
+</div>

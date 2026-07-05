@@ -70,6 +70,7 @@ Rails.application.routes.draw do
       patch :thumbnail, on: :member
     end
     resource :reading_schedule, only: [ :update ], controller: "books/reading_schedules"
+    resource :status, only: [ :update ], controller: "books/statuses"
     resource :row, only: [ :show, :edit, :update ], controller: "books/rows"
     resource :tags, only: [], controller: "books/tags" do
       post :toggle

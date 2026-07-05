@@ -99,6 +99,11 @@ class Book < ApplicationRecord
     :on_track
   end
 
+  # 読書戦略ボードの並び順: 読了目標日の近い順(未設定は末尾)
+  scope :by_reading_deadline, -> {
+    order(Arel.sql("target_finish_on ASC NULLS LAST")).order(:created_at)
+  }
+
   scope :autocomplete_title_or_author, ->(term) {
     where("title ILIKE ? OR author ILIKE ?", "#{term}%", "#{term}%")
       .select(:id, :title, :author)

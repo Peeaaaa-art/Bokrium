@@ -1,0 +1,40 @@
+<% ratio = book.reading? ? book.reading_progress_ratio : nil %>
+<div class="kanban-card card shadow-sm mb-2"
+     id="kanban_card_<%= book.id %>"
+     data-status-url="<%= book_status_path(book) %>">
+  <div class="card-body p-2">
+    <div class="d-flex gap-2">
+      <% if book.book_cover_s3.attached? %>
+        <%= lazy_image_tag book.book_cover_s3, alt: book.title, class: "kanban-card-cover flex-shrink-0" %>
+      <% else %>
+        <div class="kanban-card-cover kanban-card-cover--placeholder d-flex align-items-center justify-content-center text-secondary flex-shrink-0">
+          <%= bi_icon("book", css: "is-7") %>
+        </div>
+      <% end %>
+      <div class="min-w-0 flex-grow-1">
+        <%= link_to book.title, book_path(book),
+              class: "small fw-bold text-decoration-none text-body kanban-card-title", title: book.title %>
+        <% if book.reading? %>
+          <% if book.target_finish_on || ratio %>
+            <div class="d-flex align-items-center gap-1 mt-1">
+              <% if book.target_finish_on %>
+                <%= reading_schedule_badge(book) %>
+              <% end %>
+              <% if ratio %>
+                <span class="text-secondary" style="font-size: 0.7rem;"><%= (ratio * 100).round %>%</span>
+              <% end %>
+            </div>
+          <% end %>
+          <% if ratio %>
+            <div class="progress mt-1" role="progressbar" aria-label="読書の進捗"
+                 aria-valuenow="<%= (ratio * 100).round %>" aria-valuemin="0" aria-valuemax="100" style="height: 4px;">
+              <div class="progress-bar bg-success" style="width: <%= (ratio * 100).round %>%;"></div>
+            </div>
+          <% end %>
+        <% elsif book.author.present? %>
+          <div class="text-secondary text-truncate" style="font-size: 0.7rem;"><%= book.author %></div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

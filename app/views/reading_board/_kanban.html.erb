@@ -1,0 +1,5 @@
+<div class="kanban-board">
+  <% @kanban_columns.each do |column| %>
+    <%= render "reading_board/kanban_column", column: column %>
+  <% end %>
+</div>
