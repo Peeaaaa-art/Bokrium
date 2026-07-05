@@ -3,6 +3,9 @@
 Devise.setup do |config|
   config.mailer_sender = "Bokrium <support@bokrium.com>"
 
+  # パスワードリセット等のレスポンスからメールアドレスの存在有無を判別できないようにする
+  config.paranoid = true
+
   require "devise/orm/active_record"
 
   config.maximum_attempts = 10

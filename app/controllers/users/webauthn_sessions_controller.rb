@@ -2,6 +2,8 @@
 
 module Users
   class WebauthnSessionsController < ApplicationController
+    rate_limit to: 10, within: 3.minutes, only: :create
+
     # ログイン開始（challenge 生成）
     def new
       options = WebAuthn::Credential.options_for_get(
