@@ -3,9 +3,8 @@
     <div class="card-body d-flex flex-column">
       <div class="d-flex gap-3">
         <%= link_to book_path(book), class: "flex-shrink-0", title: book.title do %>
-          <% if book.book_cover_s3.attached? %>
-            <%= lazy_image_tag book.book_cover_s3, alt: book.title,
-                  style: "width: 56px; height: 80px; object-fit: cover; border-radius: 4px;" %>
+          <% if book.cover_image? %>
+            <%= render Books::CoverComponent.new(book: book, image_class: "reading-board-cover") %>
           <% else %>
             <div class="d-flex align-items-center justify-content-center bg-light text-secondary rounded"
                  style="width: 56px; height: 80px;">

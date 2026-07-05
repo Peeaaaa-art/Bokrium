@@ -43,6 +43,11 @@ class Book < ApplicationRecord
     validate_upload_format(book_cover_s3, :book_cover_s3)
   end
 
+  # 表示できる書影(アップロード済み or 外部URL)があるか
+  def cover_image?
+    (book_cover_s3.attached? && book_cover_s3.key.present?) || book_cover.present?
+  end
+
   def bokrium_cover_url
     return nil unless book_cover_s3.attached? && book_cover_s3.key.present?
 

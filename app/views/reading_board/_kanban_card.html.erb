@@ -4,8 +4,8 @@
      data-book-id="<%= book.id %>">
   <div class="card-body p-2">
     <div class="d-flex gap-2">
-      <% if book.book_cover_s3.attached? %>
-        <%= lazy_image_tag book.book_cover_s3, alt: book.title, class: "kanban-card-cover flex-shrink-0" %>
+      <% if book.cover_image? %>
+        <%= render Books::CoverComponent.new(book: book, image_class: "kanban-card-cover flex-shrink-0") %>
       <% else %>
         <div class="kanban-card-cover kanban-card-cover--placeholder d-flex align-items-center justify-content-center text-secondary flex-shrink-0">
           <%= bi_icon("book", css: "is-7") %>

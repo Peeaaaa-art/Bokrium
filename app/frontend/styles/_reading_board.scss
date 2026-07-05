@@ -54,6 +54,14 @@
   opacity: 0.4;
 }
 
+// リストviewの書影
+.reading-board-cover {
+  width: 56px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
 // ロードマップview
 .roadmap-scroll {
   overflow-x: auto;
