@@ -42,5 +42,11 @@ RSpec.describe BookApis::NdlService do
         page: nil
       )
     end
+
+    it 'タイムアウトした場合はハングせずnilを返す' do
+      stub_request(:get, "https://iss.ndl.go.jp/api/opensearch?isbn=#{isbn}").to_timeout
+
+      expect(described_class.fetch(isbn)).to be_nil
+    end
   end
 end

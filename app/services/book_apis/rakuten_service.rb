@@ -49,18 +49,14 @@ module BookApis
         uri = URI.parse(ENDPOINT)
         uri.query = URI.encode_www_form(default_params.merge(params).compact)
 
-        req = Net::HTTP::Get.new(uri)
-        req["Accept"] = "application/json"
-        req["Authorization"] = "Bearer #{access_key}" if access_key.present?
-        req["Origin"] = request_origin
-        req["Referer"] = request_referer
+        headers = {
+          "Accept" => "application/json",
+          "Origin" => HttpClient.request_origin,
+          "Referer" => HttpClient.request_referer
+        }
+        headers["Authorization"] = "Bearer #{access_key}" if access_key.present?
 
-        http = Net::HTTP.new(uri.host, uri.port)
-        http.use_ssl = true
-        http.open_timeout = 5
-        http.read_timeout = 5
-
-        http.request(req)
+        HttpClient.get(uri, headers: headers)
       end
 
       def default_params
@@ -120,22 +116,6 @@ module BookApis
 
       def access_key
         ENV["RAKUTEN_ACCESS_KEY"]
-      end
-
-      def request_origin
-        raw = ENV["APP_HOST"].to_s.strip
-        raw = "https://bokrium.com" if raw.blank?
-        normalized = raw.match?(/\Ahttps?:\/\//) ? raw : "https://#{raw}"
-        uri = URI.parse(normalized)
-        origin = +"#{uri.scheme}://#{uri.host}"
-        origin << ":#{uri.port}" if uri.port && uri.port != uri.default_port
-        origin
-      rescue URI::InvalidURIError
-        "https://bokrium.com"
-      end
-
-      def request_referer
-        "#{request_origin}/"
       end
     end
   end

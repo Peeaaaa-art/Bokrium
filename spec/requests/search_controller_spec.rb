@@ -21,6 +21,43 @@ RSpec.describe "SearchController", type: :request do
     end
   end
 
+  describe "GET /search/isbn_turbo (ISBNキャッシュ)" do
+    let(:isbn) { "9784041023444" }
+    let(:book_data) do
+      {
+        title: "キャッシュテスト本",
+        author: "テスト著者",
+        publisher: "テスト出版社",
+        isbn: isbn,
+        book_cover: "https://example.com/cover.jpg"
+      }
+    end
+    let(:turbo_headers) { { "Accept" => "text/vnd.turbo-stream.html" } }
+
+    before do
+      allow(Rails).to receive(:cache).and_return(ActiveSupport::Cache::MemoryStore.new)
+      allow(BookApis::OpenBdService).to receive(:fetch).and_return(book_data)
+      allow(BookApis::RakutenService).to receive(:fetch).and_return(nil)
+      allow(BookApis::GoogleBooksService).to receive(:fetch).and_return(nil)
+      allow(BookApis::NdlService).to receive(:fetch).and_return(nil)
+    end
+
+    it "同一ISBNの2回目以降は外部APIを呼ばない" do
+      2.times { get search_isbn_turbo_path(isbn: isbn), headers: turbo_headers }
+
+      expect(response).to have_http_status(:ok)
+      expect(BookApis::OpenBdService).to have_received(:fetch).once
+    end
+
+    it "全APIが未ヒットのISBNはキャッシュしない" do
+      allow(BookApis::OpenBdService).to receive(:fetch).and_return(nil)
+
+      2.times { get search_isbn_turbo_path(isbn: isbn), headers: turbo_headers }
+
+      expect(BookApis::OpenBdService).to have_received(:fetch).twice
+    end
+  end
+
   describe "GET /search (typeが不正 or 空クエリ)" do
     it "typeが無効なとき何も検索されない" do
       get search_books_path(type: "unknown", query: "foo")

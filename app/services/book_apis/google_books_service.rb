@@ -14,7 +14,7 @@ module BookApis
 
       parse_response(JSON.parse(response.body), isbn)
     rescue StandardError => e
-      Rails.logger.error("[GoogleBooksService][ISBN] #{e.message}")
+      Rails.logger.error("[GoogleBooksService][ISBN] #{e.class}: #{e.message}")
       nil
     end
 
@@ -30,7 +30,7 @@ module BookApis
         total_count: data["totalItems"].to_i
       }
     rescue StandardError => e
-      Rails.logger.error("[GoogleBooksService][Title/Author] #{e.message}")
+      Rails.logger.error("[GoogleBooksService][Title/Author] #{e.class}: #{e.message}")
       blank_result
     end
 
@@ -40,16 +40,11 @@ module BookApis
       uri = URI.parse(ENDPOINT)
       uri.query = URI.encode_www_form(params.merge(api_key_param))
 
-      req = Net::HTTP::Get.new(uri)
-      req["Origin"] = request_origin
-      req["Referer"] = request_referer
-
-      http = Net::HTTP.new(uri.host, uri.port)
-      http.use_ssl = true
-      http.open_timeout = 5
-      http.read_timeout = 5
-
-      response = http.request(req)
+      # Origin/RefererはAPIキーのHTTPリファラー制限用(BookApis::HttpClient参照)
+      response = HttpClient.get(uri, headers: {
+        "Origin" => HttpClient.request_origin,
+        "Referer" => HttpClient.request_referer
+      })
 
       unless response.is_a?(Net::HTTPSuccess)
         Rails.logger.warn("[GoogleBooksService] Unexpected response: #{response.code} #{response.message}")
@@ -60,24 +55,6 @@ module BookApis
 
     def self.api_key_param
       ENV["GOOGLE_BOOKS_API_KEY"].present? ? { key: ENV["GOOGLE_BOOKS_API_KEY"] } : {}
-    end
-
-    # Google CloudのAPIキーにHTTPリファラー制限をかけているため、
-    # サーバーサイドのNet::HTTPが自動付与しないOrigin/Refererを明示する(RakutenServiceと同様)
-    def self.request_origin
-      raw = ENV["APP_HOST"].to_s.strip
-      raw = "https://bokrium.com" if raw.blank?
-      normalized = raw.match?(/\Ahttps?:\/\//) ? raw : "https://#{raw}"
-      uri = URI.parse(normalized)
-      origin = +"#{uri.scheme}://#{uri.host}"
-      origin << ":#{uri.port}" if uri.port && uri.port != uri.default_port
-      origin
-    rescue URI::InvalidURIError
-      "https://bokrium.com"
-    end
-
-    def self.request_referer
-      "#{request_origin}/"
     end
 
     def self.parse_response(data, isbn)
