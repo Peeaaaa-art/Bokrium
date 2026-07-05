@@ -1,7 +1,8 @@
 <div class="kanban-column"
      id="kanban_column_<%= column[:status] %>"
      data-controller="kanban-column"
-     data-kanban-column-status-value="<%= column[:status] %>">
+     data-kanban-column-status-value="<%= column[:status] %>"
+     data-kanban-column-url-value="<%= reading_board_column_path %>">
   <div class="d-flex align-items-center justify-content-between px-2 pt-2">
     <span class="fw-bold small"><%= t("books.status.#{column[:status]}") %></span>
     <% truncated = column[:books].size < column[:total] %>

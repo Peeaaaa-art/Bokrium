@@ -14,8 +14,11 @@ module ReadingBoardColumns
     }
   end
 
+  # 手動並び替え済み(board_positionあり)が先、未設定は各列の自動順で後ろに続く
   def kanban_column_books(status)
-    scope = current_user.books.with_attached_book_cover_s3
+    scope = current_user.books
+      .with_attached_book_cover_s3
+      .order(Arel.sql("board_position ASC NULLS LAST"))
     case status.to_s
     when "want_to_read"
       scope.want_to_read.order(created_at: :desc)
