@@ -45,6 +45,48 @@ RSpec.describe "ReadingBoard", type: :request do
       end
     end
 
+    describe "GET /reading_board (かんばんview)" do
+      it "ステータス3列が自分の本だけで表示される" do
+        FactoryBot.create(:book, user: user, status: :want_to_read, title: "積んでる本")
+        FactoryBot.create(:book, user: user, status: :reading, title: "読んでる本")
+        FactoryBot.create(:book, user: user, status: :finished, title: "読み終えた本")
+        FactoryBot.create(:book, user: other_user, status: :reading, title: "他人の本")
+
+        get reading_board_path(view: "kanban")
+
+        expect(response).to have_http_status(:ok)
+        %w[want_to_read reading finished].each do |status|
+          expect(response.body).to include("kanban_column_#{status}")
+        end
+        expect(response.body).to include("積んでる本", "読んでる本", "読み終えた本")
+        expect(response.body).not_to include("他人の本")
+      end
+
+      it "選択したviewがセッションに記憶される" do
+        get reading_board_path(view: "kanban")
+        get reading_board_path
+
+        expect(response.body).to include("kanban_column_reading")
+      end
+
+      it "不正なviewはリスト表示にフォールバックする" do
+        get reading_board_path(view: "bogus")
+
+        expect(response).to have_http_status(:ok)
+        expect(response.body).not_to include("kanban_column_reading")
+      end
+
+      it "読了列は表示上限を超えない(ヘッダーには総数)" do
+        stub_const("ReadingBoardColumns::KANBAN_FINISHED_LIMIT", 2)
+        3.times { |i| FactoryBot.create(:book, user: user, status: :finished, title: "読了本#{i}") }
+
+        get reading_board_path(view: "kanban")
+
+        expect(response.body.scan(/kanban_card_\d+/).uniq.size).to eq(2)
+        expect(response.body).to include("直近2冊を表示") # 切り詰め時はバッジに総数+説明title
+      end
+    end
+
     describe "PATCH /books/:book_id/reading_schedule" do
       let(:book) { FactoryBot.create(:book, user: user, status: :reading, page: 200) }
 

@@ -1,0 +1,55 @@
+// 読書戦略ボード(かんばんview)
+.kanban-board {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+}
+
+.kanban-column {
+  flex: 1 0 240px;
+  max-width: 340px;
+  background-color: rgba(0, 0, 0, 0.03);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 0.5rem;
+}
+
+.kanban-list {
+  // 空の列にもドロップできる高さを確保しつつ、長い列は列内スクロールにする
+  min-height: 120px;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.kanban-card {
+  cursor: grab;
+
+  &:active {
+    cursor: grabbing;
+  }
+}
+
+.kanban-card-cover {
+  width: 28px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 3px;
+}
+
+.kanban-card-cover--placeholder {
+  background-color: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.kanban-card-title {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+// ドラッグ中に元の位置に表示される残像
+.kanban-ghost {
+  opacity: 0.4;
+}

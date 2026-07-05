@@ -1,0 +1,12 @@
+<% if @books.any? %>
+  <div class="row row-cols-1 row-cols-md-2 g-3">
+    <%= render partial: "reading_board/book", collection: @books, as: :book %>
+  </div>
+<% else %>
+  <div class="text-center text-secondary py-5">
+    <%= bi_icon("book", css: "is-3 mb-2") %>
+    <p class="mb-1">読書中の本がありません。</p>
+    <p class="small mb-3">本のステータスを「読書中」にすると、ここに並びます。</p>
+    <%= link_to "本棚へ", books_index_path, class: "btn btn-sm btn-outline-primary" %>
+  </div>
+<% end %>

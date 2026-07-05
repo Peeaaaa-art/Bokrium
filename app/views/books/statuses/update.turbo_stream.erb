@@ -1,0 +1,5 @@
+<% @columns.each do |column| %>
+  <%= turbo_stream.replace "kanban_column_#{column[:status]}" do %>
+    <%= render "reading_board/kanban_column", column: column %>
+  <% end %>
+<% end %>
