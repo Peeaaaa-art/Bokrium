@@ -1,0 +1,8 @@
+<% selected = book.book_tag_assignments.exists?(user_tag_id: tag.id) %>
+<span id="book_<%= book.id %>_tag_<%= tag.id %>" class="d-inline-block">
+  <%= button_to toggle_book_tags_path(book, tag_id: tag.id), method: :post,
+      class: "badge rounded-pill border-0 #{selected ? 'selected-tag' : 'unselected-tag'}",
+      style: "background-color: #{tag.color.presence || '#6c757d'};" do %>
+    <%= tag.name %>
+  <% end %>
+</span>

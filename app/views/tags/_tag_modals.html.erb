@@ -7,16 +7,9 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
       </div>
       <div class="modal-body">
-        <div class="d-flex flex-wrap m-3 gap-2">
+        <div class="d-flex flex-wrap m-3 gap-2" id="tag_select_list_<%= book.id %>">
           <% if user_tags.present? %>
-            <% user_tags.each do |tag| %>
-              <% selected = book.book_tag_assignments.exists?(user_tag_id: tag.id) %>
-              <%= button_to toggle_book_tags_path(book, tag_id: tag.id), method: :post,
-                  class: "badge rounded-pill border-0 #{selected ? 'selected-tag' : 'unselected-tag'}",
-                  style: "background-color: #{tag.color.presence || '#6c757d'};" do %>
-                <%= tag.name %>
-              <% end %>
-            <% end %>
+            <%= render partial: "tags/tag_select_button", collection: user_tags, as: :tag, locals: { book: book } %>
           <% end %>
         </div>
         <hr>
