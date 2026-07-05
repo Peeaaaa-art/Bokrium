@@ -6,17 +6,18 @@ module UploadValidations
   def validate_upload_format(attachment, attribute_name)
     return unless attachment.attached?
 
-    allowed_extensions = %w[jpg jpeg png gif webp svg]
-    allowed_content_types = %w[image/jpeg image/png image/gif image/webp image/svg+xml]
+    # SVGはscriptを内包できる(stored XSSベクタ)ため許可しない
+    allowed_extensions = %w[jpg jpeg png gif webp]
+    allowed_content_types = %w[image/jpeg image/png image/gif image/webp]
 
     extension = attachment.filename.extension_without_delimiter&.downcase
     content_type = attachment.content_type
 
     # content_type が許可されていれば、拡張子が無くても許可する
     if !allowed_content_types.include?(content_type)
-      errors.add(attribute_name, " : 許可されていない形式です（jpg, png, gif, webp, svg）")
+      errors.add(attribute_name, " : 許可されていない形式です（jpg, png, gif, webp）")
     elsif extension.present? && !allowed_extensions.include?(extension)
-      errors.add(attribute_name, " : ファイル拡張子が不正です（jpg, png, gif, webp, svg）")
+      errors.add(attribute_name, " : ファイル拡張子が不正です（jpg, png, gif, webp）")
     end
 
     if attachment.blob.byte_size > MAX_UPLOAD_SIZE

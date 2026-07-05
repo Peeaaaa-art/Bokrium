@@ -1,4 +1,7 @@
 class SearchController < ApplicationController
+  # 外部書誌APIへのプロキシなので、未認証の連打で外部APIのquotaを食い潰されないようにする
+  rate_limit to: 30, within: 1.minute
+
   SEARCH_TYPES = %w[isbn author title].freeze
   APIs = %i[ OpenBdService RakutenService GoogleBooksService NdlService ]
             .map { |name| BookApis.const_get(name) }

@@ -1,4 +1,5 @@
 class UserTagsController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_user_tag, only: [ :edit, :update, :destroy ]
 
   def create

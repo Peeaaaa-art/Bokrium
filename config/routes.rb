@@ -126,7 +126,7 @@ Rails.application.routes.draw do
     post :stripe, to: "stripe#create"
     post :email_notifications, to: "email_notifications#create"
   end
-  get "subscriptions/create", as: :create_subscrption
+  post "subscriptions", to: "subscriptions#create", as: :create_subscription
   post "subscription/cancel", to: "subscriptions#cancel", as: :cancel_subscription
 end
 
