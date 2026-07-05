@@ -45,12 +45,10 @@ Rails.application.routes.draw do
   get "donations/thank_you", to: "donations#thank_you"
 
 
-  get "explore/suggestions"
   get "search", to: "search#index", as: :search_books
   get "search/barcode", to: "search#barcode", as: :search_barcode
   get "search/isbn_turbo", to: "search#search_isbn_turbo", as: :search_isbn_turbo
   get "search/search_google_books", to: "search#search_google_books", as: :search_google_books
-  post "/presigned_url", to: "uploads#presigned_url"
   post "/callback", to: "line_webhooks#callback"
 
   patch "/line_notifications/toggle", to: "line_notifications#toggle", as: :toggle_notifications
