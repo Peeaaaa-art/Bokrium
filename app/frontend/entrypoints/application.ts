@@ -67,12 +67,14 @@ document.addEventListener("turbo:frame-load", () => {
 
 // --- Stimulus Controllers ---
 import AnimationController from "./controllers/animation_controller";
+import AuthMethodController from "./controllers/auth_method_controller";
 import AutoCompleteController from "./controllers/autocomplete_controller";
 import AutoRemoveController from "./controllers/auto_remove_controller";
 import AutoSubmitController from "./controllers/auto_submit_controller";
 import BarcodeResultController from "./controllers/barcode_result_controller";
 import BarcodeScanController from "./controllers/barcode_scan_controller";
 import BookEditController from "./controllers/book_edit_controller";
+import ClipboardController from "./controllers/clipboard_controller";
 import ColumnSelectorController from "./controllers/column_selector_controller";
 import ConfirmModalController from "./controllers/confirm_modal_controller";
 import DetailCardColumnSelectorController from "./controllers/detail_card_column_selector_controller";
@@ -87,6 +89,7 @@ import ScrollTopOnClickController from "./controllers/scroll_top_on_click_contro
 import SpinnerController from "./controllers/spinner_controller";
 import SpineBookController from "./controllers/spine_book_controller";
 import TagToggleController from "./controllers/tag_toggle_controller";
+import VideoPlayController from "./controllers/video_play_controller";
 import WebauthnLoginController from "./controllers/webauthn_login_controller";
 import WebauthnRegistrationController from "./controllers/webauthn_registration_controller";
 
@@ -95,12 +98,14 @@ const application = Application.start();
 window.Stimulus = application;
 
 application.register("animation", AnimationController);
+application.register("auth-method", AuthMethodController);
 application.register("autocomplete", AutoCompleteController);
 application.register("auto-remove", AutoRemoveController);
 application.register("auto-submit", AutoSubmitController);
 application.register("barcode-result", BarcodeResultController);
 application.register("barcode-scan", BarcodeScanController);
 application.register("book-edit", BookEditController);
+application.register("clipboard", ClipboardController);
 application.register("column-selector", ColumnSelectorController);
 application.register("confirm-modal", ConfirmModalController);
 application.register("detail-card-column-selector", DetailCardColumnSelectorController);
@@ -115,6 +120,7 @@ application.register("scroll-top-on-click", ScrollTopOnClickController);
 application.register("spinner", SpinnerController);
 application.register("spine-book", SpineBookController);
 application.register("tag-toggle", TagToggleController);
+application.register("video-play", VideoPlayController);
 application.register("webauthn-login", WebauthnLoginController);
 application.register("webauthn-registration", WebauthnRegistrationController);
 
@@ -130,5 +136,21 @@ const loadReadonlyEditorIfNeeded = () => {
   }
 };
 document.addEventListener("turbo:load", loadReadonlyEditorIfNeeded);
+
+// 非同期CSS(Google Fonts等)のmedia切替。
+// CSP強制下ではlinkタグのonload属性が使えないため、JS側で行う
+// (<link media="print" data-media-onload="all"> を対象にする)
+const activateAsyncStylesheets = () => {
+  document.querySelectorAll<HTMLLinkElement>("link[data-media-onload]").forEach((link) => {
+    const targetMedia = link.dataset.mediaOnload || "all";
+    if (link.media === targetMedia) return;
+
+    const apply = () => { link.media = targetMedia; };
+    if (link.sheet) apply();
+    else link.addEventListener("load", apply, { once: true });
+  });
+};
+activateAsyncStylesheets();
+document.addEventListener("turbo:load", activateAsyncStylesheets);
 
 export { application };

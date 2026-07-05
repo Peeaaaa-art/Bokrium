@@ -56,7 +56,10 @@
           <li>
             <button
               class="dropdown-item"
-              onclick="navigator.clipboard.writeText('<%= memo.public_url %>'); alert('共有URLをコピーしました');"
+              data-controller="clipboard"
+              data-clipboard-text-value="<%= memo.public_url %>"
+              data-clipboard-message-value="共有URLをコピーしました"
+              data-action="clipboard#copy"
             >
             <%= bi_icon("clipboard", css: "is-6 me-1") %> 共有URLをコピー
             </button>
