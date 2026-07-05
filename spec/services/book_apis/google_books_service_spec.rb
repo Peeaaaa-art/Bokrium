@@ -92,7 +92,7 @@ RSpec.describe BookApis::GoogleBooksService do
           .with(query: hash_including("q" => "isbn:#{isbn}"))
           .to_raise(StandardError.new("エラー発生"))
 
-        expect(Rails.logger).to receive(:error).with(/\[GoogleBooksService\]\[ISBN\] エラー発生/)
+        expect(Rails.logger).to receive(:error).with(/\[GoogleBooksService\]\[ISBN\] StandardError: エラー発生/)
         expect(described_class.fetch(isbn)).to be_nil
       end
     end
@@ -167,7 +167,7 @@ RSpec.describe BookApis::GoogleBooksService do
           .with(query: hash_including("q" => query))
           .to_raise(StandardError.new("search error"))
 
-        expect(Rails.logger).to receive(:error).with(/\[GoogleBooksService\]\[Title\/Author\] search error/)
+        expect(Rails.logger).to receive(:error).with(/\[GoogleBooksService\]\[Title\/Author\] StandardError: search error/)
         expect(described_class.fetch_by_title_or_author(query)).to eq({ items: [], total_count: 0 })
       end
     end

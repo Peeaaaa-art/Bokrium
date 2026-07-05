@@ -8,7 +8,7 @@ module BookApis
 
     def self.fetch(isbn)
       uri = URI.parse("#{ENDPOINT}?isbn=#{isbn}")
-      response = Net::HTTP.get_response(uri)
+      response = HttpClient.get(uri)
 
       return nil unless response.is_a?(Net::HTTPSuccess)
 
@@ -25,7 +25,7 @@ module BookApis
         price: data.dig("onix", "ProductSupply", "SupplyDetail", "Price", 0, "PriceAmount")&.to_i
       }
     rescue StandardError => e
-      Rails.logger.error("[OpenBdService] #{e.message}")
+      Rails.logger.error("[OpenBdService] #{e.class}: #{e.message}")
       nil
     end
   end

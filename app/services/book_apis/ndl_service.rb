@@ -38,13 +38,7 @@ module BookApis
       raise "Too many HTTP redirects" if limit == 0
 
       uri = URI.parse(uri_str)
-      http = Net::HTTP.new(uri.host, uri.port)
-      http.use_ssl = uri.scheme == "https"
-
-      req = Net::HTTP::Get.new(uri)
-      req["User-Agent"] = "Ruby/#{RUBY_VERSION}"
-
-      res = http.request(req)
+      res = HttpClient.get(uri, headers: { "User-Agent" => "Ruby/#{RUBY_VERSION}" })
 
       case res
       when Net::HTTPSuccess

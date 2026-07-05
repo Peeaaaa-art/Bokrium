@@ -136,7 +136,13 @@ class SearchController < ApplicationController
     end
   end
 
+  # ISBN→書誌情報はほぼ不変のため、ヒットした結果のみキャッシュする
+  # (未ヒットのISBNは後から流通し始めることがあるためキャッシュしない)
   def fetch_book_info(isbn)
+    cache_key = "book_info/v1/#{isbn}"
+    cached = Rails.cache.read(cache_key)
+    return cached if cached.present?
+
     result = {}
 
     APIs.each do |api|
@@ -150,7 +156,9 @@ class SearchController < ApplicationController
       break if complete?(result)
     end
 
-    result.presence
+    result = result.presence
+    Rails.cache.write(cache_key, result, expires_in: 30.days) if result
+    result
   end
 
   def complete?(data)

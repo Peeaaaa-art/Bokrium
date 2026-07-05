@@ -1,10 +1,9 @@
 require 'rails_helper'
-require 'net/http'
 
 RSpec.describe BookApis::OpenBdService do
   describe '.fetch' do
     let(:isbn) { "9784041023444" }
-    let(:uri) { URI.parse("https://api.openbd.jp/v1/get?isbn=#{isbn}") }
+    let(:endpoint) { "https://api.openbd.jp/v1/get?isbn=#{isbn}" }
 
     context '正常なレスポンスが返ってきた場合' do
       let(:response_body) do
@@ -32,9 +31,7 @@ RSpec.describe BookApis::OpenBdService do
       end
 
       it '正しい書籍データを返す' do
-        success_response = instance_double(Net::HTTPSuccess, body: response_body)
-        allow(success_response).to receive(:is_a?).with(Net::HTTPSuccess).and_return(true)
-        allow(Net::HTTP).to receive(:get_response).with(uri).and_return(success_response)
+        stub_request(:get, endpoint).to_return(status: 200, body: response_body)
 
         result = described_class.fetch(isbn)
         expect(result).to eq({
@@ -51,9 +48,7 @@ RSpec.describe BookApis::OpenBdService do
 
     context '書籍データが見つからない場合' do
       it 'nilを返す' do
-        response = instance_double(Net::HTTPSuccess, body: [ nil ].to_json)
-        allow(response).to receive(:is_a?).with(Net::HTTPSuccess).and_return(true)
-        allow(Net::HTTP).to receive(:get_response).with(uri).and_return(response)
+        stub_request(:get, endpoint).to_return(status: 200, body: [ nil ].to_json)
 
         expect(described_class.fetch(isbn)).to be_nil
       end
@@ -61,9 +56,7 @@ RSpec.describe BookApis::OpenBdService do
 
     context 'HTTPレスポンスが失敗した場合' do
       it 'nilを返す' do
-        fail_response = instance_double(Net::HTTPInternalServerError)
-        allow(fail_response).to receive(:is_a?).with(Net::HTTPSuccess).and_return(false)
-        allow(Net::HTTP).to receive(:get_response).with(uri).and_return(fail_response)
+        stub_request(:get, endpoint).to_return(status: 500, body: "")
 
         expect(described_class.fetch(isbn)).to be_nil
       end
@@ -71,9 +64,17 @@ RSpec.describe BookApis::OpenBdService do
 
     context '例外が発生した場合' do
       it 'nilを返す' do
-        allow(Net::HTTP).to receive(:get_response).with(uri).and_raise(StandardError.new("接続失敗"))
+        stub_request(:get, endpoint).to_raise(StandardError.new("接続失敗"))
 
-        expect(Rails.logger).to receive(:error).with(/\[OpenBdService\] 接続失敗/)
+        expect(Rails.logger).to receive(:error).with(/\[OpenBdService\] StandardError: 接続失敗/)
+        expect(described_class.fetch(isbn)).to be_nil
+      end
+    end
+
+    context 'タイムアウトした場合' do
+      it 'ハングせずnilを返す' do
+        stub_request(:get, endpoint).to_timeout
+
         expect(described_class.fetch(isbn)).to be_nil
       end
     end
