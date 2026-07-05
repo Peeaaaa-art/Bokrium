@@ -43,6 +43,23 @@ RSpec.describe BookApis::GoogleBooksService do
           page: 123
         })
       end
+
+      it "Origin/RefererヘッダーにAPP_HOSTを付与する(APIキーのリファラー制限対策)" do
+        allow(ENV).to receive(:[]).with("APP_HOST").and_return("https://bokrium.com")
+
+        stub_request(:get, endpoint)
+          .with(
+            query: hash_including("q" => "isbn:#{isbn}"),
+            headers: { "Origin" => "https://bokrium.com", "Referer" => "https://bokrium.com/" }
+          )
+          .to_return(status: 200, body: { items: [] }.to_json)
+
+        described_class.fetch(isbn)
+        expect(WebMock).to have_requested(:get, endpoint).with(
+          query: hash_including("q" => "isbn:#{isbn}"),
+          headers: { "Origin" => "https://bokrium.com", "Referer" => "https://bokrium.com/" }
+        )
+      end
     end
 
     context "APIキーが設定されている場合" do
