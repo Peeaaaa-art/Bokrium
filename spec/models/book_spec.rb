@@ -287,4 +287,14 @@ RSpec.describe Book, type: :model do
       expect(book.reload.started_on).to be_nil
     end
   end
+
+  describe "#cover_image?" do
+    it "外部URLの書影があれば true" do
+      expect(build(:book, book_cover: "https://example.com/cover.jpg").cover_image?).to be true
+    end
+
+    it "書影がなければ false" do
+      expect(build(:book, book_cover: nil).cover_image?).to be false
+    end
+  end
 end

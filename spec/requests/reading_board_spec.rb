@@ -43,6 +43,15 @@ RSpec.describe "ReadingBoard", type: :request do
         expect(near).to be < far
         expect(far).to be < none
       end
+
+      it "外部URLの書影(Rakuten/Google等)も表示される" do
+        FactoryBot.create(:book, user: user, status: :reading, title: "外部書影の本",
+          book_cover: "https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/0000/dummy.jpg")
+
+        get reading_board_path
+
+        expect(response.body).to include("https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/0000/dummy.jpg")
+      end
     end
 
     describe "GET /reading_board (かんばんview)" do
@@ -60,6 +69,15 @@ RSpec.describe "ReadingBoard", type: :request do
         end
         expect(response.body).to include("積んでる本", "読んでる本", "読み終えた本")
         expect(response.body).not_to include("他人の本")
+      end
+
+      it "外部URLの書影がカードに表示される" do
+        FactoryBot.create(:book, user: user, status: :want_to_read, title: "外部書影の本",
+          book_cover: "https://books.google.com/books/content/dummy_cover.jpg")
+
+        get reading_board_path(view: "kanban")
+
+        expect(response.body).to include("https://books.google.com/books/content/dummy_cover.jpg")
       end
 
       it "選択したviewがセッションに記憶される" do
