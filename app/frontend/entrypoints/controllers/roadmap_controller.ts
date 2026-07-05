@@ -1,11 +1,6 @@
 import { Controller } from "@hotwired/stimulus"
 import { renderStreamMessage } from "@hotwired/turbo"
-
-function csrfToken(): string {
-  return (
-    document.querySelector<HTMLMetaElement>("meta[name='csrf-token']")?.content ?? ""
-  )
-}
+import { csrfToken } from "../utils/csrf"
 
 function isoDate(date: Date): string {
   const pad = (n: number) => String(n).padStart(2, "0")

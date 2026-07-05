@@ -1,4 +1,5 @@
 import { Controller } from "@hotwired/stimulus"
+import { csrfToken } from "../utils/csrf"
 
 export default class BookEditController extends Controller<HTMLElement> {
   static targets = ["title", "author", "publisher"]
@@ -62,21 +63,19 @@ export default class BookEditController extends Controller<HTMLElement> {
     const titleInput = row.querySelector<HTMLInputElement>("input[name='title']")
     const authorInput = row.querySelector<HTMLInputElement>("input[name='author']")
     const publisherInput = row.querySelector<HTMLInputElement>("input[name='publisher']")
-    const csrfMeta = document.querySelector<HTMLMetaElement>("meta[name='csrf-token']")
+    const token = csrfToken()
 
-    if (!titleInput || !authorInput || !publisherInput || !csrfMeta) {
+    if (!titleInput || !authorInput || !publisherInput || !token) {
       alert("入力値の取得に失敗しました。")
       return
     }
-
-    const csrfToken = csrfMeta.getAttribute("content") ?? ""
 
     fetch(`/books/${id}/row`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
         Accept: "text/vnd.turbo-stream.html",
-        "X-CSRF-Token": csrfToken
+        "X-CSRF-Token": token
       },
       body: JSON.stringify({
         book: {

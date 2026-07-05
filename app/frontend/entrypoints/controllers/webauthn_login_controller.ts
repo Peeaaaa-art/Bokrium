@@ -1,4 +1,5 @@
 import { Controller } from "@hotwired/stimulus";
+import { csrfToken } from "../utils/csrf";
 
 type LoginOptionsResponse = {
   challenge: string;
@@ -79,7 +80,7 @@ export default class WebauthnLoginController extends Controller<HTMLElement> {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "X-CSRF-Token": this.getCSRFToken(),
+          "X-CSRF-Token": csrfToken(),
         },
         body: JSON.stringify(body),
       });
@@ -160,13 +161,5 @@ export default class WebauthnLoginController extends Controller<HTMLElement> {
       binary += String.fromCharCode(bytes[i]);
     }
     return btoa(binary).replace(/\+/g, "-").replace(/\//g, "_").replace(/=/g, "");
-  }
-
-  // Helper: CSRF トークン取得
-  private getCSRFToken(): string {
-    const meta = document.querySelector<HTMLMetaElement>(
-      'meta[name="csrf-token"]'
-    );
-    return meta ? meta.content : "";
   }
 }

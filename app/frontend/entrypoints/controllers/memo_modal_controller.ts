@@ -1,5 +1,4 @@
 import { Controller } from "@hotwired/stimulus"
-import { mountRichEditor } from "../rich_editor"
 import { prepareMemoHtmlForSave } from "../utils/memo_links"
 import { normalizeProseMirrorHtmlForSave } from "../utils/prosemirror_html"
 
@@ -40,7 +39,7 @@ export default class MemoModalController extends Controller<HTMLElement> {
     }
   }
 
-  open(event: Event) {
+  async open(event: Event) {
     if (this.shouldIgnoreOpen(event)) return
 
     if (event.type === "touchend") {
@@ -70,6 +69,8 @@ export default class MemoModalController extends Controller<HTMLElement> {
       editorRoot.dataset.initialContent = initialContent
       editorRoot.dataset.memoId = memoId
 
+      // TipTap+Reactは重いためモーダルを開くときに初めて読み込む
+      const { mountRichEditor } = await import("../rich_editor")
       mountRichEditor(editorRoot)
 
       const observer = new MutationObserver(() => {
