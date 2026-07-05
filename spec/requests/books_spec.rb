@@ -12,6 +12,34 @@ RSpec.describe "Books", type: :request do
     }
   end
 
+  describe "GET /books" do
+    it "表紙付きの本を並べてもblobのN+1クエリが発生しない" do
+      5.times do |i|
+        book = create(:book, user: user, title: "表紙つきの本#{i}")
+        book.book_cover_s3.attach(
+          io: File.open(Rails.root.join("spec/fixtures/files/sample.png")),
+          filename: "sample.png",
+          content_type: "image/png"
+        )
+      end
+
+      blob_select_count = 0
+      counter = lambda do |_name, _started, _finished, _id, payload|
+        next if payload[:cached]
+
+        blob_select_count += 1 if payload[:sql].to_s.match?(/SELECT.*"active_storage_blobs"/m)
+      end
+
+      ActiveSupport::Notifications.subscribed(counter, "sql.active_record") do
+        get books_path
+      end
+
+      expect(response).to have_http_status(:ok)
+      # preload済みなら表紙5冊分のblobは1クエリにまとまる（N+1なら5クエリ以上になる）
+      expect(blob_select_count).to be <= 2
+    end
+  end
+
   describe "GET /books/:id" do
     it "書籍の詳細が表示される" do
       book = create(:book, user: user, title: "詳細テスト本")

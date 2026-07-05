@@ -132,7 +132,7 @@ class BooksController < ApplicationController
 
   def set_book_with_associations
     @book = current_user.books
-            .includes(:user_tags, { images: :image_s3_attachment }, :book_cover_s3_attachment)
+            .includes(:user_tags, { images: { image_s3_attachment: :blob } }, { book_cover_s3_attachment: :blob })
             .find(params[:id])
   end
 

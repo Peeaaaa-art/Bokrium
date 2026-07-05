@@ -10,6 +10,9 @@ Rails.application.configure do
     Bullet.raise         = true # raise an error if n+1 query occurs
     # ActiveStorageがattach時に内部で行うincludes(:record)をBulletが誤検知するため除外する
     Bullet.add_safelist type: :unused_eager_loading, class_name: "ActiveStorage::Attachment", association: :record
+    # blobへのアクセスはdelegate_missing_to :blob経由のためBulletが「未使用のeager load」と誤検知する
+    # (実際に使われていることはspec/requests/books_spec.rbのblobクエリ数アサーションで担保)
+    Bullet.add_safelist type: :unused_eager_loading, class_name: "ActiveStorage::Attachment", association: :blob
   end
 
   # Settings specified here will take precedence over those in config/application.rb.
@@ -62,3 +65,7 @@ Rails.application.configure do
   # Raise error when a before_action's only/except options reference missing actions.
   config.action_controller.raise_on_missing_callback_actions = true
 end
+
+Rails.application.routes.default_url_options = {
+  host: "www.example.com"
+}
