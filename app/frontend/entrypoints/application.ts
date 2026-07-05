@@ -122,6 +122,13 @@ application.register("webauthn-registration", WebauthnRegistrationController);
 window.bootstrap = bootstrap;
 
 // --- Custom JS ---
-import "./readonly_editor";
+// readonly_editor(React+TipTap)は重いため、該当要素があるページでのみ遅延読み込みする。
+// 読み込み後はモジュール自身のturbo:loadリスナーが以降の遷移を処理する
+const loadReadonlyEditorIfNeeded = () => {
+  if (document.querySelector(".readonly-editor-root")) {
+    import("./readonly_editor");
+  }
+};
+document.addEventListener("turbo:load", loadReadonlyEditorIfNeeded);
 
 export { application };

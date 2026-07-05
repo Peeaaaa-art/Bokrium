@@ -1,12 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 import { renderStreamMessage } from "@hotwired/turbo"
 import type Sortable from "sortablejs"
-
-function csrfToken(): string {
-  return (
-    document.querySelector<HTMLMetaElement>("meta[name='csrf-token']")?.content ?? ""
-  )
-}
+import { csrfToken } from "../utils/csrf"
 
 // 読書戦略ボード(かんばん)の1列。列間ドラッグでステータス変更、
 // 列内ドラッグで手動並び替え。どちらもドロップ後の列の並び(ordered_ids)を

@@ -6,6 +6,7 @@ import {
   exportToBlob,
 } from "@excalidraw/excalidraw"
 import "@excalidraw/excalidraw/index.css"
+import { csrfToken } from "../utils/csrf"
 
 type ExcalidrawImperativeAPI = Parameters<
   NonNullable<React.ComponentProps<typeof Excalidraw>["excalidrawAPI"]>
@@ -46,13 +47,6 @@ interface Props {
   viewMode: boolean
   thumbnailMissing: boolean
   initialSceneData: SceneData
-}
-
-function csrfToken(): string {
-  return (
-    document.querySelector<HTMLMetaElement>("meta[name='csrf-token']")
-      ?.content ?? ""
-  )
 }
 
 export default function HandwrittenNoteEditor({

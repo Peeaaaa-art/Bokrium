@@ -12,6 +12,7 @@
  *****************************************************/
 import { Controller } from "@hotwired/stimulus"
 import { renderStreamMessage } from "@hotwired/turbo"
+import { csrfToken } from "../utils/csrf"
 
 interface ScanEvent extends CustomEvent {
   detail: {
@@ -36,7 +37,7 @@ export default class BarcodeResultController extends Controller {
     fetch(`/search/isbn_turbo?isbn=${isbn}`, {
       headers: {
         Accept: "text/vnd.turbo-stream.html",
-        "X-CSRF-Token": this.getCsrfToken(),
+        "X-CSRF-Token": csrfToken(),
         "X-Requested-With": "XMLHttpRequest"
       },
       signal: controller.signal
@@ -65,10 +66,5 @@ export default class BarcodeResultController extends Controller {
           </turbo-stream>
         `)
       })
-  }
-
-  getCsrfToken(): string {
-    const meta = document.querySelector('meta[name="csrf-token"]') as HTMLMetaElement | null
-    return meta?.content ?? ""
   }
 }

@@ -4,7 +4,8 @@
  * 使用技術: Stimulus + ZXing + Turbo Stream
  *********************************************/
 import { Controller } from "@hotwired/stimulus"
-import { BrowserMultiFormatReader, BarcodeFormat } from "@zxing/browser"
+// ZXingは重いためスキャンページ表示時にのみ動的importする(メインバンドルに含めない)
+import type { BrowserMultiFormatReader } from "@zxing/browser"
 
 export default class BarcodeScanController extends Controller {
   private static scannerStarted = false
@@ -26,11 +27,13 @@ export default class BarcodeScanController extends Controller {
     if (document.visibilityState === "hidden") this.stopCamera()
   }
 
-  connect() {
+  async connect() {
     if (BarcodeScanController.scannerStarted) return
 
     BarcodeScanController.scannerStarted = true
     this.scannedIsbns.clear()
+
+    const { BrowserMultiFormatReader, BarcodeFormat } = await import("@zxing/browser")
 
     this.reader = new BrowserMultiFormatReader()
 

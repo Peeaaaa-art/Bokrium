@@ -37,9 +37,14 @@ export function mountReadOnlyEditor(element: HTMLElement | null): void {
   mountedRoots.set(element, root);
 }
 
-// Turbo Drive / Turbo Native / Turbo Streams 対応
-document.addEventListener("turbo:load", () => {
+function mountAllReadOnlyEditors(): void {
   document.querySelectorAll<HTMLElement>(".readonly-editor-root").forEach((el) => {
     mountReadOnlyEditor(el);
   });
-});
+}
+
+// Turbo Drive / Turbo Native / Turbo Streams 対応
+document.addEventListener("turbo:load", mountAllReadOnlyEditors);
+
+// 遅延import時はturbo:loadが発火済みのため、モジュール評価時にも即時マウントする
+mountAllReadOnlyEditors();
