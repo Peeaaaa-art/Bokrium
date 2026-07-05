@@ -53,3 +53,91 @@
 .kanban-ghost {
   opacity: 0.4;
 }
+
+// ロードマップview
+.roadmap-scroll {
+  overflow-x: auto;
+}
+
+.roadmap-row {
+  display: grid;
+  grid-template-columns: 200px minmax(560px, 1fr);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &--header {
+    border-bottom-color: rgba(0, 0, 0, 0.15);
+  }
+}
+
+.roadmap-label {
+  min-width: 0;
+  padding: 0.4rem 0.5rem;
+  border-right: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.roadmap-lane {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(var(--rm-days), minmax(9px, 1fr));
+  align-items: center;
+  min-height: 48px;
+
+  &--header {
+    min-height: 26px;
+    align-items: end;
+  }
+}
+
+.roadmap-tick {
+  grid-row: 1;
+  align-self: stretch;
+  display: flex;
+  align-items: flex-end;
+  padding-left: 3px;
+  border-left: 1px solid rgba(0, 0, 0, 0.08);
+  font-size: 0.68rem;
+  color: rgba(0, 0, 0, 0.45);
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.roadmap-bar {
+  grid-row: 1;
+  height: 14px;
+  border-radius: 7px;
+  opacity: 0.85;
+
+  // ウィンドウ外に続くバーは端を切って「まだ続く」ことを示す
+  &--clipped-start {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+
+  &--clipped-end {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+}
+
+// 今日の位置を示す縦線
+.roadmap-today {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background-color: rgba(220, 53, 69, 0.45);
+  pointer-events: none;
+}
+
+.roadmap-edit summary {
+  list-style: none;
+  cursor: pointer;
+
+  &::-webkit-details-marker {
+    display: none;
+  }
+}

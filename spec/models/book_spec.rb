@@ -262,4 +262,29 @@ RSpec.describe Book, type: :model do
       end
     end
   end
+
+  describe "started_on の自動記録" do
+    it "ステータスが読書中に変わったとき今日が記録される" do
+      book = create(:book, status: :want_to_read)
+      expect {
+        book.update!(status: :reading)
+      }.to change { book.reload.started_on }.from(nil).to(Date.current)
+    end
+
+    it "すでに設定済みなら上書きしない" do
+      book = create(:book, status: :want_to_read, started_on: Date.new(2026, 7, 1))
+      book.update!(status: :reading)
+      expect(book.reload.started_on).to eq(Date.new(2026, 7, 1))
+    end
+
+    it "読書中として作成された本にも記録される" do
+      expect(create(:book, status: :reading).started_on).to eq(Date.current)
+    end
+
+    it "読書中以外への変更では記録されない" do
+      book = create(:book, status: :want_to_read)
+      book.update!(status: :finished)
+      expect(book.reload.started_on).to be_nil
+    end
+  end
 end

@@ -87,6 +87,30 @@ RSpec.describe "ReadingBoard", type: :request do
       end
     end
 
+    describe "GET /reading_board (ロードマップview)" do
+      it "目標日ありの読書中の本がタイムラインに、未設定の本が導線つきで表示される" do
+        with_bar = FactoryBot.create(:book, user: user, status: :reading, title: "バーの本",
+          page: 200, current_page: 50, started_on: Date.current - 5, target_finish_on: Date.current + 10)
+        FactoryBot.create(:book, user: user, status: :reading, title: "未設定の本")
+        FactoryBot.create(:book, user: other_user, status: :reading, title: "他人の本",
+          target_finish_on: Date.current + 5)
+
+        get reading_board_path(view: "roadmap")
+
+        expect(response).to have_http_status(:ok)
+        expect(response.body).to include("roadmap_row_#{with_bar.id}")
+        expect(response.body).to include("目標日 未設定の読書中の本", "未設定の本")
+        expect(response.body).not_to include("他人の本")
+      end
+
+      it "読書中の本がなければ空状態を表示する" do
+        get reading_board_path(view: "roadmap")
+
+        expect(response).to have_http_status(:ok)
+        expect(response.body).to include("読書中の本がありません")
+      end
+    end
+
     describe "PATCH /books/:book_id/reading_schedule" do
       let(:book) { FactoryBot.create(:book, user: user, status: :reading, page: 200) }
 
@@ -99,6 +123,15 @@ RSpec.describe "ReadingBoard", type: :request do
         book.reload
         expect(book.target_finish_on).to eq(Date.new(2026, 8, 1))
         expect(book.current_page).to eq(80)
+      end
+
+      it "開始日を更新できる" do
+        patch book_reading_schedule_path(book), params: {
+          book: { started_on: "2026-07-01" }
+        }, headers: { "Accept" => "text/vnd.turbo-stream.html" }
+
+        expect(response).to have_http_status(:ok)
+        expect(book.reload.started_on).to eq(Date.new(2026, 7, 1))
       end
 
       it "現在ページが不正なら 422 を返す" do

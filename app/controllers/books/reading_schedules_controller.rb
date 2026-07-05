@@ -36,6 +36,6 @@ class Books::ReadingSchedulesController < ApplicationController
   end
 
   def reading_schedule_params
-    params.expect(book: [ :target_finish_on, :current_page ])
+    params.expect(book: [ :target_finish_on, :current_page, :started_on ])
   end
 end

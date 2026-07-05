@@ -1,13 +1,16 @@
 <% content_for :title, "読書戦略ボード - Bokrium" %>
 
-<div class="container my-4 my-md-5" style="max-width: <%= @view == "kanban" ? "1200px" : "960px" %>;">
+<div class="container my-4 my-md-5" style="max-width: <%= @view == "list" ? "960px" : "1200px" %>;">
   <div class="d-flex align-items-center gap-2 mb-1">
     <%= bi_icon("calendar-check", css: "is-4") %>
     <h1 class="h4 fw-bold mb-0">読書戦略ボード</h1>
   </div>
   <p class="text-secondary small mb-3">
-    <% if @view == "kanban" %>
+    <% case @view %>
+    <% when "kanban" %>
       カードをドラッグしてステータスを変更できます。
+    <% when "roadmap" %>
+      読書中の本を時間軸で俯瞰できます。バーは開始日から読了目標日まで。
     <% else %>
       読書中の本に読了目標日を決めて、コツコツ読み進めましょう。締切が近い順に並びます。
     <% end %>
@@ -22,10 +25,17 @@
           class: "btn #{@view == 'kanban' ? 'btn-secondary' : 'btn-outline-secondary'}" do %>
       <%= bi_icon("kanban", css: "is-7") %> かんばん
     <% end %>
+    <%= link_to reading_board_path(view: "roadmap"),
+          class: "btn #{@view == 'roadmap' ? 'btn-secondary' : 'btn-outline-secondary'}" do %>
+      <%= bi_icon("calendar-range", css: "is-7") %> ロードマップ
+    <% end %>
   </div>
 
-  <% if @view == "kanban" %>
+  <% case @view %>
+  <% when "kanban" %>
     <%= render "reading_board/kanban" %>
+  <% when "roadmap" %>
+    <%= render "reading_board/roadmap" %>
   <% else %>
     <%= render "reading_board/list" %>
   <% end %>

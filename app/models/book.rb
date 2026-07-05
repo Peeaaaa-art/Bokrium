@@ -2,6 +2,7 @@ class Book < ApplicationRecord
   include PgSearch::Model
   include UploadValidations
   before_validation :normalize_isbn
+  before_save :record_started_on_when_reading
 
   belongs_to :user
   has_one_attached :book_cover_s3, service: :cloudflare_r2, dependent: :purge
@@ -126,5 +127,13 @@ class Book < ApplicationRecord
 
   def normalize_isbn
     self.isbn = nil if isbn.blank?
+  end
+
+  # ステータスが「読書中」になったとき、読書開始日を自動記録する。
+  # ユーザーが自分で設定・編集した値は上書きしない
+  def record_started_on_when_reading
+    return unless will_save_change_to_status? && reading?
+
+    self.started_on ||= Date.current
   end
 end
