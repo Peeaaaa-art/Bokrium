@@ -148,6 +148,34 @@ RSpec.describe "ReadingBoard", type: :request do
         patch book_reading_schedule_path(others), params: { book: { current_page: 10 } }
         expect(response).to have_http_status(:not_found)
       end
+
+      context "view_context=roadmap(バードラッグからの保存)" do
+        let(:json_turbo_headers) do
+          { "Accept" => "text/vnd.turbo-stream.html", "Content-Type" => "application/json" }
+        end
+
+        it "ロードマップ全体をTurbo Streamで返す" do
+          book.update!(target_finish_on: Date.current + 10)
+
+          patch book_reading_schedule_path(book),
+            params: { book: { target_finish_on: (Date.current + 20).iso8601 }, view_context: "roadmap" }.to_json,
+            headers: json_turbo_headers
+
+          expect(response).to have_http_status(:ok)
+          expect(response.body).to include('target="roadmap_container"')
+          expect(response.body).to include("roadmap_row_#{book.id}")
+          expect(book.reload.target_finish_on).to eq(Date.current + 20)
+        end
+
+        it "更新に失敗したら422を返す(バーは巻き戻し)" do
+          patch book_reading_schedule_path(book),
+            params: { book: { current_page: -5 }, view_context: "roadmap" }.to_json,
+            headers: json_turbo_headers
+
+          expect(response).to have_http_status(:unprocessable_content)
+          expect(book.reload.current_page).to be_nil
+        end
+      end
     end
   end
 end

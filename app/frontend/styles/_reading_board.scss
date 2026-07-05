@@ -106,10 +106,28 @@
 }
 
 .roadmap-bar {
+  position: relative;
   grid-row: 1;
   height: 14px;
   border-radius: 7px;
   opacity: 0.85;
+  cursor: grab;
+  touch-action: none; // タッチドラッグ中に横スクロールへ吸われないようにする
+
+  // 指でもつかみやすいように当たり判定を上下左右へ広げる
+  &::before {
+    content: "";
+    position: absolute;
+    inset: -10px -6px;
+  }
+
+  &:hover {
+    opacity: 1;
+  }
+
+  &:active {
+    cursor: grabbing;
+  }
 
   // ウィンドウ外に続くバーは端を切って「まだ続く」ことを示す
   &--clipped-start {
