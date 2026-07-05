@@ -1,4 +1,32 @@
 module ReadingBoardHelper
+  # ロードマップのバーが占めるグリッド列(1始まり、endは排他的)。
+  # ウィンドウ外にはみ出す分は端に切り詰め、切り詰めたかどうかも返す
+  def roadmap_bar_columns(book, window_start:, window_end:)
+    target = book.target_finish_on
+    raw_start = [ book.started_on || Date.current, target ].min
+
+    clipped_start = raw_start < window_start
+    clipped_end = target > window_end
+    start_date = clipped_start ? window_start : raw_start
+    end_date = clipped_end ? window_end : target
+
+    {
+      start: (start_date - window_start).to_i + 1,
+      end: (end_date - window_start).to_i + 2,
+      clipped_start: clipped_start,
+      clipped_end: clipped_end
+    }
+  end
+
+  # ロードマップのバーの色(締切状態に応じる)
+  def roadmap_bar_class(book)
+    case book.reading_schedule_status
+    when :overdue then "bg-danger"
+    when :due_today then "bg-warning"
+    else "bg-success"
+    end
+  end
+
   # 読書スケジュールの状態バッジ
   def reading_schedule_badge(book)
     case book.reading_schedule_status

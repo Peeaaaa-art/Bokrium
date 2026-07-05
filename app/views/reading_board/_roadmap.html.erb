@@ -1,0 +1,77 @@
+<% if @roadmap_books.empty? && @no_target_books.empty? %>
+  <div class="text-center text-secondary py-5">
+    <%= bi_icon("book", css: "is-3 mb-2") %>
+    <p class="mb-1">読書中の本がありません。</p>
+    <p class="small mb-3">本のステータスを「読書中」にすると、ここに並びます。</p>
+    <%= link_to "本棚へ", books_index_path, class: "btn btn-sm btn-outline-primary" %>
+  </div>
+<% else %>
+  <% if @roadmap_books.any? %>
+    <div class="roadmap-scroll border rounded">
+      <div class="roadmap-row roadmap-row--header">
+        <div class="roadmap-label"></div>
+        <div class="roadmap-lane roadmap-lane--header" style="--rm-days: <%= @total_days %>;">
+          <% (0...@total_days).step(7) do |offset| %>
+            <div class="roadmap-tick" style="grid-column: <%= offset + 1 %> / <%= [ offset + 8, @total_days + 1 ].min %>;">
+              <%= (@window_start + offset).strftime("%-m/%-d") %>
+            </div>
+          <% end %>
+          <div class="roadmap-today" style="left: <%= (@today_ratio * 100).round(2) %>%;"></div>
+        </div>
+      </div>
+
+      <% @roadmap_books.each do |book| %>
+        <% bar = roadmap_bar_columns(book, window_start: @window_start, window_end: @window_end) %>
+        <div class="roadmap-row" id="roadmap_row_<%= book.id %>">
+          <div class="roadmap-label">
+            <%= link_to book.title, book_path(book),
+                  class: "small fw-bold text-decoration-none text-body text-truncate d-block", title: book.title %>
+            <div class="d-flex align-items-center gap-2">
+              <%= reading_schedule_badge(book) %>
+              <details class="roadmap-edit">
+                <summary class="text-secondary" title="開始日・読了目標日を編集"><%= bi_icon("pencil", css: "is-7") %></summary>
+                <%= form_with model: book, url: book_reading_schedule_path(book), method: :patch,
+                      data: { turbo: false }, class: "mt-1" do |f| %>
+                  <%= f.label :started_on, "開始日", class: "form-label small mb-0" %>
+                  <%= f.date_field :started_on, value: book.started_on, class: "form-control form-control-sm mb-1" %>
+                  <%= f.label :target_finish_on, "読了目標日", class: "form-label small mb-0" %>
+                  <%= f.date_field :target_finish_on, value: book.target_finish_on, class: "form-control form-control-sm mb-1" %>
+                  <%= f.submit "更新", class: "btn btn-sm btn-primary w-100" %>
+                <% end %>
+              </details>
+            </div>
+          </div>
+          <div class="roadmap-lane" style="--rm-days: <%= @total_days %>;">
+            <div class="roadmap-bar <%= roadmap_bar_class(book) %><%= " roadmap-bar--clipped-start" if bar[:clipped_start] %><%= " roadmap-bar--clipped-end" if bar[:clipped_end] %>"
+                 style="grid-column: <%= bar[:start] %> / <%= bar[:end] %>;"
+                 title="<%= book.started_on&.strftime("%-m/%-d") || "今日" %> → <%= book.target_finish_on.strftime("%-m/%-d") %>"></div>
+            <div class="roadmap-today" style="left: <%= (@today_ratio * 100).round(2) %>%;"></div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="text-secondary small border rounded p-3">
+      読了目標日を設定すると、ここに時間軸のバーが表示されます。
+    </div>
+  <% end %>
+
+  <% if @no_target_books.any? %>
+    <div class="mt-4">
+      <div class="fw-bold small mb-2">目標日 未設定の読書中の本</div>
+      <div class="d-flex flex-column gap-2">
+        <% @no_target_books.each do |book| %>
+          <div class="d-flex align-items-center gap-2 border rounded px-2 py-1">
+            <%= link_to book.title, book_path(book),
+                  class: "small text-decoration-none text-body text-truncate", title: book.title %>
+            <%= form_with model: book, url: book_reading_schedule_path(book), method: :patch,
+                  data: { turbo: false }, class: "d-flex align-items-center gap-1 ms-auto" do |f| %>
+              <%= f.date_field :target_finish_on, class: "form-control form-control-sm", style: "width: auto;" %>
+              <%= f.submit "設定", class: "btn btn-sm btn-outline-primary" %>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+<% end %>
