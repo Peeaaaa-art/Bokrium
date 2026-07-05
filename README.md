@@ -106,6 +106,11 @@
 - Rakuten Books API は `openapi.rakuten.co.jp` を利用します。
 - 必須環境変数: `RAKUTEN_APPLICATION_ID`, `RAKUTEN_ACCESS_KEY`
 - 旧ドメイン・旧アプリ・旧APIバージョンの停止日は `2026-05-14`（移行対応期限は `2026-05-13`）です。
+
+### Google Books API
+- APIキー無し（匿名）だと1日あたりのクォータが枯渇しており常に429が返るため、`GOOGLE_BOOKS_API_KEY` の設定が必須です。
+- 環境変数: `GOOGLE_BOOKS_API_KEY`（[Google Cloud Console](https://console.cloud.google.com/)でBooks APIを有効化しAPIキーを発行）
+- 未設定の場合は匿名リクエストにフォールバックしますが、検索は失敗し続けます。
   
   
   <br><h3 align="center">📚👀 本棚</h3>

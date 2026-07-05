@@ -9,8 +9,7 @@ module BookApis
     def self.fetch(isbn)
       return nil if isbn.blank?
 
-      uri = URI.parse("#{ENDPOINT}?q=isbn:#{URI.encode_www_form_component(isbn)}")
-      response = Net::HTTP.get_response(uri)
+      response = request(q: "isbn:#{isbn}")
       return nil unless response.is_a?(Net::HTTPSuccess)
 
       parse_response(JSON.parse(response.body), isbn)
@@ -22,13 +21,7 @@ module BookApis
     def self.fetch_by_title_or_author(query, page = 1)
       return blank_result if query.blank?
 
-      uri = URI.parse("#{ENDPOINT}?" + URI.encode_www_form({
-        q: query,
-        maxResults: 30,
-        startIndex: (page - 1) * 30
-      }))
-
-      response = Net::HTTP.get_response(uri)
+      response = request(q: query, maxResults: 30, startIndex: (page - 1) * 30)
       return blank_result unless response.is_a?(Net::HTTPSuccess)
 
       data = JSON.parse(response.body)
@@ -42,6 +35,28 @@ module BookApis
     end
 
     private
+
+    def self.request(params)
+      uri = URI.parse(ENDPOINT)
+      uri.query = URI.encode_www_form(params.merge(api_key_param))
+
+      http = Net::HTTP.new(uri.host, uri.port)
+      http.use_ssl = true
+      http.open_timeout = 5
+      http.read_timeout = 5
+
+      response = http.request(Net::HTTP::Get.new(uri))
+
+      unless response.is_a?(Net::HTTPSuccess)
+        Rails.logger.warn("[GoogleBooksService] Unexpected response: #{response.code} #{response.message}")
+      end
+
+      response
+    end
+
+    def self.api_key_param
+      ENV["GOOGLE_BOOKS_API_KEY"].present? ? { key: ENV["GOOGLE_BOOKS_API_KEY"] } : {}
+    end
 
     def self.parse_response(data, isbn)
       item = data["items"]&.first
