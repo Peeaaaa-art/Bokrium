@@ -1,7 +1,7 @@
 <% ratio = book.reading? ? book.reading_progress_ratio : nil %>
 <div class="kanban-card card shadow-sm mb-2"
      id="kanban_card_<%= book.id %>"
-     data-status-url="<%= book_status_path(book) %>">
+     data-book-id="<%= book.id %>">
   <div class="card-body p-2">
     <div class="d-flex gap-2">
       <% if book.book_cover_s3.attached? %>
