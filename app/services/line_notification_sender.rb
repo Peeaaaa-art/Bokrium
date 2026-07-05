@@ -50,8 +50,4 @@ class LineNotificationSender
 
     client.push_message(push_message_request: request)
   end
-
-  def self.strip_tags(html)
-    ActionView::Base.full_sanitizer.sanitize(html)
-  end
 end

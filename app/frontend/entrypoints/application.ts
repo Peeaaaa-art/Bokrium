@@ -87,7 +87,6 @@ import ScrollTopOnClickController from "./controllers/scroll_top_on_click_contro
 import SpinnerController from "./controllers/spinner_controller";
 import SpineBookController from "./controllers/spine_book_controller";
 import TagToggleController from "./controllers/tag_toggle_controller";
-import UiToggleController from "./controllers/ui_toggle_controller";
 import WebauthnLoginController from "./controllers/webauthn_login_controller";
 import WebauthnRegistrationController from "./controllers/webauthn_registration_controller";
 
@@ -116,27 +115,11 @@ application.register("scroll-top-on-click", ScrollTopOnClickController);
 application.register("spinner", SpinnerController);
 application.register("spine-book", SpineBookController);
 application.register("tag-toggle", TagToggleController);
-application.register("ui-toggle", UiToggleController);
 application.register("webauthn-login", WebauthnLoginController);
 application.register("webauthn-registration", WebauthnRegistrationController);
 
 // --- Global Dependencies ---
 window.bootstrap = bootstrap;
-// visit を追加した Turbo オブジェクトだけを使う
-window.Turbo = {
-  ...Turbo,
-  visit: (url: string, options?: TurboVisitOptions) => {
-    const frame = options?.frame;
-    if (frame) {
-      const frameElement = document.querySelector(`turbo-frame#${frame}`);
-      if (frameElement instanceof HTMLElement) {
-        frameElement.setAttribute("src", url);
-        return;
-      }
-    }
-    window.location.href = url;
-  },
-};
 
 // --- Custom JS ---
 import "./readonly_editor";
