@@ -65,6 +65,17 @@ RSpec.describe "HandwrittenNotes", type: :request do
         expect(response.body).to include(book_handwritten_note_path(book, note))
       end
 
+      it "サムネイル未添付ならdata-thumbnail-missingがtrueになる" do
+        get book_handwritten_note_path(book, note)
+        expect(response.body).to include('data-thumbnail-missing="true"')
+      end
+
+      it "サムネイル添付済みならdata-thumbnail-missingがfalseになる" do
+        note.thumbnail_s3.attach(fixture_file_upload("sample.png", "image/png"))
+        get book_handwritten_note_path(book, note)
+        expect(response.body).to include('data-thumbnail-missing="false"')
+      end
+
       it "他人のノートにはアクセスできない" do
         get book_handwritten_note_path(other_book, other_note)
         expect(response).to have_http_status(:not_found)

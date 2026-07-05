@@ -21,7 +21,6 @@ const PERSISTED_APP_STATE_KEYS = [
 
 const AUTOSAVE_DEBOUNCE_MS = 1200
 const TITLE_DEBOUNCE_MS = 800
-const THUMBNAIL_DEBOUNCE_MS = 5000
 const THUMBNAIL_MAX_SIZE = 480
 
 type SaveStatus = "idle" | "saving" | "saved" | "error"
@@ -31,10 +30,21 @@ interface SceneData {
   appState?: Record<string, unknown>
 }
 
+// サムネイル生成に使うシーンの静的スナップショット。
+// ライブなExcalidraw APIに依存させないことで、Turbo遷移などで
+// コンポーネントがunmountされた後でもエクスポートを完走できる
+type ExportInput = Parameters<typeof exportToBlob>[0]
+interface SceneSnapshot {
+  elements: ExportInput["elements"]
+  appState: ExportInput["appState"]
+  files: ExportInput["files"]
+}
+
 interface Props {
   updateUrl: string
   thumbnailUrl: string
   viewMode: boolean
+  thumbnailMissing: boolean
   initialSceneData: SceneData
 }
 
@@ -49,11 +59,12 @@ export default function HandwrittenNoteEditor({
   updateUrl,
   thumbnailUrl,
   viewMode,
+  thumbnailMissing,
   initialSceneData,
 }: Props): React.JSX.Element {
   const apiRef = useRef<ExcalidrawImperativeAPI | null>(null)
   const saveTimerRef = useRef<number | null>(null)
-  const thumbnailTimerRef = useRef<number | null>(null)
+  const thumbnailSeqRef = useRef(0)
   const lastSavedMarkerRef = useRef<string | null>(null)
   const [status, setStatus] = useState<SaveStatus>("idle")
 
@@ -107,31 +118,42 @@ export default function HandwrittenNoteEditor({
 
   // サムネイルは補助情報。失敗しても本体の保存フローには影響させない
   const uploadThumbnail = useCallback(
-    async (options: { keepalive?: boolean } = {}) => {
-      const api = apiRef.current
-      if (!api) return
-      const elements = api.getSceneElements()
-      if (elements.length === 0) return
+    async (snapshot: SceneSnapshot, options: { keepalive?: boolean } = {}) => {
+      if (snapshot.elements.length === 0) return
+      const seq = ++thumbnailSeqRef.current
 
       try {
         const blob = await exportToBlob({
-          elements,
-          appState: api.getAppState(),
-          files: api.getFiles(),
+          elements: snapshot.elements,
+          appState: snapshot.appState,
+          files: snapshot.files,
           maxWidthOrHeight: THUMBNAIL_MAX_SIZE,
           mimeType: "image/png",
         })
+        // エクスポート中に新しいシーンのアップロードが始まっていたら、
+        // 古いサムネイルで上書きしないよう破棄する
+        if (seq !== thumbnailSeqRef.current) return
+
         const form = new FormData()
         form.append("thumbnail", blob, "thumbnail.png")
-        await fetch(thumbnailUrl, {
-          method: "PATCH",
-          headers: {
-            "X-CSRF-Token": csrfToken(),
-            Accept: "application/json",
-          },
-          body: form,
-          keepalive: options.keepalive ?? false,
-        })
+        const postForm = (keepalive: boolean): Promise<Response> =>
+          fetch(thumbnailUrl, {
+            method: "PATCH",
+            headers: {
+              "X-CSRF-Token": csrfToken(),
+              Accept: "application/json",
+            },
+            body: form,
+            keepalive,
+          })
+        try {
+          await postForm(options.keepalive ?? false)
+        } catch (error) {
+          // keepalive fetchはボディが64KBを超えると即時例外になる。
+          // ページがまだ生きていれば通常のfetchで再送する
+          if (!options.keepalive) throw error
+          await postForm(false)
+        }
       } catch {
         // no-op
       }
@@ -139,22 +161,23 @@ export default function HandwrittenNoteEditor({
     [thumbnailUrl]
   )
 
-  const scheduleThumbnail = useCallback(() => {
-    if (thumbnailTimerRef.current !== null) {
-      window.clearTimeout(thumbnailTimerRef.current)
-    }
-    thumbnailTimerRef.current = window.setTimeout(() => {
-      thumbnailTimerRef.current = null
-      void uploadThumbnail()
-    }, THUMBNAIL_DEBOUNCE_MS)
-  }, [uploadThumbnail])
-
   const doSave = useCallback(
     async (options: { keepalive?: boolean } = {}) => {
+      const api = apiRef.current
       const marker = sceneMarker()
-      if (marker === null || marker === lastSavedMarkerRef.current) return
+      if (!api || marker === null || marker === lastSavedMarkerRef.current)
+        return
       const scene = buildPersistedScene()
       if (!scene) return
+
+      // 保存対象と同じシーンをここで静的にキャプチャしておく。
+      // 保存完了時にはTurbo遷移でunmount済みのことがあり、
+      // その時点のAPIからは要素を取得できないため
+      const snapshot: SceneSnapshot = {
+        elements: scene.elements,
+        appState: { ...api.getAppState() },
+        files: api.getFiles(),
+      }
 
       setStatus("saving")
       try {
@@ -171,12 +194,14 @@ export default function HandwrittenNoteEditor({
         if (!response.ok) throw new Error(`save failed: ${response.status}`)
         lastSavedMarkerRef.current = marker
         setStatus("saved")
-        scheduleThumbnail()
+        // 保存が成功したシーンをそのままサムネイルにする。
+        // 別タイマーに遅延させると、発火前にページを離れたとき取り逃す
+        void uploadThumbnail(snapshot, options)
       } catch {
         setStatus("error")
       }
     },
-    [sceneMarker, buildPersistedScene, updateUrl, scheduleThumbnail]
+    [sceneMarker, buildPersistedScene, updateUrl, uploadThumbnail]
   )
 
   const flushSave = useCallback(
@@ -185,14 +210,9 @@ export default function HandwrittenNoteEditor({
         window.clearTimeout(saveTimerRef.current)
         saveTimerRef.current = null
       }
-      if (thumbnailTimerRef.current !== null) {
-        window.clearTimeout(thumbnailTimerRef.current)
-        thumbnailTimerRef.current = null
-        void uploadThumbnail(options)
-      }
       void doSave(options)
     },
-    [doSave, uploadThumbnail]
+    [doSave]
   )
 
   // 描画中のonChangeは毎フレーム発火するため、ここでは重い処理をしない。
@@ -292,11 +312,21 @@ export default function HandwrittenNoteEditor({
       if (saveTimerRef.current !== null) {
         window.clearTimeout(saveTimerRef.current)
       }
-      if (thumbnailTimerRef.current !== null) {
-        window.clearTimeout(thumbnailTimerRef.current)
-      }
     }
   }, [viewMode, flushSave])
+
+  // 過去にアップロードを取り逃したサムネイルの自己修復。
+  // サーバー側に未添付でシーンに要素があれば、開いただけで生成して送る
+  // (閲覧専用のモバイルで開いた場合も含む)
+  useEffect(() => {
+    if (!thumbnailMissing) return
+    if (initialData.elements.length === 0) return
+    void uploadThumbnail({
+      elements: initialData.elements,
+      appState: initialData.appState,
+      files: initialData.files,
+    })
+  }, [thumbnailMissing, initialData, uploadThumbnail])
 
   const statusLabel: Record<SaveStatus, string> = {
     idle: "",

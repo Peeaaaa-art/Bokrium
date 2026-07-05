@@ -23,6 +23,7 @@ function mountHandwrittenNote(): void {
   const thumbnailUrl = element.dataset.thumbnailUrl
   if (!updateUrl || !thumbnailUrl) return
   const viewMode = element.dataset.viewMode === "true"
+  const thumbnailMissing = element.dataset.thumbnailMissing === "true"
 
   let initialSceneData = {}
   const dataScript = document.querySelector("#handwritten-note-data")
@@ -41,6 +42,7 @@ function mountHandwrittenNote(): void {
       updateUrl={updateUrl}
       thumbnailUrl={thumbnailUrl}
       viewMode={viewMode}
+      thumbnailMissing={thumbnailMissing}
       initialSceneData={initialSceneData}
     />
   )
