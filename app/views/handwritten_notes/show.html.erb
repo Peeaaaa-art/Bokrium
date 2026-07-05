@@ -23,7 +23,8 @@
        class="handwritten-note-canvas border rounded shadow-sm"
        data-update-url="<%= book_handwritten_note_path(@book, @handwritten_note) %>"
        data-thumbnail-url="<%= thumbnail_book_handwritten_note_path(@book, @handwritten_note) %>"
-       data-view-mode="<%= mobile? %>"></div>
+       data-view-mode="<%= mobile? %>"
+       data-thumbnail-missing="<%= !@handwritten_note.thumbnail_s3.attached? %>"></div>
 
   <script type="application/json" id="handwritten-note-data">
     <%= raw({ data: @handwritten_note.data }.to_json) %>
