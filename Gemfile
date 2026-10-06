@@ -2,7 +2,7 @@ source "https://rubygems.org"
 
 ruby "~> 4.0.1"
 
-gem "rails", "~> 8.1.2"
+gem "rails", "~> 8.1.3", ">= 8.1.3.1"
 
 gem "puma", "~> 8.0", ">= 8.0.2"
 
@@ -12,7 +12,7 @@ gem "propshaft"
 
 gem "vite_rails"
 
-gem "view_component", ">= 4.9.0"
+gem "view_component", ">= 4.12.0"
 
 gem "pg"
 
@@ -41,7 +41,7 @@ gem "webauthn"
 
 gem "rails-i18n"
 
-gem "pagy", "~> 43.2"
+gem "pagy", "~> 43.2", ">= 43.5.6"
 
 gem "rack-rewrite"
 
@@ -77,7 +77,7 @@ end
 group :development, :test do
   gem "debug", platforms: [ :mri, :windows ], require: "debug/prelude"
 
-  gem "brakeman", "~> 8.0", require: false
+  gem "brakeman", "~> 8.0", ">= 8.1.0", require: false
 
   gem "bundler-audit", require: false
 
