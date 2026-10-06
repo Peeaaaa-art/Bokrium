@@ -1,6 +1,6 @@
 require "pagy"
 
-Pagy.options[:items] = 50
+Pagy::OPTIONS[:items] = 50
 # 他は必要になってからでOK
 
 Rails.application.config.to_prepare do

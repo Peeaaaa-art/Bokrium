@@ -3,9 +3,9 @@
 // =========================
 import { useEffect, useState } from "react"
 import type { ReactElement } from "react"
-import { useEditor, EditorContent, BubbleMenu } from "@tiptap/react"
+import { useEditor, EditorContent } from "@tiptap/react"
+import { BubbleMenu } from "@tiptap/react/menus"
 import StarterKit from "@tiptap/starter-kit"
-import BubbleMenuExtension from "@tiptap/extension-bubble-menu"
 import CharacterCount from "@tiptap/extension-character-count"
 import { getMarkRange } from "@tiptap/core"
 import {
@@ -39,11 +39,10 @@ function RichEditor({ element }: RichEditorProps): ReactElement | null {
 
   const editor = useEditor({
     extensions: [
-      StarterKit,
+      StarterKit.configure({ link: false }),
       MarkdownPasteExtension,
       MarkdownLinkInputExtension,
       createMemoLinkExtension(false),
-      BubbleMenuExtension,
       CharacterCount.configure({ limit: 10000 }),
     ],
     content: initialContent,
@@ -169,7 +168,6 @@ function RichEditor({ element }: RichEditorProps): ReactElement | null {
     <div className="rhodia-grid-bg" style={{ overflowY: "auto", position: "relative" }}>
       <BubbleMenu
         editor={editor}
-        tippyOptions={{ duration: 150, interactive: true }}
         shouldShow={({ editor }) => linkFormOpen || editor.isActive("link") || !editor.state.selection.empty}
       >
         <div className="bubble-menu bg-white border rounded shadow-sm p-2">

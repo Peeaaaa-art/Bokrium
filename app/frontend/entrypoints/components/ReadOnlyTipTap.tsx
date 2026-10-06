@@ -17,7 +17,7 @@ function ReadOnlyTipTap({ content }: ReadOnlyTipTapProps): ReactElement | null {
   const cleaned = normalizeProseMirrorHtmlForSave(sanitized)
 
   const editor = useEditor({
-    extensions: [StarterKit, createMemoLinkExtension(true)],
+    extensions: [StarterKit.configure({ link: false }), createMemoLinkExtension(true)],
     content: cleaned,
     editable: false,
   })
