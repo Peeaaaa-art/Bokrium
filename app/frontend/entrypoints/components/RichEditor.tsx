@@ -38,6 +38,8 @@ function RichEditor({ element }: RichEditorProps): ReactElement | null {
   const [linkRange, setLinkRange] = useState<{ from: number; to: number } | null>(null)
 
   const editor = useEditor({
+    // Toolbar active states read editor.isActive during rendering.
+    shouldRerenderOnTransaction: true,
     extensions: [
       StarterKit.configure({ link: false }),
       MarkdownPasteExtension,

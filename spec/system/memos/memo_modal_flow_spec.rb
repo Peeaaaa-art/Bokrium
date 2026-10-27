@@ -17,6 +17,29 @@ RSpec.describe "メモモーダル（書籍詳細→メモクリック→編集�
   context "既存メモの編集" do
     before { memo }
 
+    it "書式の切り替えと選択移動にツールバーのactive表示が追従する" do
+      memo.update!(content: "<p><strong>太字</strong></p><p>通常</p>")
+      visit book_path(book)
+      find("[id='memo_#{memo.id}'] .memo-body", wait: 10).click
+      expect(page).to have_selector("#memoEditModal.show", wait: 10)
+      editor = find("#memoEditModal #rich-editor-root .ProseMirror[contenteditable='true']", wait: 10, match: :first)
+      editor.click
+      editor.send_keys([ :control, :home ], [ :shift, :end ])
+
+      expect(page).to have_selector(".bubble-menu button.active", text: "B", exact_text: true)
+      find(".bubble-menu button", text: "B", exact_text: true).click
+      expect(editor).not_to have_selector("strong")
+      expect(page).to have_selector(".bubble-menu button:not(.active)", text: "B", exact_text: true)
+      find(".bubble-menu button", text: "B", exact_text: true).click
+      expect(editor).to have_selector("strong", text: "太字")
+      expect(page).to have_selector(".bubble-menu button.active", text: "B", exact_text: true)
+
+      editor.send_keys([ :control, :end ], [ :shift, :home ])
+      expect(page).to have_selector(".bubble-menu button:not(.active)", text: "B", exact_text: true)
+      editor.send_keys([ :control, :home ], [ :shift, :end ])
+      expect(page).to have_selector(".bubble-menu button.active", text: "B", exact_text: true)
+    end
+
     it "書籍詳細でメモをクリックしてモーダルを開き、文章を追記して保存するとDBに反映される" do
       visit book_path(book)
 
