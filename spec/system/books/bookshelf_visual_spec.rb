@@ -3,7 +3,6 @@
 require "rails_helper"
 require "base64"
 require "fileutils"
-require "json"
 require "zlib"
 
 Capybara.register_driver :playwright_webkit_bookshelf do |app|
@@ -16,7 +15,7 @@ RSpec.describe "Bookshelf alignment", type: :system do
   let(:user) { create(:user) }
 
   def cover_data(width, height, color)
-    # Raster covers exercise intrinsic sizing independently of SVG's sizing rules.
+    # Solid PNGs keep cover boundaries measurable without external image services.
     chunk = lambda do |type, data|
       [ data.bytesize ].pack("N") + type + data + [ Zlib.crc32(type + data) ].pack("N")
     end
@@ -29,117 +28,76 @@ RSpec.describe "Bookshelf alignment", type: :system do
     "data:image/png;base64,#{Base64.strict_encode64(png)}"
   end
 
+  def finish_book_transitions
+    page.execute_script("document.querySelectorAll('.book-on-shelf').forEach(book => book.getAnimations().forEach(animation => animation.finish()))")
+  end
+
+  def shelf_gaps
+    page.evaluate_script(<<~JS)
+      Array.from(document.querySelectorAll('.kino-shelf-row')).map(row => {
+        const shelf = row.querySelector('.shelf-bar').getBoundingClientRect().top;
+        return Array.from(row.querySelectorAll('.book-cover')).map(img => shelf - img.getBoundingClientRect().bottom);
+      })
+    JS
+  end
+
   before do |example|
     driven_by(example.metadata[:webkit] ? :playwright_webkit_bookshelf : :playwright_chrome_headless)
-    sample = "data:image/png;base64,#{Base64.strict_encode64(File.binread(Rails.root.join('spec/fixtures/files/sample.png')))}"
-    covers = [ nil, cover_data(128, 200, "#4070a0"), cover_data(300, 200, "#b06b42"),
-               cover_data(200, 200, "#4a8664"), sample, "data:image/png;base64,broken" ]
-    24.times do |index|
-      create(:book, user: user, title: "Case #{index + 1}", book_cover: covers[index % covers.length])
+    # The first row matches the report: four shorter covers and one taller cover.
+    sizes = [ [ 120, 170 ], [ 120, 170 ], [ 120, 170 ], [ 120, 190 ], [ 120, 170 ],
+              [ 200, 200 ], [ 300, 200 ], [ 120, 180 ], [ 120, 190 ], [ 120, 170 ] ]
+    20.times do |index|
+      width, height = sizes[index % sizes.length]
+      color = index.even? ? "#4070a0" : "#b06b42"
+      data = cover_data(width, height, color)
+      book = create(:book, user: user, title: "Visual book #{index + 1}", created_at: Time.current - index.minutes, book_cover: data)
+      if index.even?
+        book.book_cover_s3.attach(io: StringIO.new(Base64.decode64(data.split(",").last)),
+          filename: "cover-#{index}.png", content_type: "image/png")
+      end
+    end
+    allow_any_instance_of(Book).to receive(:bokrium_cover_url) do |book|
+      Rails.application.routes.url_helpers.rails_blob_path(book.book_cover_s3, only_path: true)
     end
     sign_in user
   end
 
-  it "records shelves with placeholders, different cover ratios, and failed images" do
-    FileUtils.mkdir_p(Rails.root.join("tmp/bookshelf-screenshots"))
-    [ [ "mobile", 390, 5 ], [ "desktop", 1440, 10 ] ].each do |label, width, per|
+  [ [ "chromium-mobile", 390, 5, false ], [ "chromium-desktop", 1440, 10, false ],
+    [ "webkit-mobile", 390, 5, true ] ].each do |label, width, per, webkit|
+    it "keeps mixed-height covers on every shelf in #{label}", webkit: webkit do
       page.current_window.resize_to(width, 1600)
       visit books_path(view: "shelf", per: per)
       expect(page).to have_css(".kino-shelf-row", minimum: 2)
-      expect(page).to have_css(".cover-placeholder-wrapper", minimum: 1)
-      page.execute_script("document.querySelectorAll('.kino-shelf-row').forEach(row => row.getAnimations().forEach(animation => animation.finish()))")
-
-      # Control the placeholder image without relying on the external CDN.
-      placeholder_count = page.all(".placeholder-cover").size
-      page.execute_script("document.querySelectorAll('.placeholder-cover').forEach(img => { img.onerror = () => img.dataset.testState = 'failed'; img.src = 'data:image/png;base64,broken'; })")
-      expect(page).to have_css(".placeholder-cover[data-test-state='failed']", count: placeholder_count)
-      page.save_screenshot(Rails.root.join("tmp/bookshelf-screenshots/#{label}-missing.png").to_s)
-      page.execute_script("document.querySelectorAll('.placeholder-cover').forEach(img => { img.onload = () => img.dataset.testState = 'loaded'; img.src = #{cover_data(120, 180, '#e6cc55').to_json}; })")
-      expect(page).to have_css(".placeholder-cover[data-test-state='loaded']", count: placeholder_count)
-      page.save_screenshot(Rails.root.join("tmp/bookshelf-screenshots/#{label}-loaded.png").to_s)
-
-      gaps = page.evaluate_script(<<~JS)
-        Array.from(document.querySelectorAll('.kino-shelf-row')).slice(0, 2).map(row => {
-          const shelf = row.querySelector('.shelf-bar').getBoundingClientRect().top;
-          return Array.from(row.querySelectorAll('.book-on-shelf')).map(book => {
-            const visual = book.querySelector('.cover-placeholder-wrapper') || book.querySelector('.book-cover');
-            return { title: book.querySelector('img').alt, loaded: book.querySelector('img').naturalWidth > 0,
-              gap: Math.round((shelf - visual.getBoundingClientRect().bottom) * 100) / 100 };
-          });
-        })
-      JS
-      puts "Bookshelf #{label} gaps (px): #{gaps.inspect}"
-    end
-  end
-  it "records shelf alignment with WebKit and mixed cover heights", :webkit do
-    sizes = [ [ 120, 170 ], [ 120, 170 ], [ 120, 170 ], [ 120, 190 ], [ 120, 170 ] ]
-    user.books.order(:id).each_with_index do |book, index|
-      width, height = sizes[index % sizes.length]
-      data = cover_data(width, height, index % sizes.length == 3 ? "#b06b42" : "#4070a0")
-      book.book_cover_s3.attach(io: StringIO.new(Base64.decode64(data.split(",").last)), filename: "cover-#{index}.png", content_type: "image/png")
-    end
-
-    # Serve attached covers through the test server, retaining the upload component markup.
-    allow_any_instance_of(Book).to receive(:bokrium_cover_url) do |book|
-      Rails.application.routes.url_helpers.rails_blob_path(book.book_cover_s3, only_path: true)
-    end
-    FileUtils.mkdir_p(Rails.root.join("tmp/bookshelf-screenshots"))
-    [ [ "webkit-mobile", 390, 5 ] ].each do |label, width, per|
-      page.current_window.resize_to(width, 1600)
-      visit books_path(view: "shelf", per: per)
-      puts "WebKit page: #{page.current_url} #{page.title} #{page.text[0, 300]}"
-      expect(page).to have_css(".kino-shelf-row", minimum: 2)
-      expect(page).to have_css(".book-cover", minimum: per * 2)
-      page.execute_script("document.querySelectorAll('.kino-shelf-row').forEach(row => row.getAnimations().forEach(animation => animation.finish()))")
+      expect(page).to have_css(".book-cover", count: 20)
       page.execute_script(<<~JS)
         document.querySelectorAll('.book-cover').forEach(img => {
-          const loaded = () => { if (img.naturalWidth > 0) img.dataset.testLoaded = 'true'; };
-          img.addEventListener('load', loaded, { once: true });
-          loaded();
+          const markLoaded = () => { if (img.naturalWidth > 0) img.dataset.testLoaded = 'true'; };
+          img.addEventListener('load', markLoaded, { once: true });
+          img.loading = 'eager';
+          markLoaded();
         });
+        document.querySelectorAll('.kino-shelf-row').forEach(row => row.getAnimations().forEach(animation => animation.finish()));
       JS
-      expect(page).to have_css(".book-cover[data-test-loaded='true']", minimum: per * 2)
+      expect(page).to have_css(".book-cover[data-test-loaded='true']", count: 20)
+      FileUtils.mkdir_p(Rails.root.join("tmp/bookshelf-screenshots"))
       page.save_screenshot(Rails.root.join("tmp/bookshelf-screenshots/#{label}.png").to_s)
-      dimensions = page.evaluate_script(<<~JS)
-        Array.from(document.querySelectorAll('.kino-shelf-row')).slice(0, 2).map(row => {
-          const shelf = row.querySelector('.shelf-bar').getBoundingClientRect().top;
-          return Array.from(row.querySelectorAll('.book-on-shelf')).map(book => {
-            const image = book.querySelector('img');
-            const link = image.parentElement;
-            const rect = element => {
-              const box = element.getBoundingClientRect();
-              return { top: box.top, bottom: box.bottom, width: box.width, height: box.height };
-            };
-            return { image: rect(image), book: rect(book), link: rect(link), row: rect(row.querySelector('.book-row')),
-              natural: [image.naturalWidth, image.naturalHeight], shelf: shelf,
-              rowAlign: getComputedStyle(row.querySelector('.book-row')).alignItems,
-              bookAlign: getComputedStyle(book).alignItems, fit: getComputedStyle(image).objectFit };
-          });
-        })
-      JS
-      puts "Bookshelf #{label} dimensions: #{dimensions.to_json}"
-      page.execute_script("document.querySelector('.book-on-shelf a').addEventListener('click', event => event.preventDefault(), { once: true })")
-      page.driver.with_playwright_page { |browser_page| browser_page.tap_point(".book-on-shelf a") }
-      page.execute_script("document.querySelectorAll('.book-on-shelf').forEach(book => book.getAnimations().forEach(animation => animation.finish()))")
-      touch_gaps = page.evaluate_script(<<~JS)
-        Array.from(document.querySelectorAll('.kino-shelf-row')).slice(0, 2).map(row => {
-          const shelf = row.querySelector('.shelf-bar').getBoundingClientRect().top;
-          return Array.from(row.querySelectorAll('.book-cover')).map(img => shelf - img.getBoundingClientRect().bottom);
-        })
-      JS
-      puts "Bookshelf #{label} touch gaps: #{touch_gaps.to_json}"
-      puts "Bookshelf touch pointer: #{page.evaluate_script("({ hover: matchMedia('(hover: hover)').matches, fine: matchMedia('(pointer: fine)').matches })").to_json}"
-      page.save_screenshot(Rails.root.join("tmp/bookshelf-screenshots/#{label}-touch-before.png").to_s)
-      page.execute_script("const style = document.createElement('style'); style.textContent = '@media (hover: none) { .book-on-shelf:hover { transform: none; } }'; document.head.appendChild(style);")
-      page.execute_script("document.querySelectorAll('.book-on-shelf').forEach(book => book.getAnimations().forEach(animation => animation.finish()))")
-      touch_fixed_gaps = page.evaluate_script(<<~JS)
-        Array.from(document.querySelectorAll('.kino-shelf-row')).slice(0, 2).map(row => {
-          const shelf = row.querySelector('.shelf-bar').getBoundingClientRect().top;
-          return Array.from(row.querySelectorAll('.book-cover')).map(img => shelf - img.getBoundingClientRect().bottom);
-        })
-      JS
-      puts "Bookshelf #{label} touch fixed gaps: #{touch_fixed_gaps.to_json}"
-      page.save_screenshot(Rails.root.join("tmp/bookshelf-screenshots/#{label}-touch-after.png").to_s)
+
+      # Allow subpixel rounding and the existing slight overlap with the shelf.
+      expect(shelf_gaps.flatten).to all(be_between(-2, 2))
+
+      if webkit
+        # Keep the page open so the persistent touch hover can be inspected.
+        page.execute_script("document.querySelector('.book-on-shelf a').addEventListener('click', event => event.preventDefault(), { once: true })")
+        page.driver.with_playwright_page { |browser_page| browser_page.tap_point(".book-on-shelf a") }
+        finish_book_transitions
+        page.save_screenshot(Rails.root.join("tmp/bookshelf-screenshots/#{label}-after-tap.png").to_s)
+        expect(shelf_gaps.flatten).to all(be_between(-2, 2))
+      elsif label == "chromium-desktop"
+        page.first(".book-on-shelf").hover
+        finish_book_transitions
+        # Mouse users retain the existing hover lift.
+        expect(shelf_gaps.first.first).to be > 2
+      end
     end
   end
 end
