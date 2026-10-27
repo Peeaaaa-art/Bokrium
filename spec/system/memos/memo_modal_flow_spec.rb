@@ -17,6 +17,43 @@ RSpec.describe "メモモーダル（書籍詳細→メモクリック→編集�
   context "既存メモの編集" do
     before { memo }
 
+    it "書式の切り替えと選択移動にツールバーのactive表示が追従する" do
+      select_paragraph = lambda do |text|
+        page.execute_script(<<~JS, text)
+          const editor = document.querySelector("#memoEditModal #rich-editor-root .ProseMirror[contenteditable='true']");
+          const paragraph = Array.from(editor.querySelectorAll("p")).find(node => node.textContent === arguments[0]);
+          editor.focus();
+          const range = document.createRange();
+          range.selectNodeContents(paragraph);
+          const selection = window.getSelection();
+          selection.removeAllRanges();
+          selection.addRange(range);
+          document.dispatchEvent(new Event("selectionchange"));
+        JS
+        expect(page.evaluate_script("window.getSelection().toString()")).to eq(text)
+      end
+
+      memo.update!(content: "<p><strong>太字</strong></p><p>通常</p>")
+      visit book_path(book)
+      find("[id='memo_#{memo.id}'] .memo-body", wait: 10).click
+      expect(page).to have_selector("#memoEditModal.show", wait: 10)
+      editor = find("#memoEditModal #rich-editor-root .ProseMirror[contenteditable='true']", wait: 10, match: :first)
+      select_paragraph.call("太字")
+
+      expect(page).to have_selector(".bubble-menu button.active", text: "B", exact_text: true)
+      find(".bubble-menu button", text: "B", exact_text: true).click
+      expect(editor).not_to have_selector("strong")
+      expect(page).to have_selector(".bubble-menu button:not(.active)", text: "B", exact_text: true)
+      find(".bubble-menu button", text: "B", exact_text: true).click
+      expect(editor).to have_selector("strong", text: "太字")
+      expect(page).to have_selector(".bubble-menu button.active", text: "B", exact_text: true)
+
+      select_paragraph.call("通常")
+      expect(page).to have_selector(".bubble-menu button:not(.active)", text: "B", exact_text: true)
+      select_paragraph.call("太字")
+      expect(page).to have_selector(".bubble-menu button.active", text: "B", exact_text: true)
+    end
+
     it "書籍詳細でメモをクリックしてモーダルを開き、文章を追記して保存するとDBに反映される" do
       visit book_path(book)
 
