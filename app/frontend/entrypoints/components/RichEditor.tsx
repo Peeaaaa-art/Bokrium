@@ -1,10 +1,11 @@
 // =========================
 // RichEditor (編集用)
 // =========================
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import type { ReactElement } from "react"
 import { useEditor, EditorContent } from "@tiptap/react"
 import { BubbleMenu } from "@tiptap/react/menus"
+import type { BubbleMenuProps } from "@tiptap/react/menus"
 import StarterKit from "@tiptap/starter-kit"
 import CharacterCount from "@tiptap/extension-character-count"
 import { getMarkRange } from "@tiptap/core"
@@ -36,6 +37,11 @@ function RichEditor({ element }: RichEditorProps): ReactElement | null {
   const [linkUrl, setLinkUrl] = useState("")
   const [linkError, setLinkError] = useState("")
   const [linkRange, setLinkRange] = useState<{ from: number; to: number } | null>(null)
+  // BubbleMenu dispatches a transaction when shouldShow changes; keep it stable across transactions.
+  const shouldShowBubbleMenu = useCallback<NonNullable<BubbleMenuProps["shouldShow"]>>(
+    ({ editor }) => linkFormOpen || editor.isActive("link") || !editor.state.selection.empty,
+    [linkFormOpen]
+  )
 
   const editor = useEditor({
     // Toolbar active states read editor.isActive during rendering.
@@ -170,7 +176,7 @@ function RichEditor({ element }: RichEditorProps): ReactElement | null {
     <div className="rhodia-grid-bg" style={{ overflowY: "auto", position: "relative" }}>
       <BubbleMenu
         editor={editor}
-        shouldShow={({ editor }) => linkFormOpen || editor.isActive("link") || !editor.state.selection.empty}
+        shouldShow={shouldShowBubbleMenu}
       >
         <div className="bubble-menu bg-white border rounded shadow-sm p-2">
           <div className="d-flex flex-wrap gap-2">
