@@ -75,9 +75,14 @@ RSpec.describe "Bookshelf alignment", type: :system do
     sizes = [ [ 120, 170 ], [ 120, 170 ], [ 120, 170 ], [ 120, 190 ], [ 120, 170 ] ]
     user.books.order(:id).each_with_index do |book, index|
       width, height = sizes[index % sizes.length]
-      book.update!(book_cover: cover_data(width, height, index % sizes.length == 3 ? "#b06b42" : "#4070a0"))
+      data = cover_data(width, height, index % sizes.length == 3 ? "#b06b42" : "#4070a0")
+      book.book_cover_s3.attach(io: StringIO.new(Base64.decode64(data.split(",").last)), filename: "cover-#{index}.png", content_type: "image/png")
     end
 
+    # Serve attached covers through the test server, retaining the upload component markup.
+    allow_any_instance_of(Book).to receive(:bokrium_cover_url) do |book|
+      Rails.application.routes.url_helpers.rails_blob_path(book.book_cover_s3, only_path: true)
+    end
     FileUtils.mkdir_p(Rails.root.join("tmp/bookshelf-screenshots"))
     [ [ "webkit-mobile", 390, 5 ] ].each do |label, width, per|
       page.current_window.resize_to(width, 1600)
@@ -86,7 +91,14 @@ RSpec.describe "Bookshelf alignment", type: :system do
       expect(page).to have_css(".kino-shelf-row", minimum: 2)
       expect(page).to have_css(".book-cover", minimum: per * 2)
       page.execute_script("document.querySelectorAll('.kino-shelf-row').forEach(row => row.getAnimations().forEach(animation => animation.finish()))")
-      expect(page.evaluate_script("Array.from(document.querySelectorAll('.book-cover')).every(img => img.complete && img.naturalWidth > 0)")).to eq(true)
+      page.execute_script(<<~JS)
+        document.querySelectorAll('.book-cover').forEach(img => {
+          const loaded = () => { if (img.naturalWidth > 0) img.dataset.testLoaded = 'true'; };
+          img.addEventListener('load', loaded, { once: true });
+          loaded();
+        });
+      JS
+      expect(page).to have_css(".book-cover[data-test-loaded='true']", count: 24)
       page.save_screenshot(Rails.root.join("tmp/bookshelf-screenshots/#{label}.png").to_s)
       dimensions = page.evaluate_script(<<~JS)
         Array.from(document.querySelectorAll('.kino-shelf-row')).slice(0, 2).map(row => {
