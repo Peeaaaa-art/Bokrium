@@ -42,6 +42,7 @@ jobs:
     steps:
       - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8
       - uses: ./.github/actions/setup-rspec-env
+        timeout-minutes: 5
 
       - name: Run RSpec FAST (exclude spec/system)
         env:
@@ -83,6 +84,7 @@ jobs:
     steps:
       - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8
       - uses: ./.github/actions/setup-rspec-env
+        timeout-minutes: 5
 
       - name: Install Playwright browsers
         timeout-minutes: 5
