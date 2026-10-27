@@ -42,6 +42,7 @@ jobs:
     steps:
       - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8
       - uses: ./.github/actions/setup-rspec-env
+        timeout-minutes: 5
 
       - name: Run RSpec FAST (exclude spec/system)
         env:
@@ -83,9 +84,11 @@ jobs:
     steps:
       - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8
       - uses: ./.github/actions/setup-rspec-env
+        timeout-minutes: 5
 
       - name: Install Playwright browsers
-        run: npx playwright install --with-deps --only-shell
+        timeout-minutes: 5
+        run: npx playwright install --with-deps --only-shell chromium webkit
 
       - name: Run RSpec SYSTEM (spec/system only)
         env:
@@ -99,6 +102,14 @@ jobs:
         with:
           name: screenshots-system-node-${{ matrix.node_index }}
           path: tmp/screenshots
+          if-no-files-found: ignore
+
+      - name: Collect bookshelf screenshots
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: always()
+        with:
+          name: bookshelf-screenshots-node-${{ matrix.node_index }}
+          path: tmp/bookshelf-screenshots
           if-no-files-found: ignore
 
   rspec_all:
