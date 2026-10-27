@@ -4,6 +4,7 @@ require "rails_helper"
 require "base64"
 require "fileutils"
 require "json"
+require "zlib"
 
 Capybara.register_driver :playwright_webkit_bookshelf do |app|
   Capybara::Playwright::Driver.new(app, browser_type: :webkit, headless: true,
@@ -15,8 +16,17 @@ RSpec.describe "Bookshelf alignment", type: :system do
   let(:user) { create(:user) }
 
   def cover_data(width, height, color)
-    svg = %(<svg xmlns="http://www.w3.org/2000/svg" width="#{width}" height="#{height}"><rect width="100%" height="100%" fill="#{color}"/></svg>)
-    "data:image/svg+xml;base64,#{Base64.strict_encode64(svg)}"
+    # Raster covers exercise intrinsic sizing independently of SVG's sizing rules.
+    chunk = lambda do |type, data|
+      [ data.bytesize ].pack("N") + type + data + [ Zlib.crc32(type + data) ].pack("N")
+    end
+    pixel = [ color.delete_prefix("#") ].pack("H*")
+    raw = ("\x00".b + pixel * width) * height
+    png = "\x89PNG\r\n\x1a\n".b
+    png += chunk.call("IHDR", [ width, height, 8, 2, 0, 0, 0 ].pack("NNC5"))
+    png += chunk.call("IDAT", Zlib::Deflate.deflate(raw))
+    png += chunk.call("IEND", "".b)
+    "data:image/png;base64,#{Base64.strict_encode64(png)}"
   end
 
   before do |example|
