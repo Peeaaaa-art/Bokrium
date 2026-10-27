@@ -98,7 +98,7 @@ RSpec.describe "Bookshelf alignment", type: :system do
           loaded();
         });
       JS
-      expect(page).to have_css(".book-cover[data-test-loaded='true']", count: 24)
+      expect(page).to have_css(".book-cover[data-test-loaded='true']", minimum: per * 2)
       page.save_screenshot(Rails.root.join("tmp/bookshelf-screenshots/#{label}.png").to_s)
       dimensions = page.evaluate_script(<<~JS)
         Array.from(document.querySelectorAll('.kino-shelf-row')).slice(0, 2).map(row => {
