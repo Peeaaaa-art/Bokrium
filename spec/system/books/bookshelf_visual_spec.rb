@@ -119,7 +119,7 @@ RSpec.describe "Bookshelf alignment", type: :system do
       JS
       puts "Bookshelf #{label} dimensions: #{dimensions.to_json}"
       page.execute_script("document.querySelector('.book-on-shelf a').addEventListener('click', event => event.preventDefault(), { once: true })")
-      page.driver.with_playwright_page { |browser_page| browser_page.tap(".book-on-shelf a") }
+      page.driver.with_playwright_page { |browser_page| browser_page.tap_point(".book-on-shelf a") }
       page.execute_script("document.querySelectorAll('.book-on-shelf').forEach(book => book.getAnimations().forEach(animation => animation.finish()))")
       touch_gaps = page.evaluate_script(<<~JS)
         Array.from(document.querySelectorAll('.kino-shelf-row')).slice(0, 2).map(row => {
@@ -140,7 +140,6 @@ RSpec.describe "Bookshelf alignment", type: :system do
       JS
       puts "Bookshelf #{label} touch fixed gaps: #{touch_fixed_gaps.to_json}"
       page.save_screenshot(Rails.root.join("tmp/bookshelf-screenshots/#{label}-touch-after.png").to_s)
-
     end
   end
 end
