@@ -19,8 +19,8 @@ RSpec.describe "Bookshelf alignment", type: :system do
     "data:image/svg+xml;base64,#{Base64.strict_encode64(svg)}"
   end
 
-  before do
-    driven_by :playwright_chrome_headless
+  before do |example|
+    driven_by(example.metadata[:webkit] ? :playwright_webkit_bookshelf : :playwright_chrome_headless)
     sample = "data:image/png;base64,#{Base64.strict_encode64(File.binread(Rails.root.join('spec/fixtures/files/sample.png')))}"
     covers = [ nil, cover_data(128, 200, "#4070a0"), cover_data(300, 200, "#b06b42"),
                cover_data(200, 200, "#4a8664"), sample, "data:image/png;base64,broken" ]
@@ -61,8 +61,7 @@ RSpec.describe "Bookshelf alignment", type: :system do
       puts "Bookshelf #{label} gaps (px): #{gaps.inspect}"
     end
   end
-  it "records shelf alignment with WebKit and mixed cover heights" do
-    driven_by :playwright_webkit_bookshelf
+  it "records shelf alignment with WebKit and mixed cover heights", :webkit do
     sizes = [ [ 120, 170 ], [ 120, 170 ], [ 120, 170 ], [ 120, 190 ], [ 120, 170 ] ]
     user.books.order(:id).each_with_index do |book, index|
       width, height = sizes[index % sizes.length]
@@ -73,6 +72,7 @@ RSpec.describe "Bookshelf alignment", type: :system do
     [ [ "webkit-mobile", 390, 5 ] ].each do |label, width, per|
       page.current_window.resize_to(width, 1600)
       visit books_path(view: "shelf", per: per)
+      puts "WebKit page: #{page.current_url} #{page.title} #{page.text[0, 300]}"
       expect(page).to have_css(".kino-shelf-row", minimum: 2)
       expect(page).to have_css(".book-cover", minimum: per * 2)
       page.execute_script("document.getAnimations().forEach(animation => animation.finish())")
@@ -98,5 +98,4 @@ RSpec.describe "Bookshelf alignment", type: :system do
       puts "Bookshelf #{label} dimensions: #{dimensions.to_json}"
     end
   end
-
 end
