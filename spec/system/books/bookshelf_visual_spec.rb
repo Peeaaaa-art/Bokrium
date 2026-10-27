@@ -7,7 +7,7 @@ require "json"
 
 Capybara.register_driver :playwright_webkit_bookshelf do |app|
   Capybara::Playwright::Driver.new(app, browser_type: :webkit, headless: true,
-    userAgent: "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1",
+    userAgent: "Mozilla/5.0 (iPhone; CPU iPhone OS 26_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.0 Mobile/15E148 Safari/604.1",
     isMobile: true, hasTouch: true, deviceScaleFactor: 3)
 end
 
@@ -96,6 +96,15 @@ RSpec.describe "Bookshelf alignment", type: :system do
         })
       JS
       puts "Bookshelf #{label} dimensions: #{dimensions.to_json}"
+      page.execute_script("const style = document.createElement('style'); style.textContent = '.book-row { align-items: flex-end; }'; document.head.appendChild(style);")
+      page.save_screenshot(Rails.root.join("tmp/bookshelf-screenshots/#{label}-row-aligned.png").to_s)
+      aligned = page.evaluate_script(<<~JS)
+        Array.from(document.querySelectorAll('.kino-shelf-row')).slice(0, 2).map(row => {
+          const shelf = row.querySelector('.shelf-bar').getBoundingClientRect().top;
+          return Array.from(row.querySelectorAll('.book-cover')).map(img => shelf - img.getBoundingClientRect().bottom);
+        })
+      JS
+      puts "Bookshelf #{label} row-aligned gaps: #{aligned.to_json}"
     end
   end
 end
