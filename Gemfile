@@ -12,7 +12,7 @@ gem "propshaft"
 
 gem "vite_rails"
 
-gem "view_component", ">= 4.12.0"
+gem "view_component", ">= 4.14.0"
 
 gem "pg"
 

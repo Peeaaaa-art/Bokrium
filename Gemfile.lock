@@ -144,7 +144,7 @@ GEM
     crack (1.0.1)
       bigdecimal
       rexml
-    crass (1.0.7)
+    crass (1.0.8)
     csv (3.3.5)
     date (3.5.1)
     debug (1.11.1)
@@ -502,7 +502,7 @@ GEM
     uri (1.1.1)
     useragent (0.16.11)
     version_gem (1.1.13)
-    view_component (4.12.0)
+    view_component (4.14.0)
       actionview (>= 7.1.0)
       activesupport (>= 7.1.0)
       concurrent-ruby (~> 1)
@@ -598,7 +598,7 @@ DEPENDENCIES
   stripe
   turbo-rails
   tzinfo-data
-  view_component (>= 4.12.0)
+  view_component (>= 4.14.0)
   vite_rails
   web-console
   webauthn
