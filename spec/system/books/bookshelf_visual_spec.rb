@@ -37,7 +37,7 @@ RSpec.describe "Bookshelf alignment", type: :system do
       visit books_path(view: "shelf", per: per)
       expect(page).to have_css(".kino-shelf-row", minimum: 2)
       expect(page).to have_css(".cover-placeholder-wrapper", minimum: 1)
-      page.execute_script("document.getAnimations().forEach(animation => animation.finish())")
+      page.execute_script("document.querySelectorAll('.kino-shelf-row').forEach(row => row.getAnimations().forEach(animation => animation.finish()))")
 
       # Control the placeholder image without relying on the external CDN.
       placeholder_count = page.all(".placeholder-cover").size
@@ -75,7 +75,7 @@ RSpec.describe "Bookshelf alignment", type: :system do
       puts "WebKit page: #{page.current_url} #{page.title} #{page.text[0, 300]}"
       expect(page).to have_css(".kino-shelf-row", minimum: 2)
       expect(page).to have_css(".book-cover", minimum: per * 2)
-      page.execute_script("document.getAnimations().forEach(animation => animation.finish())")
+      page.execute_script("document.querySelectorAll('.kino-shelf-row').forEach(row => row.getAnimations().forEach(animation => animation.finish()))")
       expect(page.evaluate_script("Array.from(document.querySelectorAll('.book-cover')).every(img => img.complete && img.naturalWidth > 0)")).to eq(true)
       page.save_screenshot(Rails.root.join("tmp/bookshelf-screenshots/#{label}.png").to_s)
       dimensions = page.evaluate_script(<<~JS)
