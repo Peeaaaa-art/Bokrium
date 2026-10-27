@@ -118,15 +118,29 @@ RSpec.describe "Bookshelf alignment", type: :system do
         })
       JS
       puts "Bookshelf #{label} dimensions: #{dimensions.to_json}"
-      page.execute_script("const style = document.createElement('style'); style.textContent = '.book-row { align-items: flex-end; }'; document.head.appendChild(style);")
-      page.save_screenshot(Rails.root.join("tmp/bookshelf-screenshots/#{label}-row-aligned.png").to_s)
-      aligned = page.evaluate_script(<<~JS)
+      page.execute_script("document.querySelector('.book-on-shelf a').addEventListener('click', event => event.preventDefault(), { once: true })")
+      page.driver.with_playwright_page { |browser_page| browser_page.tap(".book-on-shelf a") }
+      page.execute_script("document.querySelectorAll('.book-on-shelf').forEach(book => book.getAnimations().forEach(animation => animation.finish()))")
+      touch_gaps = page.evaluate_script(<<~JS)
         Array.from(document.querySelectorAll('.kino-shelf-row')).slice(0, 2).map(row => {
           const shelf = row.querySelector('.shelf-bar').getBoundingClientRect().top;
           return Array.from(row.querySelectorAll('.book-cover')).map(img => shelf - img.getBoundingClientRect().bottom);
         })
       JS
-      puts "Bookshelf #{label} row-aligned gaps: #{aligned.to_json}"
+      puts "Bookshelf #{label} touch gaps: #{touch_gaps.to_json}"
+      puts "Bookshelf touch pointer: #{page.evaluate_script("({ hover: matchMedia('(hover: hover)').matches, fine: matchMedia('(pointer: fine)').matches })").to_json}"
+      page.save_screenshot(Rails.root.join("tmp/bookshelf-screenshots/#{label}-touch-before.png").to_s)
+      page.execute_script("const style = document.createElement('style'); style.textContent = '@media (hover: none) { .book-on-shelf:hover { transform: none; } }'; document.head.appendChild(style);")
+      page.execute_script("document.querySelectorAll('.book-on-shelf').forEach(book => book.getAnimations().forEach(animation => animation.finish()))")
+      touch_fixed_gaps = page.evaluate_script(<<~JS)
+        Array.from(document.querySelectorAll('.kino-shelf-row')).slice(0, 2).map(row => {
+          const shelf = row.querySelector('.shelf-bar').getBoundingClientRect().top;
+          return Array.from(row.querySelectorAll('.book-cover')).map(img => shelf - img.getBoundingClientRect().bottom);
+        })
+      JS
+      puts "Bookshelf #{label} touch fixed gaps: #{touch_fixed_gaps.to_json}"
+      page.save_screenshot(Rails.root.join("tmp/bookshelf-screenshots/#{label}-touch-after.png").to_s)
+
     end
   end
 end
