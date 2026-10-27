@@ -101,6 +101,14 @@ jobs:
           path: tmp/screenshots
           if-no-files-found: ignore
 
+      - name: Collect bookshelf screenshots
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: always()
+        with:
+          name: bookshelf-screenshots-node-${{ matrix.node_index }}
+          path: tmp/bookshelf-screenshots
+          if-no-files-found: ignore
+
   rspec_all:
     name: "test - RSpec gate"
     runs-on: ubuntu-24.04
